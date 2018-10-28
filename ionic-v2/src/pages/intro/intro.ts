@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, AlertController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, AlertController, Platform, LoadingController } from 'ionic-angular';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+
+import * as firebase from 'firebase/app';
 
 @IonicPage()
 @Component({
@@ -20,7 +22,7 @@ export class IntroPage {
       title: "Join the Tribe!",
       description: "Travel globally. Experience locally.",
       image: "./assets/slide1-1.png",
-      color: "#C0C0B5"
+      color: "#1ABC9C"
     }
   ];
 
@@ -28,14 +30,39 @@ export class IntroPage {
   constructor(public navCtrl: NavController,
     private alertCtrl: AlertController,
     private fb: Facebook,
-    private platform: Platform,) {
+    private platform: Platform,
+    private loadingCtrl: LoadingController) {
   }
 
   facebookWithCordova(){
+
+    let loadingPopup = this.loadingCtrl.create({
+      spinner: 'crescent',
+      content: 'Logging in...'
+    });
     this.fb.login(['public_profile','user_location','email','user_age_range','user_friends','user_gender'])
-      .then((res: FacebookLoginResponse) => {
+      .then((loginResponse: FacebookLoginResponse) => {
           //this.navCtrl.push(HomePage);
-          this.presentAlert("Go to HomePage");
+          //this.presentAlert("Go to HomePage");
+          const credentials: firebase.auth.AuthCredential = firebase.auth.FacebookAuthProvider.credential(loginResponse.authResponse.accessToken);
+          loadingPopup.present();
+
+          firebase.auth().signInWithCredential(credentials)
+            .then((user: firebase.User) => {
+              let uid: string = user.uid;
+              // this.presentAlert('firebase.User.uid:' + uid);
+              loadingPopup.dismiss();
+  
+              // check if the user is delinquent
+              loadingPopup = this.loadingCtrl.create({
+                spinner: 'crescent',
+                content: 'Checking account status...'
+              });
+            })
+            .catch((err) => {
+              loadingPopup.dismiss();
+              this.presentAlert('Error logging into Facebook: ' + err);
+            });
         }
       )
       .catch(e => this.presentAlert('Error logging into Facebook: ' + e));
