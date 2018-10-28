@@ -1,0 +1,8 @@
+myPink: rgb(241, 172, 68)); 
+
+Convert to hex
+https://www.rgbtohex.net/
+
+myTeal: #1ABC9C
+myGrey: #C0C0B5
+myDarkPurple: #800040
