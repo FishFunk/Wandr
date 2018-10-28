@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, AlertController, Platform } from 'ionic-angular';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 
 @IonicPage()
@@ -27,16 +27,29 @@ export class IntroPage {
 
   constructor(public navCtrl: NavController,
     private alertCtrl: AlertController,
-    private fb: Facebook) {
+    private fb: Facebook,
+    private platform: Platform,) {
   }
 
-  goToLogin(){
+  facebookWithCordova(){
     this.fb.login(['public_profile','user_location','email','user_age_range','user_friends','user_gender'])
-      .then((res: FacebookLoginResponse) => console.log("Facebook login was successful!"))
-      .catch(e => console.log('Error logging into Facebook', e));
+      .then((res: FacebookLoginResponse) => {
+          //this.navCtrl.push(HomePage);
+          this.presentAlert("Go to HomePage");
+        }
+      )
+      .catch(e => this.presentAlert('Error logging into Facebook: ' + e));
   }
 
-  
+  facebookLogin() {
+    if (this.platform.is('cordova')) {
+      this.facebookWithCordova();
+    }
+    else {
+      this.presentAlert('cordova is not available.');
+    }
+  }
+
   presentAlert(title) {
     let alert = this.alertCtrl.create({
       title: title,

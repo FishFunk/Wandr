@@ -3,10 +3,10 @@
   <ion-slides pager="true">
 
       <ion-slide *ngFor="let slide of slides" [ngStyle]="{'background-color': slide.color} "> 
-            <ion-toolbar transparent>
+            <!-- <ion-toolbar transparent>
                   <ion-buttons end>                         
                   </ion-buttons>
-            </ion-toolbar>
+            </ion-toolbar> -->
 
             <div class="intro-box">
                 <img [src]="slide.image" class="pop-in slide-image"/>
@@ -27,7 +27,7 @@
             <div class="introBox" margin-top>
                 <img src="./assets/slide5.png" class="slide-image"/>
                 <!--<h2 class="slide-title">Let's get started</h2>-->
-                <button ion-button large outline round icon-right color="primary" margin-top (click)="goToLogin()">
+                <button ion-button large outline round icon-right color="primary" margin-top (click)="facebookLogin()">
                     <img src="./assets/fb.png" class="slide-image"/>&nbsp;&nbsp;
                     Join with Facebook!
                     <ion-icon name="arrow-forward"></ion-icon>

@@ -11,23 +11,18 @@ import { MyApp } from './app.component';
 
 //***********  Angularfire2 v5 **************/
 
-//import { AngularFireModule } from 'angularfire2';
+import { AngularFireModule } from 'angularfire2';
 // New imports to update based on AngularFire2 version 4
-// import { AngularFireDatabaseModule } from 'angularfire2/database-deprecated';
-//import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
 //***********  Facebook **************/
 import { Facebook } from '@ionic-native/facebook';
-//***********  Google plus **************/
-//import { GooglePlus } from '@ionic-native/google-plus';
 
 //*********** Provider **************/
 // import { AuthData } from '../providers/auth-data';
 
-
-import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
-
-
+import firebase from 'firebase';
 //********** firebase configuration  ************ */
 export const config = { 
   apiKey: "AIzaSyCDSds5vBVew16tGl7hRr8CAbtYGMJwvhE",
@@ -46,9 +41,9 @@ export const config = {
     BrowserModule,
     IonicModule.forRoot(MyApp),
   
-    // AngularFireModule.initializeApp(config),
-    // AngularFireDatabaseModule,
-    //AngularFireAuthModule
+    AngularFireModule.initializeApp(config),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
