@@ -22,7 +22,7 @@ import { Facebook } from '@ionic-native/facebook';
 //*********** Provider **************/
 // import { AuthData } from '../providers/auth-data';
 
-import firebase from 'firebase';
+//import firebase from 'firebase';
 //********** firebase configuration  ************ */
 export const config = { 
   apiKey: "AIzaSyCDSds5vBVew16tGl7hRr8CAbtYGMJwvhE",
@@ -52,6 +52,8 @@ export const config = {
   providers: [
     StatusBar,
     SplashScreen,
+    ErrorHandler,
+    IonicErrorHandler,
     // Geolocation,
     // {
     //   provide: HAMMER_GESTURE_CONFIG,
