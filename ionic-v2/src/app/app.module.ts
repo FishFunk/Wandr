@@ -17,7 +17,7 @@ import { MyApp } from './app.component';
 //import { AngularFireAuthModule } from 'angularfire2/auth';
 
 //***********  Facebook **************/
-//import { Facebook } from '@ionic-native/facebook';
+import { Facebook } from '@ionic-native/facebook';
 //***********  Google plus **************/
 //import { GooglePlus } from '@ionic-native/google-plus';
 
@@ -63,8 +63,8 @@ export const config = {
     // },
     // {provide: ErrorHandler, useClass: IonicErrorHandler},
     // AuthData,
-    // Facebook,
-    // GooglePlus
+    // GooglePlus,
+     Facebook
   ]
 })
 export class AppModule {}

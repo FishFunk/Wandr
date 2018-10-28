@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, AlertController } from 'ionic-angular';
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 
 @IonicPage()
 @Component({
@@ -25,11 +26,14 @@ export class IntroPage {
 
 
   constructor(public navCtrl: NavController,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController,
+    private fb: Facebook) {
   }
 
   goToLogin(){
-    this.presentAlert("Need to implement Facebook login")
+    this.fb.login(['public_profile','user_location','email','user_age_range','user_friends','user_gender'])
+      .then((res: FacebookLoginResponse) => console.log("Facebook login was successful!"))
+      .catch(e => console.log('Error logging into Facebook', e));
   }
 
   
