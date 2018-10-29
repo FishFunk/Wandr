@@ -3,6 +3,7 @@ import { IonicPage, NavController, AlertController, Platform, LoadingController 
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 
 import * as firebase from 'firebase/app';
+import { TabsPage } from '../tabs/tabs';
 
 @IonicPage()
 @Component({
@@ -27,6 +28,12 @@ export class IntroPage {
   ];
 
 
+
+  public userProfile: any = null;
+  private unsubscribe: any;
+  private loggedIn: boolean = true;
+
+
   constructor(public navCtrl: NavController,
     private alertCtrl: AlertController,
     private fb: Facebook,
@@ -42,22 +49,18 @@ export class IntroPage {
     });
     this.fb.login(['public_profile','user_location','email','user_age_range','user_friends','user_gender'])
       .then((loginResponse: FacebookLoginResponse) => {
-          //this.navCtrl.push(HomePage);
-          //this.presentAlert("Go to HomePage");
-          const credentials: firebase.auth.AuthCredential = firebase.auth.FacebookAuthProvider.credential(loginResponse.authResponse.accessToken);
-          loadingPopup.present();
+          
+          const credentials: firebase.auth.AuthCredential = firebase.auth.FacebookAuthProvider.credential(
+            loginResponse.authResponse.accessToken);
+          
+            loadingPopup.present();
 
-          firebase.auth().signInWithCredential(credentials)
+            firebase.auth().signInWithCredential(credentials)
             .then((user: firebase.User) => {
               let uid: string = user.uid;
-              // this.presentAlert('firebase.User.uid:' + uid);
+              this.presentAlert('firebase.User.uid:' + uid);
               loadingPopup.dismiss();
-  
-              // check if the user is delinquent
-              loadingPopup = this.loadingCtrl.create({
-                spinner: 'crescent',
-                content: 'Checking account status...'
-              });
+              this.next();
             })
             .catch((err) => {
               loadingPopup.dismiss();
@@ -74,7 +77,14 @@ export class IntroPage {
     }
     else {
       this.presentAlert('cordova is not available.');
+      this.next();
     }
+  }
+
+  
+  private next(): void {
+    //this.unsubscribe();
+    this.navCtrl.setRoot(TabsPage);
   }
 
   presentAlert(title) {

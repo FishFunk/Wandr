@@ -11,13 +11,23 @@ import { MyApp } from './app.component';
 
 //***********  Angularfire2 v5 **************/
 
-import { AngularFireModule } from 'angularfire2';
+//import { AngularFireModule } from 'angularfire2';
+//import {AngularFireModule} from 'Angularfire2';
+import {AngularFireModule} from 'angularfire2';
 // New imports to update based on AngularFire2 version 4
-import { AngularFireDatabaseModule } from 'angularfire2/database';
+//import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database-deprecated';
+//import { AngularFireDatabase} from 'angularfire2/database';
+// for AngularFireAuth
+import { AngularFireAuth } from 'angularfire2/auth';
+
+
 
 //***********  Facebook **************/
 import { Facebook } from '@ionic-native/facebook';
+import { TabsPage } from '../pages/tabs/tabs';
+import { ProfilePage } from '../pages/profile/profile';
 
 //*********** Provider **************/
 // import { AuthData } from '../providers/auth-data';
@@ -35,19 +45,23 @@ export const config = {
   
 @NgModule({
   declarations: [
-    MyApp
+    MyApp,
+    TabsPage,
+    ProfilePage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
   
-    AngularFireModule.initializeApp(config),
     AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFireModule.initializeApp(config),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp
+    MyApp,
+    TabsPage,
+    ProfilePage
   ],
   providers: [
     StatusBar,
@@ -65,3 +79,5 @@ export const config = {
   ]
 })
 export class AppModule {}
+
+

@@ -1,0 +1,30 @@
+.fa-icons-general {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translate(0, 0);
+}
+
+.ion-ios-fa-cutlery::before,
+.ion-ios-fa-cutlery-outline::before,
+.ion-md-fa-cutlery::before {
+  @extend .fa-icons-general;
+  content: "\f0f5";
+}
+
+.ion-ios-fa-cog::before,
+.ion-ios-fa-cog-outline::before,
+.ion-md-fa-cog::before {
+  @extend .fa-icons-general;
+  content: "\f013";
+}
+
+.ion-ios-fa-list::before,
+.ion-ios-fa-list-outline::before,
+.ion-md-fa-list::before {
+  @extend .fa-icons-general;
+  content: "\f03a";
+}
