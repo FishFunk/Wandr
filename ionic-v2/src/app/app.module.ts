@@ -33,6 +33,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 //***********  Views **************/
 import { ProfilePage } from '../pages/profile/profile';
 import { InboxPage } from '../pages/messages/inbox';
+import { InvitePage } from '../pages/invite/invite';
 
 //*********** Provider **************/
 // import { AuthData } from '../providers/auth-data';
@@ -53,7 +54,8 @@ export const config = {
     MyApp,
     TabsPage,
     ProfilePage,
-    InboxPage
+    InboxPage,
+    InvitePage
   ],
   imports: [
     BrowserModule,
@@ -68,7 +70,8 @@ export const config = {
     MyApp,
     TabsPage,
     ProfilePage,
-    InboxPage
+    InboxPage,
+    InvitePage
   ],
   providers: [
     StatusBar,
