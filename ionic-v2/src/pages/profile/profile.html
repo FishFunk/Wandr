@@ -11,7 +11,7 @@
 
     <img id="profile1-image" class="pop-in" src="{{(profile | async)?.imgProfile}}"/>
     <h3 id="profile1-name">{{(profile | async)?.name}}</h3>
-    <!--<p>{{(profile2 | async)?.company}} &bull; {{(profile2 | async)?.position}}</p> -->
+     <!--<p>{{(profile2 | async)?.company}} &bull; {{(profile2 | async)?.position}}</p> -->
     <p class="profile1-description">{{(profile | async)?.position}} of {{(profile | async)?.company}}</p>
     <button ion-button *ngIf="!following"  block color="green" (click)="follow()">Follow</button>
     <button ion-button icon-left *ngIf="following"  block color="gray" (click)="follow()">
