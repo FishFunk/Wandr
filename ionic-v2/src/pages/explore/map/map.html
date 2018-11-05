@@ -1,0 +1,45 @@
+
+<!-- <ion-header>
+    <ion-navbar color="white" class="white-text">
+    </ion-navbar>
+  </ion-header> -->
+<ion-header>
+      <ion-navbar color="lightblue">
+        
+        <ion-title>
+            Explore the WanderMap!
+        </ion-title>
+        <!-- <ion-buttons end>
+            <button ion-button icon-only (click)="showMapMarker()">
+                <ion-icon name="map"></ion-icon>
+            </button>
+        </ion-buttons> -->
+    </ion-navbar>
+</ion-header>
+
+<ion-content no-padding >
+  
+    <ion-card  *ngFor="let mapList of mapList | async" >
+
+         <div class="img-map-wrapper">   
+            <img tappable src="https://avatars3.githubusercontent.com/u/13572357?s=400&v=4" (click)="showDetail(0)"/>
+         </div>
+
+          <ion-list no-lines>
+            <ion-item>
+
+              <ion-avatar item-left>
+                    <img src="{{mapList.image}}">
+              </ion-avatar>
+              
+              <h2>{{mapList.name}}</h2>
+              <p>{{mapList.openDate}}</p>
+
+              <ion-badge item-right>rating:{{mapList.rating}}</ion-badge>
+
+            </ion-item>
+          </ion-list>
+
+      </ion-card>
+      <div style="height:50px;"></div>
+</ion-content>

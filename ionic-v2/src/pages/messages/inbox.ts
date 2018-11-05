@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController ,ToastController } from 'ionic-angular';
-import { AngularFireDatabase, FirebaseObjectObservable} 
-from 'angularfire2/database-deprecated';
+import { AngularFireDatabase, FirebaseObjectObservable} from 'angularfire2/database-deprecated';
 
 @IonicPage()
 @Component({
