@@ -26,8 +26,14 @@ import { AngularFireAuth } from 'angularfire2/auth';
 
 //***********  Facebook **************/
 import { Facebook } from '@ionic-native/facebook';
+
+//***********  Tabs **************/
 import { TabsPage } from '../pages/tabs/tabs';
+
+//***********  Views **************/
 import { ProfilePage } from '../pages/profile/profile';
+import { InboxPage } from '../pages/messages/inbox';
+import { InvitePage } from '../pages/invite/invite';
 
 //*********** Provider **************/
 // import { AuthData } from '../providers/auth-data';
@@ -47,7 +53,9 @@ export const config = {
   declarations: [
     MyApp,
     TabsPage,
-    ProfilePage
+    ProfilePage,
+    InboxPage,
+    InvitePage
   ],
   imports: [
     BrowserModule,
@@ -61,7 +69,9 @@ export const config = {
   entryComponents: [
     MyApp,
     TabsPage,
-    ProfilePage
+    ProfilePage,
+    InboxPage,
+    InvitePage
   ],
   providers: [
     StatusBar,

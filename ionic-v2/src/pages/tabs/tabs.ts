@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ProfilePage } from '../profile/profile';
+import { InboxPage } from '../messages/inbox';
+import { InvitePage } from '../invite/invite';
 
 
 @Component({
@@ -8,9 +10,9 @@ import { ProfilePage } from '../profile/profile';
 
 export class TabsPage {
   tab1Root = ProfilePage;
-  tab2Root = ProfilePage;//MessagesPage;
+  tab2Root = InboxPage;
   tab3Root = ProfilePage;//ExplorePage;
-  tab4Root = ProfilePage;// InvitationPage;
+  tab4Root =InvitePage;
   tab5Root = ProfilePage;//HelpPage;
 
   constructor() {
