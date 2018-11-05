@@ -6,7 +6,6 @@ import { MapPage } from '../explore/map/map';
 
 
 
-
 @Component({
   templateUrl: 'tabs.html'
 })

@@ -5,6 +5,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 //*********** ionic Native **************/
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { SocialSharing } from '@ionic-native/social-sharing';
 //import { Geolocation } from '@ionic-native/geolocation';
 
 import { MyApp } from './app.component';
@@ -83,14 +84,15 @@ export const config = {
     SplashScreen,
     ErrorHandler,
     IonicErrorHandler,
+    SocialSharing,
+    Facebook
     // Geolocation,
     // {
     //   provide: HAMMER_GESTURE_CONFIG,
     // },
     // {provide: ErrorHandler, useClass: IonicErrorHandler},
     // AuthData,
-    // GooglePlus,
-     Facebook
+    // GooglePlus
   ]
 })
 export class AppModule {}
