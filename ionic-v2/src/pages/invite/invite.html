@@ -3,43 +3,33 @@
     <ion-navbar>
         <ion-title>Invite Your Friends!</ion-title>
         <div padding>
-            <p>The more connections you make, the wider your reach.</p>
+            <p>Strengthen your network and profile status. The more connections you make, the greater the possibilities!</p>
         </div>
     </ion-navbar>
 </ion-header>
   
-<ion-content padding>
+<ion-content>
     <ion-list>
-        <ion-item padding>
-            <ion-icon name="logo-facebook" item-start>
-                Facebook
-            </ion-icon>
-        </ion-item>
-        <ion-item padding>
-            <ion-icon name="mail" item-start>
-                Email
-            </ion-icon>
-        </ion-item>
-        <ion-item padding>
-            <ion-icon name="text" item-start>
-                Message
-            </ion-icon>
-        </ion-item>
-        <ion-item padding>
-            <ion-icon name="logo-whatsapp" item-start>
-                WhatsApp
-            </ion-icon>
-        </ion-item>
-        <ion-item padding>
-            <ion-icon name="logo-twitter" item-start>
-                Twitter
-            </ion-icon>
-        </ion-item>
-        <ion-item padding>
-            <ion-icon name="copy" item-start>
-                Copy Link
-            </ion-icon>
-        </ion-item>
+        <button ion-item padding (click)="facebookShare()">
+            <ion-icon name="logo-facebook" item-start></ion-icon>
+            Facebook
+        </button>
+        <button ion-item padding (click)="instagramShare()">
+            <ion-icon name="logo-instagram" item-start></ion-icon>
+            Instagram
+        </button>
+        <button ion-item padding (click)="twitterShare()">
+            <ion-icon name="logo-twitter" item-start></ion-icon>
+            Twitter
+        </button>
+        <button ion-item padding (click)="smsShare()">
+            <ion-icon name="text" item-start></ion-icon>
+            Message
+        </button>
+        <button ion-item padding (click)="whatsAppShare()">
+            <ion-icon name="logo-whatsapp" item-start></ion-icon>
+            WhatsApp
+        </button>
     </ion-list>
 </ion-content>
   

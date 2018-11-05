@@ -13,4 +13,5 @@ import { IonicPageModule } from 'ionic-angular';
     InvitePage
   ]
 })
+
 export class InvitePageModule {}

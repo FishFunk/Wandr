@@ -3,7 +3,6 @@ import { ProfilePage } from '../profile/profile';
 import { InboxPage } from '../messages/inbox';
 import { InvitePage } from '../invite/invite';
 
-
 @Component({
   templateUrl: 'tabs.html'
 })
