@@ -51,7 +51,7 @@ public readonly firebaseInitOptions: any = {
   }
 
   onPlatformReady(){
-    //this.logger.initialize();     
+    //TODO: this.logger.initialize();     
     this.statusBar.styleDefault();
     this.splashScreen.hide();
   }
@@ -60,7 +60,6 @@ public readonly firebaseInitOptions: any = {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     // page.component = item array.component --> 
-    //this.nav.setRoot(page.component);
     this.nav.setRoot(page.component);
   }
 }

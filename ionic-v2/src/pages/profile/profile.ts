@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController ,ToastController } from 'ionic-angular';
-import { 
-  AngularFireDatabase , 
-  FirebaseObjectObservable} 
-from 'angularfire2/database-deprecated';
+import {  AngularFireDatabase ,  FirebaseObjectObservable} from 'angularfire2/database-deprecated';
+import { Facebook } from '@ionic-native/facebook';
 
 @IonicPage()
 @Component({
@@ -18,7 +16,8 @@ export class ProfilePage {
     public navParams: NavParams, 
     public afDB: AngularFireDatabase, 
     public loadingCtrl: LoadingController, 
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController,
+    private fb: Facebook) {
 
     let loadingPopup = this.loadingCtrl.create({
       spinner: 'crescent',
@@ -32,6 +31,18 @@ export class ProfilePage {
   follow() {
     this.following = !this.following;
     this.presentToast('bottom','Follow user clicked');
+  }
+
+  logout(){
+    this.fb.logout()
+      .then(()=>{
+        // TODO: Exit app - back to intro
+        this.presentToast('top', 'Logout successful!');
+      })
+      .catch((error)=>{
+        console.log(error);
+        this.presentToast('top', 'Logout failed!');
+      });
   }
 
   presentToast(position: string,message: string) {

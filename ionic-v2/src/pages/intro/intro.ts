@@ -30,8 +30,6 @@ export class IntroPage {
 
 
   public userProfile: any = null;
-  private unsubscribe: any;
-  private loggedIn: boolean = true;
 
 
   constructor(public navCtrl: NavController,
