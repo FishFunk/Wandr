@@ -13,28 +13,24 @@
     <h3 id="profile1-name">{{(profile | async)?.name}}</h3>
      <!--<p>{{(profile2 | async)?.company}} &bull; {{(profile2 | async)?.position}}</p> -->
     <p class="profile1-description">{{(profile | async)?.position}} of {{(profile | async)?.company}}</p>
-    <button ion-button *ngIf="!following"  block color="green" (click)="follow()">Follow</button>
-    <button ion-button icon-left *ngIf="following"  block color="gray" (click)="follow()">
-      <ion-icon name="checkmark"></ion-icon>
-      Following
-    </button>
 
     <ion-grid>
       <ion-row class="profile1-numbers">
 
+        <!-- TODO: Change "follower/ing to reflect labels" -->
         <ion-col width-33>
-          <span>{{(profile | async)?.follower}}</span>
-          <p>Followers</p>
+          <span>{{(profile | async)?.follower}}</span> 
+          <p>1st Connections</p>
         </ion-col>
 
         <ion-col width-33>      
           <span>{{(profile | async)?.following}}</span>
-          <p>Following</p>
+          <p>2nd Connections</p>
         </ion-col>
 
         <ion-col width-33>   
           <span>{{(profile | async)?.following}}</span>
-          <p>Following</p>
+          <p>Friends Invited</p>
         </ion-col>
 
       </ion-row>

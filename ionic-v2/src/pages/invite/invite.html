@@ -2,7 +2,7 @@
 <ion-header>
     <ion-navbar>
         <ion-title>Invite Your Friends!</ion-title>
-        <div padding>
+        <div padding text-center>
             <p>Strengthen your network and profile status. The more connections you make, the greater the possibilities!</p>
         </div>
     </ion-navbar>
@@ -11,25 +11,37 @@
 <ion-content>
     <ion-list>
         <button ion-item padding (click)="facebookShare()">
-            <ion-icon name="logo-facebook" item-start></ion-icon>
+            <ion-icon class="facebook_blue" name="logo-facebook" item-start></ion-icon>
             Facebook
         </button>
         <button ion-item padding (click)="instagramShare()">
-            <ion-icon name="logo-instagram" item-start></ion-icon>
+            <ion-icon class="instagram_magenta" name="logo-instagram" item-start></ion-icon>
             Instagram
         </button>
         <button ion-item padding (click)="twitterShare()">
-            <ion-icon name="logo-twitter" item-start></ion-icon>
+            <ion-icon class="twitter_blue" name="logo-twitter" item-start></ion-icon>
             Twitter
         </button>
         <button ion-item padding (click)="smsShare()">
-            <ion-icon name="text" item-start></ion-icon>
+            <ion-icon class="message_blue" name="text" item-start></ion-icon>
             Message
         </button>
         <button ion-item padding (click)="whatsAppShare()">
-            <ion-icon name="logo-whatsapp" item-start></ion-icon>
+            <ion-icon class="whatsapp_green" name="logo-whatsapp" item-start></ion-icon>
             WhatsApp
         </button>
     </ion-list>
+
+    <ion-card>
+        <ion-card-header>
+            Your Network
+        </ion-card-header>    
+        <ion-card-content>
+            <label>1st Degree Connections:</label>&nbsp;<span>32</span><br>
+            <label>2nd Degree Connections:</label>&nbsp;<span>134</span><br>
+            <label>Friends Invited:</label>&nbsp;<span>12</span>
+        </ion-card-content>     
+    </ion-card>
+
 </ion-content>
   

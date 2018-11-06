@@ -9,7 +9,6 @@ import { Facebook } from '@ionic-native/facebook';
   templateUrl: 'profile.html'
 })
 export class ProfilePage {
-  following: boolean = false;
   profile:  FirebaseObjectObservable<any[]>;
 
   constructor(public navCtrl: NavController, 
@@ -26,11 +25,6 @@ export class ProfilePage {
     loadingPopup.present();
     this.profile = afDB.object('/profile/1');
     this.profile.subscribe(() => loadingPopup.dismiss());
-  }
-
-  follow() {
-    this.following = !this.following;
-    this.presentToast('bottom','Follow user clicked');
   }
 
   logout(){
