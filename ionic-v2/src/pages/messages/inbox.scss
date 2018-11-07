@@ -1,0 +1,22 @@
+page-inbox {
+    .timestamp {
+        position: absolute;
+        top: 8px;
+        right: 16px;
+        font-size: 12px;
+        color: #888;
+    }
+
+    .list-header{
+        color: #888;
+    }
+
+    .unread {
+        color: black;
+        font-weight: bold;
+    }
+
+    .name {
+        font-size: 16px;
+    }
+}

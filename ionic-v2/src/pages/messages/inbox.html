@@ -5,55 +5,141 @@
     </ion-navbar>
 </ion-header>
   
-<ion-content padding>
+<ion-content>
     <!----- If list is empty: "No messages here yet!"------->
     <ion-list>
-        <ion-item-sliding>
-            <ion-item>
-                <ion-avatar item-start>
-                <img src="https://avatars3.githubusercontent.com/u/13572357?s=400&v=4">
-                </ion-avatar>
-                <h2>James</h2>
-                <p>Preview of last message sent...</p>
-            </ion-item>
-            <ion-item-options side="right">
-                <button ion-button color="light">
-                        <ion-icon name="hand"></ion-icon>
-                        Block
-                </button>
-                <button ion-button color="warning">
-                        <ion-icon name="warning"></ion-icon>
-                        Report
-                </button>
-                <button ion-button color="danger">
-                        <ion-icon name="trash"></ion-icon>
-                        Delete
-                </button>
-            </ion-item-options>
-        </ion-item-sliding>
-        <ion-item-sliding>
-            <ion-item>
-                <ion-avatar item-start>
-                <img src="https://avatars3.githubusercontent.com/u/13572357?s=400&v=4">
-                </ion-avatar>
-                <h2>Samantha</h2>
-                <p>Preview of last message sent...</p>
-            </ion-item>
-            <ion-item-options side="right">
-                <button ion-button color="light">
-                        <ion-icon name="hand"></ion-icon>
-                        Block
-                </button>
-                <button ion-button color="warning">
-                        <ion-icon name="warning"></ion-icon>
-                        Report
-                </button>
-                <button ion-button color="danger">
-                        <ion-icon name="trash"></ion-icon>
-                        Delete
-                </button>
-            </ion-item-options>
-        </ion-item-sliding>   
+        <ion-item-group>
+            <ion-list-header class="list-header">Today</ion-list-header>
+            <ion-item-sliding>
+                <ion-item>
+                    <ion-avatar item-start>
+                    <img src="https://avatars3.githubusercontent.com/u/13572357?s=400&v=4">
+                    </ion-avatar>
+                    <span class="name, unread">Tara L</span><br>
+                    <p class="unread">Yeah, for sure!</p>
+                    <span class="timestamp">8:15pm</span>
+                </ion-item>
+                <ion-item-options side="right">
+                    <button ion-button color="light">
+                            <ion-icon name="hand"></ion-icon>
+                            Block
+                    </button>
+                    <button ion-button color="warning">
+                            <ion-icon name="warning"></ion-icon>
+                            Report
+                    </button>
+                    <button ion-button color="danger">
+                            <ion-icon name="trash"></ion-icon>
+                            Delete
+                    </button>
+                </ion-item-options>
+            </ion-item-sliding>
+            <ion-item-sliding>
+                <ion-item>
+                    <ion-avatar item-start>
+                    <img src="https://avatars3.githubusercontent.com/u/13572357?s=400&v=4">
+                    </ion-avatar>
+                    <span class="name">Johnny B</span><br>
+                    <p>Sounds good dude! We'll be in touch.</p>
+                    <span class="timestamp">6:52pm</span>
+                </ion-item>
+                <ion-item-options side="right">
+                    <button ion-button color="light">
+                            <ion-icon name="hand"></ion-icon>
+                            Block
+                    </button>
+                    <button ion-button color="warning">
+                            <ion-icon name="warning"></ion-icon>
+                            Report
+                    </button>
+                    <button ion-button color="danger">
+                            <ion-icon name="trash"></ion-icon>
+                            Delete
+                    </button>
+                </ion-item-options>
+            </ion-item-sliding>
+        </ion-item-group>
+        <ion-item-group>
+            <ion-list-header class="list-header">Yesterday</ion-list-header>
+            <ion-item-sliding>
+                <ion-item>
+                    <ion-avatar item-start>
+                    <img src="https://avatars3.githubusercontent.com/u/13572357?s=400&v=4">
+                    </ion-avatar>
+                    <span class="name">Samantha W</span><br>
+                    <p>Totally. I know where all of the best...</p>
+                    <span class="timestamp">10:31am</span>
+                </ion-item>
+                <ion-item-options side="right">
+                    <button ion-button color="light">
+                            <ion-icon name="hand"></ion-icon>
+                            Block
+                    </button>
+                    <button ion-button color="warning">
+                            <ion-icon name="warning"></ion-icon>
+                            Report
+                    </button>
+                    <button ion-button color="danger">
+                            <ion-icon name="trash"></ion-icon>
+                            Delete
+                    </button>
+                </ion-item-options>
+            </ion-item-sliding>
+        </ion-item-group>
+        <ion-item-group>
+            <ion-list-header class="list-header">Last Week</ion-list-header>
+            <ion-item-sliding>
+                <ion-item>
+                    <ion-avatar item-start>
+                    <img src="https://avatars3.githubusercontent.com/u/13572357?s=400&v=4">
+                    </ion-avatar>
+                    <span class="name">Chris D</span><br>
+                    <p>Haha. I'm sure we can figure out...</p>
+                    <span class="timestamp">Tuesday</span>
+                </ion-item>
+                <ion-item-options side="right">
+                    <button ion-button color="light">
+                            <ion-icon name="hand"></ion-icon>
+                            Block
+                    </button>
+                    <button ion-button color="warning">
+                            <ion-icon name="warning"></ion-icon>
+                            Report
+                    </button>
+                    <button ion-button color="danger">
+                            <ion-icon name="trash"></ion-icon>
+                            Delete
+                    </button>
+                </ion-item-options>
+            </ion-item-sliding>
+        </ion-item-group>
+        <ion-item-group>
+            <ion-list-header class="list-header">Older</ion-list-header>
+            <ion-item-sliding>
+                <ion-item>
+                    <ion-avatar item-start>
+                    <img src="https://avatars3.githubusercontent.com/u/13572357?s=400&v=4">
+                    </ion-avatar>
+                    <span>Daniel F</span><br>
+                    <p>Cool, see you soon!</p>
+                    <span class="timestamp">09/22/18</span>
+                </ion-item>
+                <ion-item-options side="right">
+                    <button ion-button color="light">
+                            <ion-icon name="hand"></ion-icon>
+                            Block
+                    </button>
+                    <button ion-button color="warning">
+                            <ion-icon name="warning"></ion-icon>
+                            Report
+                    </button>
+                    <button ion-button color="danger">
+                            <ion-icon name="trash"></ion-icon>
+                            Delete
+                    </button>
+                </ion-item-options>
+            </ion-item-sliding>
+        </ion-item-group>
     </ion-list>
 </ion-content>
   
