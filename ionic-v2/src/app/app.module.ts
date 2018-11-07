@@ -35,9 +35,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { ProfilePage } from '../pages/profile/profile';
 import { InboxPage } from '../pages/messages/inbox';
 import { InvitePage } from '../pages/invite/invite';
-import {MapPage} from '../pages/explore/map/map';
-import { MapDetailPage } from '../pages/explore/map-detail/map-detail';
-import { MapMarkerPage } from '../pages/explore/map-marker/map-marker';
+import {MapPage} from '../pages/explore/map';
 
 //*********** Provider **************/
 // import { AuthData } from '../providers/auth-data';

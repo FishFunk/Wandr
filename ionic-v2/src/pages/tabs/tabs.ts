@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ProfilePage } from '../profile/profile';
 import { InboxPage } from '../messages/inbox';
 import { InvitePage } from '../invite/invite';
-import { MapPage } from '../explore/map/map';
+import { MapPage } from '../explore/map';
 
 
 
