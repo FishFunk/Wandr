@@ -6,7 +6,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SocialSharing } from '@ionic-native/social-sharing';
-//import { Geolocation } from '@ionic-native/geolocation';
+import { NativeGeocoder } from '@ionic-native/native-geocoder';
 
 import { MyApp } from './app.component';
 
@@ -83,7 +83,8 @@ export const config = {
     ErrorHandler,
     IonicErrorHandler,
     SocialSharing,
-    Facebook
+    Facebook,
+    NativeGeocoder
     // Geolocation,
     // {
     //   provide: HAMMER_GESTURE_CONFIG,
