@@ -1,14 +1,12 @@
-<ion-tabs selectedIndex="0">
-  <!-- <ion-tabs #myTabs> -->
-  <ion-tab [root]="tab1Root" tabTitle="" tabIcon="person"></ion-tab>
-  <ion-tab [root]="tab2Root" tabTitle="" tabIcon="chatbubbles"></ion-tab>
-  <ion-tab [root]="tab3Root" tabTitle="" tabIcon="map"></ion-tab>
-  <ion-tab [root]="tab4Root" tabTitle="" tabIcon="paper-plane"></ion-tab>
-  <ion-tab [root]="tab5Root" tabTitle="" tabIcon="help-circle"></ion-tab>
+<ion-tabs #appTabs color="myTeal" selectedIndex="0">
+  <ion-tab [root]="tab1Root" tabIcon="person" tabTitle="profile"></ion-tab>
+  <ion-tab [root]="tab2Root" tabIcon="chatbubbles" tabTitle="inbox"></ion-tab>
+  <ion-fab center bottom>
+    <button color="myDarkPurple" ion-fab (click)="onClickExploreButton()">
+      <ion-icon name="globe"></ion-icon>
+    </button>
+  </ion-fab>
+  <ion-tab id="exploreTab" [root]="tab3Root" tabIcon="deliberately_invalid" tabTitle=""></ion-tab>
+  <ion-tab [root]="tab4Root" tabIcon="paper-plane" tabTitle="invite"> </ion-tab>
+  <ion-tab [root]="tab5Root" tabIcon="settings" tabTitle="settings"></ion-tab>
 </ion-tabs>
-<!-- 
-<ion-fab vertical="bottom" horizontal="center" slot="fixed">
-  <ion-fab-button>
-      <ion-icon name="add"></ion-icon>
-  </ion-fab-button>
-</ion-fab> -->
