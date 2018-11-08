@@ -1,8 +1,8 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { NativeGeocoderOptions, NativeGeocoder, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
-import { GoogleAuthProvider } from '@firebase/auth-types';
- 
+import { HeatMapLocation, IHeatMapLocation } from './models/heatMapLocation';
+
 declare var google;
  
 @Component({
@@ -41,11 +41,8 @@ export class MapPage {
  
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-    var a = new HeatMapLocation('San Diego', 'CA', 4);
-    var b = new HeatMapLocation('Houston', 'TX', 3);
-    var c = new HeatMapLocation('Washington', 'DC', 22);
-
-    var geoData = await this.geocode([a, b, c]);
+    var userLocationData = await this.readUserLocationData();
+    var geoData = await this.geocodeLocations(userLocationData);
 
     this.heatmap = new google.maps.visualization.HeatmapLayer({
       data: geoData,
@@ -99,7 +96,7 @@ export class MapPage {
     ];
   }
 
-  async geocode(locations: HeatMapLocation[]): Promise<google.maps.LatLng[]>
+  async geocodeLocations(locations: IHeatMapLocation[]): Promise<google.maps.LatLng[]>
   {
     var formattedData: google.maps.LatLng[] = [];
     for(var i=0; i<locations.length; i++)
@@ -118,8 +115,24 @@ export class MapPage {
 
     return formattedData;
   }
-}
 
-export class HeatMapLocation {
-  constructor(public city: string, public stateOrCountry: string, public count: number){}
+  async readUserLocationData(): Promise<IHeatMapLocation[]>{
+    return await new Promise<IHeatMapLocation[]>((resolve, reject)=>{
+      resolve([
+        new HeatMapLocation('San Diego', 'CA', 4),
+        new HeatMapLocation('Houston', 'TX', 3),
+        new HeatMapLocation('Washington', 'DC', 22),
+        new HeatMapLocation('San Jose', 'CR', 6),
+        new HeatMapLocation('Honolulu', 'HI', 2),
+        new HeatMapLocation('Delray Beach', 'FL', 2),
+        new HeatMapLocation('San Francisco', 'CA', 5),
+        new HeatMapLocation('Los Angelos', 'CA', 4),
+        new HeatMapLocation('Philadelphia', 'PA', 8)
+      ]);
+    });
+  }
+
+  onClickSearchButton(){
+    alert("Search function not yet implemented");
+  }
 }

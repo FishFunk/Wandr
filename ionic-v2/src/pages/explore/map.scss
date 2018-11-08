@@ -8,5 +8,16 @@
         width: 100%;
         height: 100%;
       }
+
+      ion-fab {
+        button {
+          height: 2.5em !important;
+          width: 2.5em !important;
+        }
+
+        ion-icon{
+          font-size: 2em !important;
+        }
+      }
     }
 }
