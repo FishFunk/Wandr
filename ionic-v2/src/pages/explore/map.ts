@@ -3,7 +3,7 @@ import { NavController } from 'ionic-angular';
 import { NativeGeocoderOptions, NativeGeocoder, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 import { IUser } from '../../models/user';
 import { WebDataService } from '../../helpers/webDataService';
-import { markParentViewsForCheck } from '@angular/core/src/view/util';
+import _ from 'underscore';
 
 declare var google;
  
@@ -32,14 +32,15 @@ declare var google;
 export class MapPage {
 
   @ViewChild('map') mapElement: ElementRef;
-  map: any;
-  heatmap: any;
+  map: google.maps.Map;
+  heatmap: google.maps.visualization.HeatmapLayer;
   minZoomLevel: number = 2;
   maxZoomLevel: number = 12;
   geocoderOptions: NativeGeocoderOptions = {
     useLocale: true,
     maxResults: 1
   };
+  locationMap: _.Dictionary<google.maps.LatLng>; // { 'string_location' : LatLng Object }
 
   constructor(public navCtrl: NavController,
     private nativeGeocoder: NativeGeocoder,
@@ -81,7 +82,7 @@ export class MapPage {
   }
 
   private async createMarkersAndHeatMap(users: IUser[]){
-    var locationMap: _.Dictionary<google.maps.LatLng> = {}; // { 'location' : 'LatLng'  }
+    this.locationMap = {}; // { 'location' : 'LatLng'  }
     var heatMapLatLngs: google.maps.LatLng[] = [];
     var markerLatLngs: google.maps.LatLng[] = [];
 
@@ -90,14 +91,14 @@ export class MapPage {
 
       // Cache/read geocode information
       let geoCode: google.maps.LatLng;
-      if(!locationMap[formattedLocation]){
+      if(!this.locationMap[formattedLocation]){
         geoCode = await this.getLatLong(formattedLocation);
-        locationMap[formattedLocation] = geoCode; // What happens if geocode is null?
+        this.locationMap[formattedLocation] = geoCode; // What happens if geocode is null?
 
         // Add clickable marker for each unique location
         markerLatLngs.push(geoCode);
       } else {
-        geoCode = locationMap[formattedLocation];
+        geoCode = this.locationMap[formattedLocation];
       }
 
       // Add heatmap marker for every location instance
@@ -119,7 +120,6 @@ export class MapPage {
   }
 
   private setMarkers(geoData: google.maps.LatLng[]){
-    var self = this;
     geoData.forEach((latLng)=> {
 
       var image = {
@@ -143,8 +143,12 @@ export class MapPage {
     });
   }
 
-  private onMarkerClick(latLng: google.maps.Marker){
-    alert(latLng);
+  private onMarkerClick(latLng: google.maps.LatLng){
+    var test = _.findKey(this.locationMap, (obj)=>{
+      return obj == latLng;
+    });
+    
+    alert(test);
   }
 
   private initHeatMap(geoData: google.maps.LatLng[]){
