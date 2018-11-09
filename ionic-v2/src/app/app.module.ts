@@ -35,10 +35,11 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { ProfilePage } from '../pages/profile/profile';
 import { InboxPage } from '../pages/messages/inbox';
 import { InvitePage } from '../pages/invite/invite';
-import {MapPage} from '../pages/explore/map';
+import { MapPage } from '../pages/explore/map';
 
 //*********** Provider **************/
 // import { AuthData } from '../providers/auth-data';
+import { WebDataService } from '../helpers/webDataService';
 
 //import firebase from 'firebase';
 //********** firebase configuration  ************ */
@@ -84,7 +85,8 @@ export const config = {
     IonicErrorHandler,
     SocialSharing,
     Facebook,
-    NativeGeocoder
+    NativeGeocoder,
+    WebDataService
     // Geolocation,
     // {
     //   provide: HAMMER_GESTURE_CONFIG,
