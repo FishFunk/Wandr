@@ -40,6 +40,7 @@ import { MapPage } from '../pages/explore/map';
 //*********** Provider **************/
 // import { AuthData } from '../providers/auth-data';
 import { WebDataService } from '../helpers/webDataService';
+import { ModalPage } from '../pages/explore/modal';
 
 //import firebase from 'firebase';
 //********** firebase configuration  ************ */
@@ -60,6 +61,7 @@ export const config = {
     InboxPage,
     InvitePage,
     MapPage,
+    ModalPage
   ],
   imports: [
     BrowserModule,
@@ -77,6 +79,7 @@ export const config = {
     InboxPage,
     InvitePage,
     MapPage,
+    ModalPage
   ],
   providers: [
     StatusBar,

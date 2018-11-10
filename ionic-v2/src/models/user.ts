@@ -1,5 +1,3 @@
-import { NativeGeocoderForwardResult } from "@ionic-native/native-geocoder";
-
 export interface IUser{
     app_uid: string; 
     facebook_uid: string;

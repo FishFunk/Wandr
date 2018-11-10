@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ModalController } from 'ionic-angular';
 import { IUser } from '../../models/user';
 import { WebDataService } from '../../helpers/webDataService';
+import { ModalPage } from './modal';
 import _ from 'underscore';
 
 declare var google;
@@ -22,7 +23,8 @@ export class MapPage {
   userMap: _.Dictionary<IUser[]> // Users mapped by string location
 
   constructor(public navCtrl: NavController,
-    private webDataService: WebDataService) {
+    private webDataService: WebDataService,
+    private modalCtrl: ModalController) {
   }
  
   ionViewDidLoad(){
@@ -118,19 +120,19 @@ export class MapPage {
     });
   }
 
-  private onMarkerClick(latLng: google.maps.LatLng){
+  private onMarkerClick(latLng: google.maps.LatLng, e: Event){
     var str_location = _.findKey(this.locationMap, (obj)=>{
       return obj == latLng;
     });
     
-    alert(`You have ${this.userMap[str_location].length} connections in ${str_location}!`);
+    this.presentPopover(e, this.userMap[str_location]);
   }
 
   private initHeatMap(geoData: google.maps.LatLng[]){
     this.heatmap = new google.maps.visualization.HeatmapLayer({
       data: geoData,
       map: this.map,
-      radius: 100,
+      radius: 80,
       gradient: [
         'rgba(0, 255, 255, 0)',
         'rgba(0, 255, 255, 1)',
@@ -148,5 +150,10 @@ export class MapPage {
         'rgba(255, 0, 0, 1)'
       ]
     });
+  }
+
+  private presentPopover(myEvent, firstConnections: IUser[]) {
+    let popover = this.modalCtrl.create(ModalPage, { firstConnections: firstConnections });
+    popover.present({ ev: myEvent });
   }
 }

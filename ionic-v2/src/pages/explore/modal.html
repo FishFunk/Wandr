@@ -1,0 +1,54 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons start>
+            <button margin-left ion-button icon-only (click)="closeModal()">
+                <ion-icon name="close"></ion-icon>
+            </button>
+        </ion-buttons>
+        
+        <ion-title end>{{firstConnections[0].location.stringFormat}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <div padding>
+        <ion-segment [(ngModel)]="view">
+            <ion-segment-button value="first">
+            1st Degree
+            </ion-segment-button>
+            <ion-segment-button value="second">
+            2nd Degree
+            </ion-segment-button>
+            <ion-segment-button value="forum">
+            Local Forum
+            </ion-segment-button>
+        </ion-segment>
+    </div>      
+    <div [ngSwitch]="view">
+        <ion-list *ngSwitchCase="'first'">
+            <ion-item>
+                <ion-thumbnail item-start>
+                    <img src="">
+                </ion-thumbnail>
+                <h2>Ruby Thomas</h2>
+            </ion-item>
+        </ion-list>
+        
+        <ion-list *ngSwitchCase="'second'">
+            <ion-item>
+                <ion-thumbnail item-start>
+                    <img src="">
+                </ion-thumbnail>
+                <h2>Luna Lovegood</h2>
+            </ion-item>
+        </ion-list>
+
+        <ion-list *ngSwitchCase="'forum'">
+            <ion-item>
+                <ion-thumbnail item-start>
+                    <img src="">
+                </ion-thumbnail>
+                <h2>Hiking Group</h2>
+            </ion-item>
+        </ion-list>
+    </div>
+</ion-content>
