@@ -3,6 +3,7 @@ import { ViewController, NavParams } from "ionic-angular";
 import { IUser } from '../../models/user';
 
 @Component({
+    selector: 'modal-page',
     templateUrl: 'modal.html'
   })
 
@@ -15,6 +16,10 @@ export class ModalPage
     constructor(public viewCtrl: ViewController, params: NavParams) {
         let users = params.get('firstConnections');
         this.firstConnections = users;
+    }
+
+    onClickProfile(user: IUser){
+      alert(user.first_name);
     }
   
     closeModal() {
