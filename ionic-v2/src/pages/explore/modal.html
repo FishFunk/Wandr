@@ -25,27 +25,70 @@
     </div>      
     <div [ngSwitch]="view">
         <ion-list *ngSwitchCase="'first'">
-            <ion-item>
-                <ion-thumbnail item-start>
-                    <img src="">
-                </ion-thumbnail>
-                <h2>Ruby Thomas</h2>
-            </ion-item>
+            <div *ngFor="let user of firstConnections">
+                <ion-item>
+                    <ion-thumbnail item-start>
+                        <img src="../../assets/avatar_man.png">
+                        <!-- <img src="{{user.profile_img_url}}"> -->
+                    </ion-thumbnail>
+                    <h2>{{user.first_name}}</h2>
+                    <h3>{{user.age}}</h3>
+                    <p>{{user.bio}}</p>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col *ngIf="user.services.host">
+                                <ion-icon *ngIf="user.services.host" name="home"> Host</ion-icon>
+                            </ion-col>
+                            <ion-col *ngIf="user.services.tips">
+                                <ion-icon name="information-circle"> Tips</ion-icon>
+                            </ion-col>
+                            <ion-col *ngIf="user.services.meetup">
+                                <ion-icon name="contacts"> Meetup</ion-icon>
+                            </ion-col>
+                            <ion-col *ngIf="user.services.emergencyContact">
+                                <ion-icon name="call"> Emergency Contact</ion-icon>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-item>
+            </div>
         </ion-list>
         
         <ion-list *ngSwitchCase="'second'">
-            <ion-item>
-                <ion-thumbnail item-start>
-                    <img src="">
-                </ion-thumbnail>
-                <h2>Luna Lovegood</h2>
-            </ion-item>
+            <div *ngFor="let user of secondConnections">
+                <ion-item>
+                    <ion-thumbnail item-start>
+                        <img src="../../assets/avatar_woman.png">
+                    </ion-thumbnail>
+                    <h2>{{user.first_name}}</h2>
+                    <h3>{{user.age}}</h3>
+                    <p>{{user.bio}}</p>
+                    <ion-grid>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col *ngIf="user.services.host">
+                                    <ion-icon *ngIf="user.services.host" name="home"> Host</ion-icon>
+                                </ion-col>
+                                <ion-col *ngIf="user.services.tips">
+                                    <ion-icon name="information-circle"> Tips</ion-icon>
+                                </ion-col>
+                                <ion-col *ngIf="user.services.meetup">
+                                    <ion-icon name="contacts"> Meetup</ion-icon>
+                                </ion-col>
+                                <ion-col *ngIf="user.services.emergencyContact">
+                                    <ion-icon name="call"> Emergency Contact</ion-icon>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-grid>
+                </ion-item>
+            </div>
         </ion-list>
 
         <ion-list *ngSwitchCase="'forum'">
             <ion-item>
                 <ion-thumbnail item-start>
-                    <img src="">
+                    <img src="../../assets/bg9.jpg">
                 </ion-thumbnail>
                 <h2>Hiking Group</h2>
             </ion-item>

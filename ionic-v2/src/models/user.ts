@@ -8,6 +8,7 @@ export interface IUser{
     location: ILocation;
     friends: Array<string>; // App specific UIDs
     services: IUserServices;
+    profile_img_url?: string;
     last_login: string;
 }
 
@@ -35,6 +36,7 @@ export class User implements IUser{
         public location: ILocation,
         public friends: Array<string>,
         public services: IUserServices,
-        public last_login: string)
+        public last_login: string,
+        public profile_img_url?: string)
         {}
 }

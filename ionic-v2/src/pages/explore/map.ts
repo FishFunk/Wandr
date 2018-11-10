@@ -132,7 +132,7 @@ export class MapPage {
     this.heatmap = new google.maps.visualization.HeatmapLayer({
       data: geoData,
       map: this.map,
-      radius: 80,
+      radius: 60,
       gradient: [
         'rgba(0, 255, 255, 0)',
         'rgba(0, 255, 255, 1)',
