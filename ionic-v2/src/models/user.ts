@@ -1,3 +1,5 @@
+import { NativeGeocoderForwardResult } from "@ionic-native/native-geocoder";
+
 export interface IUser{
     app_uid: string; 
     facebook_uid: string;
@@ -12,8 +14,9 @@ export interface IUser{
 }
 
 export interface ILocation{
-    stateOrCountry: string;
-    city: string;
+    stringFormat: string; // TODO: Need to ensure consistent format and data validation
+    latitude: string;
+    longitude: string;
 }
 
 export interface IUserServices{

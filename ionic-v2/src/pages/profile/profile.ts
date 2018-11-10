@@ -25,6 +25,21 @@ export class ProfilePage {
     loadingPopup.present();
     this.profile = afDB.object('/profile/1');
     this.profile.subscribe(() => loadingPopup.dismiss());
+
+    //// TODO: Get geocode information from user string location, save in DB
+
+    // var geocoderOptions: NativeGeocoderOptions = {
+    //   useLocale: true,
+    //   maxResults: 1
+    // };
+    // var data: NativeGeocoderForwardResult[] = await this.nativeGeocoder.forwardGeocode(strLocation, this.geocoderOptions);
+    // if(!data || data.length == 0){
+    //   console.error(`Unable to geocode: ${strLocation}`);
+    //   return null;
+    // }
+
+    // return new google.maps.LatLng(data[0].latitude, data[0].longitude);
+
   }
 
   logout(){

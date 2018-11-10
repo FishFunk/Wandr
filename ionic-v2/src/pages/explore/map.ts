@@ -1,6 +1,5 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { NativeGeocoderOptions, NativeGeocoder, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 import { IUser } from '../../models/user';
 import { WebDataService } from '../../helpers/webDataService';
 import _ from 'underscore';
@@ -12,38 +11,17 @@ declare var google;
   templateUrl: 'map.html'
 })
 
-// Sample Lat Longs
-// Houston TX
-// new google.maps.LatLng(29.7604, -95.3698),
-
-// Austin TX
-// new google.maps.LatLng(30.2672, -97.7431),
-
-// Washington DC
-// new google.maps.LatLng(38.9072, -77.0369),
-
-// San Francisco
-// new google.maps.LatLng(37.7749, -122.4194),
-
-// Toulouse, France
-// new google.maps.LatLng(43.6047, 1.4442)
-
-
 export class MapPage {
 
-  @ViewChild('map') mapElement: ElementRef;
   map: google.maps.Map;
   heatmap: google.maps.visualization.HeatmapLayer;
   minZoomLevel: number = 2;
   maxZoomLevel: number = 12;
-  geocoderOptions: NativeGeocoderOptions = {
-    useLocale: true,
-    maxResults: 1
-  };
+
   locationMap: _.Dictionary<google.maps.LatLng>; // { 'string_location' : LatLng Object }
+  userMap: _.Dictionary<IUser[]> // Users mapped by string location
 
   constructor(public navCtrl: NavController,
-    private nativeGeocoder: NativeGeocoder,
     private webDataService: WebDataService) {
   }
  
@@ -63,7 +41,7 @@ export class MapPage {
  
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-    var users = await this.webDataService.readUserConnections();
+    var users = await this.webDataService.readUserFirstConnections();
     this.createMarkersAndHeatMap(users);
 
     // Wait for map to initialize
@@ -81,18 +59,19 @@ export class MapPage {
     alert("Search function not yet implemented");
   }
 
-  private async createMarkersAndHeatMap(users: IUser[]){
-    this.locationMap = {}; // { 'location' : 'LatLng'  }
+  private createMarkersAndHeatMap(users: IUser[]){
+    this.locationMap = {}; // { 'location' : LatLng  }
+    this.userMap = {}; // { 'location' : user[]  }
     var heatMapLatLngs: google.maps.LatLng[] = [];
     var markerLatLngs: google.maps.LatLng[] = [];
 
     for(var idx = 0; idx < users.length; idx++){
-      let formattedLocation = `${users[idx].location.city}, ${users[idx].location.stateOrCountry}`;
+      let formattedLocation = users[idx].location.stringFormat;
 
-      // Cache/read geocode information
+      // Cache and map geocode information
       let geoCode: google.maps.LatLng;
       if(!this.locationMap[formattedLocation]){
-        geoCode = await this.getLatLong(formattedLocation);
+        geoCode = new google.maps.LatLng(users[idx].location.latitude, users[idx].location.longitude);
         this.locationMap[formattedLocation] = geoCode; // What happens if geocode is null?
 
         // Add clickable marker for each unique location
@@ -100,6 +79,13 @@ export class MapPage {
       } else {
         geoCode = this.locationMap[formattedLocation];
       }
+
+      // Cache user data grouped by common location
+      if(!this.userMap[formattedLocation]){
+        this.userMap[formattedLocation] = [];
+      } 
+      
+      this.userMap[formattedLocation].push(users[idx]); 
 
       // Add heatmap marker for every location instance
       heatMapLatLngs.push(geoCode);
@@ -109,22 +95,12 @@ export class MapPage {
     this.initHeatMap(heatMapLatLngs);
   }
 
-  private async getLatLong(strLocation: string): Promise<google.maps.LatLng>{
-    var data: NativeGeocoderForwardResult[] = await this.nativeGeocoder.forwardGeocode(strLocation, this.geocoderOptions);
-    if(!data || data.length == 0){
-      console.error(`Unable to geocode: ${strLocation}`);
-      return null;
-    }
-
-    return new google.maps.LatLng(data[0].latitude, data[0].longitude);
-  }
-
   private setMarkers(geoData: google.maps.LatLng[]){
     geoData.forEach((latLng)=> {
 
       var image = {
         url: '../../assets/transparent.png',
-        size: new google.maps.Size(40, 40),
+        size: new google.maps.Size(45, 45),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(20, 20)
       };
@@ -134,21 +110,20 @@ export class MapPage {
         icon: image
       });
 
-      marker.setOpacity(0.1);
+      marker.setOpacity(0.05);
 
       marker.addListener('click', this.onMarkerClick.bind(this, latLng));
-
 
       marker.setMap(this.map);
     });
   }
 
   private onMarkerClick(latLng: google.maps.LatLng){
-    var test = _.findKey(this.locationMap, (obj)=>{
+    var str_location = _.findKey(this.locationMap, (obj)=>{
       return obj == latLng;
     });
     
-    alert(test);
+    alert(`You have ${this.userMap[str_location].length} connections in ${str_location}!`);
   }
 
   private initHeatMap(geoData: google.maps.LatLng[]){
