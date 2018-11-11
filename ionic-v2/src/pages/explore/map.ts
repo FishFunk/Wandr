@@ -69,7 +69,7 @@ export class MapPage {
 
     for(var idx = 0; idx < users.length; idx++){
       let formattedLocation = users[idx].location.stringFormat;
-
+      
       // Cache and map geocode information
       let geoCode: google.maps.LatLng;
       if(!this.locationMap[formattedLocation]){

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User, IUser } from '../models/user';
+import { MockDataGenerator } from './mockDataGenerator';
 
 @Injectable()
 export class WebDataService {
@@ -11,7 +12,8 @@ export class WebDataService {
   // Mock: Convert to read data from server
   async readUserFirstConnections(): Promise<IUser[]>{
     return await new Promise<IUser[]>((resolve, reject)=>{
-      var usersJson = this.getMockUserJson();
+      var generator = new MockDataGenerator();
+      var usersJson = generator.generateMockJson(200);
       var users = JSON.parse(usersJson);
       resolve(users);
     });
@@ -27,18 +29,12 @@ export class WebDataService {
   }
 
   private getMockUserJson(){
-
     //**** Sample Lat Longs ****//
-    // Houston TX (29.7604, -95.3698),
-
-    // Austin TX (30.2672, -97.7431),
-
-    // Washington DC (38.9072, -77.0369),
-
-    // San Francisco (37.7749, -122.4194),
-
+    // Houston TX (29.7604, -95.3698)
+    // Austin TX (30.2672, -97.7431)
+    // Washington DC (38.9072, -77.0369)
+    // San Francisco (37.7749, -122.4194)
     // Toulouse, France (43.6047, 1.4442)
-
     // San Diego, CA (32.7157, -117.1611)
 
       var user1 = new User('1001', 'abcdefg', 'Daniel', 'Fishman', 27, 'Wassssupppp', 
@@ -54,7 +50,7 @@ export class WebDataService {
       '11/01/2018');
 
       var user3 = new User('1003', 'pqrstuv', 'Max', 'Augliere', 27, 'Be kind to one another!', 
-      { stringFormat: 'Delray Beach, FL', latitude: '26.4615', longitude: '80.0728' },
+      { stringFormat: 'Delray Beach, FL', latitude: '26.4615', longitude: '-80.0728' },
       ['1001'],
       { host: true, tips: true, meetup: true, emergencyContact: true },
       '11/01/2018');
@@ -88,7 +84,6 @@ export class WebDataService {
       ['1001'],
       { host: true, tips: true, meetup: false, emergencyContact: false },
       '11/01/2018');
-
 
 
     return JSON.stringify([user1, user2, user3, user4, user5, user6, user7, user8]);

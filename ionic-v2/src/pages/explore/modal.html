@@ -27,7 +27,7 @@
         <ion-list *ngSwitchCase="'first'">
             <button ion-item *ngFor="let user of firstConnections" (click)="onClickProfile(user)">
                 <ion-thumbnail item-start>
-                    <img src="../../assets/avatar_man.png">
+                    <img src="{{user.profile_img_url}}">
                     <!-- <img src="{{user.profile_img_url}}"> -->                      
                 </ion-thumbnail>
                 <label class="name">{{user.first_name}}</label>
@@ -44,7 +44,7 @@
         <ion-list *ngSwitchCase="'second'">
             <button ion-item *ngFor="let user of secondConnections" (click)="onClickProfile(user)">
                 <ion-thumbnail item-start>
-                    <img src="../../assets/avatar_woman.png">
+                    <img src="{{user.profile_img_url}}">
                 </ion-thumbnail>
                 <label class="name">{{user.first_name}}</label>
                 <div>
