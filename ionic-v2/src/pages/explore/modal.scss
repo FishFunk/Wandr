@@ -1,12 +1,27 @@
 modal-page {
 
-    .name {
+    .list-name {
         font-weight: bold;
         font-size: 14px;
     }
 
-    ion-icon {
+    .mini-icon {
         color: #800040; // myDarkPurple
         font-size: 1em !important;
+    }
+
+    .image-md {
+        height: 6em;
+        width: 6em;
+    }
+
+    .scroll {
+        overflow-y: scroll;
+        display: block;
+        height: auto;
+    }
+
+    ion-avatar{
+        margin: auto;
     }
 }

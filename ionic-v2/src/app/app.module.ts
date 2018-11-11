@@ -66,7 +66,6 @@ export const config = {
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-  
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireModule.initializeApp(config),

@@ -1,6 +1,7 @@
-import { Component } from "@angular/core";
-import { ViewController, NavParams } from "ionic-angular";
+import { Component, ViewChild } from "@angular/core";
+import { ViewController, NavParams, Slides } from "ionic-angular";
 import { IUser } from '../../models/user';
+import _ from "underscore";
 
 @Component({
     selector: 'modal-page',
@@ -9,20 +10,43 @@ import { IUser } from '../../models/user';
 
 export class ModalPage 
 {
-    view: string = 'first';
-    firstConnections: IUser[] = [];
-    secondConnections: IUser[] = [];
+  @ViewChild(Slides) slides: Slides;
+  view: string = 'first';
+  firstConnections: IUser[] = [];
+  secondConnections: IUser[] = [];
+  currentUser = {};
+  showProfileSlide: boolean = false;
 
-    constructor(public viewCtrl: ViewController, params: NavParams) {
-        let users = params.get('firstConnections');
-        this.firstConnections = users;
-    }
+  constructor(public viewCtrl: ViewController, params: NavParams) {
+      let users = params.get('firstConnections');
+      this.firstConnections = users;
+      this.currentUser = _.first(users);
+  }
 
-    onClickProfile(user: IUser){
-      alert(user.first_name);
-    }
-  
-    closeModal() {
-      this.viewCtrl.dismiss();
-    }
+  ionViewDidLoad(){
+    this.slides.lockSwipes(true);
+  }
+
+  onClickProfile(user: IUser){
+    this.slides.lockSwipes(false);
+    this.currentUser = user;
+    this.showProfileSlide = true;
+    this.slides.slideNext(500);
+    this.slides.lockSwipes(true);
+  }
+
+  onClickSendMessage(){
+    alert("not yet implemented");
+  }
+
+  backSlide(){
+    this.slides.lockSwipes(false);
+    this.showProfileSlide = false;
+    this.slides.slidePrev(500);
+    this.slides.lockSwipes(true);
+  }
+
+  closeModal() {
+    this.viewCtrl.dismiss();
+  }
 }
