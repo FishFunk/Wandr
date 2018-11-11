@@ -51,7 +51,7 @@ public readonly firebaseInitOptions: any = {
   }
 
   onPlatformReady(){
-    //TODO: this.logger.initialize();     
+    // TODO: this.logger.initialize();   
     this.statusBar.styleDefault();
     this.splashScreen.hide();
   }

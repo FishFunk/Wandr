@@ -1,13 +1,9 @@
 page-profile {
 
   $text-color:#fff;
-  profileHeader{
-      color: #333;
-      font-size: 18px;
-  }
+  
   #profile1-image {
     display: block;
-    // border-radius: 50%;
     border-radius: 50%;
     width: auto;
     height: 110px;
@@ -26,7 +22,7 @@ page-profile {
     color: #444;
     font-size: 22px;
   }
-  .profile1-description {
+  .profile1-location {
     font-size: 15px;
     color: #888;
   }

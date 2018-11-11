@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController ,ToastController } from 'ionic-angular';
 import {  AngularFireDatabase ,  FirebaseObjectObservable} from 'angularfire2/database-deprecated';
 import { Facebook } from '@ionic-native/facebook';
+import { IntroPage } from '../intro/intro';
 
 @IonicPage()
 @Component({
@@ -10,6 +11,8 @@ import { Facebook } from '@ionic-native/facebook';
 })
 export class ProfilePage {
   profile:  FirebaseObjectObservable<any[]>;
+  editMode: boolean = false;
+  loadingPopup;
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams, 
@@ -18,13 +21,12 @@ export class ProfilePage {
     private toastCtrl: ToastController,
     private fb: Facebook) {
 
-    let loadingPopup = this.loadingCtrl.create({
+    this.loadingPopup = this.loadingCtrl.create({
       spinner: 'crescent',
       content: ''
     });
-    loadingPopup.present();
+    this.loadingPopup.present();
     this.profile = afDB.object('/profile/1');
-    this.profile.subscribe(() => loadingPopup.dismiss());
 
     //// TODO: Get geocode information from user string location, save in DB
 
@@ -42,11 +44,19 @@ export class ProfilePage {
 
   }
 
+  ionViewDidLoad(){
+    this.loadingPopup.dismiss();
+  }
+
+  onClickEdit(){
+    this.editMode = true;
+  }
+
   logout(){
     this.fb.logout()
       .then(()=>{
-        // TODO: Exit app - back to intro
         this.presentToast('top', 'Logout successful!');
+        this.navCtrl.setRoot(IntroPage);
       })
       .catch((error)=>{
         console.log(error);

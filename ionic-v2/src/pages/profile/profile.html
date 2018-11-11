@@ -1,89 +1,79 @@
-
 <ion-header>
-  <ion-navbar color="white" class="white-text">
+  <ion-navbar>
+      <ion-title><ion-icon name="md-globe">&nbsp;Travel Guru</ion-icon></ion-title>
+      <ion-buttons end>
+        <button ion-button icon-only><ion-icon name="create"></ion-icon></button>
+      </ion-buttons>
   </ion-navbar>
 </ion-header>
-
-
 <ion-content padding>
-
   <div id="profile1-info" class="test-class" padding>
-
     <img id="profile1-image" class="pop-in" src="{{(profile | async)?.imgProfile}}"/>
     <h3 id="profile1-name">{{(profile | async)?.name}}</h3>
-     <!--<p>{{(profile2 | async)?.company}} &bull; {{(profile2 | async)?.position}}</p> -->
-    <p class="profile1-description">{{(profile | async)?.position}} of {{(profile | async)?.company}}</p>
-
+    <p class="profile1-location">Washington DC</p>
     <ion-grid>
       <ion-row class="profile1-numbers">
-
         <!-- TODO: Change "follower/ing to reflect labels" -->
         <ion-col width-33>
           <span>{{(profile | async)?.follower}}</span> 
           <p>1st Connections</p>
         </ion-col>
-
         <ion-col width-33>      
           <span>{{(profile | async)?.following}}</span>
           <p>2nd Connections</p>
         </ion-col>
-
         <ion-col width-33>   
           <span>{{(profile | async)?.following}}</span>
           <p>Friends Invited</p>
         </ion-col>
-
       </ion-row>
     </ion-grid>
 
-  </div>
+    <!--***********  About  ***********-->
+    <ion-list no-lines text-wrap>
+        <ion-list-header>
+          <h2>About</h2>
+        </ion-list-header>
+        <ion-item>
+          <p >{{(profile | async)?.aboutMe}}</p>
+        </ion-item>
+    </ion-list>
 
+    <!--***********  Services  ***********-->
+    <ion-list no-lines text-wrap>
+        <ion-list-header>
+          <h2>Services</h2>
+        </ion-list-header>
+        <ion-item>
+          <p >{{(profile | async)?.aboutMe}}</p>
+        </ion-item>
+    </ion-list>
 
-<!--***********  About  ***********-->
-
-  <ion-list no-lines text-wrap>
+    <!--***********  Contact  ***********-->
+    <ion-list no-lines>
       <ion-list-header>
-        <h2> About</h2>
+        <h2>Contact</h2>
       </ion-list-header>
       <ion-item>
-        <p >{{(profile | async)?.aboutMe}}</p>
+          <ion-icon name="mail" item-left></ion-icon>
+          <h2>ceo@cemo.com</h2>
       </ion-item>
-  </ion-list>
-
-<!--***********  Contact  ***********-->
-  <ion-list no-lines>
-    <ion-list-header>
-      <h2>Contact</h2>
-    </ion-list-header>
-    <ion-item>
-        <ion-icon name="ios-mail" item-left></ion-icon>
-        <h2>ceo@cemo.com</h2>
-        <p>work email</p>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="ios-call" item-left></ion-icon>
-      <h2>009923124322</h2>
-      <p>mobile phone</p>
-    </ion-item>
-    <ion-item>
-        <ion-icon name="logo-linkedin" item-left></ion-icon>
-        <h2>linkedin.com/cemo</h2>
-        <p>linked in </p>
-    </ion-item>
-     <ion-item>
-      <ion-icon name="logo-facebook" item-left></ion-icon>
-      <h2>facebook.com/cemo</h2>
-      <p>facebook</p>
-    </ion-item>
-    <ion-item>
+      <ion-item>
+          <ion-icon name="logo-linkedin" item-left></ion-icon>
+          <h2>linkedin.com/cemo</h2>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="logo-facebook" item-left></ion-icon>
+        <h2>facebook.com/cemo</h2>
+      </ion-item>
+      <ion-item>
         <ion-icon name="logo-skype" item-left></ion-icon>
         <h2>cemo@outlook.com</h2>
-        <p>skype</p>
-    </ion-item>
-  </ion-list>
-  
-  <button ion-button full color="dark" clear (click)="logout()">
-    Logout
-  </button>
-
+      </ion-item>
+    </ion-list>
+    
+    <button ion-button full color="dark" clear (click)="logout()">
+      Logout
+    </button>
+  </div>
 </ion-content>
