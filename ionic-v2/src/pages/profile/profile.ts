@@ -70,6 +70,7 @@ export class ProfilePage {
     toast.present();
   }
 
+  // start Bound Elements
   private updateSearchResults(){
     if (this.autoComplete.input == '') {
       this.autoCompleteItems = [];
@@ -90,4 +91,5 @@ export class ProfilePage {
     this.autoComplete.input = item.description;
     this.autoCompleteItems = [];
   }
+  // end Bound Elements
 }

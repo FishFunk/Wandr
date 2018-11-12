@@ -18,6 +18,16 @@ export class MapPage {
   heatmap: google.maps.visualization.HeatmapLayer;
   minZoomLevel: number = 2;
   maxZoomLevel: number = 12;
+  mapCenter = new google.maps.LatLng(39.250223, -99.142097); // Center
+    
+  mapOptions = {
+    center: this.mapCenter,
+    zoom: this.minZoomLevel,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+
+  minY = -70;
+  maxY = 70;
 
   locationMap: _.Dictionary<google.maps.LatLng>; // { 'string_location' : LatLng Object }
   userMap: _.Dictionary<IUser[]> // Users mapped by string location
@@ -33,26 +43,35 @@ export class MapPage {
  
   async loadMap(){
     var self = this;
-    let latLng = new google.maps.LatLng(39.250223, -99.142097); // Kansas
  
-    let mapOptions = {
-      center: latLng,
-      zoom: this.minZoomLevel,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
- 
-    this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    this.map = new google.maps.Map(document.getElementById('map'), this.mapOptions);
 
     var users = await this.webDataService.readUserFirstConnections();
     this.createMarkersAndHeatMap(users);
 
-    // Wait for map to initialize
+    // Bind map events
     setTimeout(()=>{
+        // Limit zoom level
         self.map.addListener('zoom_changed', function(e) {
             var currentZoomLevel = self.map.getZoom();
             if (currentZoomLevel < self.minZoomLevel || currentZoomLevel > self.maxZoomLevel){ 
                 e.preventDefault();
             }
+        });
+
+        // Prevent scrolling outside Y range
+        self.map.addListener('idle', function(e){
+          var c = self.map.getCenter(),
+            y = c.lat();
+
+          if (y > self.minY && y < self.maxY) {
+            // still within valid bounds, so save the last valid position
+            self.mapCenter = c;
+            return; 
+          }
+    
+          // not valid anymore => return to last valid position
+          self.map.panTo(self.mapCenter);
         });
     }, 1000);
   }
@@ -74,7 +93,7 @@ export class MapPage {
       let geoCode: google.maps.LatLng;
       if(!this.locationMap[formattedLocation]){
         geoCode = new google.maps.LatLng(users[idx].location.latitude, users[idx].location.longitude);
-        this.locationMap[formattedLocation] = geoCode; // What happens if geocode is null?
+        this.locationMap[formattedLocation] = geoCode;
 
         // Add clickable marker for each unique location
         markerLatLngs.push(geoCode);
@@ -112,7 +131,7 @@ export class MapPage {
         icon: image
       });
 
-      marker.setOpacity(0.05);
+      marker.setOpacity(0);
 
       marker.addListener('click', this.onMarkerClick.bind(this, latLng));
 
