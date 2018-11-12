@@ -10,8 +10,8 @@ export class MockDataGenerator
           var usr = new User(
             i.toString(), 
             i.toString(), 
-            this.randomWord(),
-            this.randomWord(),
+            this.randomFirstName(),
+            this.randomLastName(),
             this.randomNumber(18, 99),
             this.randomSentence(),
             this.randomLocation(),
@@ -58,7 +58,7 @@ export class MockDataGenerator
     
       private randomWord(){
         var letters = "abcdefghijklmnopqrstuvwxyrz";
-        var wordLength = this.randomNumber(1, 10);
+        var wordLength = this.randomNumber(2, 10);
         var word = "";
     
         for(var i=0; i < wordLength; i++){
@@ -78,4 +78,145 @@ export class MockDataGenerator
     
         return sentence;
       }
+
+      private randomFirstName(){
+        let names = [
+          "Alex",
+          "Andre",
+          "Arnold",
+          "Amanda",
+          "Anna",
+          "Aaron",
+          "Ben",
+          "Bill",
+          "Carson",
+          "Cecilia",
+          "Cooper",
+          "Carter",
+          "David",
+          "Daniel",
+          "Dale",
+          "Dee",
+          "Daisy",
+          "Eric",
+          "Erica",
+          "Erin",
+          "Frank",
+          "Fred",
+          "Floyd",
+          "Francisco",
+          "Francesca",
+          "Gina",
+          "George",
+          "Gabrielle",
+          "Gabe",
+          "Harry",
+          "Henry",
+          "Isaac",
+          "Ian",
+          "Isabel",
+          "Janie",
+          "Jane",
+          "Jill",
+          "Jack",
+          "Jasmine",
+          "Jerry",
+          "Jack",
+          "Jerry",
+          "John",
+          "Kathy",
+          "Kerry",
+          "Kenny",
+          "Karl",
+          "Kim",
+          "Kelly",
+          "Larry",
+          "Linda",
+          "Lindsey",
+          "Luke",
+          "Molly",
+          "Mary",
+          "Madison",
+          "Maxwell",
+          "Mark",
+          "Morty",
+          "Nick",
+          "Perry",
+          "Pierce",
+          "Parker",
+          "Patricia",
+          "Que",
+          "Rita",
+          "Rose",
+          "Reese",
+          "Ryan",
+          "Rick",
+          "Sam",
+          "Steven",
+          "Samantha",
+          "Susan",
+          "Trey",
+          "Tuan",
+          "Timothy",
+          "Thomas",
+          "Udall",
+          "Victor",
+          "Victoria",
+          "Venessa",
+          "Walter",
+          "William",
+          "Xavier",
+          "Yoyo",
+          "Zizi"
+        ];
+
+      return names[this.randomNumber(0, names.length - 1)];
+      }
+
+
+    private randomLastName(){
+      let names = [
+        "Barker",
+        "Johanssen",
+        "Palmer",
+        "Bynes",
+        "Rienerston",
+        "Ufberg",
+        "Kissel",
+        "Myers",
+        "Wahl",
+        "Goldberg",
+        "Flinstone",
+        "McJones",
+        "Waters",
+        "Simposon",
+        "Smith",
+        "Taylor",
+        "Frankel",
+        "Lee",
+        "Wong",
+        "Augliere",
+        "Fishman",
+        "Burbank",
+        "Abemrod",
+        "Appleseed",
+        "Williams",
+        "Stone",
+        "Boyle",
+        "Singer",
+        "Pugarelli",
+        "Hickman",
+        "Reed",
+        "Piralta",
+        "Lohmann",
+        "Mullen",
+        "Gilchrist",
+        "Cherepansky",
+        "Peeples",
+        "Terhune",
+        "Ma"
+      ];
+
+      return names[this.randomNumber(0, names.length - 1)];
+    }
 }

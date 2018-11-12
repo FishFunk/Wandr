@@ -9,6 +9,7 @@ page-inbox {
 
     .list-header{
         color: #888;
+        text-align: left;
     }
 
     .unread {
@@ -18,5 +19,11 @@ page-inbox {
 
     .name {
         font-size: 16px;
+    }
+
+    .scroll {
+        overflow-y: scroll;
+        display: block;
+        height: auto;
     }
 }
