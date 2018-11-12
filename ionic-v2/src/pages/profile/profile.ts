@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController ,ToastController } from 'ionic-angular';
 import {  AngularFireDatabase ,  FirebaseObjectObservable} from 'angularfire2/database-deprecated';
 import { Facebook } from '@ionic-native/facebook';
-import { IntroPage } from '../intro/intro';
 
 @IonicPage()
 @Component({
@@ -13,6 +12,9 @@ export class ProfilePage {
   profile:  FirebaseObjectObservable<any[]>;
   editMode: boolean = false;
   loadingPopup;
+  countries: any[] = [];
+  selectedCountry: string;
+  selectState: boolean = false;
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams, 
@@ -27,7 +29,6 @@ export class ProfilePage {
     });
     this.loadingPopup.present();
     this.profile = afDB.object('/profile/1');
-
     //// TODO: Get geocode information from user string location, save in DB
 
     // var geocoderOptions: NativeGeocoderOptions = {
@@ -48,20 +49,8 @@ export class ProfilePage {
     this.loadingPopup.dismiss();
   }
 
-  onClickEdit(){
-    this.editMode = true;
-  }
-
-  logout(){
-    this.fb.logout()
-      .then(()=>{
-        this.presentToast('top', 'Logout successful!');
-        this.navCtrl.setRoot(IntroPage);
-      })
-      .catch((error)=>{
-        console.log(error);
-        this.presentToast('top', 'Logout failed!');
-      });
+  toggleEdit(){
+    this.editMode = !this.editMode;
   }
 
   presentToast(position: string,message: string) {
@@ -72,5 +61,4 @@ export class ProfilePage {
     });
     toast.present();
   }
-
 }
