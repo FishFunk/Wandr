@@ -9,22 +9,17 @@
 </ion-header>
 <ion-content padding>
   <div id="profile1-info" class="test-class" padding>
-    <img id="profile1-image" class="pop-in" src="{{(profile | async)?.imgProfile}}"/>
+    <img id="profile1-image" class="pop-in" src="../../assets/avatar_man.png"/>
     <h3 id="profile1-name">{{(profile | async)?.name}}</h3>
     <p *ngIf="!editMode" class="profile1-location">Washington DC</p>
     <div *ngIf="editMode">
-      <ion-grid text-center>
-        <ion-row>
-          <ion-col>
-              <ion-label color="dark" stacked>City</ion-label>
-              <ion-input placeholder="Text Input"></ion-input>
-          </ion-col>
-          <ion-col>      
-              <ion-label color="dark" stacked>Country or State</ion-label>
-              <ion-input placeholder="Text Input"></ion-input>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <ion-label color="dark" stacked>Where Do You Live?</ion-label>
+      <ion-searchbar [(ngModel)]="autoComplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>
+      <ion-list [hidden]="autoCompleteItems.length == 0">
+        <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">
+          {{ item.description }}
+        </ion-item>
+      </ion-list>
     </div>
     <ion-grid *ngIf="!editMode">
       <ion-row class="profile1-numbers">

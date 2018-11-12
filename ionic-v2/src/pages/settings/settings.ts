@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ToastController, NavController } from 'ionic-angular';
+import { IonicPage, ToastController, NavController, AlertController } from 'ionic-angular';
 import { Facebook } from '@ionic-native/facebook';
 import { IntroPage } from '../intro/intro';
 
@@ -12,11 +12,31 @@ export class SettingsPage {
     constructor(
         public navCtrl: NavController,
         private toastCtrl: ToastController,
+        private alertCtrl: AlertController,
         private fb: Facebook){
 
     }
 
-    logout() {
+    onClickLogout() {
+        const confirm = this.alertCtrl.create({
+          title: 'Are you sure you want to logout?',
+          buttons: [
+            {
+                text: "I'm sure",
+                    handler: () => {
+                    this.logout();
+                }
+            },
+            {
+                text: 'Oops, no way!',
+                handler: () => {}
+            }]
+        });
+        confirm.present();
+    }
+
+
+    private logout() {
         this.fb.logout()
             .then(()=>{
                 this.presentToast('top', 'Logout successful!');
@@ -28,7 +48,7 @@ export class SettingsPage {
             });
     }
 
-    presentToast(position: string,message: string) {
+    private presentToast(position: string,message: string) {
         let toast = this.toastCtrl.create({
           message: message,
           position: position,

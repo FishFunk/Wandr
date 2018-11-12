@@ -18,10 +18,12 @@
             <ion-label>Push Notifications</ion-label>
             <ion-toggle checked="true"></ion-toggle>
         </ion-item>
-        <ion-item>
-            <button ion-button full color="dark" clear (click)="logout()">
+    </ion-list>
+    <ion-footer>
+        <ion-toolbar>
+            <button ion-button full color="dark" clear (click)="onClickLogout()">
                 Logout
             </button>
-        </ion-item>
-    </ion-list>
+        </ion-toolbar>
+    </ion-footer>
 </ion-content>
