@@ -1,14 +1,21 @@
 
 <ion-header>
     <ion-navbar>
-        <ion-title>Invite Your Friends!</ion-title>
-        <div padding text-center>
-            <p>Strengthen your network and profile status. The more connections you make, the greater the possibilities!</p>
-        </div>
+        <ion-title><ion-icon name="md-globe">&nbsp;Travel Guru</ion-icon></ion-title>
     </ion-navbar>
 </ion-header>
   
 <ion-content>
+    <ion-card text-center>
+        <ion-card-header>
+            Grow Your Network!
+        </ion-card-header>    
+        <ion-card-content>
+            <label>1st Degree Connections:</label>&nbsp;<span>32</span><br>
+            <label>2nd Degree Connections:</label>&nbsp;<span>134</span><br>
+            <label>Friends Invited:</label>&nbsp;<span>12</span>
+        </ion-card-content>     
+    </ion-card>
     <ion-list>
         <button ion-item padding (click)="facebookShare()">
             <ion-icon class="facebook_blue" name="logo-facebook" item-start></ion-icon>
@@ -31,17 +38,5 @@
             WhatsApp
         </button>
     </ion-list>
-
-    <ion-card>
-        <ion-card-header>
-            Your Network
-        </ion-card-header>    
-        <ion-card-content>
-            <label>1st Degree Connections:</label>&nbsp;<span>32</span><br>
-            <label>2nd Degree Connections:</label>&nbsp;<span>134</span><br>
-            <label>Friends Invited:</label>&nbsp;<span>12</span>
-        </ion-card-content>     
-    </ion-card>
-
 </ion-content>
   

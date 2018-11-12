@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { User, IUser } from '../models/user';
 import { MockDataGenerator } from './mockDataGenerator';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class WebDataService {
  
-    constructor() {
- 
+    constructor(private http: HttpClient) {
     }
  
   // Mock: Convert to read data from server
@@ -25,6 +25,20 @@ export class WebDataService {
       var usersJson = this.getMockUserJson();
       var users = JSON.parse(usersJson);
       resolve(users);
+    });
+  }
+
+  async readListOfCountryNames(){
+    return new Promise((resolve, reject) => 
+    {
+      this.http.get('https://restcountries.eu/rest/v2/all?fields=name').subscribe(data => {
+        resolve(data);
+      },
+      (error) => 
+      {
+        console.log(error);
+        reject(error);
+      });
     });
   }
 

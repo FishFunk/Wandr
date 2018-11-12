@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { HttpClientModule } from '@angular/common/http';
 
 //*********** ionic Native **************/
 import { StatusBar } from '@ionic-native/status-bar';
@@ -36,6 +37,7 @@ import { ProfilePage } from '../pages/profile/profile';
 import { InboxPage } from '../pages/messages/inbox';
 import { InvitePage } from '../pages/invite/invite';
 import { MapPage } from '../pages/explore/map';
+import { SettingsPage } from '../pages/settings/settings';
 
 //*********** Provider **************/
 // import { AuthData } from '../providers/auth-data';
@@ -61,14 +63,16 @@ export const config = {
     InboxPage,
     InvitePage,
     MapPage,
-    ModalPage
+    ModalPage,
+    SettingsPage
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    AngularFireModule.initializeApp(config),
+    AngularFireModule.initializeApp(config)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -78,7 +82,8 @@ export const config = {
     InboxPage,
     InvitePage,
     MapPage,
-    ModalPage
+    ModalPage,
+    SettingsPage
   ],
   providers: [
     StatusBar,

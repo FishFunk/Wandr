@@ -4,6 +4,7 @@ import { InboxPage } from '../messages/inbox';
 import { InvitePage } from '../invite/invite';
 import { MapPage } from '../explore/map';
 import { Tabs } from 'ionic-angular';
+import { SettingsPage } from '../settings/settings';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class TabsPage {
   tab2Root = InboxPage;
   tab3Root = MapPage;
   tab4Root = InvitePage;
-  tab5Root = ProfilePage; //HelpPage;
+  tab5Root = SettingsPage;
 
   constructor(){
   }

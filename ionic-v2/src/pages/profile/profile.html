@@ -2,16 +2,26 @@
   <ion-navbar>
       <ion-title><ion-icon name="md-globe">&nbsp;Travel Guru</ion-icon></ion-title>
       <ion-buttons end>
-        <button ion-button icon-only><ion-icon name="create"></ion-icon></button>
+        <button ion-button icon-only *ngIf="!editMode" (click)="toggleEdit()"><ion-icon name="create"></ion-icon></button>
+        <button ion-button icon-only *ngIf="editMode" (click)="toggleEdit()">Done</button>
       </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content padding>
   <div id="profile1-info" class="test-class" padding>
-    <img id="profile1-image" class="pop-in" src="{{(profile | async)?.imgProfile}}"/>
+    <img id="profile1-image" class="pop-in" src="../../assets/avatar_man.png"/>
     <h3 id="profile1-name">{{(profile | async)?.name}}</h3>
-    <p class="profile1-location">Washington DC</p>
-    <ion-grid>
+    <p *ngIf="!editMode" class="profile1-location">Washington DC</p>
+    <div *ngIf="editMode">
+      <ion-label color="dark" stacked>Where Do You Live?</ion-label>
+      <ion-searchbar [(ngModel)]="autoComplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>
+      <ion-list [hidden]="autoCompleteItems.length == 0">
+        <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">
+          {{ item.description }}
+        </ion-item>
+      </ion-list>
+    </div>
+    <ion-grid *ngIf="!editMode">
       <ion-row class="profile1-numbers">
         <!-- TODO: Change "follower/ing to reflect labels" -->
         <ion-col width-33>
@@ -34,46 +44,75 @@
         <ion-list-header>
           <h2>About</h2>
         </ion-list-header>
-        <ion-item>
-          <p >{{(profile | async)?.aboutMe}}</p>
+        <ion-item *ngIf="!editMode">
+          <p>{{(profile | async)?.aboutMe}}</p>
+        </ion-item>
+        <ion-item *ngIf="editMode">
+          <!-- <ion-label color="dark" stacked>A bit about yourself</ion-label> -->
+          <ion-textarea placeholder="Enter a description">{{(profile | async)?.aboutMe}}</ion-textarea>
         </ion-item>
     </ion-list>
 
     <!--***********  Services  ***********-->
     <ion-list no-lines text-wrap>
-        <ion-list-header>
-          <h2>Services</h2>
-        </ion-list-header>
-        <ion-item>
-          <p >{{(profile | async)?.aboutMe}}</p>
-        </ion-item>
+      <ion-list-header>
+        <h2>Services</h2>
+      </ion-list-header>
+      <ion-item>
+        <ion-grid text-center>
+          <ion-row>
+              <ion-col>
+                  <ion-checkbox *ngIf="editMode"></ion-checkbox>
+                  <ion-icon name="home"></ion-icon><br>
+                  <p>Host</p>
+              </ion-col>
+              <ion-col>    
+                  <ion-checkbox *ngIf="editMode"></ion-checkbox>
+                  <ion-icon name="information-circle"></ion-icon><br>
+                  <p>Local Tips</p>
+              </ion-col>
+              <ion-col>
+                  <div *ngIf="editMode">
+                    <ion-checkbox *ngIf="editMode"></ion-checkbox>
+                  </div>
+                  <ion-icon name="contacts"></ion-icon><br>
+                  <p>Meetup</p>
+              </ion-col>
+              <ion-col>
+                  <div *ngIf="editMode">
+                    <ion-checkbox></ion-checkbox>
+                  </div>
+                  <ion-icon name="call"></ion-icon><br>
+                  <p>Emergency Contact</p>
+              </ion-col>            
+          </ion-row>
+        </ion-grid> 
+      </ion-item>
     </ion-list>
 
     <!--***********  Contact  ***********-->
-    <ion-list no-lines>
-      <ion-list-header>
-        <h2>Contact</h2>
-      </ion-list-header>
-      <ion-item>
-          <ion-icon name="mail" item-left></ion-icon>
-          <h2>ceo@cemo.com</h2>
-      </ion-item>
-      <ion-item>
-          <ion-icon name="logo-linkedin" item-left></ion-icon>
-          <h2>linkedin.com/cemo</h2>
-      </ion-item>
-      <ion-item>
-        <ion-icon name="logo-facebook" item-left></ion-icon>
-        <h2>facebook.com/cemo</h2>
-      </ion-item>
-      <ion-item>
-        <ion-icon name="logo-skype" item-left></ion-icon>
-        <h2>cemo@outlook.com</h2>
-      </ion-item>
-    </ion-list>
-    
-    <button ion-button full color="dark" clear (click)="logout()">
-      Logout
-    </button>
+    <div *ngIf="!editMode">
+      <ion-list no-lines>
+        <ion-list-header>
+          <h2>Contact</h2>
+        </ion-list-header>
+        <ion-item>
+            <ion-icon name="mail" item-left></ion-icon>
+            <h2>ceo@cemo.com</h2>
+        </ion-item>
+        <ion-item>
+            <ion-icon name="logo-linkedin" item-left></ion-icon>
+            <h2>linkedin.com/cemo</h2>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="logo-facebook" item-left></ion-icon>
+          <h2>facebook.com/cemo</h2>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="logo-skype" item-left></ion-icon>
+          <h2>cemo@outlook.com</h2>
+        </ion-item>
+      </ion-list>
+    </div>
   </div>
 </ion-content>
