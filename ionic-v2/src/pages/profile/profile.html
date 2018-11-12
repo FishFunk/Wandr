@@ -23,17 +23,16 @@
     </div>
     <ion-grid *ngIf="!editMode">
       <ion-row class="profile1-numbers">
-        <!-- TODO: Change "follower/ing to reflect labels" -->
         <ion-col width-33>
-          <span>{{(profile | async)?.follower}}</span> 
+          <span>72</span> 
           <p>1st Connections</p>
         </ion-col>
         <ion-col width-33>      
-          <span>{{(profile | async)?.following}}</span>
+          <span>412</span>
           <p>2nd Connections</p>
         </ion-col>
         <ion-col width-33>   
-          <span>{{(profile | async)?.following}}</span>
+          <span>23</span>
           <p>Friends Invited</p>
         </ion-col>
       </ion-row>
@@ -90,8 +89,8 @@
       </ion-item>
     </ion-list>
 
-    <!--***********  Contact  ***********-->
-    <div *ngIf="!editMode">
+    <!-- ***********  Contact  *********** -->
+    <!-- <div *ngIf="!editMode">
       <ion-list no-lines>
         <ion-list-header>
           <h2>Contact</h2>
@@ -112,7 +111,7 @@
           <ion-icon name="logo-skype" item-left></ion-icon>
           <h2>cemo@outlook.com</h2>
         </ion-item>
-      </ion-list>
+      </ion-list> -->
     </div>
   </div>
 </ion-content>
