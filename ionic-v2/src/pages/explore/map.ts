@@ -13,12 +13,13 @@ declare var google;
 })
 
 export class MapPage {
-
+  users: IUser[] = [];
+  searchItems: string[];
   map: google.maps.Map;
   heatmap: google.maps.visualization.HeatmapLayer;
   minZoomLevel: number = 2;
   maxZoomLevel: number = 12;
-  mapCenter = new google.maps.LatLng(39.250223, -99.142097); // Center
+  mapCenter = new google.maps.LatLng(39.250223, -99.142097);
     
   mapOptions = {
     center: this.mapCenter,
@@ -42,42 +43,30 @@ export class MapPage {
   }
  
   async loadMap(){
-    var self = this;
- 
     this.map = new google.maps.Map(document.getElementById('map'), this.mapOptions);
 
-    var users = await this.webDataService.readUserFirstConnections();
-    this.createMarkersAndHeatMap(users);
+    this.users = await this.webDataService.readUserFirstConnections();
+    this.createMarkersAndHeatMap(this.users);
 
     // Bind map events
     setTimeout(()=>{
-        // Limit zoom level
-        self.map.addListener('zoom_changed', function(e) {
-            var currentZoomLevel = self.map.getZoom();
-            if (currentZoomLevel < self.minZoomLevel || currentZoomLevel > self.maxZoomLevel){ 
-                e.preventDefault();
-            }
-        });
-
-        // Prevent scrolling outside Y range
-        self.map.addListener('idle', function(e){
-          var c = self.map.getCenter(),
-            y = c.lat();
-
-          if (y > self.minY && y < self.maxY) {
-            // still within valid bounds, so save the last valid position
-            self.mapCenter = c;
-            return; 
-          }
-    
-          // not valid anymore => return to last valid position
-          self.map.panTo(self.mapCenter);
-        });
+      this.bindEvents();        
     }, 1000);
   }
 
-  onClickSearchButton(){
-    alert("Search function not yet implemented");
+  getItems(ev: any) {
+
+    this.searchItems = _.map(this.users, (usr)=> `${usr.first_name} ${usr.last_name} (${usr.location.stringFormat})`);
+    
+    // set val to the value of the searchbar
+    const val = ev.target.value;
+
+    // if the value is an empty string don't filter the items
+    if (val && val.trim() != '') {
+      this.searchItems = this.searchItems.filter((item) => {
+        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    }
   }
 
   private createMarkersAndHeatMap(users: IUser[]){
@@ -174,5 +163,68 @@ export class MapPage {
   private presentPopover(myEvent, firstConnections: IUser[]) {
     let popover = this.modalCtrl.create(ModalPage, { firstConnections: firstConnections });
     popover.present({ ev: myEvent });
+  }
+
+  private bindEvents(){
+    // Limit zoom level
+    this.map.addListener('zoom_changed', ()=> {
+      var currentZoomLevel = this.map.getZoom();
+      if (currentZoomLevel < this.minZoomLevel){
+        this.map.setZoom(this.minZoomLevel);
+      } else if (currentZoomLevel > this.maxZoomLevel){ 
+          this.map.setZoom(this.maxZoomLevel);
+      }
+    });
+
+    // Create the search box and link it to the UI element.
+    var input = document.getElementById('searchInput');
+    var searchBox = new google.maps.places.SearchBox(input);
+    this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    searchBox.addListener('places_changed', ()=> {
+      var places = searchBox.getPlaces();
+
+      if (places.length == 0) {
+        return;
+      }
+
+      // For each place, get the location.
+      var bounds = new google.maps.LatLngBounds();
+      places.forEach((place)=> {
+        if (!place.geometry) {
+          console.log("Returned place contains no geometry");
+          return;
+        }
+
+        if (place.geometry.viewport) {
+          // Only geocodes have viewport.
+          bounds.union(place.geometry.viewport);
+        } else {
+          bounds.extend(place.geometry.location);
+        }
+      });
+      this.map.fitBounds(bounds);
+      this.map.setZoom(this.maxZoomLevel);
+    });
+
+    // Prevent scrolling outside Y range
+    this.map.addListener('idle', (e)=>{
+
+      var c = this.map.getCenter(),
+        y = c.lat();
+
+      if (y > this.minY && y < this.maxY) {
+        // still within valid bounds, so save the last valid position
+        this.mapCenter = c;
+      // Bias the SearchBox results towards current map's viewport.
+        searchBox.setBounds(this.map.getBounds());
+        return; 
+      }
+
+      // not valid anymore => return to last valid position
+      this.map.panTo(this.mapCenter);
+    });
   }
 }

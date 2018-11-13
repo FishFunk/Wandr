@@ -29,7 +29,7 @@ export class MockDataGenerator
       private randomLocation(){
         var locations = [
           { stringFormat: "Houston, TX", latitude: "29.7604", longitude: "-95.3698" },
-          { stringFormat: "Auston, TX", latitude: "30.2672", longitude: "-97.7431" },
+          { stringFormat: "Austin, TX", latitude: "30.2672", longitude: "-97.7431" },
           { stringFormat: "Washington DC", latitude: "38.9072", longitude: "-77.0369" },
           { stringFormat: "San Francisco, CA", latitude: "37.7749", longitude: "-122.4194" },
           { stringFormat: "Toulouse, France", latitude: "43.6047", longitude: "1.4442" },
