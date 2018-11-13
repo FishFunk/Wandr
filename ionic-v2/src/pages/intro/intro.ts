@@ -17,15 +17,13 @@ export class IntroPage {
   slides = [
     {
       title: "Welcome, Travel Guru",
-      description: "Explore new places. Meet new people",
-      image: "./assets/slide2-2.png",
-      color: "#1ABC9C"
+      description: "Explore. Discover. Connect.",
+      image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
     },
     {
       title: "Join the Tribe!",
       description: "Travel globally. Experience locally.",
-      image: "./assets/slide1-1.png",
-      color: "#1ABC9C"
+      image: "../../assets/undraw/purple/undraw_connected_8wvi.svg"
     }
   ];
 

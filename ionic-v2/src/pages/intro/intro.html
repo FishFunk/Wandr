@@ -1,36 +1,18 @@
-
-<ion-content fullscreen class="tutorial-page" no-bounce>
+<ion-content no-bounce>
   <ion-slides pager="true">
+    <ion-slide *ngFor="let slide of slides" [ngStyle]="{'background-color':'#1ABC9C'}"> 
+    <img [src]="slide.image" class="slide-image"/>
+    <h2 class="slide-title" [innerHTML]="slide.title"></h2>
+    <p [innerHTML]="slide.description"></p>
+    </ion-slide>
 
-      <ion-slide *ngFor="let slide of slides" [ngStyle]="{'background-color': slide.color} "> 
-            <div class="intro-box">
-                <img [src]="slide.image" class="pop-in slide-image"/>
-                <h2 class="slide-title" [innerHTML]="slide.title"></h2>
-                <p [innerHTML]="slide.description"></p>
-                <br>
-                <button ion-button large outline round icon-right color="primary" margin-top (click)="onClickfacebookLogin()">
-                    <img src="./assets/fb.png" class="slide-image"/>&nbsp;&nbsp;
-                    Join with Facebook!
-                    <ion-icon name="arrow-forward"></ion-icon>
-                </button>
-            </div>
-      </ion-slide>
-
-      <ion-slide [ngStyle]="{'background-color': '#FFFFFF'}">
-            <ion-toolbar transparent>
-                    <ion-buttons end>
-                        <button ion-button menuToggle color="myDarkPurple"></button>                                
-                    </ion-buttons>
-            </ion-toolbar>
-            <div class="introBox" margin-top>
-                <img src="./assets/slide5.png" class="slide-image"/>
-                <button ion-button large outline round icon-right color="primary" margin-top (click)="onClickfacebookLogin()">
-                    <img src="./assets/fb.png" class="slide-image"/>&nbsp;&nbsp;
-                    Join with Facebook!
-                    <ion-icon name="arrow-forward"></ion-icon>
-                </button>
-            </div>
-      </ion-slide>
+    <ion-slide [ngStyle]="{'background-color':'#1ABC9C'}">
+        <img src="../../assets/undraw/purple/undraw_online_world_mc1t.svg" class="slide-image"/>
+        <br><br>
+        <button ion-button outline round color="secondary" margin-top (click)="onClickfacebookLogin()">
+            <!-- <img src="./assets/fb.png"/>&nbsp;&nbsp; -->
+            <ion-icon id="facebook-logo" name="logo-facebook" color="secondary">&nbsp;&nbsp;Join with Facebook!</ion-icon>
+        </button>
+    </ion-slide>
   </ion-slides>
-
 </ion-content>         
