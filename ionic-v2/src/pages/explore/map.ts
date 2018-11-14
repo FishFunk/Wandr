@@ -24,7 +24,26 @@ export class MapPage {
   mapOptions = {
     center: this.mapCenter,
     zoom: this.minZoomLevel,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    styles: [
+      {"featureType": "administrative", "elementType": "labels.text.fill", "stylers": [{"color": "#444444"}]},
+      {"featureType": "administrative.land_parcel","stylers": [{"visibility": "off"}]},
+      {"featureType": "administrative.neighborhood","stylers": [{"visibility": "off"}]},
+      {"featureType": "landscape","stylers": [{"color": "#f2f2f2"}]},
+      {"featureType": "poi","stylers": [{"visibility": "off"}]},
+      {"featureType": "poi","elementType": "labels.text","stylers": [{"visibility": "off"}]},
+      {"featureType": "poi.business","stylers": [{"visibility": "off"}]},
+      {"featureType": "road","stylers": [{"saturation": -100},{"lightness": 45}]},
+      {"featureType": "road","elementType": "labels","stylers": [{"visibility": "off"}]},
+      {"featureType": "road","elementType": "labels.icon","stylers": [{"visibility": "off"}]},
+      {"featureType": "road.arterial","stylers": [{"visibility": "off"}]},
+      {"featureType": "road.arterial","elementType": "labels.icon","stylers": [{"visibility": "off"}]},
+      {"featureType": "road.highway","stylers": [{"visibility": "simplified"}]},
+      {"featureType": "road.highway","elementType": "labels","stylers": [{"visibility": "off"}]},
+      {"featureType": "road.local","stylers": [{"visibility": "off"}]},
+      {"featureType": "transit","stylers": [{"visibility": "off"}]},
+      {"featureType": "water","stylers": [{"color": "#aeaeae"},{"visibility": "on"}]},
+      {"featureType": "water","elementType": "labels.text","stylers": [{"visibility": "off"}]}]
   }
 
   minY = -70;
@@ -142,20 +161,17 @@ export class MapPage {
       map: this.map,
       radius: 60,
       gradient: [
-        'rgba(0, 255, 255, 0)',
-        'rgba(0, 255, 255, 1)',
-        'rgba(0, 191, 255, 1)',
-        'rgba(0, 127, 255, 1)',
-        'rgba(0, 63, 255, 1)',
-        'rgba(0, 0, 255, 1)',
-        'rgba(0, 0, 223, 1)',
-        'rgba(0, 0, 191, 1)',
-        'rgba(0, 0, 159, 1)',
-        'rgba(0, 0, 127, 1)',
-        'rgba(63, 0, 91, 1)',
-        'rgba(127, 0, 63, 1)',
-        'rgba(191, 0, 31, 1)',
-        'rgba(255, 0, 0, 1)'
+        'rgba(26, 188, 156, 0)',
+        'rgba(26, 188, 156, 1)',
+        'rgba(34, 167, 157, 1)',
+        'rgba(43, 146, 158, 1)',
+        'rgba(51, 125, 160, 1)',
+        'rgba(60, 104, 161, 1)',
+        'rgba(68, 83, 163, 1)',
+        'rgba(77, 62, 164, 1)',
+        'rgba(85, 41, 166, 1)',
+        'rgba(94, 20, 167, 1)',
+        'rgba(103, 0, 169, 1)'
       ]
     });
   }
