@@ -38,9 +38,7 @@ $colors: (
   secondary:  #6700a9,
   danger:     #111010,
   light:      #f4f4f4,
-  dark:       #222, 
-  myDarkPurple: #6700a9,
-  myTeal: #1ABC9C,
+  dark:       #222,
   myGrey: #C0C0B5,
   myRed: #ED1C24, 
   lightPurple: #dba3ff);
@@ -93,3 +91,8 @@ $colors: (
 .toolbar{
   box-shadow: 0px 2px 0px #ffffff !important;
 }
+
+$badge-ios-background-color: color($colors, secondary);
+$badge-md-background-color: color($colors, secondary);
+$badge-wp-background-color: color($colors, secondary);
+

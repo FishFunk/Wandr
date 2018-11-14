@@ -34,10 +34,10 @@
                         </ion-thumbnail>
                         <label class="list-name">{{user.first_name}}</label>
                         <div>
-                            <ion-icon *ngIf="user.services.host" name="home"></ion-icon>
-                            <ion-icon *ngIf="user.services.tips" name="information-circle"></ion-icon>
-                            <ion-icon *ngIf="user.services.meetup" name="contacts"></ion-icon>
-                            <ion-icon *ngIf="user.services.emergencyContact" name="call"></ion-icon>
+                            <ion-icon class="mini-icon" *ngIf="user.services.host" name="home"></ion-icon>
+                            <ion-icon class="mini-icon" *ngIf="user.services.tips" name="information-circle"></ion-icon>
+                            <ion-icon class="mini-icon" *ngIf="user.services.meetup" name="contacts"></ion-icon>
+                            <ion-icon class="mini-icon" *ngIf="user.services.emergencyContact" name="call"></ion-icon>
                         </div>
                         <p>{{user.bio}}</p>
                     </button>
