@@ -21,12 +21,23 @@
             <ion-label>Push Notifications</ion-label>
             <ion-toggle checked="true"></ion-toggle>
         </ion-item>
+        <ion-item>
+            <ion-label>Ghost Mode</ion-label>
+            <ion-toggle checked="false"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-label>3rd Degree Connections</ion-label>
+            <ion-toggle checked="false"></ion-toggle>
+        </ion-item>
     </ion-list>
-    <ion-footer>
-        <ion-toolbar>
-            <button ion-button full color="dark" clear (click)="onClickLogout()">
-                Logout
-            </button>
-        </ion-toolbar>
+    <ion-footer text-center>
+        <button ion-button color="dark" clear (click)="onClickLogout()">
+            Logout
+        </button>
+        <br>
+        <button ion-button color="danger" clear (click)="onClickDeleteAccount()">
+            Delete Account
+        </button>
+        <br><br>
     </ion-footer>
 </ion-content>

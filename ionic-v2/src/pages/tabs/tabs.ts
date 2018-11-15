@@ -16,10 +16,6 @@ export class TabsPage {
 
   @ViewChild('appTabs') tabRef: Tabs;
 
-  ionViewDidEnter() {
-    // Select first tab to be shown
- }
-
   tab1Root = ProfilePage;
   tab2Root = InboxPage;
   tab3Root = MapPage;

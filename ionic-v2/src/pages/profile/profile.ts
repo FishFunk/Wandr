@@ -1,7 +1,8 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController ,ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import {  AngularFireDatabase ,  FirebaseObjectObservable} from 'angularfire2/database-deprecated';
 import { Facebook } from '@ionic-native/facebook';
+import { IUser, User, ILocation, IUserServices } from '../../models/user';
 
 @IonicPage()
 @Component({
@@ -9,11 +10,22 @@ import { Facebook } from '@ionic-native/facebook';
   templateUrl: 'profile.html'
 })
 export class ProfilePage {
+  a = true;
+  b = true;
+  c = false;
+  d = true;
+
   googleAutoComplete: any;
   autoComplete: any = { input: '' };
   autoCompleteItems: any[] = [];
 
-  profile:  FirebaseObjectObservable<any[]>;
+  userData:  IUser = new User('TG1','FB1','Johnny', 'Appleseed', 
+    28, "I really like planting apple trees.", 
+    { stringFormat: '', latitude: '', longitude: ''},
+    [],
+    { host: true, tips: true, meetup: false, emergencyContact: false},
+    "11/13/18",
+    "");
   editMode: boolean = false;
   loadingPopup;
   countries: any[] = [];
@@ -33,7 +45,6 @@ export class ProfilePage {
       content: ''
     });
     this.loadingPopup.present();
-    this.profile = afDB.object('/profile/1');
 
     this.googleAutoComplete = new google.maps.places.AutocompleteService();
 
@@ -88,6 +99,7 @@ export class ProfilePage {
   }
 
   private selectSearchResult(item){
+    // TODO: Get geocode info and update profile
     this.autoComplete.input = item.description;
     this.autoCompleteItems = [];
   }

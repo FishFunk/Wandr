@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, AlertController, Platform, LoadingController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, AlertController, Platform, LoadingController, Tabs } from 'ionic-angular';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 
 import * as firebase from 'firebase/app';
@@ -11,7 +11,6 @@ import { TabsPage } from '../tabs/tabs';
   templateUrl: 'intro.html'
 })
 export class IntroPage {
-
   cordova: boolean = false;
 
   slides = [
