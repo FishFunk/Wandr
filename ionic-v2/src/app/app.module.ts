@@ -43,6 +43,7 @@ import { SettingsPage } from '../pages/settings/settings';
 // import { AuthData } from '../providers/auth-data';
 import { WebDataService } from '../helpers/webDataService';
 import { ModalPage } from '../pages/explore/modal';
+import { FacebookApi } from '../helpers/facebookApi';
 
 //import firebase from 'firebase';
 //********** firebase configuration  ************ */
@@ -93,7 +94,8 @@ export const config = {
     SocialSharing,
     Facebook,
     NativeGeocoder,
-    WebDataService
+    WebDataService,
+    FacebookApi
     // Geolocation,
     // {
     //   provide: HAMMER_GESTURE_CONFIG,

@@ -11,7 +11,7 @@
   <div id="profile1-info" class="test-class" padding *ngIf="!editMode">
     <img id="profile1-image" class="pop-in" src="../../assets/avatar_man.png"/>
     <h3 id="profile1-name">{{userData.first_name}} {{userData.last_name}}</h3>
-    <p class="profile1-location">Washington DC</p>
+    <p class="profile1-location">{{userData.location.stringFormat}}</p>
     <ion-grid>
       <ion-row class="profile1-numbers">
         <ion-col width-33>

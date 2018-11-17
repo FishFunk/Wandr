@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, ToastController, NavController, AlertController } from 'ionic-angular';
-import { Facebook } from '@ionic-native/facebook';
-import { IntroPage } from '../intro/intro';
-import { ProfilePage } from '../profile/profile';
+import { FacebookApi } from '../../helpers/facebookApi';
 
 
 @IonicPage()
@@ -16,7 +14,7 @@ export class SettingsPage {
         public navCtrl: NavController,
         private toastCtrl: ToastController,
         private alertCtrl: AlertController,
-        private fb: Facebook){
+        private fbApi: FacebookApi){
 
     }
 
@@ -40,7 +38,7 @@ export class SettingsPage {
 
 
     private logout() {
-        this.fb.logout()
+        this.fbApi.facebookLogout()
             .then(()=>{
                 alert("Not yet implemented");
                 // this.presentToast('top', 'Logout successful!');
