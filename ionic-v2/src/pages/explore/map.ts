@@ -13,18 +13,20 @@ declare var google;
 })
 
 export class MapPage {
+  maxZoomLevel = 12;
+  minZoomLevel = 2;
   loadingPopup: Loading;
   users: IUser[] = [];
   searchItems: string[];
   map: google.maps.Map;
   heatmap: google.maps.visualization.HeatmapLayer;
-  minZoomLevel: number = 2;
-  maxZoomLevel: number = 12;
   mapCenter = new google.maps.LatLng(39.250223, -99.142097);
   searchBox: google.maps.places.SearchBox;
 
   mapOptions = {
     center: this.mapCenter,
+    minZoom: this.minZoomLevel,
+    maxZoom: this.maxZoomLevel,
     zoom: this.minZoomLevel,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     styles: [
@@ -78,10 +80,10 @@ export class MapPage {
       this.createMarkersAndHeatMap(this.users);
 
       // Bind map events
-      setTimeout(()=>{
+      //setTimeout(()=>{
         this.bindEvents();
         this.loadingPopup.dismiss();
-      }, 500);
+      //}, 500);
 
     } catch(ex){
       console.error(ex);
@@ -198,15 +200,6 @@ export class MapPage {
   }
 
   private bindEvents(){
-    // Limit zoom level
-    this.map.addListener('zoom_changed', ()=> {
-      var currentZoomLevel = this.map.getZoom();
-      if (currentZoomLevel < this.minZoomLevel){
-        this.map.setZoom(this.minZoomLevel);
-      } else if (currentZoomLevel > this.maxZoomLevel){ 
-          this.map.setZoom(this.maxZoomLevel);
-      }
-    });
 
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
