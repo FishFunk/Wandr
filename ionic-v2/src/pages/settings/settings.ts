@@ -40,9 +40,8 @@ export class SettingsPage {
     private logout() {
         this.fbApi.facebookLogout()
             .then(()=>{
-                alert("Not yet implemented");
-                // this.presentToast('top', 'Logout successful!');
-                // TODO: Reset app
+                this.presentToast('top', 'Logout successful!');
+                // TODO: Reset to app intro
             })
             .catch((error)=>{
                 console.error(error);

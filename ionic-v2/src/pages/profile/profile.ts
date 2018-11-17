@@ -41,7 +41,7 @@ export class ProfilePage {
   }
 
   ionViewDidLoad(){
-    this.loadingPopup.dismiss();
+    // this.loadingPopup.dismiss();
   }
 
   toggleEdit(){

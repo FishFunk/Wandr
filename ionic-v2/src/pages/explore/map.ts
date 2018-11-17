@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
+import { NavController, ModalController, LoadingController, Loading } from 'ionic-angular';
 import { IUser } from '../../models/user';
 import { WebDataService } from '../../helpers/webDataService';
 import { ModalPage } from './modal';
@@ -13,6 +13,7 @@ declare var google;
 })
 
 export class MapPage {
+  loadingPopup: Loading;
   users: IUser[] = [];
   searchItems: string[];
   map: google.maps.Map;
@@ -20,7 +21,8 @@ export class MapPage {
   minZoomLevel: number = 2;
   maxZoomLevel: number = 12;
   mapCenter = new google.maps.LatLng(39.250223, -99.142097);
-    
+  searchBox: google.maps.places.SearchBox;
+
   mapOptions = {
     center: this.mapCenter,
     zoom: this.minZoomLevel,
@@ -54,7 +56,8 @@ export class MapPage {
 
   constructor(public navCtrl: NavController,
     private webDataService: WebDataService,
-    private modalCtrl: ModalController) {
+    private modalCtrl: ModalController,
+    private loadingCtrl: LoadingController) {
   }
  
   ionViewDidLoad(){
@@ -62,15 +65,28 @@ export class MapPage {
   }
  
   async loadMap(){
-    this.map = new google.maps.Map(document.getElementById('map'), this.mapOptions);
+    try {
+      this.showLoadingPopup();
+      this.map = new google.maps.Map(document.getElementById('map'), this.mapOptions);
 
-    this.users = await this.webDataService.readUserFirstConnections();
-    this.createMarkersAndHeatMap(this.users);
+      // Create the search box and link it to the UI element.
+      var input = document.getElementById('searchInput');
+      this.searchBox = new google.maps.places.SearchBox(input);
+      this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
-    // Bind map events
-    setTimeout(()=>{
-      this.bindEvents();        
-    }, 1000);
+      this.users = await this.webDataService.readUserFirstConnections();
+      this.createMarkersAndHeatMap(this.users);
+
+      // Bind map events
+      setTimeout(()=>{
+        this.bindEvents();
+        this.loadingPopup.dismiss();
+      }, 500);
+
+    } catch(ex){
+      console.error(ex);
+      this.loadingPopup.dismiss();
+    }
   }
 
   getItems(ev: any) {
@@ -192,15 +208,10 @@ export class MapPage {
       }
     });
 
-    // Create the search box and link it to the UI element.
-    var input = document.getElementById('searchInput');
-    var searchBox = new google.maps.places.SearchBox(input);
-    this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
-
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
-    searchBox.addListener('places_changed', ()=> {
-      var places = searchBox.getPlaces();
+    this.searchBox.addListener('places_changed', ()=> {
+      var places = this.searchBox.getPlaces();
 
       if (places.length == 0) {
         return;
@@ -234,13 +245,21 @@ export class MapPage {
       if (y > this.minY && y < this.maxY) {
         // still within valid bounds, so save the last valid position
         this.mapCenter = c;
-      // Bias the SearchBox results towards current map's viewport.
-        searchBox.setBounds(this.map.getBounds());
+        // Bias the SearchBox results towards current map's viewport.
+        this.searchBox.setBounds(this.map.getBounds());
         return; 
       }
 
       // not valid anymore => return to last valid position
       this.map.panTo(this.mapCenter);
     });
+  }
+
+  private showLoadingPopup(){
+    this.loadingPopup = this.loadingCtrl.create({
+      spinner: 'crescent',
+      content: ''
+    });
+    this.loadingPopup.present();
   }
 }
