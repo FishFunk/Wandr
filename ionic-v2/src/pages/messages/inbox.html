@@ -68,10 +68,35 @@
         </ion-slide>
 
         <!-- Chat View -->
-        <ion-slide>
-            <ion-card>
-                Chat View Goes Here
-            </ion-card>
+        <ion-slide class="scroll">
+            <ion-grid>
+                <ion-row>
+                    <ion-col col-2>
+                        <ion-avatar class="chat-avatar">
+                            <img src="../../assets/avatar_man.png">
+                        </ion-avatar>
+                    </ion-col>
+                    <ion-col col-8>
+                        <div class="chat-bubble bubble-left">
+                            <p>Let's meet down the street at the cafe.</p>
+                        </div>
+                    </ion-col>
+                    <ion-col col-2></ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col col-2></ion-col>
+                    <ion-col col-8>
+                        <div class="chat-bubble bubble-right">
+                            <p>Sounds good man. Talk to you then.</p>
+                        </div>
+                    </ion-col>
+                    <ion-col col-2>
+                        <ion-avatar class="chat-avatar">
+                            <img src="../../assets/avatar_man.png">
+                        </ion-avatar>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
         </ion-slide>
     </ion-slides>
 </ion-content>

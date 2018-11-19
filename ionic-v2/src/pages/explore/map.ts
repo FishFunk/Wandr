@@ -80,10 +80,8 @@ export class MapPage {
       this.createMarkersAndHeatMap(this.users);
 
       // Bind map events
-      //setTimeout(()=>{
-        this.bindEvents();
-        this.loadingPopup.dismiss();
-      //}, 500);
+      this.bindEvents();
+      this.loadingPopup.dismiss();
 
     } catch(ex){
       console.error(ex);
