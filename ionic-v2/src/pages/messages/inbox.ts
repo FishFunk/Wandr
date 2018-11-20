@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Slides } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Slides, Loading } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseObjectObservable} from 'angularfire2/database-deprecated';
+import { WebDataService } from '../../helpers/webDataService';
 
 @IonicPage()
 @Component({
@@ -10,24 +11,43 @@ import { AngularFireDatabase, FirebaseObjectObservable} from 'angularfire2/datab
 export class InboxPage {
 
   @ViewChild(Slides) slides: Slides;
-  messages:  FirebaseObjectObservable<any[]>;
+  chats:  any[] = [];
+  messages: any[] = [];
   showChatSlide: boolean = false;
+  loading: Loading;
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams, 
     public afDB: AngularFireDatabase, 
-    public loadingCtrl: LoadingController) {
+    public loadingCtrl: LoadingController,
+    private webDataService: WebDataService) {
   }
 
   ionViewDidLoad(){
+    this.loading = this.loadingCtrl.create();
     this.slides.lockSwipes(true);
+    this.loadChats();
+  }
+
+  async loadChats(){
+    this.chats = await this.webDataService.readChatList();
+    this.loading.dismiss();
   }
 
   //***** start Bound Events *****//
-  forwardSlide(){
+  async forwardSlide(){
     this.slides.lockSwipes(false);
     this.showChatSlide = true;
     this.slides.slideNext(500);
+
+    this.loading = this.loadingCtrl.create();
+    this.messages = await this.webDataService.readMessages();
+    this.messages.forEach(msg=>{
+      msg.received = !! Math.round(Math.random());
+      msg.profileImageUrl = "../../assets/avatar_man.png";
+    });
+    this.loading.dismiss();
+
     this.slides.lockSwipes(true);
   }
 

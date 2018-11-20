@@ -12,91 +12,52 @@
         <ion-slide>
             <!----- TODO: If list is empty: "No messages here yet!"------->
             <ion-list>
-                <ion-item-group>
-                    <ion-list-header class="list-header">Today</ion-list-header>
-                    <button ion-item (click)="forwardSlide()">
-                        <ion-avatar item-start>
-                            <img src="https://avatars3.githubusercontent.com/u/13572357?s=400&v=4">
-                        </ion-avatar>
-                        <span class="name, unread">Tara L</span><br>
-                        <p class="unread">Yeah, for sure!</p>
-                        <span class="timestamp">8:15pm</span>
+                <div *ngFor="let chat of chats">
+                    <button ion-item (click)="forwardSlide(chat)">
+                        <ion-thumbnail item-start>
+                            <img src="../../assets/avatar_man.png">
+                        </ion-thumbnail>
+                        <span class="name, unread">{{chat.name}}</span><br>
+                        <p class="unread">{{chat.lastMessage}}</p>
+                        <span class="timestamp">{{chat.timeStamp}}</span>
                     </button>
-                    <button ion-item>
-                        <ion-avatar item-start>
-                            <img src="https://avatars3.githubusercontent.com/u/13572357?s=400&v=4">
-                        </ion-avatar>
-                        <span class="name">Johnny B</span><br>
-                        <p>Sounds good dude! We'll be in touch.</p>
-                        <span class="timestamp">6:52pm</span>
-                    </button>
-                </ion-item-group>
-                <ion-item-group>
-                    <ion-list-header class="list-header">Yesterday</ion-list-header>
-                    <button ion-item>
-                        <ion-avatar item-start>
-                            <img src="https://avatars3.githubusercontent.com/u/13572357?s=400&v=4">
-                        </ion-avatar>
-                        <span class="name">Samantha W</span><br>
-                        <p>Totally. I know where all of the best...</p>
-                        <span class="timestamp">10:31am</span>
-                    </button>
-                </ion-item-group>
-                <ion-item-group>
-                    <ion-list-header class="list-header">Last Week</ion-list-header>
-                    <button ion-item>
-                        <ion-avatar item-start>
-                            <img src="https://avatars3.githubusercontent.com/u/13572357?s=400&v=4">
-                        </ion-avatar>
-                        <span class="name">Chris D</span><br>
-                        <p>Haha. I'm sure we can figure out...</p>
-                        <span class="timestamp">Tuesday</span>
-                    </button>
-                </ion-item-group>
-                <ion-item-group>
-                    <ion-list-header class="list-header">Older</ion-list-header>
-                    <button ion-item>
-                        <ion-avatar item-start>
-                            <img src="https://avatars3.githubusercontent.com/u/13572357?s=400&v=4">
-                        </ion-avatar>
-                        <span>Daniel F</span><br>
-                        <p>Cool, see you soon!</p>
-                        <span class="timestamp">09/22/18</span>
-                    </button>
-                </ion-item-group>
+                </div>
             </ion-list>
         </ion-slide>
 
         <!-- Chat View -->
-        <ion-slide class="scroll">
+        <ion-slide>
             <ion-grid>
-                <ion-row>
-                    <ion-col col-2>
+                <ion-row *ngFor="let msg of messages">
+                    <ion-col col-1 *ngIf="msg.received">
                         <ion-avatar class="chat-avatar">
-                            <img src="../../assets/avatar_man.png">
+                            <img [src]="msg.profileImageUrl"/>
                         </ion-avatar>
                     </ion-col>
-                    <ion-col col-8>
-                        <div class="chat-bubble bubble-left">
-                            <p>Let's meet down the street at the cafe.</p>
-                        </div>
+                    <ion-col col-8 *ngIf="msg.received" class="message other-message">
+                        <span>{{ msg.message }}</span>
+                        <div class="message-time">{{msg.timeStamp | date:'dd.MM hh:MM'}}</div>
                     </ion-col>
-                    <ion-col col-2></ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col col-2></ion-col>
-                    <ion-col col-8>
-                        <div class="chat-bubble bubble-right">
-                            <p>Sounds good man. Talk to you then.</p>
-                        </div>
+            
+                    <ion-col offset-3 col-8 *ngIf="!msg.received" class="message my-message">
+                        <span>{{ msg.message }}</span>
+                        <div class="message-time">{{msg.timeStamp | date:'dd.MM hh:MM'}}</div>
                     </ion-col>
-                    <ion-col col-2>
+                    <ion-col col-1 *ngIf="!msg.received">
                         <ion-avatar class="chat-avatar">
-                            <img src="../../assets/avatar_man.png">
+                            <img [src]="msg.profileImageUrl"/>
                         </ion-avatar>
                     </ion-col>
                 </ion-row>
             </ion-grid>
+            <ion-footer>
+                <ion-toolbar>
+                    <ion-textarea clearInput placeholder="Type message here..." type="text"></ion-textarea>
+                </ion-toolbar>
+                <ion-fab right bottom>
+                    <button ion-fab color="light" (click)="onClickSendMessage()">Send</button>
+                </ion-fab>
+            </ion-footer>
         </ion-slide>
     </ion-slides>
 </ion-content>

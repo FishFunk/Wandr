@@ -1,4 +1,5 @@
 import { User, ILocation, IUserServices } from '../models/user';
+import { Chat, Message } from '../models/chat';
 
 export class MockDataGenerator
 {
@@ -24,6 +25,29 @@ export class MockDataGenerator
         }
     
         return JSON.stringify(mockUsers);
+      }
+
+      public generateMockChatJson(count: number = 5): string{
+        var chats = [];
+        for(var i=0; i<count; i++)
+        {
+          var chat = new Chat(this.randomFirstName(), this.randomSentence(), new Date().toDateString());
+          chats.push(chat);
+        }
+
+        return JSON.stringify(chats);
+      }
+
+
+      public generateMockMessageJson(count: number = 5): string{
+        var messages = [];
+        for(var i=0; i<count; i++)
+        {
+          var msg = new Message(this.randomFirstName(), this.randomSentence(), new Date().toDateString());
+          messages.push(msg);
+        }
+
+        return JSON.stringify(messages);
       }
     
       private randomLocation(){
