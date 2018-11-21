@@ -1,5 +1,6 @@
 export abstract class Constants {
-    public static userIdKey = "userId";
+    public static facebookUserIdKey = "facebookUserId";
+    public static firebaseUserIdKey = "firebaseUserId";
     public static accessTokenKey = "accessToken";
     public static profileImageUrlKey = "profileUrl";
 }

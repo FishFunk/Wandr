@@ -3,14 +3,15 @@ import { User, IUser } from '../models/user';
 import { MockDataGenerator } from './mockDataGenerator';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { IChat, IMessage } from '../models/chat';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { _throw } from 'rxjs/observable/throw';
+import { SaveProfileRequest } from '../models/saveProfileRequest';
 
 @Injectable()
 export class WebDataService {
 
-    rootUrl: string = "https://<OUR ENDPOINT BASE>.cloudfunctions.net/api";
+    rootUrl: string = "https://us-central1-wanderlust-277a8.cloudfunctions.net/api";
     requestOptions = { headers: new HttpHeaders() };
     mockDataGenerator: MockDataGenerator;
  
@@ -55,23 +56,20 @@ export class WebDataService {
     });
   }
 
+  saveProfile(data: SaveProfileRequest): Subscription{
+    return this.constructHttpPost('saveProfile', data).subscribe();
+  }
+
   private constructHttpPost(endPoint: string, requestData: any = {}): Observable<any>
   {
     let url = `${this.rootUrl}/${endPoint}`;
-    let body = JSON.stringify(requestData);
+    //let body = JSON.stringify(requestData);
 
     return this.http
-      .post(url, body, this.requestOptions)
+      .post(url, requestData, this.requestOptions)
       .pipe(
         retry(2),
         catchError(this.errorHandler));
-      // .subscribe((data: any) => {
-      //   resolve(data);
-      // },
-      // error => {
-      //   this.logError(error);
-      //   reject(error);
-      // });
   }
 
   private constructHttpGet(endPoint: string): Observable<any>
@@ -83,13 +81,6 @@ export class WebDataService {
       .pipe(
         retry(2),
         catchError(this.errorHandler));
-      // .subscribe((data: any) => {
-      //   resolve(data);
-      // },
-      // error => {
-      //   this.logError(error);
-      //   reject(error);
-      // });
 
   }
 
@@ -102,14 +93,6 @@ export class WebDataService {
       .pipe(
         retry(2),
         catchError(this.errorHandler));
-      // .subscribe((data: any) => {
-      //   resolve(data);
-      // },
-      // error => {
-      //   this.logError(error);
-      //   reject(error);
-      // });
-
   }
 
   private errorHandler(error: HttpErrorResponse) {

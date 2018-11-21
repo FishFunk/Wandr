@@ -71,12 +71,14 @@ export class IntroPage {
 
     if (statusResponse.status != 'connected') {
       statusResponse = await this.fbApi.facebookLogin();
-      var userData = await this.fbApi.firebaseLogin(statusResponse.authResponse.accessToken);
     }
+
+    var userData = await this.fbApi.firebaseLogin(statusResponse.authResponse.accessToken);
 
     this.cacheFacebookTokens(
       statusResponse.authResponse.userID, 
-      statusResponse.authResponse.accessToken);
+      statusResponse.authResponse.accessToken,
+      userData.uid);
   }
 
   private presentAlert(title) {
@@ -87,9 +89,10 @@ export class IntroPage {
     alert.present();
   }
 
-  private cacheFacebookTokens(userId: string, accessToken: string){
+  private cacheFacebookTokens(facebookUid: string, firebaseUid: string, accessToken: string){
     if(window.sessionStorage){
-      window.sessionStorage.setItem(Constants.userIdKey, userId);
+      window.sessionStorage.setItem(Constants.facebookUserIdKey, facebookUid);
+      window.sessionStorage.setItem(Constants.firebaseUserIdKey, firebaseUid);
       window.sessionStorage.setItem(Constants.accessTokenKey, accessToken);
     } else {
       throw new Error("Session storage not available");

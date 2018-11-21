@@ -1,10 +1,12 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, LoadingController, ToastController } from 'ionic-angular';
 import {  AngularFireDatabase } from 'angularfire2/database-deprecated';
 import { IUser, User } from '../../models/user';
 import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
+import { WebDataService } from '../../helpers/webDataService';
+import { SaveProfileRequest } from '../../models/saveProfileRequest';
 
 @IonicPage()
 @Component({
@@ -34,14 +36,14 @@ export class ProfilePage {
 
   private geocoderOptions: NativeGeocoderOptions = { useLocale: true, maxResults: 1 };
 
-  constructor(public navCtrl: NavController, 
-    public navParams: NavParams, 
+  constructor(
     public afDB: AngularFireDatabase, 
     public loadingCtrl: LoadingController, 
     private toastCtrl: ToastController,
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
-    private facebookApi: FacebookApi) {
+    private facebookApi: FacebookApi,
+    private webDataService: WebDataService) {
 
     this.googleAutoComplete = new google.maps.places.AutocompleteService();
   }
@@ -51,20 +53,24 @@ export class ProfilePage {
   }
 
   async load(){
-    var userId = window.sessionStorage.getItem(Constants.userIdKey);
+    this.showLoadingPopup();
+
+    var firebaseUid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
+    var facebookUid = window.sessionStorage.getItem(Constants.facebookUserIdKey);
     var token = window.sessionStorage.getItem(Constants.accessTokenKey);
 
     // TODO: IF user is onboarding, get FB data. Otherwise pull Firebase user data
-    var fbUserData = await <any> this.facebookApi.getUser(userId, token);
+    var fbUserData = await <any> this.facebookApi.getUser(facebookUid, token);
 
-    this.userData.app_uid = userId;
+    this.userData.app_uid = firebaseUid;
+    this.userData.facebook_uid = facebookUid;
 
     var names = fbUserData.name.split(' ');
     this.userData.first_name = names[0];
     this.userData.last_name = names[1];
     this.userData.last_login = new Date().toString();
 
-    this.userData.friends = await this.facebookApi.getFriendList(userId);
+    this.userData.friends = await this.facebookApi.getFriendList(facebookUid);
     
     this.userData.location.stringFormat = fbUserData.location.name;
     this.autoComplete.input = fbUserData.location.name;
@@ -73,6 +79,8 @@ export class ProfilePage {
     let photoUrl = fbUserData.picture ? fbUserData.picture.data.url : '../../assets/avatar_man.png';
     this.userData.profile_img_url = photoUrl;
     sessionStorage.setItem(Constants.profileImageUrlKey, photoUrl);
+
+    this.loadingPopup.dismiss();
   }
 
   toggleEdit(){
@@ -116,7 +124,14 @@ export class ProfilePage {
   private async saveProfileEdits(){
     await this.forwardGeocode(this.autoComplete.input);
     await this.reverseGeocode();
+
     // TODO: Update backend
+    var updateUser = new SaveProfileRequest();
+    updateUser.uid = sessionStorage.getItem(Constants.firebaseUserIdKey);
+    updateUser.onboardcomplete = false;
+    updateUser.user = this.userData;
+
+    this.webDataService.saveProfile(updateUser);
   }
 
   private async forwardGeocode(formattedLocation: string)
