@@ -63,8 +63,7 @@ export class WebDataService {
     return this.constructHttpPost('saveProfile', data).subscribe();
   }
 
-  private constructHttpPost(endPoint: string, requestData: any = {}): Observable<any>
-  {
+  private constructHttpPost(endPoint: string, requestData: any = {}): Observable<any>{
     let url = `${this.rootUrl}/${endPoint}`;
 
     return this.http.post(url, requestData, this.requestOptions);
