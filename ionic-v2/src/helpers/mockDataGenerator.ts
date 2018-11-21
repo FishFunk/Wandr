@@ -13,15 +13,15 @@ export class MockDataGenerator
             i.toString(), 
             this.randomFirstName(),
             this.randomLastName(),
-            this.randomNumber(18, 99),
-            this.randomSentence(),
             this.randomLocation(),
             [this.randomNumber(1,count).toString(), this.randomNumber(1,count).toString()],
             this.randomServices(),
-            '11/01/2018',
-            Math.round(Math.random()) ? '../../assets/avatar_man.png' : '../../assets/avatar_woman.png')
-    
-            mockUsers.push(usr);
+            new Date().toString(),
+            Math.round(Math.random()) ? '../../assets/avatar_man.png' : '../../assets/avatar_woman.png',
+            this.randomNumber(18, 99),
+            this.randomSentence());
+
+          mockUsers.push(usr);
         }
     
         return JSON.stringify(mockUsers);

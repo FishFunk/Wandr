@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, Loading } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, Loading, Keyboard } from 'ionic-angular';
 import { WebDataService } from '../../helpers/webDataService';
 
 @IonicPage()
@@ -14,7 +14,12 @@ export class MessagesPage {
 
   constructor(public navCtrl: NavController, 
     public loadingCtrl: LoadingController,
-    private webDataService: WebDataService) {
+    private webDataService: WebDataService,
+    public keyboard: Keyboard) {
+        // TODO: FAB button doesn't hide when keyboard is shown
+        // this.keyboard.willShow.subscribe(()=>{
+        //     alert("Test");
+        // });
   }
 
   ionViewDidLoad(){

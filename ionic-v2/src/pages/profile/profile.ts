@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams, LoadingController, ToastController
 import {  AngularFireDatabase } from 'angularfire2/database-deprecated';
 import { IUser, User } from '../../models/user';
 import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder';
+import { FacebookApi } from '../../helpers/facebookApi';
+import { Constants } from '../../helpers/constants';
 
 @IonicPage()
 @Component({
@@ -14,13 +16,16 @@ export class ProfilePage {
   autoComplete: any = { input: '' };
   autoCompleteItems: any[] = [];
 
-  userData:  IUser = new User('TG1','FB1','Johnny', 'Appleseed', 
-    28, "I really like planting apple trees.", 
-    { stringFormat: 'San Diego, CA', latitude: '', longitude: ''},
-    [],
-    { host: true, tips: true, meetup: false, emergencyContact: false},
-    "11/13/18",
-    "");
+  // TODO: Generate user from Firebase or Facebook (onboarding)
+  userData:  IUser = new User('', '', 'First', 'Last', 
+  { stringFormat: 'Washington, DC', latitude: '', longitude: ''}, 
+  [],
+  { host: true, tips: true, meetup: true, emergencyContact: true},
+  '',
+  '../../assets/avatar_man.png',
+  28,
+  'This is just fake data, for now.');
+
   editMode: boolean = false;
   loadingPopup;
   countries: any[] = [];
@@ -35,13 +40,39 @@ export class ProfilePage {
     public loadingCtrl: LoadingController, 
     private toastCtrl: ToastController,
     private zone: NgZone,
-    private nativeGeocoder: NativeGeocoder) {
+    private nativeGeocoder: NativeGeocoder,
+    private facebookApi: FacebookApi) {
 
     this.googleAutoComplete = new google.maps.places.AutocompleteService();
   }
 
   ionViewDidLoad(){
-    // this.loadingPopup.dismiss();
+    this.load();
+  }
+
+  async load(){
+    var userId = window.sessionStorage.getItem(Constants.userIdKey);
+    var token = window.sessionStorage.getItem(Constants.accessTokenKey);
+
+    // TODO: IF user is onboarding, get FB data. Otherwise pull Firebase user data
+    var fbUserData = await <any> this.facebookApi.getUser(userId, token);
+
+    this.userData.app_uid = userId;
+
+    var names = fbUserData.name.split(' ');
+    this.userData.first_name = names[0];
+    this.userData.last_name = names[1];
+    this.userData.last_login = new Date().toString();
+
+    this.userData.friends = await this.facebookApi.getFriendList(userId);
+    
+    this.userData.location.stringFormat = fbUserData.location.name;
+    this.autoComplete.input = fbUserData.location.name;
+    await this.forwardGeocode(fbUserData.location.name);
+
+    let photoUrl = fbUserData.picture ? fbUserData.picture.data.url : '../../assets/avatar_man.png';
+    this.userData.profile_img_url = photoUrl;
+    sessionStorage.setItem(Constants.profileImageUrlKey, photoUrl);
   }
 
   toggleEdit(){

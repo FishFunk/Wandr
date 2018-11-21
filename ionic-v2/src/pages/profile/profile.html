@@ -8,121 +8,128 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <div id="profile1-info" class="test-class" padding *ngIf="!editMode">
-    <img id="profile1-image" class="pop-in" src="../../assets/avatar_man.png"/>
-    <h3 id="profile1-name">{{userData.first_name}} {{userData.last_name}}</h3>
-    <p class="profile1-location">{{userData.location.stringFormat}}</p>
-    <ion-grid>
-      <ion-row class="profile1-numbers">
-        <ion-col width-33>
-          <span>72</span> 
-          <p>1st Connections</p>
-        </ion-col>
-        <ion-col width-33>      
-          <span>412</span>
-          <p>2nd Connections</p>
-        </ion-col>
-        <ion-col width-33>   
-          <span>23</span>
-          <p>Friends Invited</p>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
 
-    <!--***********  About  ***********-->
-    <ion-list no-lines text-wrap>
+  <div class="profile-info">
+    <img class="profile-image" [src]="userData.profile_img_url"/>
+    <h3 class="profile-name">{{userData.first_name}} {{userData.last_name}}</h3>
+    
+    <!-- DISPLAY MODE -->
+    <div *ngIf="!editMode">
+      <p class="profile-location">{{userData.location.stringFormat}}</p>
+      <ion-grid>
+        <ion-row class="profile-numbers">
+          <ion-col width-33>
+            <span>72</span> 
+            <p>1st Connections</p>
+          </ion-col>
+          <ion-col width-33>      
+            <span>412</span>
+            <p>2nd Connections</p>
+          </ion-col>
+          <ion-col width-33>   
+            <span>23</span>
+            <p>Friends Invited</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!--***********  About  ***********-->
+      <ion-list no-lines text-wrap>
+          <ion-list-header>
+            <h2>About</h2>
+          </ion-list-header>
+          <ion-item>
+            <p>{{userData.bio}}</p>
+          </ion-item>
+      </ion-list>
+
+      <!--***********  Services  ***********-->
+      <ion-list no-lines text-wrap>
         <ion-list-header>
-          <h2>About</h2>
+          <h2>Services</h2>
         </ion-list-header>
         <ion-item>
-          <p>{{userData.bio}}</p>
+          <ion-grid text-center item-content>
+            <ion-row>
+                <ion-col *ngIf="userData.services.host">
+                    <ion-icon name="home"></ion-icon><br>
+                    <p>Host</p>
+                </ion-col>
+                <ion-col *ngIf="userData.services.tips">
+                    <ion-icon name="information-circle"></ion-icon><br>
+                    <p>Local Tips</p>
+                </ion-col>
+                <ion-col *ngIf="userData.services.meetup">
+                    <ion-icon name="contacts"></ion-icon><br>
+                    <p>Meetup</p>
+                </ion-col>
+                <ion-col *ngIf="userData.services.emergencyContact">
+                    <ion-icon name="call"></ion-icon><br>
+                    <p>Emergency Contact</p>
+                </ion-col>            
+            </ion-row>
+          </ion-grid> 
         </ion-item>
-    </ion-list>
+      </ion-list>
+    </div>
 
-    <!--***********  Services  ***********-->
-    <ion-list no-lines text-wrap>
-      <ion-list-header>
-        <h2>Services</h2>
-      </ion-list-header>
-      <ion-item>
-        <ion-grid text-center item-content>
-          <ion-row>
-              <ion-col *ngIf="userData.services.host">
+    <!-- EDIT MODE -->
+    <div *ngIf="editMode">
+      <!--***********  Location  ***********-->
+      <ion-label color="dark" stacked>Where Do You Live?</ion-label>
+      <ion-searchbar 
+        [(ngModel)]="autoComplete.input" 
+        (ionInput)="updateSearchResults()" 
+        placeholder="Search for a place">
+      </ion-searchbar>
+      <ion-list [hidden]="autoCompleteItems.length == 0">
+        <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">
+          {{ item.description }}
+        </ion-item>
+      </ion-list>
+      <br>
+      <!--***********  About  ***********-->
+      <ion-list no-lines text-wrap>
+          <ion-list-header>
+            <h2>About</h2>
+          </ion-list-header>
+          <ion-item>
+            <ion-textarea placeholder="A bit about yourself..." [(ngModel)]="userData.bio"></ion-textarea>
+          </ion-item>
+      </ion-list>
+
+      <!--***********  Services  ***********-->
+      <ion-list no-lines text-wrap>
+        <ion-list-header>
+          <h2>Services</h2>
+        </ion-list-header>
+        <ion-item>
+          <ion-grid text-center item-content>
+            <ion-row>
+                <ion-col>
+                  <ion-checkbox [(ngModel)]="userData.services.host"></ion-checkbox>
                   <ion-icon name="home"></ion-icon><br>
                   <p>Host</p>
-              </ion-col>
-              <ion-col *ngIf="userData.services.tips">
+                </ion-col>
+                <ion-col>    
+                  <ion-checkbox [(ngModel)]="userData.services.tips"></ion-checkbox>
                   <ion-icon name="information-circle"></ion-icon><br>
                   <p>Local Tips</p>
-              </ion-col>
-              <ion-col *ngIf="userData.services.meetup">
+                </ion-col>
+                <ion-col>
+                  <ion-checkbox [(ngModel)]="userData.services.meetup"></ion-checkbox>
                   <ion-icon name="contacts"></ion-icon><br>
                   <p>Meetup</p>
-              </ion-col>
-              <ion-col *ngIf="userData.services.emergencyContact">
+                </ion-col>
+                <ion-col>
+                  <ion-checkbox [(ngModel)]="userData.services.emergencyContact"></ion-checkbox>
                   <ion-icon name="call"></ion-icon><br>
                   <p>Emergency Contact</p>
-              </ion-col>            
-          </ion-row>
-        </ion-grid> 
-      </ion-item>
-    </ion-list>
-  </div>
-  <div id="profile1-edit" class="test-class" padding *ngIf="editMode">
-    <img id="profile1-image" class="pop-in" src="../../assets/avatar_man.png"/>
-    <h3 id="profile1-name">{{userData.first_name}} {{userData.last_name}}</h3>
-
-    <!--***********  Location  ***********-->
-    <ion-label color="dark" stacked>Where Do You Live?</ion-label>
-    <ion-searchbar [(ngModel)]="autoComplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>
-    <ion-list [hidden]="autoCompleteItems.length == 0">
-      <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">
-        {{ item.description }}
-      </ion-item>
-    </ion-list>
-
-    <!--***********  About  ***********-->
-    <ion-list no-lines text-wrap>
-        <ion-list-header>
-          <h2>About</h2>
-        </ion-list-header>
-        <ion-item>
-          <!-- <ion-label color="dark" stacked>A bit about yourself</ion-label> -->
-          <ion-textarea placeholder="Enter a description" [(ngModel)]="userData.bio"></ion-textarea>
+                </ion-col>            
+            </ion-row>
+          </ion-grid> 
         </ion-item>
-    </ion-list>
-
-    <!--***********  Services  ***********-->
-    <ion-list no-lines text-wrap>
-      <ion-list-header>
-        <h2>Services</h2>
-      </ion-list-header>
-      <ion-item>
-        <ion-grid text-center item-content>
-          <ion-row>
-              <ion-col>
-                <ion-checkbox [(ngModel)]="userData.services.host"></ion-checkbox>
-                <ion-icon name="home"></ion-icon><br>
-                <p>Host</p>
-              </ion-col>
-              <ion-col>    
-                <ion-checkbox [(ngModel)]="userData.services.tips"></ion-checkbox>
-                <ion-icon name="information-circle"></ion-icon><br>
-                <p>Local Tips</p>
-              </ion-col>
-              <ion-col>
-                <ion-checkbox [(ngModel)]="userData.services.meetup"></ion-checkbox>
-                <ion-icon name="contacts"></ion-icon><br>
-                <p>Meetup</p>
-              </ion-col>
-              <ion-col>
-                <ion-checkbox [(ngModel)]="userData.services.emergencyContact"></ion-checkbox>
-                <ion-icon name="call"></ion-icon><br>
-                <p>Emergency Contact</p>
-              </ion-col>            
-          </ion-row>
-        </ion-grid> 
-      </ion-item>
-    </ion-list>
+      </ion-list>
+    </div>
   </div>
 </ion-content>

@@ -2,7 +2,7 @@ page-profile {
 
   $text-color:#fff;
   
-  #profile1-image {
+  .profile-image {
     display: block;
     border-radius: 50%;
     width: auto;
@@ -14,20 +14,20 @@ page-profile {
     border-image: initial;
     // box-shadow: 0px 11px 20px -3px rgba(142, 136, 146, 0.75);
   }
-  #profile1-info {
+  .profile-info {
     width: 100%;
     text-align: center;
   }
-  #profile1-name {
+  .profile-name {
     color: #444;
     font-size: 22px;
   }
-  .profile1-location {
+  .profile-location {
     font-size: 15px;
     color: #888;
   }
 
- .profile1-numbers {
+ .profile-numbers {
     p {
       color: #888;
       font-size: 16px;

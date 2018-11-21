@@ -3,13 +3,15 @@ export interface IUser{
     facebook_uid: string;
     first_name: string;
     last_name: string;
-    age: number;
-    bio: string;
+    age?: number;
+    bio?: string;
     location: ILocation;
     friends: Array<string>; // App specific UIDs
     services: IUserServices;
     profile_img_url?: string;
     last_login: string;
+    ghost_mode: boolean;
+    onboarding: boolean;
 }
 
 export interface ILocation{
@@ -31,12 +33,14 @@ export class User implements IUser{
         public facebook_uid: string,
         public first_name: string,
         public last_name: string,
-        public age: number,
-        public bio: string,
         public location: ILocation,
         public friends: Array<string>,
         public services: IUserServices,
         public last_login: string,
-        public profile_img_url?: string)
+        public profile_img_url?: string,
+        public age?: number,
+        public bio?: string,
+        public ghost_mode: boolean = false,
+        public onboarding: boolean = false)
         {}
 }
