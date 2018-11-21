@@ -3,7 +3,6 @@ import { IonicPage, NavController, AlertController, Platform, LoadingController 
 import { TabsPage } from '../tabs/tabs';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
-import firebase = require('firebase');
 
 
 @IonicPage()
