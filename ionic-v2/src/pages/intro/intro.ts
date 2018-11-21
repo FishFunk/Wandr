@@ -73,12 +73,12 @@ export class IntroPage {
       statusResponse = await this.fbApi.facebookLogin();
     }
 
-    var userData = await this.fbApi.firebaseLogin(statusResponse.authResponse.accessToken);
+    var firebaseData = await this.fbApi.firebaseLogin(statusResponse.authResponse.accessToken);
 
     this.cacheFacebookTokens(
       statusResponse.authResponse.userID, 
-      statusResponse.authResponse.accessToken,
-      userData.uid);
+      firebaseData.uid,
+      statusResponse.authResponse.accessToken);
   }
 
   private presentAlert(title) {

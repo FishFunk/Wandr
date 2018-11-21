@@ -129,7 +129,7 @@ export class ProfilePage {
     var updateUser = new SaveProfileRequest();
     updateUser.uid = sessionStorage.getItem(Constants.firebaseUserIdKey);
     updateUser.onboardcomplete = false;
-    updateUser.user = this.userData;
+    updateUser.user = JSON.stringify(this.userData);
 
     this.webDataService.saveProfile(updateUser);
   }
