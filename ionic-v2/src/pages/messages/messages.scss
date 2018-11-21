@@ -1,0 +1,52 @@
+page-messages {
+    
+    ion-fab{
+        margin: 0 0 10px 0;
+    }
+
+    ion-textarea{
+        background-color: white;
+        margin: 12px;
+        width: 90%;
+    }
+
+    .chat-avatar{
+        display: block;
+        border-radius: 50%;
+        margin: 0 auto 0;
+        border-width: 2px;
+        border-style: solid;
+        border-color: rgba(255, 255, 255,0.1);
+        border-image: initial;
+    }
+
+    .message {
+        padding: 10px !important;
+        transition: all 250ms ease-in-out !important;
+        border-radius: 10px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .my-message {
+        background: color($colors, primary) !important;
+        color: #000 !important;
+        border-top-right-radius: 0px !important;
+        opacity: .8;
+    }
+
+    .other-message {
+        background: #dcdcdc !important;
+        color: #000 !important;
+        border-top-left-radius: 0px !important;
+    }
+
+    .message-time {
+        color: color($colors, secondary);
+        float: right;
+        font-size: small;
+    }
+
+    .message-row {
+        background-color: #fff;
+    }
+}

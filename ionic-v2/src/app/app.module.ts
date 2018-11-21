@@ -38,6 +38,7 @@ import { InboxPage } from '../pages/messages/inbox';
 import { InvitePage } from '../pages/invite/invite';
 import { MapPage } from '../pages/explore/map';
 import { SettingsPage } from '../pages/settings/settings';
+import { MessagesPage } from '../pages/messages/messages';
 
 //*********** Provider **************/
 // import { AuthData } from '../providers/auth-data';
@@ -65,7 +66,8 @@ export const config = {
     InvitePage,
     MapPage,
     ModalPage,
-    SettingsPage
+    SettingsPage,
+    MessagesPage
   ],
   imports: [
     BrowserModule,
@@ -84,7 +86,8 @@ export const config = {
     InvitePage,
     MapPage,
     ModalPage,
-    SettingsPage
+    SettingsPage,
+    MessagesPage
   ],
   providers: [
     StatusBar,

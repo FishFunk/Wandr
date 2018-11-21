@@ -1,64 +1,22 @@
 <ion-header>
     <ion-navbar>
-        <button ion-button icon-only clear *ngIf="showChatSlide" (click)="backSlide()">
-            <ion-icon name="arrow-back"></ion-icon>
-        </button>
         <ion-title><ion-icon name="md-globe">&nbsp;Travel Guru</ion-icon></ion-title>
     </ion-navbar>
 </ion-header>
 <ion-content>
-    <ion-slides>
-        <!-- Message List View -->
-        <ion-slide>
-            <!----- TODO: If list is empty: "No messages here yet!"------->
-            <ion-list>
-                <div *ngFor="let chat of chats">
-                    <button ion-item (click)="forwardSlide(chat)">
-                        <ion-thumbnail item-start>
-                            <img src="../../assets/avatar_man.png">
-                        </ion-thumbnail>
-                        <span class="name, unread">{{chat.name}}</span><br>
-                        <p class="unread">{{chat.lastMessage}}</p>
-                        <span class="timestamp">{{chat.timeStamp}}</span>
-                    </button>
-                </div>
-            </ion-list>
-        </ion-slide>
-
-        <!-- Chat View -->
-        <ion-slide>
-            <ion-grid>
-                <ion-row *ngFor="let msg of messages">
-                    <ion-col col-1 *ngIf="msg.received">
-                        <ion-avatar class="chat-avatar">
-                            <img [src]="msg.profileImageUrl"/>
-                        </ion-avatar>
-                    </ion-col>
-                    <ion-col col-8 *ngIf="msg.received" class="message other-message">
-                        <span>{{ msg.message }}</span>
-                        <div class="message-time">{{msg.timeStamp | date:'dd.MM hh:MM'}}</div>
-                    </ion-col>
-            
-                    <ion-col offset-3 col-8 *ngIf="!msg.received" class="message my-message">
-                        <span>{{ msg.message }}</span>
-                        <div class="message-time">{{msg.timeStamp | date:'dd.MM hh:MM'}}</div>
-                    </ion-col>
-                    <ion-col col-1 *ngIf="!msg.received">
-                        <ion-avatar class="chat-avatar">
-                            <img [src]="msg.profileImageUrl"/>
-                        </ion-avatar>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-            <ion-footer>
-                <ion-toolbar>
-                    <ion-textarea clearInput placeholder="Type message here..." type="text"></ion-textarea>
-                </ion-toolbar>
-                <ion-fab right bottom>
-                    <button ion-fab color="light" (click)="onClickSendMessage()">Send</button>
-                </ion-fab>
-            </ion-footer>
-        </ion-slide>
-    </ion-slides>
+    <!----- TODO: If list is empty: "No messages here yet!"------->
+    <ion-list>
+        <div *ngFor="let chat of chats">
+            <!----- TODO: Params sent to messages page? ------->
+            <button ion-item (click)="onClickChat()">
+                <ion-thumbnail item-start>
+                    <img src="../../assets/avatar_man.png">
+                </ion-thumbnail>
+                <span class="name, unread">{{chat.name}}</span><br>
+                <p class="unread">{{chat.lastMessage}}</p>
+                <span class="timestamp">{{chat.timeStamp}}</span>
+            </button>
+        </div>
+    </ion-list>
 </ion-content>
   

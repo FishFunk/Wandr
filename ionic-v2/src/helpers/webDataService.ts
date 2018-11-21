@@ -49,7 +49,7 @@ export class WebDataService {
   // Mock: Convert to read data from server
   async readMessages(): Promise<IMessage[]>{
     return new Promise<IMessage[]>((resolve, reject)=>{
-      var messages = this.mockDataGenerator.generateMockMessageJson();
+      var messages = this.mockDataGenerator.generateMockMessageJson(10);
       var data = JSON.parse(messages);
       resolve(data);
     });
