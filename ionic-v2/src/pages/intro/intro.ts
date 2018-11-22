@@ -37,20 +37,22 @@ export class IntroPage {
 
   onClickfacebookLogin() {
     if (this.cordova) {
-      let loadingPopup = this.loadingCtrl.create({
-        spinner: 'crescent',
-        content: 'Logging in...'
-      });
+      // let loadingPopup = this.loadingCtrl.create({
+      //   spinner: 'crescent',
+      //   content: 'Logging in...'
+      // });
 
       this.checkStatusAndLogin()
         .then(()=>{
-          loadingPopup.dismiss();
+          // loadingPopup.dismiss();
           this.next();
         })
         .catch((error)=> {
-          loadingPopup.dismiss()
+          // loadingPopup.dismiss()
           console.log(error);
           this.presentAlert("Failed to login with Facebook");
+
+          this.next();
           // TODO: Prompt with 'retry' button?
         });
     }

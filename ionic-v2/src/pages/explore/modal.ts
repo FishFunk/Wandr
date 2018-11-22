@@ -18,7 +18,7 @@ export class ModalPage
   showProfileSlide: boolean = false;
 
   constructor(public viewCtrl: ViewController, params: NavParams) {
-      let users = params.get('firstConnections');
+      let users = params.get('firstConnections'); 
       this.firstConnections = users;
       this.currentUser = _.first(users);
   }
