@@ -5,7 +5,6 @@ import * as firebase from 'firebase/app';
 @Injectable()
 export class FacebookApi{
 
-    private cordova: boolean;
     private facebookPermissions: ['public_profile','user_location','email','user_friends','user_gender'];
 
     constructor(private fb: Facebook){

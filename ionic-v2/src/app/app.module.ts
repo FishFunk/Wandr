@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 //*********** ionic Native **************/
 import { StatusBar } from '@ionic-native/status-bar';
@@ -71,7 +71,7 @@ export const config = {
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
@@ -99,13 +99,6 @@ export const config = {
     NativeGeocoder,
     WebDataService,
     FacebookApi
-    // Geolocation,
-    // {
-    //   provide: HAMMER_GESTURE_CONFIG,
-    // },
-    // {provide: ErrorHandler, useClass: IonicErrorHandler},
-    // AuthData,
-    // GooglePlus
   ]
 })
 export class AppModule {}

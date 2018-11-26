@@ -53,7 +53,7 @@ export class ProfilePage {
   }
 
   async load(){
-    // this.showLoadingPopup();
+    this.showLoadingPopup();
 
     var firebaseUid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
     var facebookUid = window.sessionStorage.getItem(Constants.facebookUserIdKey);
@@ -122,12 +122,14 @@ export class ProfilePage {
   // end Bound Elements
 
   private async saveProfileEdits(){
-    // await this.forwardGeocode(this.autoComplete.input);
-    // await this.reverseGeocode();
 
-    // TODO: Update backend
+    // TODO: Input validtaion
+
+    await this.forwardGeocode(this.autoComplete.input);
+    await this.reverseGeocode();
+
     var updateUser = new SaveProfileRequest();
-    updateUser.uid = 'VGdJOUiDtfPBiXaIWepW5eQZq9s1';//sessionStorage.getItem(Constants.firebaseUserIdKey);
+    updateUser.uid = sessionStorage.getItem(Constants.firebaseUserIdKey);
     updateUser.onboardcomplete = true;
     updateUser.user = this.userData;
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IUser } from '../models/user';
 import { MockDataGenerator } from './mockDataGenerator';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IChat, IMessage } from '../models/chat';
 import { Observable, Subscription } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
@@ -12,15 +12,15 @@ import { SaveProfileRequest } from '../models/saveProfileRequest';
 export class WebDataService {
 
     rootUrl: string = "https://us-central1-wanderlust-277a8.cloudfunctions.net/api";
-    requestOptions: RequestOptions;
+    requestOptions: any;
     mockDataGenerator: MockDataGenerator;
  
-    constructor(private http: Http) {
+    constructor(private http: HttpClient) {
       this.mockDataGenerator = new MockDataGenerator();
-      let headers = new Headers();
+      let headers = new HttpHeaders();
       headers.append("Content-Type", "application/json");
       headers.append("Accept", "application/json");
-      this.requestOptions = new RequestOptions({ headers: headers });
+      this.requestOptions = { headers: headers };
     }
  
   // Mock: Convert to read data from server
@@ -63,11 +63,24 @@ export class WebDataService {
     return this.constructHttpPost('saveProfile', data).subscribe();
   }
 
-  private constructHttpPost(endPoint: string, requestData: any = {}): Observable<any>{
+  private constructHttpPost(endPoint: string, requestData: any = {}): Observable<any>
+  {
     let url = `${this.rootUrl}/${endPoint}`;
 
-    return this.http.post(url, requestData, this.requestOptions);
+    return this.http
+      .post(url, requestData, this.requestOptions)
+      .pipe(
+        retry(2),
+        catchError(this.errorHandler));
+
   }
+
+
+  // private constructHttpPost(endPoint: string, requestData: any = {}): Observable<any>{
+  //   let url = `${this.rootUrl}/${endPoint}`;
+
+  //   return this.http.post(url, requestData, this.requestOptions);
+  // }
 
   // private constructHttpGet(endPoint: string): Observable<any>
   // {
@@ -92,18 +105,18 @@ export class WebDataService {
   //       catchError(this.errorHandler));
   // }
 
-  // private errorHandler(error: any) {
-  //   if (error.error instanceof ErrorEvent) {
-  //     // A client-side or network error occurred. Handle it accordingly.
-  //     console.error('An error occurred:', error.error.message);
-  //   } else {
-  //     // The backend returned an unsuccessful response code.
-  //     // The response body may contain clues as to what went wrong,
-  //     console.error(
-  //       `Backend returned code ${error.status}, ` +
-  //       `body was: ${error.error}`);
-  //   }
+  private errorHandler(error: any) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
 
-  //   return _throw("HTTP Request Failed!");
-  // };
+    return _throw("HTTP Request Failed!");
+  };
 }
