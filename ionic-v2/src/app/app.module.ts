@@ -28,6 +28,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 
 //***********  Facebook **************/
 import { Facebook } from '@ionic-native/facebook';
+// import { MockFacebookApi } from '../helpers/mockFacebookApi';
 
 //***********  Tabs **************/
 import { TabsPage } from '../pages/tabs/tabs';

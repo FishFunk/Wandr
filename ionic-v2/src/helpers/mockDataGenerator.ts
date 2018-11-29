@@ -1,26 +1,59 @@
 import { User, ILocation, IUserServices } from '../models/user';
 import { Chat, Message } from '../models/chat';
+import { FacebookLoginResponse } from '@ionic-native/facebook';
+import firebase from 'firebase';
 
 export class MockDataGenerator
 {
+    public getMockFacebookLoginResponse(): FacebookLoginResponse
+    {
+      return {
+        status: "connected",
+        authResponse: {
+            session_key: true,
+            accessToken: "cordova_not_available",
+            expiresIn: 99999999999,
+            sig: "",
+            secret: "",
+            userID: ""
+        }};
+    }
+
+    public getMockUser(id?: string, maxCount = 10): User
+    {
+      return new User(
+        id ? id : this.randomWord(), 
+        id ? id : this.randomWord(), 
+        this.randomFirstName(),
+        this.randomLastName(),
+        this.randomLocation(),
+        [this.randomNumber(1,maxCount).toString(), this.randomNumber(1,maxCount).toString()],
+        this.randomServices(),
+        new Date().toString(),
+        Math.round(Math.random()) ? '../../assets/avatar_man.png' : '../../assets/avatar_woman.png',
+        this.randomNumber(18, 99),
+        this.randomSentence())
+    }
+
+    public getMockFacebookUser()
+    {
+      return { 
+        name: `${this.randomFirstName()} ${this.randomLastName()}`,
+        location: { name: "Washington, DC"}
+      };
+    }
+
+    public getMockFirebaseResponse(): firebase.User
+    {
+      return <firebase.User> { uid: "" };
+    }
+
     public generateMockJson(count: number): string
     {
         var mockUsers = [];
         for(var i=1; i <= count; i++)
         {
-          var usr = new User(
-            i.toString(), 
-            i.toString(), 
-            this.randomFirstName(),
-            this.randomLastName(),
-            this.randomLocation(),
-            [this.randomNumber(1,count).toString(), this.randomNumber(1,count).toString()],
-            this.randomServices(),
-            new Date().toString(),
-            Math.round(Math.random()) ? '../../assets/avatar_man.png' : '../../assets/avatar_woman.png',
-            this.randomNumber(18, 99),
-            this.randomSentence());
-
+          var usr = this.getMockUser(i.toString(), count);
           mockUsers.push(usr);
         }
     
@@ -31,7 +64,7 @@ export class MockDataGenerator
         var chats = [];
         for(var i=0; i<count; i++)
         {
-          var chat = new Chat(this.randomFirstName(), this.randomSentence(), new Date().toDateString());
+          var chat = new Chat(this.randomFirstName(), this.randomSentence(), new Date().toDateString(), this.randomBool());
           chats.push(chat);
         }
 
@@ -43,7 +76,7 @@ export class MockDataGenerator
         var messages = [];
         for(var i=0; i<count; i++)
         {
-          var msg = new Message(this.randomFirstName(), this.randomSentence(), new Date().toDateString());
+          var msg = new Message(this.randomWord(), this.randomFirstName(), this.randomSentence(), new Date().toDateString());
           messages.push(msg);
         }
 
@@ -78,6 +111,10 @@ export class MockDataGenerator
     
       private randomNumber(min, max){
         return Math.round(Math.random() * (max - min));
+      }
+
+      private randomBool(){
+        return !!this.randomNumber(0, 1);
       }
     
       private randomWord(){

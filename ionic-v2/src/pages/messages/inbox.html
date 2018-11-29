@@ -11,9 +11,12 @@
             <button ion-item (click)="onClickChat()">
                 <ion-thumbnail item-start>
                     <img src="../../assets/avatar_man.png">
+                    <!-- <img [src]="chat.photoUrl"> -->
                 </ion-thumbnail>
-                <span class="name, unread">{{chat.name}}</span><br>
-                <p class="unread">{{chat.lastMessage}}</p>
+                <div [class]="chat.unread ? 'unread' : ''">
+                    <span class="name">{{chat.name}}</span><br>
+                    <p>{{chat.lastMessage}}</p>
+                </div>
                 <span class="timestamp">{{chat.timeStamp}}</span>
             </button>
         </div>

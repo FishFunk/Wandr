@@ -12,13 +12,13 @@
                 </ion-avatar>
             </ion-col>
             <ion-col col-8 *ngIf="msg.received" class="message other-message">
-                <span>{{ msg.message }}</span>
-                <div class="message-time">{{msg.timeStamp | date:'dd.MM hh:MM'}}</div>
+                <div class="message-time">{{msg.timeStamp | date:'EEE h:mm a'}}</div>
+                <p>{{ msg.message }}</p>
             </ion-col>
     
             <ion-col offset-3 col-8 *ngIf="!msg.received" class="message my-message">
-                <span>{{ msg.message }}</span>
-                <div class="message-time">{{msg.timeStamp | date:'dd.MM hh:MM'}}</div>
+                <div class="message-time">{{msg.timeStamp | date:'EEE h:mm a'}}</div>
+                <p>{{ msg.message }}</p>
             </ion-col>
             <ion-col col-1 *ngIf="!msg.received">
                 <ion-avatar class="chat-avatar">

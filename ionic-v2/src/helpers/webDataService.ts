@@ -59,6 +59,10 @@ export class WebDataService {
     });
   }
 
+  sendMessage(message: IMessage): Subscription{
+    return this.constructHttpPost('sendMessage', message).subscribe();
+  }
+
   saveProfile(data: SaveProfileRequest): Subscription{
     return this.constructHttpPost('saveProfile', data).subscribe();
   }

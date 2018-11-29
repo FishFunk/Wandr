@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, AlertController, Platform, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, AlertController, Platform } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
@@ -29,8 +29,7 @@ export class IntroPage {
   constructor(public navCtrl: NavController,
     private alertCtrl: AlertController,
     private fbApi: FacebookApi,
-    private platform: Platform,
-    private loadingCtrl: LoadingController) 
+    private platform: Platform) 
     {
       this.cordova = this.platform.is('cordova');
     }

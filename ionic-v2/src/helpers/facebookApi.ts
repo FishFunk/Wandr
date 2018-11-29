@@ -7,12 +7,14 @@ export class FacebookApi{
 
     private facebookPermissions: ['public_profile','user_location','email','user_friends','user_gender'];
 
-    constructor(private fb: Facebook){
-    }
+    constructor(
+        private fb: Facebook)
+        {
+        }
 
-    public getFriendList(userId): Promise<string[]>
+    public getFriendList(userId): Promise<any[]>
     {
-        return this.executeApiCall<string[]>(`/${userId}/friends`, 'data');
+        return this.executeApiCall<any[]>(`/${userId}/friends`, 'data');
     }
   
     public getUser(userId, accessToken)
@@ -20,9 +22,9 @@ export class FacebookApi{
         return this.executeApiCall(`/${userId}?fields=id,name,link,gender,picture.width(150).height(150),location&access_token=${accessToken}`);
     }
 
-    public getProfilePhoto(userId)
+    public getProfilePhoto(userId): Promise<string>
     {
-        return this.executeApiCall(`/${userId}/picture`);
+        return this.executeApiCall<string>(`/${userId}/picture`);
     }
 
     public facebookLogout(): Promise<any>
@@ -32,17 +34,17 @@ export class FacebookApi{
 
     public facebookLoginStatus(): Promise<FacebookLoginResponse>
     {
-      return new Promise<FacebookLoginResponse>((resolve, reject)=>{
-        this.fb.getLoginStatus()
-            .then((response)=> {
-                if(!response) {
-                    reject("facebookLoginStatus => No response");
-                } else {
-                    resolve(response);
-                }
-            })
-            .catch((error)=> reject(error));
-      });
+        return new Promise<FacebookLoginResponse>((resolve, reject)=>{
+            this.fb.getLoginStatus()
+                .then((response)=> {
+                    if(!response) {
+                        reject("facebookLoginStatus => No response");
+                    } else {
+                        resolve(response);
+                    }
+                })
+                .catch((error)=> reject(error));
+        });
     }
 
     public facebookLogin(): Promise<FacebookLoginResponse>

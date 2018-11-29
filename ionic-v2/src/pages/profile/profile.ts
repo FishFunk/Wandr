@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, LoadingController, ToastController, Platform } from 'ionic-angular';
 import {  AngularFireDatabase } from 'angularfire2/database-deprecated';
-import { IUser, User } from '../../models/user';
+import { IUser, ILocation, IUserServices, User } from '../../models/user';
 import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
@@ -17,17 +17,7 @@ export class ProfilePage {
   googleAutoComplete: any;
   autoComplete: any = { input: '' };
   autoCompleteItems: any[] = [];
-
-  // TODO: Generate user from Firebase or Facebook (onboarding)
-  userData:  IUser = new User('', '', 'First', 'Last', 
-  { stringFormat: 'Washington, DC', latitude: '', longitude: ''}, 
-  [],
-  { host: true, tips: true, meetup: true, emergencyContact: true},
-  '',
-  '../../assets/avatar_man.png',
-  28,
-  'This is just fake data, for now.');
-
+  userData:  IUser = new User('','','','',<ILocation>{},[],<IUserServices>{},'');
   editMode: boolean = false;
   loadingPopup;
   countries: any[] = [];
@@ -43,7 +33,8 @@ export class ProfilePage {
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
     private facebookApi: FacebookApi,
-    private webDataService: WebDataService) {
+    private webDataService: WebDataService,
+    private platform: Platform) {
 
     this.googleAutoComplete = new google.maps.places.AutocompleteService();
   }
@@ -55,31 +46,41 @@ export class ProfilePage {
   async load(){
     this.showLoadingPopup();
 
-    var firebaseUid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
-    var facebookUid = window.sessionStorage.getItem(Constants.facebookUserIdKey);
-    var token = window.sessionStorage.getItem(Constants.accessTokenKey);
+    if(this.platform.is('cordova')){
+      var firebaseUid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
+      var facebookUid = window.sessionStorage.getItem(Constants.facebookUserIdKey);
+      var token = window.sessionStorage.getItem(Constants.accessTokenKey);
 
-    // TODO: IF user is onboarding, get FB data. Otherwise pull Firebase user data
-    var fbUserData = await <any> this.facebookApi.getUser(facebookUid, token);
+      // TODO: IF user is onboarding, get FB data. Otherwise pull Firebase user data
+      var fbUserData = await <any> this.facebookApi.getUser(facebookUid, token);
 
-    this.userData.app_uid = firebaseUid;
-    this.userData.facebook_uid = facebookUid;
+      this.userData.app_uid = firebaseUid;
+      this.userData.facebook_uid = facebookUid;
 
-    var names = fbUserData.name.split(' ');
-    this.userData.first_name = names[0];
-    this.userData.last_name = names[1];
-    this.userData.last_login = new Date().toString();
+      var names = fbUserData.name.split(' ');
+      this.userData.first_name = names[0];
+      this.userData.last_name = names[1];
+      this.userData.last_login = new Date().toString();
 
-    this.userData.friends = await this.facebookApi.getFriendList(facebookUid);
-    
-    this.userData.location.stringFormat = fbUserData.location.name;
-    this.autoComplete.input = fbUserData.location.name;
-    await this.forwardGeocode(fbUserData.location.name);
+      this.userData.friends = await this.facebookApi.getFriendList(facebookUid);
+      
+      this.userData.location.stringFormat = fbUserData.location.name;
+      this.autoComplete.input = fbUserData.location.name;
+      await this.forwardGeocode(fbUserData.location.name);
 
-    let photoUrl = fbUserData.picture ? fbUserData.picture.data.url : '../../assets/avatar_man.png';
-    this.userData.profile_img_url = photoUrl;
-    sessionStorage.setItem(Constants.profileImageUrlKey, photoUrl);
-
+      let photoUrl = fbUserData.picture ? fbUserData.picture.data.url : '../../assets/avatar_man.png';
+      this.userData.profile_img_url = photoUrl;
+      sessionStorage.setItem(Constants.profileImageUrlKey, photoUrl);
+    } else {
+      this.userData = new User('', '', 'Johnny', 'Appleseed', 
+        { stringFormat: 'Washington, DC', latitude: '', longitude: ''}, 
+        [],
+        { host: true, tips: true, meetup: true, emergencyContact: true},
+        '',
+        '../../assets/avatar_man.png',
+        28,
+        'This is fake data, for running in the browser.');
+    }
     this.loadingPopup.dismiss();
   }
 
