@@ -4,6 +4,7 @@ import { IUser } from '../../models/user';
 import { WebDataService } from '../../helpers/webDataService';
 import { ModalPage } from './modal';
 import _ from 'underscore';
+import { first } from 'rxjs/operators';
 
 declare var google;
  
@@ -54,7 +55,7 @@ export class MapPage {
   maxY = 70;
 
   locationMap: _.Dictionary<google.maps.LatLng>; // { 'string_location' : LatLng Object }
-  userMap: _.Dictionary<IUser[]> // Users mapped by string location
+  userMap: _.Dictionary<any> // First & Second degree connections mapped by string location
 
   constructor(public navCtrl: NavController,
     private webDataService: WebDataService,
@@ -76,8 +77,10 @@ export class MapPage {
       this.searchBox = new google.maps.places.SearchBox(input);
       this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
-      this.users = await this.webDataService.readUserFirstConnections();
-      this.createMarkersAndHeatMap(this.users);
+      let firstConnections = await this.webDataService.readUserFirstConnections();
+      let secondConnections = await this.webDataService.readUserSecondConnections();
+
+      this.createMarkersAndHeatMap(firstConnections, secondConnections);
 
       // Bind map events
       this.bindEvents();
@@ -89,55 +92,57 @@ export class MapPage {
     }
   }
 
-  getItems(ev: any) {
-
-    this.searchItems = _.map(this.users, (usr)=> `${usr.first_name} ${usr.last_name} (${usr.location.stringFormat})`);
-    
-    // set val to the value of the searchbar
-    const val = ev.target.value;
-
-    // if the value is an empty string don't filter the items
-    if (val && val.trim() != '') {
-      this.searchItems = this.searchItems.filter((item) => {
-        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
-      })
-    }
-  }
-
-  private createMarkersAndHeatMap(users: IUser[]){
+  private createMarkersAndHeatMap(firstConnecitons: IUser[], secondConnections: IUser[]){
     this.locationMap = {}; // { 'location' : LatLng  }
     this.userMap = {}; // { 'location' : user[]  }
     var heatMapLatLngs: google.maps.LatLng[] = [];
     var markerLatLngs: google.maps.LatLng[] = [];
 
-    for(var idx = 0; idx < users.length; idx++){
-      let formattedLocation = users[idx].location.stringFormat;
-      
-      // Cache and map geocode information
-      let geoCode: google.maps.LatLng;
-      if(!this.locationMap[formattedLocation]){
-        geoCode = new google.maps.LatLng(users[idx].location.latitude, users[idx].location.longitude);
-        this.locationMap[formattedLocation] = geoCode;
+    for(var idx = 0; idx < firstConnecitons.length; idx++){
+      this.geoCodeAndCacheData(firstConnecitons[idx], markerLatLngs, heatMapLatLngs, true);
+    }
 
-        // Add clickable marker for each unique location
-        markerLatLngs.push(geoCode);
-      } else {
-        geoCode = this.locationMap[formattedLocation];
-      }
-
-      // Cache user data grouped by common location
-      if(!this.userMap[formattedLocation]){
-        this.userMap[formattedLocation] = [];
-      } 
-      
-      this.userMap[formattedLocation].push(users[idx]); 
-
-      // Add heatmap marker for every location instance
-      heatMapLatLngs.push(geoCode);
+    for(var idx = 0; idx < secondConnections.length; idx++){
+      this.geoCodeAndCacheData(secondConnections[idx], markerLatLngs, heatMapLatLngs, false);
     }
 
     this.setMarkers(markerLatLngs);    
     this.initHeatMap(heatMapLatLngs);
+  }
+
+  private geoCodeAndCacheData(
+    user: IUser, 
+    markerLatLngs: google.maps.LatLng[], 
+    heatMapLatLngs: google.maps.LatLng[],
+    firstDegree: boolean)
+  {
+    let formattedLocation = user.location.stringFormat;
+      
+    // Cache and map geocode information
+    let geoCode: google.maps.LatLng;
+    if(!this.locationMap[formattedLocation]){
+      geoCode = new google.maps.LatLng(user.location.latitude, user.location.longitude);
+      this.locationMap[formattedLocation] = geoCode;
+
+      // Add clickable marker for each unique location
+      markerLatLngs.push(geoCode);
+    } else {
+      geoCode = this.locationMap[formattedLocation];
+    }
+
+    // Cache user data grouped by common location
+    if(!this.userMap[formattedLocation]){
+      this.userMap[formattedLocation] = { '1': [], '2': []};
+    } 
+    
+    if(firstDegree){
+      this.userMap[formattedLocation]['1'].push(user);
+    } else {
+      this.userMap[formattedLocation]['2'].push(user);
+    }
+
+    // Add heatmap marker for every location instance
+    heatMapLatLngs.push(geoCode);
   }
 
   private setMarkers(geoData: google.maps.LatLng[]){
@@ -168,7 +173,7 @@ export class MapPage {
       return obj == latLng;
     });
     
-    this.presentPopover(e, this.userMap[str_location]);
+    this.presentPopover(e, this.userMap[str_location]['1'], this.userMap[str_location]['2']);
   }
 
   private initHeatMap(geoData: google.maps.LatLng[]){
@@ -192,8 +197,9 @@ export class MapPage {
     });
   }
 
-  private presentPopover(myEvent, firstConnections: IUser[]) {
-    let popover = this.modalCtrl.create(ModalPage, { firstConnections: firstConnections });
+  private presentPopover(myEvent, firstConnections: IUser[], secondConnections: IUser[]) {
+    let popover = this.modalCtrl.create(ModalPage, 
+      { firstConnections: firstConnections, secondConnections: secondConnections });
     popover.present({ ev: myEvent });
   }
 

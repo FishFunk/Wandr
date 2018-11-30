@@ -18,9 +18,11 @@ export class ModalPage
   showProfileSlide: boolean = false;
 
   constructor(public viewCtrl: ViewController, params: NavParams) {
-      let users = params.get('firstConnections'); 
-      this.firstConnections = users;
-      this.currentUser = _.first(users);
+      let firstConnections = params.get('firstConnections'); 
+      let secondConnections = params.get('secondConnections');
+      this.firstConnections = firstConnections;
+      this.secondConnections = secondConnections;
+      this.currentUser = _.first(firstConnections);
   }
 
   ionViewDidLoad(){

@@ -5,6 +5,8 @@ import firebase from 'firebase';
 
 export class MockDataGenerator
 {
+    private mockUserIDs = ["00001", "00002", "00003"];
+
     public getMockFacebookLoginResponse(): FacebookLoginResponse
     {
       return {
@@ -15,7 +17,7 @@ export class MockDataGenerator
             expiresIn: 99999999999,
             sig: "",
             secret: "",
-            userID: ""
+            userID: this.mockUserIDs[0]
         }};
     }
 
@@ -45,7 +47,7 @@ export class MockDataGenerator
 
     public getMockFirebaseResponse(): firebase.User
     {
-      return <firebase.User> { uid: "" };
+      return <firebase.User> { uid: this.mockUserIDs[0] };
     }
 
     public generateMockJson(count: number): string
@@ -76,7 +78,11 @@ export class MockDataGenerator
         var messages = [];
         for(var i=0; i<count; i++)
         {
-          var msg = new Message(this.randomWord(), this.randomFirstName(), this.randomSentence(), new Date().toDateString());
+          var msg = new Message(
+            this.mockUserIDs[this.randomNumber(0, this.mockUserIDs.length - 1)], 
+            this.randomFirstName(), 
+            this.randomSentence(), 
+            new Date().toDateString());
           messages.push(msg);
         }
 

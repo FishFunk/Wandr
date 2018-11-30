@@ -3,6 +3,8 @@ import { IonicPage, NavController, LoadingController, Loading } from 'ionic-angu
 import { AngularFireDatabase } from 'angularfire2/database-deprecated';
 import { WebDataService } from '../../helpers/webDataService';
 import { MessagesPage } from './messages';
+import { IChat } from '../../models/chat';
+import _ from 'underscore';
 
 @IonicPage()
 @Component({
@@ -21,12 +23,16 @@ export class InboxPage {
   }
 
   ionViewDidLoad(){
-    this.loading = this.loadingCtrl.create();
     this.loadChats();
   }
 
   async loadChats(){
+    this.loading = this.loadingCtrl.create();
     this.chats = await this.webDataService.readChatList();
+    this.chats = _.sortBy(this.chats, (chat: IChat)=>{
+      return new Date(chat.timeStamp);
+    });
+
     this.loading.dismiss();
   }
 

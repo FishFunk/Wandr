@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, AlertController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, AlertController, Platform, LoadingController } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
@@ -29,25 +29,26 @@ export class IntroPage {
   constructor(public navCtrl: NavController,
     private alertCtrl: AlertController,
     private fbApi: FacebookApi,
-    private platform: Platform) 
+    private platform: Platform,
+    private loadingCtrl: LoadingController) 
     {
       this.cordova = this.platform.is('cordova');
     }
 
   onClickfacebookLogin() {
     if (this.cordova) {
-      // let loadingPopup = this.loadingCtrl.create({
-      //   spinner: 'crescent',
-      //   content: 'Logging in...'
-      // });
+      let loadingPopup = this.loadingCtrl.create({
+        spinner: 'crescent',
+        content: 'Logging in...'
+      });
 
       this.checkStatusAndLogin()
         .then(()=>{
-          // loadingPopup.dismiss();
+          loadingPopup.dismiss();
           this.next();
         })
         .catch((error)=> {
-          // loadingPopup.dismiss()
+          loadingPopup.dismiss()
           console.log(error);
           this.presentAlert("Failed to login with Facebook");
 
@@ -56,6 +57,9 @@ export class IntroPage {
         });
     }
     else {
+      // DEBUG/Browser Mode
+      window.sessionStorage.setItem(Constants.facebookUserIdKey, "00001");
+      window.sessionStorage.setItem(Constants.firebaseUserIdKey, "00001");
       this.presentAlert('cordova is not available.');
       this.next();
     }
