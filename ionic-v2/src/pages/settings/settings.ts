@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, ToastController, NavController, AlertController } from 'ionic-angular';
 import { FacebookApi } from '../../helpers/facebookApi';
-
+import { ContactPage } from './contact';
+import { AboutPage } from './about';
 
 @IonicPage()
 @Component({
@@ -16,6 +17,14 @@ export class SettingsPage {
         private alertCtrl: AlertController,
         private fbApi: FacebookApi){
 
+    }
+
+    onClickContact(){
+        this.navCtrl.push(ContactPage, {}, { animate: true, direction: 'forward' });
+    }
+
+    onClickAbout(){
+        this.navCtrl.push(AboutPage, {}, { animate: true, direction: 'forward' });
     }
 
     onClickLogout() {
