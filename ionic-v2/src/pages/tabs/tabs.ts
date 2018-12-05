@@ -3,7 +3,7 @@ import { ProfilePage } from '../profile/profile';
 import { InboxPage } from '../messages/inbox';
 import { InvitePage } from '../invite/invite';
 import { MapPage } from '../explore/map';
-import { Tabs } from 'ionic-angular';
+import { Tabs, Platform } from 'ionic-angular';
 import { SettingsPage } from '../settings/settings';
 
 
@@ -22,9 +22,13 @@ export class TabsPage {
   tab4Root = InvitePage;
   tab5Root = SettingsPage;
 
-  constructor(){
+  useFabButton: boolean;
+
+  constructor(private platform: Platform){
+    this.useFabButton = !this.platform.is('ios');
   }
 
+  // FAB button action for Android/Windows Only
   onClickExploreButton(){
     this.tabRef.select(2);
   }

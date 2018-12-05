@@ -1,15 +1,17 @@
-tabs-page {
-  ion-tabs {
-    ion-fab {
-      bottom: 1% !important;
+.md, .wp{
+  tabs-page {
+    ion-tabs {
+      ion-fab {
+        bottom: 1% !important;
 
-      button {
-        height: 55px !important;
-        width: 55px !important;
-      }
+        button {
+          height: 55px !important;
+          width: 55px !important;
+        }
 
-      ion-icon {
-        font-size: 55px !important;
+        ion-icon {
+          font-size: 55px !important;
+        }
       }
     }
   }

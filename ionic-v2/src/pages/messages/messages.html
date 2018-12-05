@@ -5,7 +5,7 @@
 </ion-header>
 <ion-content>
     <ion-grid>
-        <ion-row *ngFor="let msg of messages">
+        <ion-row *ngFor="let msg of messages; let last = last">
             <ion-col col-1 *ngIf="msg.received">
                 <ion-avatar class="chat-avatar">
                     <img [src]="msg.profileImageUrl"/>
@@ -25,15 +25,16 @@
                     <img [src]="msg.profileImageUrl"/>
                 </ion-avatar>
             </ion-col>
+            {{last ? scrollToBottom() : ''}}
         </ion-row>
     </ion-grid>
 </ion-content>
 <ion-footer>
     <ion-toolbar>
-        <ion-textarea clearInput placeholder="Type message here..." type="text"></ion-textarea>
+        <ion-textarea [(ngModel)]="textInput" clearInput placeholder="Type message here..." type="text"></ion-textarea>
     </ion-toolbar>
     <ion-fab right bottom>
-        <button ion-fab color="light" (click)="onClickSendMessage()">Send</button>
+        <button ion-fab (click)="onClickSendMessage()">Send</button>
     </ion-fab>
 </ion-footer>
       

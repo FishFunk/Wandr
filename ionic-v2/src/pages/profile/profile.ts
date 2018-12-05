@@ -134,7 +134,13 @@ export class ProfilePage {
     updateUser.onboardcomplete = true;
     updateUser.user = this.userData;
 
-    this.webDataService.saveProfile(updateUser);
+    this.webDataService.saveProfile(updateUser)
+      .subscribe(returnData=>{
+        alert("Profile update success!");
+      },
+      error =>{
+        alert("Failed to update profile!");
+      });
   }
 
   private async forwardGeocode(formattedLocation: string)

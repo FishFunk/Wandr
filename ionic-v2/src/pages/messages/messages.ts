@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, LoadingController, Loading, Keyboard, Tabs } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, Loading, Content } from 'ionic-angular';
 import { WebDataService } from '../../helpers/webDataService';
-import { IMessage } from '../../models/chat';
+import { IMessage, Message } from '../../models/chat';
 import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
 
@@ -13,31 +13,26 @@ import { Constants } from '../../helpers/constants';
 
 export class MessagesPage {
 
-  @ViewChild('appTabs') tabRef: Tabs;
+  @ViewChild(Content) content: Content;
 
+  textInput: string = "";
   messages: any[] = [];
   loading: Loading;
   uid: string;
 
   constructor(public navCtrl: NavController, 
     public loadingCtrl: LoadingController,
-    private webDataService: WebDataService,
-    public keyboard: Keyboard) {
+    private webDataService: WebDataService) {
       
       this.uid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
-
-      //TODO: FAB button doesn't hide when keyboard is shown
-      this.keyboard.willShow.subscribe(()=>{
-        this.tabRef.setTabbarHidden(true);
-      });
-
-      this.keyboard.willHide.subscribe(()=>{
-        this.tabRef.setTabbarHidden(false);
-      });
   }
 
   ionViewDidLoad(){
     this.loadMessages();
+  }
+
+  scrollToBottom(){
+    this.content.scrollToBottom(0);
   }
 
   async loadMessages(){
@@ -57,6 +52,21 @@ export class MessagesPage {
   }
 
   onClickSendMessage(){
-    alert("not yet implemented");
+    var trimmedText = this.textInput.trim();
+    if(trimmedText.length > 0){
+      var msg = new Message(this.uid, '', trimmedText, new Date().toString());
+      this.webDataService.sendMessage(msg)
+        .subscribe(returnData=>{
+          this.loadMessages()
+            .catch(error=>{
+              console.error(error);
+              alert("Failed to fetch message list!");
+            });
+        },
+        error =>{
+          console.error(error);
+          alert("Failed to send message!");
+        });
+    }
   }
 }

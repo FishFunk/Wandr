@@ -59,12 +59,12 @@ export class WebDataService {
     });
   }
 
-  sendMessage(message: IMessage): Subscription{
-    return this.constructHttpPost('sendMessage', message).subscribe();
+  sendMessage(message: IMessage): Observable<any>{
+    return this.constructHttpPost('sendMessage', message);
   }
 
-  saveProfile(data: SaveProfileRequest): Subscription{
-    return this.constructHttpPost('saveProfile', data).subscribe();
+  saveProfile(data: SaveProfileRequest): Observable<any>{
+    return this.constructHttpPost('saveProfile', data);
   }
 
   private constructHttpPost(endPoint: string, requestData: any = {}): Observable<any>
