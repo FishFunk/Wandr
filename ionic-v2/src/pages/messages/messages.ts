@@ -1,5 +1,5 @@
-import { Component, ViewChild, ViewChildren } from '@angular/core';
-import { Content, LoadingController } from 'ionic-angular';
+import { Component, ViewChild, ViewChildren, ElementRef } from '@angular/core';
+import { Content, LoadingController, TextInput } from 'ionic-angular';
 import { Message, IMessage } from '../../models/chat';
 import { Constants } from '../../helpers/constants';
 import { WebDataService } from '../../helpers/webDataService';
@@ -15,6 +15,8 @@ export class MessagesPage {
  
     @ViewChild(Content) contentArea: Content;
     @ViewChildren('messageListItems') messageListItems;
+    @ViewChild('textInput', { read: ElementRef }) textAreaInput: ElementRef;
+
  
     uid: string;
     messages: Array<Message> = [];
@@ -28,6 +30,11 @@ export class MessagesPage {
         this.uid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
 
         this.keyboard.onKeyboardShow().subscribe(()=>{
+            this.scrollToBottom(500);
+            this.textAreaInput.nativeElement.click();
+        });
+
+        this.keyboard.onKeyboardHide().subscribe(()=>{
             this.scrollToBottom(500);
         });
     }
