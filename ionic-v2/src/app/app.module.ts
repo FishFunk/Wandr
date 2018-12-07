@@ -8,6 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
+import { Keyboard } from '@ionic-native/keyboard';
 
 import { MyApp } from './app.component';
 
@@ -78,7 +79,11 @@ export const config = {
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp,{
+      scrollPadding: false,
+      scrollAssist: true, 
+      autoFocusAssist: false
+    }),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireModule.initializeApp(config)
@@ -106,7 +111,8 @@ export const config = {
     Facebook,
     NativeGeocoder,
     WebDataService,
-    FacebookApi
+    FacebookApi,
+    Keyboard
   ]
 })
 export class AppModule {}

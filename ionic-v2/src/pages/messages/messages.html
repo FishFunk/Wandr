@@ -1,40 +1,37 @@
-<ion-header>
+<ion-header >
     <ion-navbar>
         <ion-title><ion-icon name="md-globe">&nbsp;Travel Guru</ion-icon></ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content>
-    <ion-grid>
-        <ion-row *ngFor="let msg of messages; let last = last">
-            <ion-col col-1 *ngIf="msg.received">
-                <ion-avatar class="chat-avatar">
-                    <img [src]="msg.profileImageUrl"/>
-                </ion-avatar>
-            </ion-col>
-            <ion-col col-8 *ngIf="msg.received" class="message other-message">
-                <div class="message-time">{{msg.timeStamp | date:'EEE h:mm a'}}</div>
-                <p>{{ msg.message }}</p>
-            </ion-col>
     
-            <ion-col offset-3 col-8 *ngIf="!msg.received" class="message my-message">
-                <div class="message-time">{{msg.timeStamp | date:'EEE h:mm a'}}</div>
-                <p>{{ msg.message }}</p>
-            </ion-col>
-            <ion-col col-1 *ngIf="!msg.received">
-                <ion-avatar class="chat-avatar">
-                    <img [src]="msg.profileImageUrl"/>
-                </ion-avatar>
-            </ion-col>
-            {{last ? scrollToBottom() : ''}}
-        </ion-row>
-    </ion-grid>
+<ion-content>
+    <div id="messageContent">
+        <div #messageListItems class="message" 
+                *ngFor="let message of messages" 
+                [ngClass]="getClass(message.uid)">
+            <div class="message-time">{{message.timeStamp | date:'EEE h:mm a'}}</div>
+            <p>{{ message.message }}</p>
+        </div>
+    </div>
 </ion-content>
+
 <ion-footer>
     <ion-toolbar>
-        <ion-textarea [(ngModel)]="textInput" clearInput placeholder="Type message here..." type="text"></ion-textarea>
+        <textarea 
+            spellcheck="true" 
+            autoComplete="true" 
+            autocorrect="true" 
+            rows="1" 
+            [(ngModel)]="message" 
+            placeholder="Type your message..." 
+            (keyup.enter)="sendMessage()">
+        </textarea>
+
+        <ion-buttons right>
+            <button (click)="sendMessage()" ion-button icon-only item-right>
+                <ion-icon name="send"></ion-icon>
+            </button>
+        </ion-buttons>
+
     </ion-toolbar>
-    <ion-fab right bottom>
-        <button ion-fab (click)="onClickSendMessage()">Send</button>
-    </ion-fab>
 </ion-footer>
-      
