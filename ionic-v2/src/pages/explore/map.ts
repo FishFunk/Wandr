@@ -82,6 +82,12 @@ export class MapPage {
 
       this.createMarkersAndHeatMap(firstConnections, secondConnections);
 
+      // Create the DIV to hold the control and call the createRandomControl()
+      // constructor passing in this DIV.
+      var controlDiv = document.createElement('div');
+      this.createRandomControl(controlDiv);
+      this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);
+
       // Bind map events
       this.bindEvents();
       this.loadingPopup.dismiss();
@@ -258,5 +264,47 @@ export class MapPage {
       content: ''
     });
     this.loadingPopup.present();
+  }
+
+  /**
+   * The RandomControl adds a control to the map that centers on random map spot
+   * 
+   * This constructor takes the control DIV as an argument.
+   * @constructor
+   */
+  private createRandomControl(controlDiv) {
+
+    // Set CSS for the control border.
+    var controlUI = document.createElement('div');
+    controlUI.style.backgroundColor = '#fff';
+    controlUI.style.border = '2px solid #fff';
+    controlUI.style.borderRadius = '50%';
+    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+    controlUI.style.cursor = 'pointer';
+    controlUI.style.marginBottom = '22px';
+    controlUI.style.textAlign = 'center';
+    controlUI.title = 'Click to find random city with connections';
+    controlDiv.appendChild(controlUI);
+
+    // Set CSS for the control interior.
+    var controlText = document.createElement('div');
+    controlText.style.color = 'rgb(25,25,25)';
+    controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+    controlText.style.fontSize = '12px';
+    controlText.style.lineHeight = '38px';
+    controlText.style.paddingLeft = '5px';
+    controlText.style.paddingRight = '5px';
+    controlText.innerHTML = 'Random';
+    controlUI.appendChild(controlText);
+
+    // Setup the click event listeners: simply set the map to Chicago.
+    controlUI.addEventListener('click', ()=> {
+      var keys = _.keys(this.locationMap);
+      var randomIdx = _.random(0, keys.length - 1);
+      var randomKey = keys[randomIdx];
+      var latLng = this.locationMap[randomKey];
+      this.map.panTo(latLng);
+      this.map.setZoom(this.maxZoomLevel);
+    });
   }
 }
