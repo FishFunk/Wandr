@@ -19,16 +19,16 @@
         </button>
         <ion-item>
             <ion-label>Push Notifications</ion-label>
-            <ion-toggle checked="true"></ion-toggle>
+            <ion-toggle [(ngModel)]="pushNotifications" (ionChange)="updateUserSettings()"></ion-toggle>
         </ion-item>
         <ion-item>
             <ion-label>Ghost Mode</ion-label>
-            <ion-toggle checked="false"></ion-toggle>
+            <ion-toggle [(ngModel)]="ghostMode" (ionChange)="updateUserSettings()"></ion-toggle>
         </ion-item>
-        <ion-item>
+        <!-- <ion-item>
             <ion-label>3rd Degree Connections</ion-label>
-            <ion-toggle checked="false"></ion-toggle>
-        </ion-item>
+            <ion-toggle [(ngModel)]="thirdConnections" checked="false"></ion-toggle>
+        </ion-item> -->
     </ion-list>
     <ion-footer text-center>
         <button ion-button color="dark" clear (click)="onClickLogout()">

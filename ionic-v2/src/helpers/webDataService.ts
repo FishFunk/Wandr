@@ -59,6 +59,14 @@ export class WebDataService {
     });
   }
 
+  getUserSettings(userId: string){
+    return this.constructHttpPost('getSettings', { userId: userId } );
+  }
+
+  updateUserSettings(userSettings: any){
+    return this.constructHttpPost('updateSettings', userSettings);
+  }
+
   sendMessage(message: IMessage): Observable<any>{
     return this.constructHttpPost('sendMessage', message);
   }
@@ -79,24 +87,15 @@ export class WebDataService {
 
   }
 
-
-  // private constructHttpPost(endPoint: string, requestData: any = {}): Observable<any>{
-  //   let url = `${this.rootUrl}/${endPoint}`;
-
-  //   return this.http.post(url, requestData, this.requestOptions);
-  // }
-
-  // private constructHttpGet(endPoint: string): Observable<any>
-  // {
-  //   let url = `${this.rootUrl}/${endPoint}`;
-
-  //   return this.http
-  //     .get(url, this.requestOptions)
-  //     .pipe(
-  //       retry(2),
-  //       catchError(this.errorHandler));
-
-  // }
+  private constructHttpGet(endPoint: string): Observable<any>
+  {
+    let url = `${this.rootUrl}/${endPoint}`;
+    return this.http
+      .get(url, this.requestOptions)
+      .pipe(
+        retry(2),
+        catchError(this.errorHandler));
+  }
 
   // private constructHttpDelete(endPoint: string): Observable<any>
   // {

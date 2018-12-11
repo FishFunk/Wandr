@@ -3,6 +3,9 @@ import { IonicPage, ToastController, NavController, AlertController } from 'ioni
 import { FacebookApi } from '../../helpers/facebookApi';
 import { ContactPage } from './contact';
 import { AboutPage } from './about';
+import { WebDataService } from '../../helpers/webDataService';
+import { Observable } from 'rxjs';
+import { Constants } from '../../helpers/constants';
 
 @IonicPage()
 @Component({
@@ -11,12 +14,40 @@ import { AboutPage } from './about';
 })
 export class SettingsPage {
 
+    uid: string;
+    pushNotifications: boolean;
+    ghostMode: boolean;
+
     constructor(
         public navCtrl: NavController,
         private toastCtrl: ToastController,
         private alertCtrl: AlertController,
-        private fbApi: FacebookApi){
+        private fbApi: FacebookApi,
+        private webDataService: WebDataService){
 
+        this.uid = sessionStorage.getItem(Constants.firebaseUserIdKey);
+    }
+
+    ionViewDidLoad(){
+        // this.webDataService.getUserSettings(this.uid)
+        //     .subscribe((userSettings)=>{
+        //         this.pushNotifications = !!userSettings.pushNotifications;
+        //         this.ghostMode = !!userSettings.pushNotifications;
+        //     });
+    }
+
+    updateUserSettings(){
+        alert("Not yet implemented");
+        // var newSettings = { 
+        //     uid: this.uid, 
+        //     pushNotifications: this.pushNotifications, 
+        //     ghostMode: this.ghostMode 
+        // };
+        // this.webDataService.getUserSettings(newSettings)
+        //     .subscribe((userSettings)=>{
+        //         this.pushNotifications = !!userSettings.pushNotifications;
+        //         this.ghostMode = !!userSettings.pushNotifications;
+        //     });
     }
 
     onClickContact(){
