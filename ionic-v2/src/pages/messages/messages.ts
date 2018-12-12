@@ -79,7 +79,10 @@ export class MessagesPage {
             await this.firebase.database()
                 .ref('messages/'+this.roomKey)
                 .child(key)
-                .set({ name: this.firstName, text: this.message, timestamp: dateInMillis });
+                .set({ uid: this.uid, 
+                    name: this.firstName, 
+                    text: this.message, 
+                    timestamp: dateInMillis });
 
             this.message = '';
             loading.dismiss();
