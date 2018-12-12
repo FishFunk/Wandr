@@ -5,6 +5,7 @@ import { Constants } from '../../helpers/constants';
 import { WebDataService } from '../../helpers/webDataService';
 import _ from 'underscore';
 import { Keyboard } from '@ionic-native/keyboard';
+import { FirebaseApp } from 'angularfire2';
 
  
 @Component({
@@ -19,77 +20,89 @@ export class MessagesPage {
 
  
     uid: string;
-    messages: Array<Message> = [];
+    messages: Array<any> = [];
     message: string = '';
+    roomKey: string = 'fishUID-wongUID';
+    firstName: string;
 
     constructor(
         private loadingCtrl: LoadingController,
         private webDataService: WebDataService,
-        private keyboard: Keyboard) {
+        private keyboard: Keyboard,
+        private firebase: FirebaseApp) {
         
         this.uid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
+        this.firstName = window.sessionStorage.getItem(Constants.userFirstNameKey);
 
-        this.keyboard.onKeyboardShow().subscribe(()=>{
-            this.scrollToBottom(500);
-            this.textAreaInput.nativeElement.click();
+        this.keyboard.onKeyboardShow().subscribe(async ()=>{
+            this.scrollToBottom(500)
+                .then(()=> this.textAreaInput.nativeElement.click())
+                .catch(()=>this.textAreaInput.nativeElement.click());
         });
 
-        this.keyboard.onKeyboardHide().subscribe(()=>{
-            this.scrollToBottom(500);
+        this.keyboard.onKeyboardHide().subscribe(async ()=>{
+            await this.scrollToBottom(500);
         });
     }
 
     ionViewDidLoad(){
-        this.messageListItems.changes.subscribe(t => {
-            this.scrollToBottom(500);
+        this.messageListItems.changes.subscribe(async () => {
+            await this.scrollToBottom(500);
         });
 
         this.loadMessages();
     }
 
-    ionViewDidEnter() {
-        this.scrollToBottom(300);
-    }
+    // ionViewDidEnter() {
+    //     this.scrollToBottom(500);
+    // }
 
     async loadMessages(){
         let loading = this.loadingCtrl.create();
-        this.messages = await this.webDataService.readMessages();
-        
-        this.messages = _.sortBy(this.messages, (msg: IMessage)=>{
-            return new Date(msg.timeStamp);
-        });
 
-        this.messages.forEach((msg: any)=>{
-            // add received property for UI
-            msg.received = msg.uid != this.uid;
+        this.firebase.database().ref('messages/'+this.roomKey).on('value', resp => {
+            this.messages = this.snapshotToArray(resp);
         });
 
         loading.dismiss();
     }
 
-    sendMessage() {
-        if (this.message !== '') {
-            var trimmedText = this.message.trim();
-            if(trimmedText.length > 0){
-                var msg = new Message(this.uid, '', trimmedText, new Date().toString());
-                this.webDataService.sendMessage(msg)
-                    .subscribe(returnData=>{
-                        this.messages.push(msg);
-                        this.message = '';
-                    },
-                    error =>{
-                        console.error(error);
-                        alert("Failed to send message!");
-                    });
-            }
+    async sendMessage() {
+
+        var trimmedText = this.message.trim();
+        if (trimmedText.length > 0){
+            let loading = this.loadingCtrl.create();
+
+            let dateInMillis = new Date().getTime();
+            let key = dateInMillis.toString();
+            
+            await this.firebase.database()
+                .ref('messages/'+this.roomKey)
+                .child(key)
+                .set({ name: this.firstName, text: this.message, timestamp: dateInMillis });
+
+            this.message = '';
+            loading.dismiss();
         }
+
     }
 
-    scrollToBottom(duration){
-        this.contentArea.scrollToBottom(duration);
+    async scrollToBottom(duration){
+        await this.contentArea.scrollToBottom(duration);
     }
  
     getClass(messageUid){
         return this.uid == messageUid  ? 'outgoing' : 'incoming';
     }
+
+    snapshotToArray(snapshot){
+        let returnArr = [];
+    
+        snapshot.forEach(childSnapshot => {
+            let itemValue = childSnapshot.val();
+            returnArr.push(itemValue);
+        });
+    
+        return returnArr;
+    };
 }

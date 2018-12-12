@@ -3,4 +3,6 @@ export abstract class Constants {
     public static firebaseUserIdKey = "firebaseUserId";
     public static accessTokenKey = "accessToken";
     public static profileImageUrlKey = "profileUrl";
+    public static userFirstNameKey = "firstName";
+    public static userLastNameKey = "lastName";
 }

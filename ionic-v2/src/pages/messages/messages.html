@@ -9,8 +9,8 @@
         <div #messageListItems class="message" 
                 *ngFor="let message of messages" 
                 [ngClass]="getClass(message.uid)">
-            <div class="message-time">{{message.timeStamp | date:'EEE h:mm a'}}</div>
-            <p>{{ message.message }}</p>
+            <div class="message-time">{{message.timestamp | date:'EEE h:mm a'}}</div>
+            <p>{{ message.text }}</p>
         </div>
     </div>
 </ion-content>

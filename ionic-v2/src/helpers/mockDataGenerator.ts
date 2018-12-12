@@ -89,7 +89,7 @@ export class MockDataGenerator
         return JSON.stringify(messages);
       }
     
-      private randomLocation(){
+      public randomLocation(){
         var locations = [
           { stringFormat: "Houston, TX", latitude: "29.7604", longitude: "-95.3698" },
           { stringFormat: "Austin, TX", latitude: "30.2672", longitude: "-97.7431" },
@@ -106,7 +106,7 @@ export class MockDataGenerator
         return <ILocation> locations[this.randomNumber(0,locations.length - 1)];
       }
     
-      private randomServices(){
+      public randomServices(){
         return <IUserServices> {
           host: !!Math.round(Math.random()),
           tips: !!Math.round(Math.random()),
@@ -115,15 +115,15 @@ export class MockDataGenerator
         };
       }
     
-      private randomNumber(min, max){
+      public randomNumber(min, max){
         return Math.round(Math.random() * (max - min));
       }
 
-      private randomBool(){
+      public randomBool(){
         return !!this.randomNumber(0, 1);
       }
     
-      private randomWord(){
+      public randomWord(){
         var letters = "abcdefghijklmnopqrstuvwxyrz";
         var wordLength = this.randomNumber(2, 10);
         var word = "";
@@ -136,7 +136,7 @@ export class MockDataGenerator
         return word;
       }
     
-      private randomSentence(){
+      public randomSentence(){
         var sentence = "";
         var wordCount = this.randomNumber(1, 12);
         for(var i=0; i < wordCount; i++){
@@ -146,7 +146,7 @@ export class MockDataGenerator
         return sentence;
       }
 
-      private randomFirstName(){
+      public randomFirstName(){
         let names = [
           "Alex",
           "Andre",
@@ -241,7 +241,7 @@ export class MockDataGenerator
       }
 
 
-    private randomLastName(){
+    public randomLastName(){
       let names = [
         "Barker",
         "Johanssen",
