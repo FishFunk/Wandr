@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, Loading } from 'ionic-angular';
-import { AngularFireDatabase } from 'angularfire2/database-deprecated';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { WebDataService } from '../../helpers/webDataService';
 import { MessagesPage } from './messages';
 import { IChat } from '../../models/chat';

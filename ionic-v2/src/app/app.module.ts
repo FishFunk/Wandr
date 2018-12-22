@@ -13,18 +13,9 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { MyApp } from './app.component';
 
 //***********  Angularfire2 v5 **************/
-
-//import { AngularFireModule } from 'angularfire2';
-//import {AngularFireModule} from 'Angularfire2';
-import {AngularFireModule} from 'angularfire2';
-// New imports to update based on AngularFire2 version 4
-//import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
-import { AngularFireDatabaseModule } from 'angularfire2/database-deprecated';
-//import { AngularFireDatabase} from 'angularfire2/database';
-// for AngularFireAuth
-import { AngularFireAuth } from 'angularfire2/auth';
-
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 
 //***********  Facebook **************/
@@ -54,12 +45,18 @@ import { FacebookApi } from '../helpers/facebookApi';
 //import firebase from 'firebase';
 //********** firebase configuration  ************ */
 export const config = { 
-  apiKey: "AIzaSyCDSds5vBVew16tGl7hRr8CAbtYGMJwvhE",
-  authDomain: "wanderlust-277a8.firebaseapp.com",
-  databaseURL: "https://wanderlust-277a8.firebaseio.com",
-  projectId: "wanderlust-277a8",
-  storageBucket: "wanderlust-277a8.appspot.com",
-  messagingSenderId: "346418379043"
+  // apiKey: "AIzaSyCDSds5vBVew16tGl7hRr8CAbtYGMJwvhE",
+  // authDomain: "wanderlust-277a8.firebaseapp.com",
+  // databaseURL: "https://wanderlust-277a8.firebaseio.com",
+  // projectId: "wanderlust-277a8",
+  // storageBucket: "wanderlust-277a8.appspot.com",
+  // messagingSenderId: "346418379043"
+  apiKey: "AIzaSyCJOye-L4aFVVZny4n9_XWz61ZPxbCBdyw",
+  authDomain: "wanderlust-app-220020.firebaseapp.com",
+  databaseURL: "https://wanderlust-app-220020.firebaseio.com",
+  projectId: "wanderlust-app-220020",
+  storageBucket: "wanderlust-app-220020.appspot.com",
+  messagingSenderId: "430173647950"
 };
   
 @NgModule({

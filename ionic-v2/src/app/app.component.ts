@@ -27,12 +27,18 @@ export class MyApp {
 
 //********** firebase configuration  ************ */
 public readonly firebaseInitOptions: any = { 
-  apiKey: "AIzaSyCDSds5vBVew16tGl7hRr8CAbtYGMJwvhE",
-  authDomain: "wanderlust-277a8.firebaseapp.com",
-  databaseURL: "https://wanderlust-277a8.firebaseio.com",
-  projectId: "wanderlust-277a8",
-  storageBucket: "wanderlust-277a8.appspot.com",
-  messagingSenderId: "346418379043"
+  // apiKey: "AIzaSyCDSds5vBVew16tGl7hRr8CAbtYGMJwvhE",
+  // authDomain: "wanderlust-277a8.firebaseapp.com",
+  // databaseURL: "https://wanderlust-277a8.firebaseio.com",
+  // projectId: "wanderlust-277a8",
+  // storageBucket: "wanderlust-277a8.appspot.com",
+  // messagingSenderId: "346418379043"
+  apiKey: "AIzaSyCJOye-L4aFVVZny4n9_XWz61ZPxbCBdyw",
+  authDomain: "wanderlust-app-220020.firebaseapp.com",
+  databaseURL: "https://wanderlust-app-220020.firebaseio.com",
+  projectId: "wanderlust-app-220020",
+  storageBucket: "wanderlust-app-220020.appspot.com",
+  messagingSenderId: "430173647950"
 };
 
   initializeApp() {

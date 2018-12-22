@@ -27,6 +27,23 @@ export interface IUserServices{
     emergencyContact: boolean;
 }
 
+export class Location implements ILocation{
+    constructor(
+        public stringFormat: string = '',
+        public latitude: string = '',
+        public longitude: string = '')
+    {}
+}
+
+export class UserServices implements IUserServices{
+    constructor(
+        public host: boolean = false,
+        public tips: boolean = false,
+        public meetup: boolean = false,
+        public emergencyContact: boolean = false)
+        {}
+}
+
 export class User implements IUser{
     constructor(
         public app_uid: string,
@@ -37,9 +54,9 @@ export class User implements IUser{
         public friends: Array<string>,
         public services: IUserServices,
         public last_login: string,
-        public profile_img_url?: string,
-        public age?: number,
-        public bio?: string,
+        public profile_img_url: string,
+        public age: number,
+        public bio: string = '',
         public ghost_mode: boolean = false,
         public onboarding: boolean = false)
         {}
