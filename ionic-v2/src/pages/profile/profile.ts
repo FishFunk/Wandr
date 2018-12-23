@@ -15,7 +15,7 @@ export class ProfilePage {
   googleAutoComplete: any;
   autoComplete: any = { input: '' };
   autoCompleteItems: any[] = [];
-  userData = new User('','','','',new Location(),[],new UserServices(),'', '', 0);
+  userData = new User('','','','',new Location(),[],new UserServices(),[],'','',0);
   editMode: boolean = false;
   loadingPopup;
   countries: any[] = [];
@@ -50,7 +50,7 @@ export class ProfilePage {
       var token = window.sessionStorage.getItem(Constants.accessTokenKey);
 
       var fbUserData = await <any> this.facebookApi.getUser(facebookUid, token);
-      var snapshot = await this.firebase.database.ref(`/users/${firebaseUid}`).once('value');
+      var snapshot = await this.firebase.database.ref('/users/' + firebaseUid).once('value');
 
       // If User has already been created
       if(!snapshot.val()){
@@ -68,9 +68,9 @@ export class ProfilePage {
         this.userData.location.stringFormat = fbUserData.location.name;
         this.autoComplete.input = fbUserData.location.name;
         await this.forwardGeocode(fbUserData.location.name);
-
+        
         // Create ref
-        await this.firebase.database.ref(`users/${firebaseUid}`).set(this.userData);
+        await this.firebase.database.ref('users/' + firebaseUid).set(this.userData);
       } else {
         this.userData = <User> snapshot.val();
       }
@@ -93,6 +93,7 @@ export class ProfilePage {
         { stringFormat: 'Washington, DC', latitude: '', longitude: ''}, 
         [],
         { host: true, tips: true, meetup: true, emergencyContact: true},
+        [],
         '',
         '../../assets/avatar_man.png',
         28,
@@ -149,8 +150,10 @@ export class ProfilePage {
   }
 
   private writeUserDataToDb(): Promise<any>{
-    return this.firebase.database.ref(`users/${this.userData.app_uid}`).set(this.userData, (possibleError)=>{
-      console.error(possibleError);
+    return this.firebase.database.ref('users/' + this.userData.app_uid).set(this.userData, (possibleError)=>{
+      if(possibleError){
+        console.error(possibleError);
+      };
     });
   }
 

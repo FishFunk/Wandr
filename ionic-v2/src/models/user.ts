@@ -6,12 +6,12 @@ export interface IUser{
     age?: number;
     bio?: string;
     location: ILocation;
-    friends: Array<string>; // App specific UIDs
+    friends: Array<IFacebookFriend>;
     services: IUserServices;
+    roomkeys: string[];
     profile_img_url?: string;
     last_login: string;
     ghost_mode: boolean;
-    onboarding: boolean;
 }
 
 export interface ILocation{
@@ -25,6 +25,11 @@ export interface IUserServices{
     tips: boolean;
     meetup: boolean;
     emergencyContact: boolean;
+}
+
+export interface IFacebookFriend{
+    name: string;
+    id: string;
 }
 
 export class Location implements ILocation{
@@ -51,13 +56,13 @@ export class User implements IUser{
         public first_name: string,
         public last_name: string,
         public location: ILocation,
-        public friends: Array<string>,
+        public friends: Array<IFacebookFriend>,
         public services: IUserServices,
+        public roomkeys: string[],
         public last_login: string,
         public profile_img_url: string,
         public age: number,
         public bio: string = '',
-        public ghost_mode: boolean = false,
-        public onboarding: boolean = false)
+        public ghost_mode: boolean = false)
         {}
 }

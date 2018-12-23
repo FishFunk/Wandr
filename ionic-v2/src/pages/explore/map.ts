@@ -5,6 +5,8 @@ import { WebDataService } from '../../helpers/webDataService';
 import { ModalPage } from './modal';
 import _ from 'underscore';
 import { first } from 'rxjs/operators';
+import { AngularFireDatabase, DatabaseSnapshot } from 'angularfire2/database';
+import { Constants } from '../../helpers/constants';
 
 declare var google;
  
@@ -58,9 +60,9 @@ export class MapPage {
   userMap: _.Dictionary<any> // First & Second degree connections mapped by string location
 
   constructor(public navCtrl: NavController,
-    private webDataService: WebDataService,
     private modalCtrl: ModalController,
-    private loadingCtrl: LoadingController) {
+    private loadingCtrl: LoadingController,
+    private firebase: AngularFireDatabase) {
   }
  
   ionViewDidLoad(){
@@ -77,8 +79,10 @@ export class MapPage {
       this.searchBox = new google.maps.places.SearchBox(input);
       this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
-      let firstConnections = await this.webDataService.readUserFirstConnections();
-      let secondConnections = await this.webDataService.readUserSecondConnections();
+      //let firstConnections = await this.webDataService.readUserFirstConnections();
+      let secondConnections = []; // await this.webDataService.readUserSecondConnections();
+
+      let firstConnections = await this.readFirstConnections();
 
       this.createMarkersAndHeatMap(firstConnections, secondConnections);
 
@@ -306,5 +310,37 @@ export class MapPage {
       this.map.panTo(latLng);
       this.map.setZoom(this.maxZoomLevel);
     });
+  }
+
+  private async readFirstConnections(): Promise<IUser[]>{
+
+    var firstConnections: IUser[] = [];
+    var firebaseUid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
+
+    var snapshot = await this.firebase.database.ref('/users/' + firebaseUid).once('value');
+    var user = <IUser> snapshot.val();
+
+    var promises = user.friends.map((friend)=> {
+      return this.firebase.database.ref('users')
+        .orderByChild('facebook_uid')
+        .equalTo(friend.id)
+        .once("value");
+    });
+
+    var snapshots = await Promise.all(promises).catch((error)=> {
+        console.error(error);
+        return Promise.reject(error);
+      });
+
+    snapshots.forEach((snapshot: DatabaseSnapshot<any>)=> {
+      var dbObj = snapshot.val();
+      if(dbObj){
+        var key = _.keys(snapshot.val())[0];
+        var user = <IUser> dbObj[key];
+        firstConnections.push(user);
+      }
+    });
+
+    return Promise.resolve(firstConnections);
   }
 }

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, Loading } from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
-import { WebDataService } from '../../helpers/webDataService';
 import { MessagesPage } from './messages';
-import { IChat } from '../../models/chat';
 import _ from 'underscore';
+import { Constants } from '../../helpers/constants';
+import { IUser } from '../../models/user';
 
 @IonicPage()
 @Component({
@@ -19,7 +19,7 @@ export class InboxPage {
   constructor(public navCtrl: NavController, 
     public afDB: AngularFireDatabase, 
     public loadingCtrl: LoadingController,
-    private webDataService: WebDataService) {
+    private firebase: AngularFireDatabase) {
   }
 
   ionViewDidLoad(){
@@ -28,15 +28,40 @@ export class InboxPage {
 
   async loadChats(){
     this.loading = this.loadingCtrl.create();
-    this.chats = await this.webDataService.readChatList();
-    this.chats = _.sortBy(this.chats, (chat: IChat)=>{
-      return new Date(chat.timeStamp);
-    });
+    
+    var firebaseUid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
+
+    var snapshot = await this.firebase.database.ref(`/users/${firebaseUid}`).once('value');
+    var user = <IUser> snapshot.val();
+    
+    if(user.roomkeys && user.roomkeys.length > 0){
+      await this.queryChats(user.roomkeys);
+    } else {
+      this.chats = [];
+    }
 
     this.loading.dismiss();
   }
 
   onClickChat(){
     this.navCtrl.push(MessagesPage, {}, { animate: true, direction: 'forward' });
+  }
+
+  private async queryChats(roomkeys: string[]): Promise<any>{
+
+    var promises = roomkeys.map((key)=> {
+      return this.firebase.database.ref("/chats/").child(key).once("value");
+    });
+
+    var snapshots = await Promise.all(promises).catch((error)=> {
+      console.error(error);
+      return Promise.reject(error);
+    });
+    
+    snapshots.forEach((snapshot)=> {
+      this.chats.push(snapshot.val());
+    });
+
+    return Promise.resolve();
   }
 }
