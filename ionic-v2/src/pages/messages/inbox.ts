@@ -14,25 +14,25 @@ import { IChat } from '../../models/chat';
 })
 export class InboxPage {
 
-  chats:  any[] = [];
+  userId: string;
+  chats:  IChat[] = [];
   loading: Loading;
   
   constructor(public navCtrl: NavController, 
     public afDB: AngularFireDatabase, 
     public loadingCtrl: LoadingController,
     private firebase: AngularFireDatabase) {
+      this.userId = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
   }
 
-  ionViewDidLoad(){
+  ionViewDidEnter(){
     this.loadChats();
   }
 
   async loadChats(){
     this.loading = this.loadingCtrl.create();
     
-    var firebaseUid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
-
-    var snapshot = await this.firebase.database.ref(`/users/${firebaseUid}`).once('value');
+    var snapshot = await this.firebase.database.ref('/users/' + this.userId).once('value');
     var user = <IUser> snapshot.val();
     
     if(user.roomkeys && user.roomkeys.length > 0){
@@ -49,6 +49,8 @@ export class InboxPage {
   }
 
   private async queryChats(roomkeys: string[]): Promise<any>{
+
+    this.chats = [];
 
     var promises = roomkeys.map((key)=> {
       return this.firebase.database.ref("/chats/").child(key).once("value");

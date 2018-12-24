@@ -5,6 +5,7 @@ import _ from "underscore";
 import { AngularFireFunctions } from "angularfire2/functions";
 
 import { Constants } from "../../helpers/constants";
+import { IChat } from "../../models/chat";
 
 @Component({
     selector: 'modal-page',
@@ -44,20 +45,26 @@ export class ModalPage
   }
 
   onClickSendMessage(){
-    var currentUserUid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
-    var currentUserFirstName = window.sessionStorage.getItem(Constants.userFirstNameKey);
-    var focusedConnectionUid = this.focusedConnection.app_uid;
-    var roomkey = currentUserUid + '_' + focusedConnectionUid;
+    const currentUserUid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
+    const currentUserFirstName = window.sessionStorage.getItem(Constants.userFirstNameKey);
+    const currentUserPhotoUrl = window.sessionStorage.getItem(Constants.profileImageUrlKey);
 
-    var data = {
+    const focusedConnectionUid = this.focusedConnection.app_uid;
+    const roomkey = currentUserUid + '_' + focusedConnectionUid;
+
+    const data: IChat = {
       roomkey: roomkey,
       userA_id: currentUserUid,
       userA_name: currentUserFirstName,
+      userA_photoUrl: currentUserPhotoUrl,
       userB_id: focusedConnectionUid,
-      userB_name: this.focusedConnection.first_name
+      userB_name: this.focusedConnection.first_name,
+      userB_photoUrl: this.focusedConnection.profile_img_url,
+      lastMessage: '',
+      timestamp: new Date().getTime().toString()
     };
 
-    var sendMessage = this.firebaseFunctionsModule.functions.httpsCallable('addMessage');
+    const sendMessage = this.firebaseFunctionsModule.functions.httpsCallable('addMessage');
     
     sendMessage(data).then((result)=>{
       alert("Message sent!");

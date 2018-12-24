@@ -4,7 +4,6 @@ import { FacebookApi } from '../../helpers/facebookApi';
 import { ContactPage } from './contact';
 import { AboutPage } from './about';
 import { WebDataService } from '../../helpers/webDataService';
-import { Observable } from 'rxjs';
 import { Constants } from '../../helpers/constants';
 
 @IonicPage()
@@ -12,6 +11,7 @@ import { Constants } from '../../helpers/constants';
   selector: 'page-settings',
   templateUrl: 'settings.html'
 })
+
 export class SettingsPage {
 
     uid: string;

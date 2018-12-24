@@ -71,10 +71,12 @@ export class MockDataGenerator
             this.randomWord(),
             this.randomWord(),
             this.randomFirstName(),
+            '',
             this.randomWord(),
             this.randomFirstName(),
+            '',
             this.randomSentence(),
-            new Date().toDateString());
+            new Date().getTime().toString());
             
           chats.push(chat);
         }
