@@ -62,13 +62,13 @@ export class FacebookApi{
         });
     }
 
-    public firebaseLogin(facebookAccessToken: string): Promise<firebase.User>
+    public firebaseLogin(facebookAccessToken: string): Promise<any>
     {
         return new Promise((resolve, reject)=>{
             const credentials: firebase.auth.AuthCredential = 
             firebase.auth.FacebookAuthProvider.credential(facebookAccessToken);
         
-            firebase.auth().signInWithCredential(credentials)
+            firebase.auth().signInAndRetrieveDataWithCredential(credentials)
                 .then((userData: any)=> resolve(userData))
                 .catch((error) => reject(error));
         });

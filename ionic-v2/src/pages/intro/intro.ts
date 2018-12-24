@@ -80,9 +80,10 @@ export class IntroPage {
 
     var firebaseData = await this.fbApi.firebaseLogin(statusResponse.authResponse.accessToken);
 
+    // TODO: Utilize profile and other info in firebaseData?
     this.cacheFacebookTokens(
       statusResponse.authResponse.userID, 
-      firebaseData.uid,
+      firebaseData.user.uid,
       statusResponse.authResponse.accessToken);
   }
 

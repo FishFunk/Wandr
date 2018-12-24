@@ -3,7 +3,7 @@ import { IUser } from '../models/user';
 import { MockDataGenerator } from './mockDataGenerator';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IChat, IMessage } from '../models/chat';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { _throw } from 'rxjs/observable/throw';
 import { SaveProfileRequest } from '../models/saveProfileRequest';

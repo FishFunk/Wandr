@@ -72,39 +72,39 @@
             <ion-card text-center padding>
                 <ion-card-header>
                     <ion-avatar class="image-md">
-                        <img src="{{currentUser.profile_img_url}}"/>
+                        <img src="{{focusedConnection.profile_img_url}}"/>
                     </ion-avatar>
-                    <h1>{{currentUser.first_name}} {{currentUser.last_name}}</h1>
+                    <h1>{{focusedConnection.first_name}} {{focusedConnection.last_name}}</h1>
                 </ion-card-header>
-                <strong>Age: </strong><span>{{currentUser.age}}</span><br>
-                <strong>Lives in: </strong><span>{{currentUser.location.stringFormat}}</span>
+                <strong>Age: </strong><span>{{focusedConnection.age}}</span><br>
+                <strong>Lives in: </strong><span>{{focusedConnection.location.stringFormat}}</span>
                 <hr>
                 <ion-list no-lines text-wrap>
                     <ion-list-header>
                         <h2> About</h2>
                     </ion-list-header>
                     <ion-item>
-                        <p>{{currentUser.bio}}</p>
+                        <p>{{focusedConnection.bio}}</p>
                     </ion-item>
                 </ion-list>
                 <ion-grid text-center>
                     <ion-row>
-                        <ion-col *ngIf="currentUser.services.host">
+                        <ion-col *ngIf="focusedConnection.services.host">
                             <ion-icon name="home"></ion-icon><br>
                             <p>Host</p>
                         </ion-col>
                 
-                        <ion-col *ngIf="currentUser.services.tips">      
+                        <ion-col *ngIf="focusedConnection.services.tips">      
                             <ion-icon name="information-circle"></ion-icon><br>
                             <p>Local Tips</p>
                         </ion-col>
                 
-                        <ion-col *ngIf="currentUser.services.meetup">   
+                        <ion-col *ngIf="focusedConnection.services.meetup">   
                             <ion-icon name="contacts"></ion-icon><br>
                             <p>Meetup</p>
                         </ion-col>
                 
-                        <ion-col *ngIf="currentUser.services.emergencyContact">
+                        <ion-col *ngIf="focusedConnection.services.emergencyContact">
                             <ion-icon name="call"></ion-icon><br>
                             <p>Emergency Contact</p>
                         </ion-col>            

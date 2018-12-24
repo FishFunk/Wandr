@@ -27,7 +27,6 @@ export class MessagesPage {
 
     constructor(
         private loadingCtrl: LoadingController,
-        private webDataService: WebDataService,
         private keyboard: Keyboard,
         private firebase: FirebaseApp) {
         

@@ -208,7 +208,7 @@ export class MapPage {
   }
 
   private presentPopover(myEvent, firstConnections: IUser[], secondConnections: IUser[]) {
-    let popover = this.modalCtrl.create(ModalPage, 
+    let popover = this.modalCtrl.create(ModalPage,
       { firstConnections: firstConnections, secondConnections: secondConnections });
     popover.present({ ev: myEvent });
   }

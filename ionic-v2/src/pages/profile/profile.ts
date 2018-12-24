@@ -60,9 +60,7 @@ export class ProfilePage {
         // Get first and last name
         var names = fbUserData.name.split(' ');
         this.userData.first_name = names[0];
-        window.sessionStorage.setItem(Constants.userFirstNameKey, names[0]);
         this.userData.last_name = names[1];
-        window.sessionStorage.setItem(Constants.userLastNameKey, names[1]);
 
         // Get Facebook location and geocode it
         this.userData.location.stringFormat = fbUserData.location.name;
@@ -74,6 +72,10 @@ export class ProfilePage {
       } else {
         this.userData = <User> snapshot.val();
       }
+
+      // Cache name
+      window.sessionStorage.setItem(Constants.userFirstNameKey, this.userData.first_name);
+      window.sessionStorage.setItem(Constants.userLastNameKey, this.userData.last_name);
 
       // Always update last login timestamp
       this.userData.last_login = new Date().toString();

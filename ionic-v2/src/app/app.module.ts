@@ -16,7 +16,7 @@ import { MyApp } from './app.component';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
-
+import { AngularFireFunctionsModule } from 'angularfire2/functions';
 
 //***********  Facebook **************/
 import { Facebook } from '@ionic-native/facebook';
@@ -83,6 +83,7 @@ export const config = {
     }),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    AngularFireFunctionsModule,
     AngularFireModule.initializeApp(config)
   ],
   bootstrap: [IonicApp],
