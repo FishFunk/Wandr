@@ -94,10 +94,10 @@ export class ModalPage
       timestamp: new Date().getTime().toString()
     };
 
-    const sendMessage = this.firebaseFunctionsModule.functions.httpsCallable('addMessage');
+    const sendMessage = this.firebaseFunctionsModule.functions.httpsCallable('createChat');
     
     sendMessage(data).then((result)=>{
-      alert("Message sent!");
+      alert("Message sent!"); // TODO: Navigate to chat?
       loading.dismiss();
     })
     .catch(error=>{
