@@ -27,7 +27,7 @@ export class InvitePage {
     this.socialSharing.shareViaFacebook(this.shareMessage, this.imageSrc, this.shareUrl)
     .then(() => {
     }).catch((error) => {
-        console.log(error);
+        console.error(error);
         this.presentToast('Unable to share via Facebook.');
     });
   }
@@ -36,7 +36,7 @@ export class InvitePage {
     this.socialSharing.shareViaInstagram(this.shareMessage, this.imageSrc)
     .then(() => {
     }).catch((error) => {
-        console.log(error);
+        console.error(error);
         this.presentToast('Unable to share via Instagram.');
     });
   }
@@ -46,7 +46,7 @@ export class InvitePage {
     .then(() => {
     })
     .catch((error) => {
-        console.log(error);
+        console.error(error);
         this.presentToast('Unable to share via WhatsApp.');
     });
   }
@@ -56,7 +56,7 @@ export class InvitePage {
     .then(() => {
     })
     .catch((error) => {
-        console.log(error);
+        console.error(error);
         this.presentToast('Unable to share via Twitter.');
     });
   }

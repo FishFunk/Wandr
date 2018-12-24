@@ -70,7 +70,7 @@ export class IntroPage {
   }
 
   private async checkStatusAndLogin() {
-    console.log("Checking Facebook login status");
+    console.info("Checking Facebook login status");
     
     let statusResponse = await this.fbApi.facebookLoginStatus();
 

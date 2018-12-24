@@ -25,6 +25,8 @@ export class MapPage {
   heatmap: google.maps.visualization.HeatmapLayer;
   mapCenter = new google.maps.LatLng(39.250223, -99.142097);
   searchBox: google.maps.places.SearchBox;
+  
+  private firebaseUserId: string;
 
   mapOptions = {
     center: this.mapCenter,
@@ -63,6 +65,8 @@ export class MapPage {
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private firebase: AngularFireDatabase) {
+
+    this.firebaseUserId = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
   }
  
   ionViewDidLoad(){
@@ -79,11 +83,11 @@ export class MapPage {
       this.searchBox = new google.maps.places.SearchBox(input);
       this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
-      //let firstConnections = await this.webDataService.readUserFirstConnections();
-      let secondConnections = []; // await this.webDataService.readUserSecondConnections();
-
+      // Read first and second degree connection user data
       let firstConnections = await this.readFirstConnections();
+      let secondConnections = await this.readSecondConnections(firstConnections);
 
+      // Generate heat map data from users location information
       this.createMarkersAndHeatMap(firstConnections, secondConnections);
 
       // Create the DIV to hold the control and call the createRandomControl()
@@ -182,7 +186,7 @@ export class MapPage {
     var str_location = _.findKey(this.locationMap, (obj)=>{
       return obj == latLng;
     });
-    
+
     this.presentPopover(e, this.userMap[str_location]['1'], this.userMap[str_location]['2']);
   }
 
@@ -315,9 +319,8 @@ export class MapPage {
   private async readFirstConnections(): Promise<IUser[]>{
 
     var firstConnections: IUser[] = [];
-    var firebaseUid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
 
-    var snapshot = await this.firebase.database.ref('/users/' + firebaseUid).once('value');
+    var snapshot = await this.firebase.database.ref('/users/' + this.firebaseUserId).once('value');
     var user = <IUser> snapshot.val();
 
     var promises = user.friends.map((friend)=> {
@@ -342,5 +345,47 @@ export class MapPage {
     });
 
     return Promise.resolve(firstConnections);
+  }
+
+
+  private async readSecondConnections(firstConnections: IUser[]): Promise<IUser[]>{
+
+    let secondConnectionFacebookIds = [];
+    let secondConnections: IUser[] = [];
+    const currentUserFacebookId = sessionStorage.getItem(Constants.facebookUserIdKey);
+
+    _.each(firstConnections, (user)=>{
+      _.each(user.friends, (friendObj) => {
+        // Exclude current user from appearing on map
+        if(friendObj.id != currentUserFacebookId){
+          secondConnectionFacebookIds.push(friendObj.id);
+        }
+      });
+    });
+
+    secondConnectionFacebookIds = _.uniq(secondConnectionFacebookIds);
+
+    var promises = secondConnectionFacebookIds.map((facebook_uid)=> {
+      return this.firebase.database.ref('users')
+        .orderByChild('facebook_uid')
+        .equalTo(facebook_uid)
+        .once("value");
+    });
+
+    var snapshots = await Promise.all(promises).catch((error)=> {
+        console.error(error);
+        return Promise.reject(error);
+      });
+
+    snapshots.forEach((snapshot: DatabaseSnapshot<any>)=> {
+      var dbObj = snapshot.val();
+      if(dbObj){
+        var key = _.keys(snapshot.val())[0];
+        var user = <IUser> dbObj[key];
+        secondConnections.push(user);
+      }
+    });
+
+    return Promise.resolve(secondConnections);
   }
 }

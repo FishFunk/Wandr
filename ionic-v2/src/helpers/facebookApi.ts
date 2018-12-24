@@ -88,7 +88,6 @@ export class FacebookApi{
                     }
                     else
                     {
-                        console.log(endPointStr + ' returned: ' + JSON.stringify(response));
                         resolve(fieldStr ? response[fieldStr] : response);
                     }
                 })

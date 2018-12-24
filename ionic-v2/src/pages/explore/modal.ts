@@ -23,6 +23,7 @@ export class ModalPage
   disableMessageButton: boolean = false;
   roomkey: string;
   currentUserId: string;
+  locationStringFormat: string;
 
   constructor(
     public viewCtrl: ViewController, 
@@ -34,8 +35,8 @@ export class ModalPage
       let secondConnections = params.get('secondConnections');
       this.firstConnections = firstConnections;
       this.secondConnections = secondConnections;
-      this.focusedConnection = _.first(firstConnections);
-
+      this.focusedConnection = _.first(firstConnections) || _.first(secondConnections);
+      this.locationStringFormat = this.focusedConnection.location.stringFormat;
       this.currentUserId = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
   }
 
