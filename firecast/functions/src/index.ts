@@ -11,7 +11,7 @@ export const helloWorld = functions.https.onRequest((request, response) => {
 });
 
 // Saves a message to the Firebase Realtime Database but sanitizes the text by removing swearwords.
-exports.addMessage = functions.https.onCall((chatData, context) => {
+exports.createChat = functions.https.onCall((chatData, context) => {
 
     chatData.lastMessage = `Hey ${chatData.userB_name}! Looks like you and ${chatData.userA_name} have a network connection! Why don't you get to know eachother?`;
     
