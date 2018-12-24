@@ -11,13 +11,11 @@ export const helloWorld = functions.https.onRequest((request, response) => {
 });
 
 // Saves a message to the Firebase Realtime Database but sanitizes the text by removing swearwords.
-exports.addMessage = functions.https.onCall((data, context) => {
+exports.addMessage = functions.https.onCall((chatData, context) => {
 
-    const A_id = data.userA_id;
-    const B_id = data.userB_id;
-    const roomkey = `${A_id}_${B_id}`;
-
-    return _createChatRoom(A_id, B_id, roomkey, data)
+    chatData.lastMessage = `Hey ${chatData.userB_name}! Looks like you and ${chatData.userA_name} have a network connection! Why don't you get to know eachother?`;
+    
+    return _createChatRoom(chatData)
         .then(()=>{
             return { status: 'chat-created' };
         })
@@ -26,10 +24,10 @@ exports.addMessage = functions.https.onCall((data, context) => {
         });
 });
 
-async function _createChatRoom(A_id: string, B_id: string, roomkey: string, data: any){
-    const snapshot = await admin.database().ref('/chats/' + roomkey).once('value')
+async function _createChatRoom(chatData: any){
+    const snapshot = await admin.database().ref('/chats/' + chatData.roomkey).once('value')
         .catch((error)=>{
-            throw new functions.https.HttpsError('internal', '', error);
+            throw new functions.https.HttpsError('internal', 'Fetching chats/{roomkey}', error);
         });
 
     if(snapshot.val()){
@@ -37,17 +35,19 @@ async function _createChatRoom(A_id: string, B_id: string, roomkey: string, data
         throw new functions.https.HttpsError('already-exists');
     } else {
         // Create new chat room
-        await admin.database().ref('/chats/' + roomkey).set(data)
+        await admin.database().ref('/chats/' + chatData.roomkey).set(chatData)
             .catch((error)=> {
-                throw new functions.https.HttpsError('internal', '', error);
+                throw new functions.https.HttpsError('internal', 'Setting chats/{roomkey}', error);
             });
         
-        await _updateUsersWithRoomkey(A_id, B_id, roomkey)
+        // Give users roomkey
+        await _updateUsersWithRoomkey(chatData.userA_id, chatData.userB_id, chatData.roomkey)
             .catch(error =>{
-                throw new functions.https.HttpsError('internal', '', error);
+                throw new functions.https.HttpsError('internal', 'Assigning roomkey to users', error);
             })
 
-        return _createAndSendFirstMessage(roomkey);
+        // Send first message in chat
+        return _createAndSendFirstMessage(chatData);
     }
 }
 
@@ -61,7 +61,7 @@ async function _updateUsersWithRoomkey(userA_id, userB_id, roomkey){
 
     const snapshots = await Promise.all(promises)
         .catch((error)=> {
-            return Promise.reject(error);
+            throw new functions.https.HttpsError('internal', 'Fetching users by ID', error);
         });
 
     let updates = {};
@@ -76,24 +76,25 @@ async function _updateUsersWithRoomkey(userA_id, userB_id, roomkey){
         updates['/users/' + user.app_uid] = user;
     });
 
-    return admin.database().ref().update(updates);
+    return admin.database().ref().update(updates)
+        .catch(error =>{
+            throw new functions.https.HttpsError('internal', 'Updating user roomkeys', error);
+        });
 }
 
-async function _createAndSendFirstMessage(roomkey){
-    const snapshot = await admin.database().ref('/messages/' + roomkey).once('value');
+async function _createAndSendFirstMessage(chatData: any){
+    const snapshot = await admin.database().ref('/messages/' + chatData.roomkey).once('value');
     if(snapshot.val()){
         throw new functions.https.HttpsError('already-exists');
     } else {
-        const timestamp = new Date().getTime().toString();
-
-        return admin.database().ref('/messages/' + roomkey).child(timestamp).set({
+        return admin.database().ref('/messages/' + chatData.roomkey).child(chatData.timestamp).set({
             uid: 'travel_guru_bot',
             name: 'Travel Guru Bot',
-            text: 'Hey you two! Start your conversation here.',
-            timestamp: timestamp
+            text: chatData.lastMessage,
+            timestamp: chatData.timestamp
         })
         .catch(error =>{
-            throw new functions.https.HttpsError('internal', '', error); 
+            throw new functions.https.HttpsError('internal', 'Setting messages/{roomkey}/{timestamp}', error); 
         });
     }
 }
