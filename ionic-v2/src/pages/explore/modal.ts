@@ -3,12 +3,9 @@ import { ViewController, NavParams, Slides, LoadingController } from "ionic-angu
 import { IUser } from '../../models/user';
 import _ from "underscore";
 import { AngularFireFunctions } from "angularfire2/functions";
-
 import { Constants } from "../../helpers/constants";
 import { IChat } from "../../models/chat";
-import { load } from "google-maps";
 import { AngularFireDatabase } from "angularfire2/database";
-import { isDifferent } from "@angular/core/src/render3/util";
 
 @Component({
     selector: 'modal-page',

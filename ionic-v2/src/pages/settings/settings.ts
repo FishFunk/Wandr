@@ -5,6 +5,8 @@ import { ContactPage } from './contact';
 import { AboutPage } from './about';
 import { WebDataService } from '../../helpers/webDataService';
 import { Constants } from '../../helpers/constants';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { IUserSettings } from '../../models/user';
 
 @IonicPage()
 @Component({
@@ -14,40 +16,49 @@ import { Constants } from '../../helpers/constants';
 
 export class SettingsPage {
 
-    uid: string;
+    firebaseUid: string;
     pushNotifications: boolean;
     ghostMode: boolean;
+    thirdConnections: boolean;
 
     constructor(
         public navCtrl: NavController,
         private toastCtrl: ToastController,
         private alertCtrl: AlertController,
         private fbApi: FacebookApi,
-        private webDataService: WebDataService){
+        private firebase: AngularFireDatabase){
 
-        this.uid = sessionStorage.getItem(Constants.firebaseUserIdKey);
+        this.firebaseUid = sessionStorage.getItem(Constants.firebaseUserIdKey);
     }
 
     ionViewDidLoad(){
-        // this.webDataService.getUserSettings(this.uid)
-        //     .subscribe((userSettings)=>{
-        //         this.pushNotifications = !!userSettings.pushNotifications;
-        //         this.ghostMode = !!userSettings.pushNotifications;
-        //     });
+        this.firebase.database.ref('/users/' + this.firebaseUid).once('value')
+            .then((snapshot)=>{
+                const usr = snapshot.val();
+                if(usr && usr.settings){
+                    this.pushNotifications = usr.settings.pushNotifications;
+                    this.ghostMode = usr.settings.ghostMode;
+                    this.thirdConnections = usr.settings.thirdConnections;
+                }
+            })
+            .catch(error=>{
+                console.error(error);
+            });
     }
 
     updateUserSettings(){
-        alert("Not yet implemented");
-        // var newSettings = { 
-        //     uid: this.uid, 
-        //     pushNotifications: this.pushNotifications, 
-        //     ghostMode: this.ghostMode 
-        // };
-        // this.webDataService.getUserSettings(newSettings)
-        //     .subscribe((userSettings)=>{
-        //         this.pushNotifications = !!userSettings.pushNotifications;
-        //         this.ghostMode = !!userSettings.pushNotifications;
-        //     });
+        const newSettings: IUserSettings = {
+            notifications: !!this.pushNotifications,
+            ghostMode: !!this.ghostMode,
+            thirdConnections: !!this.thirdConnections
+        }
+        this.firebase.database.ref('users/' + this.firebaseUid).child('settings').set(newSettings)
+            .then(()=>{
+                // alert("Preferences saved!");
+            })
+            .catch((error)=> {
+                console.error(error);
+            });
     }
 
     onClickContact(){

@@ -9,9 +9,9 @@ export interface IUser{
     friends: Array<IFacebookFriend>;
     services: IUserServices;
     roomkeys: string[];
-    profile_img_url?: string;
     last_login: string;
-    ghost_mode: boolean;
+    settings: any;
+    profile_img_url?: string;
 }
 
 export interface ILocation{
@@ -30,6 +30,12 @@ export interface IUserServices{
 export interface IFacebookFriend{
     name: string;
     id: string;
+}
+
+export interface IUserSettings{
+    notifications: boolean;
+    ghostMode: boolean;
+    thirdConnections: boolean;
 }
 
 export class Location implements ILocation{
@@ -63,6 +69,7 @@ export class User implements IUser{
         public profile_img_url: string,
         public age: number,
         public bio: string = '',
+        public settings: any = {},
         public ghost_mode: boolean = false)
         {}
 }
