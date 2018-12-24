@@ -10,8 +10,7 @@
             <!----- TODO: Params sent to messages page? ------->
             <button ion-item (click)="onClickChat(chat)">
                 <ion-thumbnail item-start>
-                    <img src="../../assets/avatar_man.png">
-                    <!-- <img [src]="chat.photoUrl"> -->
+                    <img [src]="userId == chat.userA_id ? chat.userB_photoUrl : chat.userA_photoUrl">
                 </ion-thumbnail>
                 <div [class]="chat.unread ? 'unread' : ''">
                     <span class="name">{{userId == chat.userA_id ? chat.userB_name : chat.userA_name}}</span><br>

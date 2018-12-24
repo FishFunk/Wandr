@@ -50,8 +50,6 @@ export class InboxPage {
 
   private async queryChats(roomkeys: string[]): Promise<any>{
 
-    this.chats = [];
-
     var promises = roomkeys.map((key)=> {
       return this.firebase.database.ref("/chats/").child(key).once("value");
     });
@@ -61,6 +59,7 @@ export class InboxPage {
       return Promise.reject(error);
     });
     
+    this.chats = [];
     snapshots.forEach((snapshot)=> {
       this.chats.push(snapshot.val());
     });

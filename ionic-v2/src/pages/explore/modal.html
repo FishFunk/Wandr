@@ -110,9 +110,12 @@
                         </ion-col>            
                     </ion-row>
                 </ion-grid> 
-                <button ion-button icon-end (click)="onClickSendMessage()">
-                    Send Message
-                    <ion-icon name="text"></ion-icon>
+                <button ion-button icon-end (click)="onClickSendMessage()" [disabled]="disableMessageButton">
+                    <div *ngIf="!disableMessageButton">
+                        <span>Send Message</span>
+                        <ion-icon name="text"></ion-icon>
+                    </div>
+                    <span *ngIf="disableMessageButton">Chat Created</span>
                 </button>
             </ion-card>
         </ion-slide>
