@@ -5,6 +5,7 @@ import { MessagesPage } from './messages';
 import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
 import { IUser } from '../../models/user';
+import { IChat } from '../../models/chat';
 
 @IonicPage()
 @Component({
@@ -43,8 +44,8 @@ export class InboxPage {
     this.loading.dismiss();
   }
 
-  onClickChat(){
-    this.navCtrl.push(MessagesPage, {}, { animate: true, direction: 'forward' });
+  onClickChat(chat: IChat){
+    this.navCtrl.push(MessagesPage, { roomkey: chat.roomkey }, { animate: true, direction: 'forward' });
   }
 
   private async queryChats(roomkeys: string[]): Promise<any>{

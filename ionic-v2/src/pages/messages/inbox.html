@@ -8,13 +8,13 @@
     <ion-list>
         <div *ngFor="let chat of chats">
             <!----- TODO: Params sent to messages page? ------->
-            <button ion-item (click)="onClickChat()">
+            <button ion-item (click)="onClickChat(chat)">
                 <ion-thumbnail item-start>
                     <img src="../../assets/avatar_man.png">
                     <!-- <img [src]="chat.photoUrl"> -->
                 </ion-thumbnail>
                 <div [class]="chat.unread ? 'unread' : ''">
-                    <span class="name">{{chat.name}}</span><br>
+                    <span class="name">{{chat.userB_name}}</span><br>
                     <p>{{chat.lastMessage}}</p>
                 </div>
                 <span class="timestamp">{{chat.timeStamp}}</span>

@@ -1,9 +1,12 @@
 export class Chat implements IChat {
     constructor(
-        public name: string,
+        public roomkey: string,
+        public userA_id: string,
+        public userA_name: string,
+        public userB_id: string,
+        public userB_name: string,
         public lastMessage: string,
         public timeStamp: string,
-        public unread: boolean, /// Dynamic value? Only applies to last message and depends on who sent it.
         public photoUrl?: string){}
 }
 
@@ -17,10 +20,13 @@ export class Message implements IMessage {
 }
 
 export interface IChat{
-    name: string;
+    roomkey: string;
+    userA_id: string;
+    userA_name: string;
+    userB_id: string;
+    userB_name: string;
     lastMessage: string;
     timeStamp: string;
-    unread: boolean;
     photoUrl?: string;
 }
 

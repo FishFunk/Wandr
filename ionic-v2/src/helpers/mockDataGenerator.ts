@@ -67,7 +67,15 @@ export class MockDataGenerator
         var chats = [];
         for(var i=0; i<count; i++)
         {
-          var chat = new Chat(this.randomFirstName(), this.randomSentence(), new Date().toDateString(), this.randomBool());
+          var chat = new Chat(
+            this.randomWord(),
+            this.randomWord(),
+            this.randomFirstName(),
+            this.randomWord(),
+            this.randomFirstName(),
+            this.randomSentence(),
+            new Date().toDateString());
+            
           chats.push(chat);
         }
 

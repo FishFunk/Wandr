@@ -1,6 +1,6 @@
 import { Component, ViewChild, ViewChildren, ElementRef } from '@angular/core';
-import { Content, LoadingController, TextInput } from 'ionic-angular';
-import { Message, IMessage } from '../../models/chat';
+import { Content, LoadingController, TextInput, NavParams } from 'ionic-angular';
+import { Message, IMessage, IChat } from '../../models/chat';
 import { Constants } from '../../helpers/constants';
 import { WebDataService } from '../../helpers/webDataService';
 import _ from 'underscore';
@@ -18,18 +18,19 @@ export class MessagesPage {
     @ViewChildren('messageListItems') messageListItems;
     @ViewChild('textInput', { read: ElementRef }) textAreaInput: ElementRef;
 
- 
     uid: string;
     messages: Array<any> = [];
     message: string = '';
-    roomKey: string = 'fishUID-wongUID';
     firstName: string;
+    roomkey: string;
 
     constructor(
+        params: NavParams,
         private loadingCtrl: LoadingController,
         private keyboard: Keyboard,
         private firebase: FirebaseApp) {
         
+        this.roomkey = params.get('roomkey');
         this.uid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
         this.firstName = window.sessionStorage.getItem(Constants.userFirstNameKey);
 
@@ -59,7 +60,7 @@ export class MessagesPage {
     async loadMessages(){
         let loading = this.loadingCtrl.create();
 
-        this.firebase.database().ref('messages/'+this.roomKey).on('value', resp => {
+        this.firebase.database().ref('messages/'+this.roomkey).on('value', resp => {
             this.messages = this.snapshotToArray(resp);
         });
 
@@ -76,7 +77,7 @@ export class MessagesPage {
             let key = dateInMillis.toString();
             
             await this.firebase.database()
-                .ref('messages/'+this.roomKey)
+                .ref('/messages/'+this.roomkey)
                 .child(key)
                 .set({ uid: this.uid, 
                     name: this.firstName, 
@@ -86,7 +87,6 @@ export class MessagesPage {
             this.message = '';
             loading.dismiss();
         }
-
     }
 
     async scrollToBottom(duration){
