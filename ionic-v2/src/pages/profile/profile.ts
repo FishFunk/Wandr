@@ -1,10 +1,11 @@
 import { Component, NgZone } from '@angular/core';
 import { IonicPage, LoadingController, ToastController, Platform } from 'ionic-angular';
-import { AngularFireDatabase } from 'angularfire2/database';
-import { Location, UserServices, User } from '../../models/user';
+import { AngularFireDatabase, DatabaseSnapshot } from 'angularfire2/database';
+import { Location, UserServices, User, IUser } from '../../models/user';
 import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
+import _ from 'underscore';
 
 @IonicPage()
 @Component({
@@ -21,6 +22,7 @@ export class ProfilePage {
   countries: any[] = [];
   selectedCountry: string;
   selectState: boolean = false;
+  secondConnectionCount: number;
 
   private geocoderOptions: NativeGeocoderOptions = { useLocale: true, maxResults: 1 };
 
@@ -71,6 +73,7 @@ export class ProfilePage {
         await this.firebase.database.ref('users/' + firebaseUid).set(this.userData);
       } else {
         this.userData = <User> snapshot.val();
+        this.secondConnectionCount = await this.countSecondConnections();
       }
 
       // Cache name
@@ -209,5 +212,36 @@ export class ProfilePage {
       duration: 1000
     });
     toast.present();
+  }
+
+  private async countSecondConnections(): Promise<number>{
+
+    let count = 0;
+    const currentUserFacebookId = sessionStorage.getItem(Constants.facebookUserIdKey);
+    let ids = _.map(this.userData.friends, (friendObj) => friendObj.id);
+
+    var promises = ids.map((facebook_uid)=> {
+      return this.firebase.database.ref('users')
+        .orderByChild('facebook_uid')
+        .equalTo(facebook_uid)
+        .once("value");
+    });
+
+    var firstConnectionSnapshots = await Promise.all(promises).catch((error)=> {
+        console.error(error);
+        return Promise.reject(error);
+    });
+
+    _.each(firstConnectionSnapshots, (snapshot)=>{
+      var user: IUser = snapshot.val();
+      _.each(user.friends, (secondConnection)=>{
+        // Exclude current user
+        if(secondConnection.id != currentUserFacebookId){
+          count++;
+        }
+      });
+    });
+
+    return Promise.resolve(count);
   }
 }
