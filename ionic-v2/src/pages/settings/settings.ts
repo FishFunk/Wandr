@@ -3,7 +3,6 @@ import { IonicPage, ToastController, NavController, AlertController } from 'ioni
 import { FacebookApi } from '../../helpers/facebookApi';
 import { ContactPage } from './contact';
 import { AboutPage } from './about';
-import { WebDataService } from '../../helpers/webDataService';
 import { Constants } from '../../helpers/constants';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { IUserSettings } from '../../models/user';
@@ -19,7 +18,6 @@ export class SettingsPage {
     firebaseUid: string;
     pushNotifications: boolean;
     ghostMode: boolean;
-    thirdConnections: boolean;
 
     constructor(
         public navCtrl: NavController,
@@ -38,7 +36,6 @@ export class SettingsPage {
                 if(usr && usr.settings){
                     this.pushNotifications = usr.settings.pushNotifications;
                     this.ghostMode = usr.settings.ghostMode;
-                    this.thirdConnections = usr.settings.thirdConnections;
                 }
             })
             .catch(error=>{
@@ -49,8 +46,7 @@ export class SettingsPage {
     updateUserSettings(){
         const newSettings: IUserSettings = {
             notifications: !!this.pushNotifications,
-            ghostMode: !!this.ghostMode,
-            thirdConnections: !!this.thirdConnections
+            ghostMode: !!this.ghostMode
         }
         this.firebase.database.ref('users/' + this.firebaseUid).child('settings').set(newSettings)
             .then(()=>{

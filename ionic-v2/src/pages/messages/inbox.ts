@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, Loading } from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { MessagesPage } from './messages';
-import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
 import { IUser } from '../../models/user';
 import { IChat } from '../../models/chat';

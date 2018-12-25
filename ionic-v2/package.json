@@ -21,6 +21,7 @@
     "@angular/platform-browser": "5.2.11",
     "@angular/platform-browser-dynamic": "5.2.11",
     "@ionic-native/core": "~4.15.0",
+    "@ionic-native/device": "^4.18.0",
     "@ionic-native/facebook": "^4.18.0",
     "@ionic-native/keyboard": "^4.18.0",
     "@ionic-native/native-geocoder": "^4.18.0",

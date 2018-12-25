@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController, LoadingController, Loading } from 'ionic-angular';
 import { IUser } from '../../models/user';
-import { WebDataService } from '../../helpers/webDataService';
 import { ModalPage } from './modal';
 import _ from 'underscore';
-import { first } from 'rxjs/operators';
 import { AngularFireDatabase, DatabaseSnapshot } from 'angularfire2/database';
 import { Constants } from '../../helpers/constants';
 
@@ -112,11 +110,11 @@ export class MapPage {
     var heatMapLatLngs: google.maps.LatLng[] = [];
     var markerLatLngs: google.maps.LatLng[] = [];
 
-    for(var idx = 0; idx < firstConnecitons.length; idx++){
+    for(let idx = 0; idx < firstConnecitons.length; idx++){
       this.geoCodeAndCacheData(firstConnecitons[idx], markerLatLngs, heatMapLatLngs, true);
     }
 
-    for(var idx = 0; idx < secondConnections.length; idx++){
+    for(let idx = 0; idx < secondConnections.length; idx++){
       this.geoCodeAndCacheData(secondConnections[idx], markerLatLngs, heatMapLatLngs, false);
     }
 

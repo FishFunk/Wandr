@@ -35,7 +35,7 @@ export interface IFacebookFriend{
 export interface IUserSettings{
     notifications: boolean;
     ghostMode: boolean;
-    thirdConnections: boolean;
+    //thirdConnections: boolean;
 }
 
 export class Location implements ILocation{

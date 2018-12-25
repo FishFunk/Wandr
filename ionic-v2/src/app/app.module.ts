@@ -9,6 +9,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
 import { Keyboard } from '@ionic-native/keyboard';
+import { Device } from '@ionic-native/device';
 
 import { MyApp } from './app.component';
 
@@ -110,7 +111,8 @@ export const config = {
     NativeGeocoder,
     WebDataService,
     FacebookApi,
-    Keyboard
+    Keyboard,
+    Device
   ]
 })
 export class AppModule {}
