@@ -52,7 +52,7 @@ page-messages {
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
-        max-width: 80%;
+        margin-right: 15%;
         p {
             color: white;
             border-radius: 0 11px 11px 11px;
@@ -69,7 +69,7 @@ page-messages {
         flex-direction: column;
         justify-content: flex-end;
         align-items: flex-end;
-        max-width: 80%;
+        margin-left: 15%;
         p {
             border-radius: 11px 11px 0 11px;
         }

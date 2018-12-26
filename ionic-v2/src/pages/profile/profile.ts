@@ -43,6 +43,12 @@ export class ProfilePage {
     this.load();
   }
 
+  ionViewWillLeave(){
+    if(this.editMode){
+      return this.toggleEdit();
+    }
+  }
+
   async load(){
     this.showLoadingPopup();
 
@@ -116,15 +122,16 @@ export class ProfilePage {
     this.loadingPopup.dismiss();
   }
 
-  toggleEdit(){
+  async toggleEdit(){
     this.editMode = !this.editMode;
     if(!this.editMode){
       this.showLoadingPopup();
-      this.saveProfileEdits()
+      return this.saveProfileEdits()
         .then(()=>{
           this.loadingPopup.dismiss();
         })
         .catch(error=>{
+          alert("Failed to update profile info");
           console.error(error);
           this.loadingPopup.dismiss();
         });
