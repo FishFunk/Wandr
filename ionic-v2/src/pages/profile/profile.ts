@@ -53,9 +53,9 @@ export class ProfilePage {
     this.showLoadingPopup();
 
     if(this.platform.is('cordova')){
-      var firebaseUid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
-      var facebookUid = window.sessionStorage.getItem(Constants.facebookUserIdKey);
-      var token = window.sessionStorage.getItem(Constants.accessTokenKey);
+      var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+      var facebookUid = window.localStorage.getItem(Constants.facebookUserIdKey);
+      var token = window.localStorage.getItem(Constants.accessTokenKey);
 
       var fbUserData = await <any> this.facebookApi.getUser(facebookUid, token);
       var snapshot = await this.firebase.database.ref('/users/' + firebaseUid).once('value');
@@ -95,9 +95,9 @@ export class ProfilePage {
       }
 
       // Cache some user data
-      window.sessionStorage.setItem(Constants.userFirstNameKey, this.userData.first_name);
-      window.sessionStorage.setItem(Constants.userLastNameKey, this.userData.last_name);
-      sessionStorage.setItem(Constants.profileImageUrlKey, this.userData.profile_img_url);
+      window.localStorage.setItem(Constants.userFirstNameKey, this.userData.first_name);
+      window.localStorage.setItem(Constants.userLastNameKey, this.userData.last_name);
+      localStorage.setItem(Constants.profileImageUrlKey, this.userData.profile_img_url);
 
       // Calculate second degree connections
       this.secondConnectionCount = await this.countSecondConnections();
@@ -236,7 +236,7 @@ export class ProfilePage {
   private async countSecondConnections(): Promise<number>{
 
     let count = 0;
-    const currentUserFacebookId = sessionStorage.getItem(Constants.facebookUserIdKey);
+    const currentUserFacebookId = localStorage.getItem(Constants.facebookUserIdKey);
     let ids = _.map(this.userData.friends, (friendObj) => friendObj.id);
 
     var promises = ids.map((facebook_uid)=> {

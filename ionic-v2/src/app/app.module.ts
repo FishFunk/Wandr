@@ -35,6 +35,7 @@ import { SettingsPage } from '../pages/settings/settings';
 import { MessagesPage } from '../pages/messages/messages';
 import { ContactPage } from '../pages/settings/contact';
 import { AboutPage } from '../pages/settings/about';
+import { IntroPage } from '../pages/intro/intro';
 
 
 //*********** Provider **************/
@@ -63,6 +64,7 @@ export const config = {
 @NgModule({
   declarations: [
     MyApp,
+    IntroPage,
     TabsPage,
     ProfilePage,
     InboxPage,
@@ -90,6 +92,7 @@ export const config = {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    IntroPage,
     TabsPage,
     ProfilePage,
     InboxPage,

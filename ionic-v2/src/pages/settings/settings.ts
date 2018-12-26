@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, ToastController, NavController, AlertController } from 'ionic-angular';
+import { IonicPage, ToastController, NavController, AlertController, App } from 'ionic-angular';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { ContactPage } from './contact';
 import { AboutPage } from './about';
 import { Constants } from '../../helpers/constants';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { IUserSettings } from '../../models/user';
+import { IntroPage } from '../intro/intro';
 
 @IonicPage()
 @Component({
@@ -21,12 +22,13 @@ export class SettingsPage {
 
     constructor(
         public navCtrl: NavController,
+        private appCtrl: App,
         private toastCtrl: ToastController,
         private alertCtrl: AlertController,
         private fbApi: FacebookApi,
         private firebase: AngularFireDatabase){
 
-        this.firebaseUid = sessionStorage.getItem(Constants.firebaseUserIdKey);
+        this.firebaseUid = localStorage.getItem(Constants.firebaseUserIdKey);
     }
 
     ionViewDidLoad(){
@@ -87,8 +89,8 @@ export class SettingsPage {
     private logout() {
         this.fbApi.facebookLogout()
             .then(()=>{
-                this.presentToast('top', 'Logout successful!');
-                // TODO: Reset to app intro
+                window.localStorage.removeItem(Constants.facebookExpireKey);
+                this.appCtrl.getRootNav().setRoot(IntroPage);
             })
             .catch((error)=>{
                 console.error(error);

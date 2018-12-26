@@ -6,6 +6,9 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 import firebase from 'firebase';
+import { Constants } from '../helpers/constants';
+import { TabsPage } from '../pages/tabs/tabs';
+import { IntroPage } from '../pages/intro/intro';
 
 @Component({
   templateUrl: 'app.html'
@@ -14,10 +17,8 @@ export class MyApp {
 
   @ViewChild(Nav) nav: Nav;
   
-  rootPage: string = 'IntroPage';
-
-  menu:Array<any> = [];
-  pages: Array<any>;
+  rootPage: any;
+  showIntro: boolean = false;
 
   constructor(public platform: Platform, 
     private statusBar: StatusBar,
@@ -47,25 +48,28 @@ public readonly firebaseInitOptions: any = {
       // Here you can do any higher level native things you might need.
       
       this.statusBar.styleDefault();
+      firebase.initializeApp(
+        this.firebaseInitOptions
+      );
+
+      var dateInMilliSecStr = window.localStorage.getItem(Constants.facebookExpireKey);
+      if(dateInMilliSecStr){
+        var expireDate = +dateInMilliSecStr;
+        var currentDate = new Date().getTime();
+        if(expireDate >= currentDate){
+          this.rootPage = IntroPage;
+        } else {
+          this.rootPage = TabsPage;
+        }
+      } else {
+        this.rootPage = IntroPage;
+      }
+  
       this.splashScreen.hide();
     });
-
-    firebase.initializeApp(
-      this.firebaseInitOptions
-    );
-    this.platform.ready().then(this.onPlatformReady.bind(this));
-  }
-
-  onPlatformReady(){
-    // TODO: this.logger.initialize();   
-    this.statusBar.styleDefault();
-    this.splashScreen.hide();
   }
 
   openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    // page.component = item array.component --> 
     this.nav.setRoot(page.component);
   }
 }

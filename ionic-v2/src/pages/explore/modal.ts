@@ -37,7 +37,7 @@ export class ModalPage
       this.secondConnections = secondConnections;
       this.focusedConnection = _.first(firstConnections) || _.first(secondConnections);
       this.locationStringFormat = this.focusedConnection.location.stringFormat;
-      this.currentUserId = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
+      this.currentUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
   }
 
   ionViewDidLoad(){
@@ -77,8 +77,8 @@ export class ModalPage
 
     let loading = this.loadingCtrl.create();
 
-    const currentUserFirstName = window.sessionStorage.getItem(Constants.userFirstNameKey);
-    const currentUserPhotoUrl = window.sessionStorage.getItem(Constants.profileImageUrlKey);
+    const currentUserFirstName = window.localStorage.getItem(Constants.userFirstNameKey);
+    const currentUserPhotoUrl = window.localStorage.getItem(Constants.profileImageUrlKey);
 
     const focusedConnectionUid = this.focusedConnection.app_uid;
     const roomkey = this.currentUserId + '_' + focusedConnectionUid;

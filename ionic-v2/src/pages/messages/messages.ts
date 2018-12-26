@@ -28,8 +28,8 @@ export class MessagesPage {
         private firebase: FirebaseApp) {
         
         this.roomkey = params.get('roomkey');
-        this.uid = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
-        this.firstName = window.sessionStorage.getItem(Constants.userFirstNameKey);
+        this.uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+        this.firstName = window.localStorage.getItem(Constants.userFirstNameKey);
 
         this.keyboard.onKeyboardShow().subscribe(async ()=>{
             this.scrollToBottom(500)

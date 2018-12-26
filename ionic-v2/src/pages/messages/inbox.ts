@@ -21,7 +21,7 @@ export class InboxPage {
     public afDB: AngularFireDatabase, 
     public loadingCtrl: LoadingController,
     private firebase: AngularFireDatabase) {
-      this.userId = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
+      this.userId = window.localStorage.getItem(Constants.firebaseUserIdKey);
   }
 
   ionViewDidEnter(){

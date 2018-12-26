@@ -64,7 +64,7 @@ export class MapPage {
     private loadingCtrl: LoadingController,
     private firebase: AngularFireDatabase) {
 
-    this.firebaseUserId = window.sessionStorage.getItem(Constants.firebaseUserIdKey);
+    this.firebaseUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
   }
  
   ionViewDidLoad(){
@@ -350,7 +350,7 @@ export class MapPage {
 
     let secondConnectionFacebookIds = [];
     let secondConnections: IUser[] = [];
-    const currentUserFacebookId = sessionStorage.getItem(Constants.facebookUserIdKey);
+    const currentUserFacebookId = localStorage.getItem(Constants.facebookUserIdKey);
 
     _.each(firstConnections, (user)=>{
       _.each(user.friends, (friendObj) => {

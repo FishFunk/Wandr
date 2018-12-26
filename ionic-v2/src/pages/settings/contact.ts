@@ -36,7 +36,7 @@ export class ContactPage {
             }
     
             var reportData = {
-                uid: sessionStorage.getItem(Constants.firebaseUserIdKey),
+                uid: localStorage.getItem(Constants.firebaseUserIdKey),
                 timestamp: new Date().toDateString(),
                 deviceInfo: deviceInfo,
                 userText: this.text.trim()
