@@ -54,7 +54,7 @@ export class ProfilePage {
       var fbUserData = await <any> this.facebookApi.getUser(facebookUid, token);
       var snapshot = await this.firebase.database.ref('/users/' + firebaseUid).once('value');
 
-      // If User has already been created
+      // If User does not exist yet
       if(!snapshot.val()){
         this.userData.app_uid = firebaseUid;
         this.userData.facebook_uid = facebookUid;
@@ -68,29 +68,38 @@ export class ProfilePage {
         this.userData.location.stringFormat = fbUserData.location.name;
         this.autoComplete.input = fbUserData.location.name;
         await this.forwardGeocode(fbUserData.location.name);
+
+        // Get Facebook friends list
+        this.userData.friends = await this.facebookApi.getFriendList(facebookUid);
+
+        // Get Facebook photo URL
+        this.userData.profile_img_url = fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
         
-        // Create ref
+        // Create user ref
         await this.firebase.database.ref('users/' + firebaseUid).set(this.userData);
       } else {
+        // IF user already has been created
         this.userData = <User> snapshot.val();
-        this.secondConnectionCount = await this.countSecondConnections();
+        
+        // Always update Facebook friends list
+        this.userData.friends = await this.facebookApi.getFriendList(facebookUid);
+
+        // Always update Facebook photo URL
+        this.userData.profile_img_url = fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
       }
 
-      // Cache name
+      // Cache some user data
       window.sessionStorage.setItem(Constants.userFirstNameKey, this.userData.first_name);
       window.sessionStorage.setItem(Constants.userLastNameKey, this.userData.last_name);
+      sessionStorage.setItem(Constants.profileImageUrlKey, this.userData.profile_img_url);
+
+      // Calculate second degree connections
+      this.secondConnectionCount = await this.countSecondConnections();
 
       // Always update last login timestamp
       this.userData.last_login = new Date().toString();
 
-      // Always update Facebook friends list
-      this.userData.friends = await this.facebookApi.getFriendList(facebookUid);
-
-      // Always update Facebook photo url
-      let photoUrl = fbUserData.picture ? fbUserData.picture.data.url : '../../assets/avatar_man.png';
-      this.userData.profile_img_url = photoUrl;
-      sessionStorage.setItem(Constants.profileImageUrlKey, photoUrl);
-
+      // Update DB
       await this.writeUserDataToDb();
     } else {
       // Debug or Browser path
@@ -148,9 +157,12 @@ export class ProfilePage {
   private async saveProfileEdits(){
 
     // TODO: Input validtaion
+    // TODO: Save breaks if geocode fails. Handle errors.
+    if(this.autoComplete.input){
+      await this.forwardGeocode(this.autoComplete.input);
+      await this.reverseGeocode();
+    }
 
-    await this.forwardGeocode(this.autoComplete.input);
-    await this.reverseGeocode();
     await this.writeUserDataToDb()
   }
 

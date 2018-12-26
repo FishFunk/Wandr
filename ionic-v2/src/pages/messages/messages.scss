@@ -24,19 +24,35 @@ page-messages {
             font-size: 14px;
             font-weight: bold;
             margin: 0px;
-            max-width: 85%;
             width: auto;
             box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
             padding: 10px 15px 10px 7px;
             margin: 5px 0;
             background: white;
+            white-space: pre-wrap;
         }
     }
+    .message.bot{
+        margin: 0 auto;
+        width: 85%;
+        p {
+            color: white;
+            border-radius: 11px 11px 11px 11px;
+            background: color($colors, primary);
+        }
+        .message-time {
+            color: color($colors, secondary);
+            text-align: center;
+            font-size: small;
+        }
+    }
+
     .message.incoming {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
+        max-width: 80%;
         p {
             color: white;
             border-radius: 0 11px 11px 11px;
@@ -53,6 +69,7 @@ page-messages {
         flex-direction: column;
         justify-content: flex-end;
         align-items: flex-end;
+        max-width: 80%;
         p {
             border-radius: 11px 11px 0 11px;
         }

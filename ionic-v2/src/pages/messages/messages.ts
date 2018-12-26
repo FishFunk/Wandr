@@ -1,7 +1,6 @@
 import { Component, ViewChild, ViewChildren, ElementRef } from '@angular/core';
-import { Content, LoadingController, TextInput, NavParams } from 'ionic-angular';
+import { Content, LoadingController, NavParams } from 'ionic-angular';
 import { Constants } from '../../helpers/constants';
-import _ from 'underscore';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { FirebaseApp } from 'angularfire2';
 
@@ -74,6 +73,7 @@ export class MessagesPage {
             let dateInMillis = new Date().getTime();
             let key = dateInMillis.toString();
             
+            // Insert message object
             await this.firebase.database()
                 .ref('/messages/'+this.roomkey)
                 .child(key)
@@ -81,6 +81,13 @@ export class MessagesPage {
                     name: this.firstName, 
                     text: this.message, 
                     timestamp: dateInMillis });
+
+            // Update chat object
+            var updates = {};
+            updates['/chats/' + this.roomkey + '/lastMessage'] = this.message;
+            updates['/chats/' + this.roomkey + '/timestamp'] = dateInMillis;
+
+            await this.firebase.database().ref().update(updates);
 
             this.message = '';
             loading.dismiss();
@@ -92,6 +99,9 @@ export class MessagesPage {
     }
  
     getClass(messageUid){
+        if(messageUid == Constants.appBotId){
+            return 'bot';
+        }
         return this.uid == messageUid  ? 'outgoing' : 'incoming';
     }
 
