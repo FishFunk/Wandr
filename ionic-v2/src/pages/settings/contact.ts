@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Device } from '@ionic-native/device';
+import { Device } from '@ionic-native/device/ngx';
 import { Constants } from '../../helpers/constants';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { NavController } from 'ionic-angular';

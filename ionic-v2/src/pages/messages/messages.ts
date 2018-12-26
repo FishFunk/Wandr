@@ -1,10 +1,8 @@
 import { Component, ViewChild, ViewChildren, ElementRef } from '@angular/core';
 import { Content, LoadingController, TextInput, NavParams } from 'ionic-angular';
-import { Message, IMessage, IChat } from '../../models/chat';
 import { Constants } from '../../helpers/constants';
-import { WebDataService } from '../../helpers/webDataService';
 import _ from 'underscore';
-import { Keyboard } from '@ionic-native/keyboard';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { FirebaseApp } from 'angularfire2';
 
  

@@ -4,12 +4,12 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpClientModule } from '@angular/common/http';
 
 //*********** ionic Native **************/
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { SocialSharing } from '@ionic-native/social-sharing';
-import { NativeGeocoder } from '@ionic-native/native-geocoder';
-import { Keyboard } from '@ionic-native/keyboard';
-import { Device } from '@ionic-native/device';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
+import { Device } from '@ionic-native/device/ngx';
 
 import { MyApp } from './app.component';
 
@@ -20,7 +20,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireFunctionsModule } from 'angularfire2/functions';
 
 //***********  Facebook **************/
-import { Facebook } from '@ionic-native/facebook';
+import { Facebook } from '@ionic-native/facebook/ngx';
 // import { MockFacebookApi } from '../helpers/mockFacebookApi';
 
 //***********  Tabs **************/

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import * as firebase from 'firebase/app';
 
 @Injectable()

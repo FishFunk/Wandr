@@ -1,8 +1,8 @@
 import { Component, NgZone } from '@angular/core';
 import { IonicPage, LoadingController, ToastController, Platform } from 'ionic-angular';
-import { AngularFireDatabase, DatabaseSnapshot } from 'angularfire2/database';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { Location, UserServices, User, IUser } from '../../models/user';
-import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder';
+import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
 import _ from 'underscore';
