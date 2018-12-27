@@ -4,18 +4,18 @@ page-messages {
         padding: 10px;
     }
 
-    .submit{
-        height: 100%;
-        width: 100%;
-    }
-
     textarea {
-        width: calc(100% - 20px);
-        margin-left: 10px;
-        background-color: #fff;
-        font-size: 1.2em;
+        background-color: rgb(255, 255, 255);
         resize: none;
         border: none;
+    }
+
+    .pad {
+        padding: 5px 5px 0 5px;
+    }
+
+    .send-icon {
+        font-size: 2.4em;
     }
 
     .message {

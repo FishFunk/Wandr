@@ -17,27 +17,20 @@
 
 <ion-footer>
     <ion-toolbar>
-        <ion-grid>
-            <ion-row center>
-                <ion-col>
-                    <textarea 
-                        #textInput
-                        spellcheck="true" 
-                        autoComplete="true" 
-                        autocorrect="true" 
-                        rows="1" 
-                        [(ngModel)]="message" 
-                        placeholder="Type your message..." 
-                        (keyup.enter)="sendMessage()">
-                    </textarea>
-                </ion-col>
-                <ion-col col-1>
-                    <div class="submit" (click)="sendMessage()">
-                        <ion-icon name="send"></ion-icon>
-                    </div>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-
+        <ion-list class="pad">
+            <ion-item>
+                <textarea #textInput
+                    spellcheck="true" 
+                    autoComplete="true" 
+                    autocorrect="true" 
+                    rows="1"
+                    [(ngModel)]="message" 
+                    placeholder="Type your message..." 
+                    (keyup.enter)="sendMessage()"></textarea>
+                <button #sendButton ion-button clear color="secondary" icon-only item-end>
+                    <ion-icon class="send-icon" name="send"></ion-icon>
+                </button>
+            </ion-item>
+        </ion-list>
     </ion-toolbar>
 </ion-footer>

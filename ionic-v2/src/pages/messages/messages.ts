@@ -1,8 +1,9 @@
-import { Component, ViewChild, ViewChildren, ElementRef } from '@angular/core';
-import { Content, LoadingController, NavParams } from 'ionic-angular';
+import { Component, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Content, LoadingController, NavParams, Button } from 'ionic-angular';
 import { Constants } from '../../helpers/constants';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { FirebaseApp } from 'angularfire2';
+import { Subscription } from 'rxjs';
 
  
 @Component({
@@ -12,14 +13,18 @@ import { FirebaseApp } from 'angularfire2';
 export class MessagesPage {
  
     @ViewChild(Content) contentArea: Content;
-    @ViewChildren('messageListItems') messageListItems;
-    @ViewChild('textInput', { read: ElementRef }) textAreaInput: ElementRef;
+    @ViewChildren('messageListItems') messageListItems: QueryList<ElementRef>;
+    @ViewChild('sendButton') sendButton: Button;
 
     uid: string;
     messages: Array<any> = [];
     message: string = '';
     firstName: string;
     roomkey: string;
+
+    keyboardShowObservable: Subscription;
+    keyboardHideObservable: Subscription;
+    sendButtonElement: Element;
 
     constructor(
         params: NavParams,
@@ -30,29 +35,53 @@ export class MessagesPage {
         this.roomkey = params.get('roomkey');
         this.uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
         this.firstName = window.localStorage.getItem(Constants.userFirstNameKey);
-
-        this.keyboard.onKeyboardShow().subscribe(async ()=>{
-            this.scrollToBottom(500)
-                .then(()=> this.textAreaInput.nativeElement.click())
-                .catch(()=>this.textAreaInput.nativeElement.click());
-        });
-
-        this.keyboard.onKeyboardHide().subscribe(async ()=>{
-            await this.scrollToBottom(500);
-        });
     }
 
-    ionViewDidLoad(){
+    ionViewWillLeave(){
+        // Remove listeners
+        this.keyboardShowObservable.unsubscribe();
+        this.keyboardHideObservable.unsubscribe();
+
+        this.sendButtonElement.removeEventListener('click', this.stopBubble.bind(this));
+        this.sendButtonElement.removeEventListener('mousedown', this.stopBubble.bind(this));
+        this.sendButtonElement.removeEventListener('touchdown', this.stopBubble.bind(this));
+        this.sendButtonElement.removeEventListener('touchmove', this.stopBubble.bind(this));
+        this.sendButtonElement.removeEventListener('touchstart', this.stopBubble.bind(this));
+        this.sendButtonElement.removeEventListener('touchend', this.stopBubbleAndSendMessage.bind(this));
+        this.sendButtonElement.removeEventListener('mouseup', this.stopBubbleAndSendMessage.bind(this));
+    }
+
+    ngAfterViewInit() {
+        // Subscribe listeners
         this.messageListItems.changes.subscribe(async () => {
             await this.scrollToBottom(500);
         });
 
+        this.keyboardShowObservable = this.keyboard.onKeyboardShow().subscribe(async ()=>{
+            await this.scrollToBottom(500);
+        });
+        
+        this.keyboardHideObservable = this.keyboard.onKeyboardHide().subscribe(async ()=>{
+            await this.scrollToBottom(500);
+        });
+
+        this.sendButtonElement = this.sendButton._elementRef.nativeElement;     
+        this.sendButtonElement.addEventListener('click', this.stopBubble.bind(this));
+        this.sendButtonElement.addEventListener('mousedown', this.stopBubble.bind(this));
+        this.sendButtonElement.addEventListener('touchdown', this.stopBubble.bind(this));
+        this.sendButtonElement.addEventListener('touchmove', this.stopBubble.bind(this));
+        this.sendButtonElement.addEventListener('touchstart', this.stopBubble.bind(this));
+        this.sendButtonElement.addEventListener('touchend', this.stopBubbleAndSendMessage.bind(this));
+        this.sendButtonElement.addEventListener('mouseup', this.sendMessage.bind(this));
+    }
+
+    ionViewDidLoad(){
         this.loadMessages();
     }
 
-    // ionViewDidEnter() {
-    //     this.scrollToBottom(500);
-    // }
+    ionViewDidEnter(){
+        this.scrollToBottom(500);
+    }
 
     async loadMessages(){
         let loading = this.loadingCtrl.create();
@@ -115,4 +144,20 @@ export class MessagesPage {
     
         return returnArr;
     };
+
+    private stopBubble(event) {
+        try 
+        {
+            event.preventDefault(); 
+            event.stopPropagation(); //Stops event bubbling
+        }
+        catch (ex) {
+            console.error(ex);
+        }
+    }
+
+    private stopBubbleAndSendMessage(event) {
+        this.stopBubble(event);
+        this.sendMessage();
+    }
 }
