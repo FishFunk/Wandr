@@ -32,6 +32,11 @@ export class MapPage {
     maxZoom: this.maxZoomLevel,
     zoom: this.minZoomLevel,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
+    zoomControl: true,
+    mapTypeControl: false,
+    streetViewControl: false,
+    rotateControl: false,
+    fullscreenControl: false,
     styles: [
       {"featureType": "administrative", "elementType": "labels.text.fill", "stylers": [{"color": "#444444"}]},
       {"featureType": "administrative.land_parcel","stylers": [{"visibility": "off"}]},
