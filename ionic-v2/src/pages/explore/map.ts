@@ -3,8 +3,8 @@ import { NavController, ModalController, LoadingController, Loading } from 'ioni
 import { IUser } from '../../models/user';
 import { ModalPage } from './modal';
 import _ from 'underscore';
-import { AngularFireDatabase, DatabaseSnapshot } from 'angularfire2/database';
 import { Constants } from '../../helpers/constants';
+import { RealtimeDbHelper } from '../../helpers/realtimeDbHelper';
 
 declare var google;
  
@@ -25,6 +25,7 @@ export class MapPage {
   searchBox: google.maps.places.SearchBox;
   
   private firebaseUserId: string;
+  private facebookUserId: string;
 
   mapOptions = {
     center: this.mapCenter,
@@ -67,9 +68,10 @@ export class MapPage {
   constructor(public navCtrl: NavController,
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
-    private firebase: AngularFireDatabase) {
+    private realtimeDbHelper: RealtimeDbHelper) {
 
     this.firebaseUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
+    this.facebookUserId = window.localStorage.getItem(Constants.facebookUserIdKey);
   }
  
   ionViewDidLoad(){
@@ -87,8 +89,8 @@ export class MapPage {
       this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
       // Read first and second degree connection user data
-      let firstConnections = await this.readFirstConnections();
-      let secondConnections = await this.readSecondConnections(firstConnections);
+      let firstConnections = await this.realtimeDbHelper.ReadFirstConnections(this.firebaseUserId);
+      let secondConnections = await this.realtimeDbHelper.ReadSecondConnections(this.facebookUserId, firstConnections);
 
       // Generate heat map data from users location information
       this.createMarkersAndHeatMap(firstConnections, secondConnections);
@@ -317,78 +319,5 @@ export class MapPage {
       this.map.panTo(latLng);
       this.map.setZoom(this.maxZoomLevel);
     });
-  }
-
-  private async readFirstConnections(): Promise<IUser[]>{
-
-    var firstConnections: IUser[] = [];
-
-    var snapshot = await this.firebase.database.ref('/users/' + this.firebaseUserId).once('value');
-    var user = <IUser> snapshot.val();
-
-    var promises = user.friends.map((friend)=> {
-      return this.firebase.database.ref('users')
-        .orderByChild('facebook_uid')
-        .equalTo(friend.id)
-        .once("value");
-    });
-
-    var snapshots = await Promise.all(promises).catch((error)=> {
-        console.error(error);
-        return Promise.reject(error);
-      });
-
-    snapshots.forEach((snapshot: DatabaseSnapshot<any>)=> {
-      var dbObj = snapshot.val();
-      if(dbObj){
-        var key = _.keys(snapshot.val())[0];
-        var user = <IUser> dbObj[key];
-        firstConnections.push(user);
-      }
-    });
-
-    return Promise.resolve(firstConnections);
-  }
-
-
-  private async readSecondConnections(firstConnections: IUser[]): Promise<IUser[]>{
-
-    let secondConnectionFacebookIds = [];
-    let secondConnections: IUser[] = [];
-    const currentUserFacebookId = localStorage.getItem(Constants.facebookUserIdKey);
-
-    _.each(firstConnections, (user)=>{
-      _.each(user.friends, (friendObj) => {
-        // Exclude current user from appearing on map
-        if(friendObj.id != currentUserFacebookId){
-          secondConnectionFacebookIds.push(friendObj.id);
-        }
-      });
-    });
-
-    secondConnectionFacebookIds = _.uniq(secondConnectionFacebookIds);
-
-    var promises = secondConnectionFacebookIds.map((facebook_uid)=> {
-      return this.firebase.database.ref('users')
-        .orderByChild('facebook_uid')
-        .equalTo(facebook_uid)
-        .once("value");
-    });
-
-    var snapshots = await Promise.all(promises).catch((error)=> {
-        console.error(error);
-        return Promise.reject(error);
-      });
-
-    snapshots.forEach((snapshot: DatabaseSnapshot<any>)=> {
-      var dbObj = snapshot.val();
-      if(dbObj){
-        var key = _.keys(snapshot.val())[0];
-        var user = <IUser> dbObj[key];
-        secondConnections.push(user);
-      }
-    });
-
-    return Promise.resolve(secondConnections);
   }
 }

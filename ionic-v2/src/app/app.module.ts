@@ -43,6 +43,7 @@ import { IntroPage } from '../pages/intro/intro';
 import { WebDataService } from '../helpers/webDataService';
 import { ModalPage } from '../pages/explore/modal';
 import { FacebookApi } from '../helpers/facebookApi';
+import { RealtimeDbHelper } from '../helpers/realtimeDbHelper';
 
 //import firebase from 'firebase';
 //********** firebase configuration  ************ */
@@ -113,6 +114,7 @@ export const config = {
     Facebook,
     NativeGeocoder,
     WebDataService,
+    RealtimeDbHelper,
     FacebookApi,
     Keyboard,
     Device

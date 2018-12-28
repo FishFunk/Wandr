@@ -6,6 +6,7 @@ import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderRever
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
 import _ from 'underscore';
+import { RealtimeDbHelper } from '../../helpers/realtimeDbHelper';
 
 @IonicPage()
 @Component({
@@ -34,7 +35,8 @@ export class ProfilePage {
     private nativeGeocoder: NativeGeocoder,
     private facebookApi: FacebookApi,
     private platform: Platform,
-    private firebase: AngularFireDatabase) {
+    private firebase: AngularFireDatabase,
+    private realtimeDbHelper: RealtimeDbHelper) {
 
     this.googleAutoComplete = new google.maps.places.AutocompleteService();
   }
@@ -138,7 +140,7 @@ export class ProfilePage {
     }
   }
 
-  // start Bound Elements
+  //***** start Bound Elements ***** //
   private updateSearchResults(){
     if (this.autoComplete.input == '') {
       this.autoCompleteItems = [];
@@ -159,7 +161,7 @@ export class ProfilePage {
     this.autoComplete.input = item.description;
     this.autoCompleteItems = [];
   }
-  // end Bound Elements
+  //******* end Bound Elements ***** //
 
   private async saveProfileEdits(){
 
@@ -235,32 +237,12 @@ export class ProfilePage {
 
   private async countSecondConnections(): Promise<number>{
 
-    let count = 0;
+    const currentUserFirebaseId = localStorage.getItem(Constants.firebaseUserIdKey);
     const currentUserFacebookId = localStorage.getItem(Constants.facebookUserIdKey);
-    let ids = _.map(this.userData.friends, (friendObj) => friendObj.id);
 
-    var promises = ids.map((facebook_uid)=> {
-      return this.firebase.database.ref('users')
-        .orderByChild('facebook_uid')
-        .equalTo(facebook_uid)
-        .once("value");
-    });
+    const firstConnections = await this.realtimeDbHelper.ReadFirstConnections(currentUserFirebaseId);
+    const secondConnections = await this.realtimeDbHelper.ReadSecondConnections(currentUserFacebookId, firstConnections);
 
-    var firstConnectionSnapshots = await Promise.all(promises).catch((error)=> {
-        console.error(error);
-        return Promise.reject(error);
-    });
-
-    _.each(firstConnectionSnapshots, (snapshot)=>{
-      var user: IUser = snapshot.val();
-      _.each(user.friends, (secondConnection)=>{
-        // Exclude current user
-        if(secondConnection.id != currentUserFacebookId){
-          count++;
-        }
-      });
-    });
-
-    return Promise.resolve(count);
+    return Promise.resolve(secondConnections.length);
   }
 }
