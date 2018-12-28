@@ -10,6 +10,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { Device } from '@ionic-native/device/ngx';
+import { Firebase } from '@ionic-native/firebase/ngx';
 
 import { MyApp } from './app.component';
 
@@ -17,6 +18,7 @@ import { MyApp } from './app.component';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireFunctionsModule } from 'angularfire2/functions';
 
 //***********  Facebook **************/
@@ -39,11 +41,11 @@ import { IntroPage } from '../pages/intro/intro';
 
 
 //*********** Provider **************/
-// import { AuthData } from '../providers/auth-data';
 import { WebDataService } from '../helpers/webDataService';
 import { ModalPage } from '../pages/explore/modal';
 import { FacebookApi } from '../helpers/facebookApi';
 import { RealtimeDbHelper } from '../helpers/realtimeDbHelper';
+import { FcmProvider } from '../providers/fcm/fcm';
 
 //import firebase from 'firebase';
 //********** firebase configuration  ************ */
@@ -88,6 +90,7 @@ export const config = {
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireFunctionsModule,
+    AngularFirestoreModule,
     AngularFireModule.initializeApp(config)
   ],
   bootstrap: [IonicApp],
@@ -117,7 +120,9 @@ export const config = {
     RealtimeDbHelper,
     FacebookApi,
     Keyboard,
-    Device
+    Device,
+    Firebase,
+    FcmProvider
   ]
 })
 export class AppModule {}

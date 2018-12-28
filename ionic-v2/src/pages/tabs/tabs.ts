@@ -3,8 +3,10 @@ import { ProfilePage } from '../profile/profile';
 import { InboxPage } from '../messages/inbox';
 import { InvitePage } from '../invite/invite';
 import { MapPage } from '../explore/map';
-import { Tabs, Platform } from 'ionic-angular';
+import { Tabs, Platform, ToastController } from 'ionic-angular';
 import { SettingsPage } from '../settings/settings';
+import { FcmProvider } from '../../providers/fcm/fcm';
+import { tap } from 'rxjs/operators';
 
 
 @Component({
@@ -24,9 +26,27 @@ export class TabsPage {
 
   useFabButton: boolean;
 
-  constructor(private platform: Platform){
+  constructor(
+    public toastCtrl: ToastController,
+    public fcm: FcmProvider,
+    private platform: Platform){
     this.useFabButton = !this.platform.is('ios');
   }
+
+  ionViewDidLoad(){
+    this.fcm.getToken();
+    this.fcm.listenToNotifications().pipe(
+      tap(msg =>{
+        const toast = this.toastCtrl.create({
+          message: msg.body,
+          duration: 3000
+        });
+
+        toast.present();
+      })
+    ).subscribe();
+  }
+
 
   // FAB button action for Android/Windows Only
   onClickExploreButton(){
