@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import { user } from 'firebase-functions/lib/providers/auth';
+import * as _ from 'lodash';
 
 admin.initializeApp();
 
@@ -34,11 +34,34 @@ admin.initializeApp();
 //     });
 
 
-// exports.newMessageNotification = 
-//     functions.firestore.document('messages/{timestamp}')
-//     .onCreate(async event =>{
-//         const newMessage = event.data();
-//     });
+exports.newMessageNotification = 
+    functions.firestore.document('messages/{roomkey}')
+    .onUpdate(async event =>{
+        const messages = event.after.data();
+        const timestamps = _.keys(messages);
+        const sorted = timestamps.sort();
+        const latestMessageKey = _.last(sorted);
+        const newMessage = messages[latestMessageKey];
+
+        const payload = {
+            notification: {
+                title: `New message from ${newMessage.name}!`,
+                body: newMessage.text
+            }
+        };
+
+        const idToNotify = newMessage.to_uid;
+        const devicesRef = await admin.firestore().collection('devices').where('userId', '==', idToNotify).get();
+        const tokens = [];
+        devicesRef.forEach(result =>{
+            const token = result.data().token;
+            tokens.push(token);
+        });
+
+        console.log(JSON.stringify(tokens));
+
+        return admin.messaging().sendToDevice(tokens, payload);
+    });
 
 // Saves a message to the Firebase Realtime Database but sanitizes the text by removing swearwords.
 exports.createChat = functions.https.onCall((chatData, context) => {
@@ -164,6 +187,7 @@ async function _createAndSendFirstMessage(chatData: any){
 
     const data = {};
     data[chatData.timestamp] = {
+        roomkey: chatData.roomkey,
         to_uid: '',
         from_uid: 'travel_guru_bot',
         name: 'Travel Guru Bot',
