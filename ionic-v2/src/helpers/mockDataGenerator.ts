@@ -90,6 +90,7 @@ export class MockDataGenerator
         for(var i=0; i<count; i++)
         {
           var msg = new Message(
+            this.randomWord(),
             this.mockUserIDs[this.randomNumber(0, this.mockUserIDs.length - 1)], 
             this.mockUserIDs[this.randomNumber(0, this.mockUserIDs.length - 1)],
             this.randomFirstName(), 

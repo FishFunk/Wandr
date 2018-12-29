@@ -110,6 +110,7 @@ export class MessagesPage {
             // Insert message doc
             let data = {};
             data[dateInMillis] = <IMessage> {
+                roomkey: this.chat.roomkey,
                 to_uid: this.uid == this.chat.userA_id ? this.chat.userA_id : this.chat.userB_id,
                 from_uid: this.uid, 
                 name: this.firstName, 

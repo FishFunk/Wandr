@@ -13,6 +13,7 @@ export class Chat implements IChat {
 
 export class Message implements IMessage {
     constructor(
+        public roomkey: string,
         public to_uid: string,
         public from_uid: string,
         public name: string,
