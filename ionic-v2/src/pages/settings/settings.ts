@@ -4,8 +4,8 @@ import { FacebookApi } from '../../helpers/facebookApi';
 import { ContactPage } from './contact';
 import { AboutPage } from './about';
 import { Constants } from '../../helpers/constants';
-import { AngularFireDatabase } from 'angularfire2/database';
-import { IUserSettings } from '../../models/user';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { IUserSettings, IUser } from '../../models/user';
 import { IntroPage } from '../intro/intro';
 
 @IonicPage()
@@ -26,17 +26,17 @@ export class SettingsPage {
         private toastCtrl: ToastController,
         private alertCtrl: AlertController,
         private fbApi: FacebookApi,
-        private firebase: AngularFireDatabase){
+        private firestore: AngularFirestore){
 
         this.firebaseUid = localStorage.getItem(Constants.firebaseUserIdKey);
     }
 
     ionViewDidLoad(){
-        this.firebase.database.ref('/users/' + this.firebaseUid).once('value')
+        this.firestore.collection('users').doc(this.firebaseUid).get().toPromise()
             .then((snapshot)=>{
-                const usr = snapshot.val();
+                const usr = <IUser> snapshot.data();
                 if(usr && usr.settings){
-                    this.pushNotifications = usr.settings.pushNotifications;
+                    this.pushNotifications = usr.settings.notifications;
                     this.ghostMode = usr.settings.ghostMode;
                 }
             })
@@ -50,7 +50,11 @@ export class SettingsPage {
             notifications: !!this.pushNotifications,
             ghostMode: !!this.ghostMode
         }
-        this.firebase.database.ref('users/' + this.firebaseUid).child('settings').set(newSettings)
+        this.firestore.collection('users')
+            .doc(this.firebaseUid)
+            .update({
+                settings: newSettings
+            })
             .then(()=>{
                 // alert("Preferences saved!");
             })

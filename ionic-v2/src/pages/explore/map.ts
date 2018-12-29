@@ -4,7 +4,7 @@ import { IUser } from '../../models/user';
 import { ModalPage } from './modal';
 import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
-import { RealtimeDbHelper } from '../../helpers/realtimeDbHelper';
+import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 
 declare var google;
  
@@ -68,7 +68,7 @@ export class MapPage {
   constructor(public navCtrl: NavController,
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
-    private realtimeDbHelper: RealtimeDbHelper) {
+    private firestoreDbHelper: FirestoreDbHelper) {
 
     this.firebaseUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.facebookUserId = window.localStorage.getItem(Constants.facebookUserIdKey);
@@ -89,8 +89,8 @@ export class MapPage {
       this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
       // Read first and second degree connection user data
-      let firstConnections = await this.realtimeDbHelper.ReadFirstConnections(this.firebaseUserId);
-      let secondConnections = await this.realtimeDbHelper.ReadSecondConnections(this.facebookUserId, firstConnections);
+      let firstConnections = await this.firestoreDbHelper.ReadFirstConnections(this.firebaseUserId);
+      let secondConnections = await this.firestoreDbHelper.ReadSecondConnections(this.facebookUserId, firstConnections);
 
       // Generate heat map data from users location information
       this.createMarkersAndHeatMap(firstConnections, secondConnections);

@@ -17,7 +17,6 @@ import { MyApp } from './app.component';
 //***********  Angularfire2 v5 **************/
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireFunctionsModule } from 'angularfire2/functions';
 
@@ -44,7 +43,7 @@ import { IntroPage } from '../pages/intro/intro';
 import { WebDataService } from '../helpers/webDataService';
 import { ModalPage } from '../pages/explore/modal';
 import { FacebookApi } from '../helpers/facebookApi';
-import { RealtimeDbHelper } from '../helpers/realtimeDbHelper';
+import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { FcmProvider } from '../providers/fcm/fcm';
 
 //import firebase from 'firebase';
@@ -87,7 +86,6 @@ export const config = {
       scrollAssist: true, 
       autoFocusAssist: false
     }),
-    AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireFunctionsModule,
     AngularFirestoreModule,
@@ -117,7 +115,7 @@ export const config = {
     Facebook,
     NativeGeocoder,
     WebDataService,
-    RealtimeDbHelper,
+    FirestoreDbHelper,
     FacebookApi,
     Keyboard,
     Device,

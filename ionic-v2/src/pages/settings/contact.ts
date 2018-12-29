@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Device } from '@ionic-native/device/ngx';
 import { Constants } from '../../helpers/constants';
-import { AngularFireDatabase } from 'angularfire2/database';
 import { NavController } from 'ionic-angular';
+import { AngularFirestore } from 'angularfire2/firestore';
 
 @Component({ 
     selector: 'page-contact',
@@ -15,7 +15,7 @@ export class ContactPage {
 
     constructor(
         private device: Device,
-        private firebase: AngularFireDatabase,
+        private firestore: AngularFirestore,
         private navCtrl: NavController){
     }
 
@@ -42,16 +42,17 @@ export class ContactPage {
                 userText: this.text.trim()
             }
 
-            this.firebase.database.ref('/reports/').push(reportData, (possibleError)=>{
-                if(possibleError){
-                    console.error(possibleError);
-                } else {
-                    alert("Thank you!");
+            this.firestore.collection('reports')
+                .add(reportData)
+                .then(()=>{
+                    alert("Thanks for your feedback!");
                     this.text = "";
                     this.reason = "";
                     this.navCtrl.pop();
-                }
-            });
+                })
+                .catch((error)=>{
+                    console.error(error);
+                });
         }
     }
 }

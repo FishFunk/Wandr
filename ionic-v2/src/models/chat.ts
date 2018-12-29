@@ -13,9 +13,10 @@ export class Chat implements IChat {
 
 export class Message implements IMessage {
     constructor(
-        public uid: string,
+        public to_uid: string,
+        public from_uid: string,
         public name: string,
-        public message: string,
+        public text: string,
         public timestamp: string){}
 }
 
@@ -32,9 +33,10 @@ export interface IChat{
 }
 
 export interface IMessage{
-    uid: string;
+    to_uid: string;
+    from_uid: string;
     name: string;
-    message: string;
+    text: string;
     timestamp: string;
 }
 

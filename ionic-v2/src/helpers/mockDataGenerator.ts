@@ -91,6 +91,7 @@ export class MockDataGenerator
         {
           var msg = new Message(
             this.mockUserIDs[this.randomNumber(0, this.mockUserIDs.length - 1)], 
+            this.mockUserIDs[this.randomNumber(0, this.mockUserIDs.length - 1)],
             this.randomFirstName(), 
             this.randomSentence(), 
             new Date().toDateString());

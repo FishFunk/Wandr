@@ -1,12 +1,12 @@
 import { Component, NgZone } from '@angular/core';
 import { IonicPage, LoadingController, ToastController, Platform } from 'ionic-angular';
-import { AngularFireDatabase } from 'angularfire2/database';
-import { Location, UserServices, User } from '../../models/user';
+import { Location, UserServices, User, IUser } from '../../models/user';
 import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
 import _ from 'underscore';
-import { RealtimeDbHelper } from '../../helpers/realtimeDbHelper';
+import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
+import { AngularFirestore } from 'angularfire2/firestore';
 
 @IonicPage()
 @Component({
@@ -28,15 +28,14 @@ export class ProfilePage {
   private geocoderOptions: NativeGeocoderOptions = { useLocale: true, maxResults: 1 };
 
   constructor(
-    public afDB: AngularFireDatabase, 
     public loadingCtrl: LoadingController, 
     private toastCtrl: ToastController,
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
     private facebookApi: FacebookApi,
     private platform: Platform,
-    private firebase: AngularFireDatabase,
-    private realtimeDbHelper: RealtimeDbHelper) {
+    private firestoreDbHelper: FirestoreDbHelper,
+    private firestore: AngularFirestore) {
 
     this.googleAutoComplete = new google.maps.places.AutocompleteService();
   }
@@ -60,10 +59,10 @@ export class ProfilePage {
       var token = window.localStorage.getItem(Constants.accessTokenKey);
 
       var fbUserData = await <any> this.facebookApi.getUser(facebookUid, token);
-      var snapshot = await this.firebase.database.ref('/users/' + firebaseUid).once('value');
+      var snapshot = await this.firestore.collection('users').doc(firebaseUid).get().toPromise();
 
       // If User does not exist yet
-      if(!snapshot.val()){
+      if(!snapshot.exists) {
         this.userData.app_uid = firebaseUid;
         this.userData.facebook_uid = facebookUid;
 
@@ -84,10 +83,11 @@ export class ProfilePage {
         this.userData.profile_img_url = fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
         
         // Create user ref
-        await this.firebase.database.ref('users/' + firebaseUid).set(this.userData);
+        const newUsr = this.getPlainUserObject();
+        await this.firestore.collection('users').doc(firebaseUid).set(newUsr);
       } else {
         // IF user already has been created
-        this.userData = <User> snapshot.val();
+        this.userData = <User> snapshot.data();
         
         // Always update Facebook friends list
         this.userData.friends = await this.facebookApi.getFriendList(facebookUid);
@@ -176,11 +176,13 @@ export class ProfilePage {
   }
 
   private writeUserDataToDb(): Promise<any>{
-    return this.firebase.database.ref('users/' + this.userData.app_uid).set(this.userData, (possibleError)=>{
-      if(possibleError){
-        console.error(possibleError);
-      };
-    });
+    const updateData = this.getPlainUserObject();
+    return this.firestore.collection('users')
+      .doc(this.userData.app_uid)
+      .update(updateData)
+      .catch((error)=>{
+        console.error(error);
+      });
   }
 
   private async forwardGeocode(formattedLocation: string)
@@ -240,9 +242,31 @@ export class ProfilePage {
     const currentUserFirebaseId = localStorage.getItem(Constants.firebaseUserIdKey);
     const currentUserFacebookId = localStorage.getItem(Constants.facebookUserIdKey);
 
-    const firstConnections = await this.realtimeDbHelper.ReadFirstConnections(currentUserFirebaseId);
-    const secondConnections = await this.realtimeDbHelper.ReadSecondConnections(currentUserFacebookId, firstConnections);
+    const firstConnections = await this.firestoreDbHelper.ReadFirstConnections(currentUserFirebaseId);
+    const secondConnections = await this.firestoreDbHelper.ReadSecondConnections(currentUserFacebookId, firstConnections);
 
     return Promise.resolve(secondConnections.length);
+  }
+
+  private getPlainUserObject(){
+    return <IUser> {
+      app_uid: this.userData.app_uid, 
+      facebook_uid: this.userData.facebook_uid,
+      first_name: this.userData.first_name,
+      last_name: this.userData.last_name,
+      bio: this.userData.bio,
+      location: Object.assign({}, this.userData.location),
+      friends: this.userData.friends.map((obj)=> {return Object.assign({}, obj)}),
+      services: {
+        host: this.userData.services.host,
+        tips: this.userData.services.tips,
+        meetup: this.userData.services.meetup,
+        emergencyContact: this.userData.services.emergencyContact
+      },
+      roomkeys: this.userData.roomkeys,
+      last_login: this.userData.last_login,
+      settings: Object.assign({}, this.userData.settings),
+      profile_img_url: this.userData.profile_img_url
+    }
   }
 }

@@ -3,6 +3,7 @@ import { Firebase } from '@ionic-native/firebase/ngx';
 import { Platform } from 'ionic-angular';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
+import { Constants } from '../../helpers/constants';
 
 /*
   Generated class for the FcmProvider provider.
@@ -44,10 +45,10 @@ export class FcmProvider {
     if(!token) return;
     
     const devicesRef = this.afs.collection('devices');
-
+    const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     const docData = {
       token,
-      userId: ''
+      userId: uid
     }
 
     return devicesRef.doc(token).set(docData);

@@ -10,7 +10,7 @@ export interface IUser{
     services: IUserServices;
     roomkeys: string[];
     last_login: string;
-    settings: any;
+    settings: IUserSettings;
     profile_img_url?: string;
 }
 

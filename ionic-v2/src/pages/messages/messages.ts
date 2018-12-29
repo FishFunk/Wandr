@@ -2,8 +2,10 @@ import { Component, ViewChild, ViewChildren, QueryList, ElementRef } from '@angu
 import { Content, LoadingController, NavParams, Button } from 'ionic-angular';
 import { Constants } from '../../helpers/constants';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
-import { FirebaseApp } from 'angularfire2';
-import { Subscription } from 'rxjs';
+import { AngularFirestore, DocumentData } from 'angularfire2/firestore';
+import { Subscription, Observable } from 'rxjs';
+import { IMessage, IChat } from '../../models/chat';
+import _ from 'underscore';
 
  
 @Component({
@@ -20,7 +22,8 @@ export class MessagesPage {
     messages: Array<any> = [];
     message: string = '';
     firstName: string;
-    roomkey: string;
+    chat: IChat;
+    messagesObservable: Observable<any>;
 
     keyboardShowObservable: Subscription;
     keyboardHideObservable: Subscription;
@@ -30,9 +33,9 @@ export class MessagesPage {
         params: NavParams,
         private loadingCtrl: LoadingController,
         private keyboard: Keyboard,
-        private firebase: FirebaseApp) {
+        private firestore: AngularFirestore) {
         
-        this.roomkey = params.get('roomkey');
+        this.chat = params.get('chat');
         this.uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
         this.firstName = window.localStorage.getItem(Constants.userFirstNameKey);
     }
@@ -84,13 +87,15 @@ export class MessagesPage {
     }
 
     async loadMessages(){
-        let loading = this.loadingCtrl.create();
 
-        this.firebase.database().ref('messages/'+this.roomkey).on('value', resp => {
-            this.messages = this.snapshotToArray(resp);
+        this.messagesObservable = this.firestore
+            .collection('messages')
+            .doc(this.chat.roomkey)
+            .valueChanges();
+        
+        this.messagesObservable.subscribe(data =>{
+            this.messages = _.map(data, (obj, key)=> obj);
         });
-
-        loading.dismiss();
     }
 
     async sendMessage() {
@@ -99,26 +104,37 @@ export class MessagesPage {
         if (trimmedText.length > 0){
             let loading = this.loadingCtrl.create();
 
-            let dateInMillis = new Date().getTime();
-            let key = dateInMillis.toString();
+            // Use timestamp as key
+            let dateInMillis = new Date().getTime().toString();
             
-            // Insert message object
-            await this.firebase.database()
-                .ref('/messages/'+this.roomkey)
-                .child(key)
-                .set({ uid: this.uid, 
-                    name: this.firstName, 
-                    text: this.message, 
-                    timestamp: dateInMillis });
+            // Insert message doc
+            let data = {};
+            data[dateInMillis] = <IMessage> {
+                to_uid: this.uid == this.chat.userA_id ? this.chat.userA_id : this.chat.userB_id,
+                from_uid: this.uid, 
+                name: this.firstName, 
+                text: this.message, 
+                timestamp: dateInMillis
+            }
 
-            // Update chat object
-            var updates = {};
-            updates['/chats/' + this.roomkey + '/lastMessage'] = this.message;
-            updates['/chats/' + this.roomkey + '/timestamp'] = dateInMillis;
-
-            await this.firebase.database().ref().update(updates);
+            let chatUpdate = {
+                lastMessage: this.message,
+                timestamp: dateInMillis
+            }
 
             this.message = '';
+
+            await this.firestore
+                .collection('messages')
+                .doc(this.chat.roomkey)
+                .update(data);
+
+            // Update chat doc
+            await this.firestore
+                .collection('chats')
+                .doc(this.chat.roomkey)
+                .update(chatUpdate);
+
             loading.dismiss();
         }
     }
@@ -127,23 +143,12 @@ export class MessagesPage {
         await this.contentArea.scrollToBottom(duration);
     }
  
-    getClass(messageUid){
-        if(messageUid == Constants.appBotId){
+    getClass(message){
+        if(message.from_uid == Constants.appBotId){
             return 'bot';
         }
-        return this.uid == messageUid  ? 'outgoing' : 'incoming';
+        return this.uid == message.from_uid  ? 'outgoing' : 'incoming';
     }
-
-    snapshotToArray(snapshot){
-        let returnArr = [];
-    
-        snapshot.forEach(childSnapshot => {
-            let itemValue = childSnapshot.val();
-            returnArr.push(itemValue);
-        });
-    
-        return returnArr;
-    };
 
     private stopBubble(event) {
         try 

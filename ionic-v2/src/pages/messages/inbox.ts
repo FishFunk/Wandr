@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, Loading } from 'ionic-angular';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { MessagesPage } from './messages';
 import { Constants } from '../../helpers/constants';
 import { IUser } from '../../models/user';
@@ -18,9 +18,8 @@ export class InboxPage {
   loading: Loading;
   
   constructor(public navCtrl: NavController, 
-    public afDB: AngularFireDatabase, 
     public loadingCtrl: LoadingController,
-    private firebase: AngularFireDatabase) {
+    private firestore: AngularFirestore) {
       this.userId = window.localStorage.getItem(Constants.firebaseUserIdKey);
   }
 
@@ -30,9 +29,10 @@ export class InboxPage {
 
   async loadChats(){
     this.loading = this.loadingCtrl.create();
+    this.loading.present();
     
-    var snapshot = await this.firebase.database.ref('/users/' + this.userId).once('value');
-    var user = <IUser> snapshot.val();
+    var snapshot = await this.firestore.collection('users').doc(this.userId).get().toPromise();
+    var user = <IUser> snapshot.data();
     
     if(user.roomkeys && user.roomkeys.length > 0){
       await this.queryChats(user.roomkeys);
@@ -44,23 +44,26 @@ export class InboxPage {
   }
 
   onClickChat(chat: IChat){
-    this.navCtrl.push(MessagesPage, { roomkey: chat.roomkey }, { animate: true, direction: 'forward' });
+    this.navCtrl.push(MessagesPage, { chat: chat }, { animate: true, direction: 'forward' });
   }
 
   private async queryChats(roomkeys: string[]): Promise<any>{
 
     var promises = roomkeys.map((key)=> {
-      return this.firebase.database.ref("/chats/").child(key).once("value");
+      return this.firestore.collection('chats').doc(key).get().toPromise();
     });
 
-    var snapshots = await Promise.all(promises).catch((error)=> {
-      console.error(error);
-      return Promise.reject(error);
-    });
+    var snapshots = await Promise.all(promises)
+      .catch((error)=> {
+        console.error(error);
+        return Promise.reject(error);
+      });
     
     this.chats = [];
     snapshots.forEach((snapshot)=> {
-      this.chats.push(snapshot.val());
+      if(snapshot.exists){
+        this.chats.push(<IChat> snapshot.data());
+      }
     });
 
     return Promise.resolve();

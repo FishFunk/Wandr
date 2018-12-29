@@ -5,7 +5,7 @@ import _ from "underscore";
 import { AngularFireFunctions } from "angularfire2/functions";
 import { Constants } from "../../helpers/constants";
 import { IChat } from "../../models/chat";
-import { AngularFireDatabase } from "angularfire2/database";
+import { AngularFirestore } from "angularfire2/firestore";
 
 @Component({
     selector: 'modal-page',
@@ -29,7 +29,7 @@ export class ModalPage
     public viewCtrl: ViewController, 
     params: NavParams,
     private firebaseFunctionsModule: AngularFireFunctions,
-    private firebase: AngularFireDatabase,
+    private firestore: AngularFirestore,
     private loadingCtrl: LoadingController) {
       let firstConnections = params.get('firstConnections'); 
       let secondConnections = params.get('secondConnections');
@@ -51,9 +51,9 @@ export class ModalPage
     this.roomkey = this.currentUserId + '_' + this.focusedConnection.app_uid;
 
     // Enable or Disable message button and go to slide
-    this.firebase.database.ref('/chats/' + this.roomkey).once('value')
+    this.firestore.collection('chats').doc(this.roomkey).get().toPromise()
       .then((snapshot)=>{
-        if(snapshot.val()){
+        if(snapshot.exists){
           // Chat with roomkey already exists, disable contact button
           this.disableMessageButton = true;
         } else {
@@ -76,6 +76,7 @@ export class ModalPage
     }
 
     let loading = this.loadingCtrl.create();
+    loading.present();
 
     const currentUserFirstName = window.localStorage.getItem(Constants.userFirstNameKey);
     const currentUserPhotoUrl = window.localStorage.getItem(Constants.profileImageUrlKey);
@@ -99,6 +100,7 @@ export class ModalPage
     
     sendMessage(data).then((result)=>{
       alert("Message sent!"); // TODO: Navigate to chat?
+      this.disableMessageButton = true;
       loading.dismiss();
     })
     .catch(error=>{

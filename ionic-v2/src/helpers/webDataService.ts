@@ -6,7 +6,6 @@ import { IChat, IMessage } from '../models/chat';
 import { Observable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { _throw } from 'rxjs/observable/throw';
-import { SaveProfileRequest } from '../models/saveProfileRequest';
 
 @Injectable()
 export class WebDataService {

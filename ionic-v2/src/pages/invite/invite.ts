@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
-import { AngularFireDatabase } from 'angularfire2/database';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @IonicPage()
@@ -17,7 +16,6 @@ export class InvitePage {
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams, 
-    public afDB: AngularFireDatabase, 
     public loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private socialSharing: SocialSharing) {
