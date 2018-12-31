@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as _ from 'lodash';
+import { QuerySnapshot } from '@google-cloud/firestore';
 
 admin.initializeApp();
 
@@ -8,30 +9,76 @@ admin.initializeApp();
 // https://firebase.google.com/docs/functions/typescript
 
 
-// exports.newUserNotification = 
-//     functions.firestore.document('users/{userId}')
-//     .onCreate(async event =>{
+// TODO: Need to test this function
+exports.newUserNotification = 
+    functions.firestore.document('users/{userId}')
+    .onCreate(async event =>{
 
-//         const newUser = event.data();
-//         const userId = newUser.app_uid;
-//         const userName = newUser.first_name;
-//         const userLoc = newUser.location.stringFormat;
-//         const friendsToNotify = newUser.friends;
+        const newUser = event.data();
+        const userName = newUser.first_name;
+        const userLoc = newUser.location.stringFormat;
+        const friendsToNotify = _.map(newUser.friends, (friend)=>friend.id);
 
-//         const msg = userLoc ? 
-//             `${userName} has joined your network in ${userLoc}!` :
-//             `${userName} is now in your network!`
+        console.trace('newUserNotification. \
+            (User Name: ' + userName + ') \
+            (Location: ' + userLoc + ') \
+            (Friends:' + JSON.stringify(friendsToNotify));
 
-//         const payload = {
-//             notification: {
-//                 title: "You Have a New Connection!",
-//                 body: msg
-//             }
-//         }
+        if(!friendsToNotify || friendsToNotify.length == 0){
+            return Promise.resolve();
+        }
 
-//         const db = admin.firestore();
+        const title = userLoc ? 
+            `${userName} has joined your network in ${userLoc}!` :
+            `${userName} and their friends are now in your network!`
 
-//     });
+        const payload = {
+            notification: {
+                title: title,
+                body: "Come explore your connections on the map."
+            }
+        }
+
+        const db = admin.firestore();
+
+        // Get user IDs to be notified
+        const userPromises = 
+            friendsToNotify.map((friendFacebookId)=>{
+                return db.collection('users')
+                    .select('app_uid')
+                    .where('facebook_uid', '==', friendFacebookId)
+                    .get();
+            });
+        
+        let querySnapshots = await Promise.all(userPromises).catch((error)=> {
+            console.error('newUserNotification - userPromises', error);
+            return Promise.reject(error);
+        });
+
+        let appIdsToNotify = _collectDataFromSnapshots(
+            querySnapshots, 'app_uid', 'newUserNotification - query user IDs');
+        console.trace('UIDs to be notified: ' + JSON.stringify(appIdsToNotify));
+
+
+        // Get device tokens
+        const tokenPromises = appIdsToNotify.map((userId)=>{
+            return admin.firestore()
+                .collection('devices')
+                .where('userId', '==', userId)
+                .get();
+        });
+
+        querySnapshots = await Promise.all(tokenPromises).catch((error)=>{
+            console.error('newUserNotification - tokenPromises', error);
+            return Promise.reject(error);
+        });
+
+        let notificationTokens = _collectDataFromSnapshots(
+            querySnapshots, 'token', 'newUserNotification - query tokens');
+        console.trace('Notification tokens: ' + JSON.stringify(notificationTokens));
+
+        return admin.messaging().sendToDevice(notificationTokens, payload);
+    });
 
 
 exports.newMessageNotification = 
@@ -57,8 +104,6 @@ exports.newMessageNotification =
             const token = result.data().token;
             tokens.push(token);
         });
-
-        console.log(JSON.stringify(tokens));
 
         return admin.messaging().sendToDevice(tokens, payload);
     });
@@ -207,4 +252,23 @@ async function _createAndSendFirstMessage(chatData: any){
                 error); 
         });
     
+}
+
+function _collectDataFromSnapshots(querySnapshots: QuerySnapshot[], property: string, traceFunctionName: string){
+    let data = [];
+    querySnapshots.forEach((querySnapshot)=> {
+        let docSnapshots = querySnapshot.docs;        
+        docSnapshots.forEach((snapshot)=>{
+          if(snapshot.exists){
+            let doc = snapshot.data();
+            console.trace(traceFunctionName + ': ' + JSON.stringify(doc));
+            console.trace(traceFunctionName + ': ' + doc[property]);
+            data.push(doc[property]);
+          } else {
+            console.trace(traceFunctionName + ': snapshot does not exist');
+          }
+        });
+    });
+
+    return data;
 }
