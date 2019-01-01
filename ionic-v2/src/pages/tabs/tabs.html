@@ -1,15 +1,15 @@
 <ion-tabs #appTabs color="primary" selectedIndex="0">
-  <ion-tab *ngIf="true" [root]="tab1Root" tabIcon="person" tabTitle="profile"></ion-tab>
-  <ion-tab *ngIf="true" [root]="tab2Root" tabIcon="chatbubbles" tabTitle="inbox" tabBadge="1"></ion-tab>
+    <ion-tab *ngIf="true" [root]="tab1Root" tabIcon="person" tabTitle="profile"></ion-tab>
+    <ion-tab *ngIf="true" [root]="tab2Root" tabIcon="chatbubbles" tabTitle="inbox" tabBadge="1"></ion-tab>
 
-  <ion-fab center bottom *ngIf="useFabButton">
-    <button color="primary" ion-fab (click)="onClickExploreButton()">
-      <ion-icon name="md-globe"></ion-icon>
-    </button>
-  </ion-fab>
-  <ion-tab *ngIf="useFabButton" [root]="tab3Root" tabIcon="deliberately_invalid" tabTitle=""></ion-tab>
-  <ion-tab *ngIf="!useFabButton" [root]="tab3Root" tabIcon="md-globe" tabTitle="explore"></ion-tab>
+    <ion-fab center bottom *ngIf="useFabButton">
+      <button color="primary" ion-fab (click)="onClickExploreButton()">
+        <ion-icon name="md-globe"></ion-icon>
+      </button>
+    </ion-fab>
+    <ion-tab *ngIf="useFabButton" [root]="tab3Root" tabIcon="deliberately_invalid" tabTitle=""></ion-tab>
+    <ion-tab *ngIf="!useFabButton" [root]="tab3Root" tabIcon="md-globe" tabTitle="explore"></ion-tab>
 
-  <ion-tab *ngIf="true" [root]="tab4Root" tabIcon="paper-plane" tabTitle="invite"> </ion-tab>
-  <ion-tab *ngIf="true" [root]="tab5Root" tabIcon="settings" tabTitle="settings"></ion-tab>
+    <ion-tab *ngIf="true" [root]="tab4Root" tabIcon="paper-plane" tabTitle="invite"> </ion-tab>
+    <ion-tab *ngIf="true" [root]="tab5Root" tabIcon="settings" tabTitle="settings"></ion-tab>
 </ion-tabs>

@@ -21,6 +21,8 @@ export class Message implements IMessage {
         public timestamp: string){}
 }
 
+
+// TODO: Add read/unread/opened flag
 export interface IChat{
     roomkey: string;
     userA_id: string;

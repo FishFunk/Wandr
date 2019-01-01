@@ -8,7 +8,6 @@ import { SettingsPage } from '../settings/settings';
 import { FcmProvider } from '../../providers/fcm/fcm';
 import { tap } from 'rxjs/operators';
 
-
 @Component({
   selector: 'tabs-page',
   templateUrl: 'tabs.html'
@@ -29,7 +28,8 @@ export class TabsPage {
   constructor(
     public toastCtrl: ToastController,
     public fcm: FcmProvider,
-    private platform: Platform){
+    private platform: Platform) {
+
     this.useFabButton = !this.platform.is('ios');
   }
 
@@ -39,7 +39,8 @@ export class TabsPage {
       tap(msg =>{
         const toast = this.toastCtrl.create({
           message: msg.body,
-          duration: 3000
+          duration: 3000,
+          position: 'top'
         });
 
         toast.present();

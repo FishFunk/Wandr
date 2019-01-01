@@ -20,6 +20,7 @@
     "@angular/http": "^6.0.0",
     "@angular/platform-browser": "^6.0.0",
     "@angular/platform-browser-dynamic": "^6.0.0",
+    "@ionic-native/badge": "beta",
     "@ionic-native/core": "beta",
     "@ionic-native/device": "beta",
     "@ionic-native/facebook": "beta",
@@ -85,7 +86,8 @@
       },
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-statusbar": {},
-      "cordova-plugin-firebase": {}
+      "cordova-plugin-firebase": {},
+      "cordova-plugin-badge": {}
     },
     "platforms": [
       "android",

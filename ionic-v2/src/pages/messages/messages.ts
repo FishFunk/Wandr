@@ -1,5 +1,5 @@
 import { Component, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
-import { Content, LoadingController, NavParams, Button } from 'ionic-angular';
+import { Content, LoadingController, NavParams, Button, Platform } from 'ionic-angular';
 import { Constants } from '../../helpers/constants';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { AngularFirestore, DocumentData } from 'angularfire2/firestore';
@@ -111,7 +111,7 @@ export class MessagesPage {
             let data = {};
             data[dateInMillis] = <IMessage> {
                 roomkey: this.chat.roomkey,
-                to_uid: this.uid == this.chat.userA_id ? this.chat.userA_id : this.chat.userB_id,
+                to_uid: this.uid == this.chat.userA_id ? this.chat.userB_id : this.chat.userA_id,
                 from_uid: this.uid, 
                 name: this.firstName, 
                 text: this.message, 
