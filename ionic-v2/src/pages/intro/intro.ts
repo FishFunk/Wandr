@@ -51,8 +51,6 @@ export class IntroPage {
           loadingPopup.dismiss()
           console.log(error);
           this.presentAlert("Failed to login with Facebook");
-
-          this.next();
           // TODO: Prompt with 'retry' button?
         });
     }

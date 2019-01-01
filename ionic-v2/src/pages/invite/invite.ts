@@ -77,7 +77,7 @@ export class InvitePage {
   presentToast(message: string) {
     let toast = this.toastCtrl.create({
       message: message,
-      position: 'bottom',
+      position: 'top',
       duration: 1500
     });
     toast.present();

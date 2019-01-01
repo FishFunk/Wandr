@@ -23,7 +23,7 @@ export class ProfilePage {
   countries: any[] = [];
   selectedCountry: string;
   selectState: boolean = false;
-  secondConnectionCount: number;
+  secondConnectionCount: number = 0;
 
   private geocoderOptions: NativeGeocoderOptions = { useLocale: true, maxResults: 1 };
 

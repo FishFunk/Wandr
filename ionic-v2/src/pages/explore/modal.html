@@ -28,6 +28,9 @@
             </div>      
             <div [ngSwitch]="view">
                 <ion-list *ngSwitchCase="'first'">
+                    <div *ngIf="firstConnections.length == 0" class="container" text-center>
+                        <p>You have no first degree connections here... yet!</p>
+                    </div>
                     <button ion-item *ngFor="let user of firstConnections" (click)="onClickProfile(user)">
                         <ion-thumbnail item-start>
                             <img src="{{user.profile_img_url}}">                  
@@ -46,6 +49,9 @@
                     </button>
                 </ion-list>
                 <ion-list *ngSwitchCase="'second'">
+                    <div *ngIf="secondConnections.length == 0" class="container" text-center>
+                        <p>You have no second degree connections here... yet!</p>
+                    </div>
                     <button ion-item *ngFor="let user of secondConnections" (click)="onClickProfile(user)">
                         <ion-thumbnail item-start>
                             <img src="{{user.profile_img_url}}">
@@ -62,15 +68,6 @@
                         </div>
                         <p>{{user.bio}}</p>
                     </button>
-                </ion-list>
-
-                <ion-list *ngSwitchCase="'forum'">
-                    <ion-item>
-                        <ion-thumbnail item-start>
-                            <img src="../../assets/bg9.jpg">
-                        </ion-thumbnail>
-                        <h2>Hiking Group</h2>
-                    </ion-item>
                 </ion-list>
             </div>
         </ion-slide>
