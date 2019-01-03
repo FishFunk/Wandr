@@ -12,7 +12,7 @@
                 <ion-thumbnail item-start>
                     <img [src]="userId == chat.userA_id ? chat.userB_photoUrl : chat.userA_photoUrl">
                 </ion-thumbnail>
-                <div [class]="chat.unread ? 'unread' : ''">
+                <div [class]="getClass(chat)">
                     <span class="name">{{userId == chat.userA_id ? chat.userB_name : chat.userA_name}}</span><br>
                     <p>{{chat.lastMessage}}</p>
                 </div>

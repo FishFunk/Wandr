@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, LoadingController, ToastController } from 'ionic-angular';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
+import { Constants } from '../../helpers/constants';
 
 @IonicPage()
 @Component({
@@ -13,12 +15,46 @@ export class InvitePage {
   social network that enhances your travel experiences. Check it out!";
   imageSrc: "";
   shareUrl: "";
+  firstConnectionCount = 0;
+  secondConnectionCount = 0;
 
-  constructor(public navCtrl: NavController, 
-    public navParams: NavParams, 
+  constructor(
     public loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
-    private socialSharing: SocialSharing) {
+    private socialSharing: SocialSharing,
+    private firestoreDbHelper: FirestoreDbHelper) {
+  }
+
+  ionViewDidLoad(){
+    this.getConnectionCounts();
+  }
+
+  async getConnectionCounts(){
+
+    const loading = this.loadingCtrl.create();
+    loading.present();
+
+    const firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+    const facebookUid = window.localStorage.getItem(Constants.facebookUserIdKey);
+
+    const firstConnecitons = await this.firestoreDbHelper.ReadFirstConnections(firebaseUid)
+      .catch(error =>{
+        console.error(error);
+        loading.dismiss();
+        return Promise.resolve([]);
+      });
+    this.firstConnectionCount = firstConnecitons.length;
+
+    const secondConnecitons = await this.firestoreDbHelper
+      .ReadSecondConnections(facebookUid, firstConnecitons)
+      .catch(error =>{
+        console.error(error);
+        loading.dismiss();
+        return Promise.resolve([]);
+      });
+    this.secondConnectionCount = secondConnecitons.length;
+
+    loading.dismiss();
   }
 
   facebookShare(){
@@ -78,7 +114,7 @@ export class InvitePage {
     let toast = this.toastCtrl.create({
       message: message,
       position: 'top',
-      duration: 1500
+      duration: 2000
     });
     toast.present();
   }

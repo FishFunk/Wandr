@@ -92,9 +92,11 @@ export class MessagesPage {
             .collection('messages')
             .doc(this.chat.roomkey)
             .valueChanges();
-        
-        this.messagesObservable.subscribe(data =>{
+            
+        this.messagesObservable.subscribe(async data =>{
             this.messages = _.map(data, (obj, key)=> obj);
+            this.updateChatReadReceipt()
+                .catch(error => console.error(error));
         });
     }
 
@@ -104,6 +106,8 @@ export class MessagesPage {
         if (trimmedText.length > 0){
             let loading = this.loadingCtrl.create();
 
+            const isUserA = this.uid == this.chat.userA_id;
+
             // Use timestamp as key
             let dateInMillis = new Date().getTime().toString();
             
@@ -111,7 +115,7 @@ export class MessagesPage {
             let data = {};
             data[dateInMillis] = <IMessage> {
                 roomkey: this.chat.roomkey,
-                to_uid: this.uid == this.chat.userA_id ? this.chat.userB_id : this.chat.userA_id,
+                to_uid: isUserA ? this.chat.userB_id : this.chat.userA_id,
                 from_uid: this.uid, 
                 name: this.firstName, 
                 text: this.message, 
@@ -120,7 +124,9 @@ export class MessagesPage {
 
             let chatUpdate = {
                 lastMessage: this.message,
-                timestamp: dateInMillis
+                timestamp: dateInMillis,
+                userA_unread: !isUserA,
+                userB_unread: isUserA
             }
 
             this.message = '';
@@ -165,5 +171,19 @@ export class MessagesPage {
     private stopBubbleAndSendMessage(event) {
         this.stopBubble(event);
         this.sendMessage();
+    }
+
+    private async updateChatReadReceipt(){
+        // Mark chat as read
+        let chatUpdate;
+        if(this.uid == this.chat.userA_id){
+            chatUpdate = { userA_unread: false };
+        } else {
+            chatUpdate = { userB_unread: false };
+        }
+        return this.firestore
+            .collection('chats')
+            .doc(this.chat.roomkey)
+            .update(chatUpdate);
     }
 }

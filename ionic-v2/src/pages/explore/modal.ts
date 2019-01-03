@@ -89,9 +89,11 @@ export class ModalPage
       userA_id: this.currentUserId,
       userA_name: currentUserFirstName,
       userA_photoUrl: currentUserPhotoUrl,
+      userA_unread: true,
       userB_id: focusedConnectionUid,
       userB_name: this.focusedConnection.first_name,
       userB_photoUrl: this.focusedConnection.profile_img_url,
+      userB_unread: true,
       lastMessage: '',
       timestamp: new Date().getTime().toString()
     };

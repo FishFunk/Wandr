@@ -47,6 +47,18 @@ export class InboxPage {
     this.navCtrl.push(MessagesPage, { chat: chat }, { animate: true, direction: 'forward' });
   }
 
+  getClass(chat: IChat){
+    if(this.userId == chat.userA_id){
+      return chat.userA_unread ? 'unread' : '';
+    }
+    else if (this.userId == chat.userB_id){
+      return chat.userB_unread ? 'unread' : '';
+    } 
+    else {
+      return '';
+    }
+  }
+
   private async queryChats(roomkeys: string[]): Promise<any>{
 
     var promises = roomkeys.map((key)=> {

@@ -7,6 +7,8 @@ import { Tabs, Platform, ToastController } from 'ionic-angular';
 import { SettingsPage } from '../settings/settings';
 import { FcmProvider } from '../../providers/fcm/fcm';
 import { tap } from 'rxjs/operators';
+import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
+import { Constants } from '../../helpers/constants';
 
 @Component({
   selector: 'tabs-page',
@@ -24,11 +26,13 @@ export class TabsPage {
   tab5Root = SettingsPage;
 
   useFabButton: boolean;
+  badgeCount = 0;
 
   constructor(
     public toastCtrl: ToastController,
     public fcm: FcmProvider,
-    private platform: Platform) {
+    private platform: Platform,
+    private firestoreDbHelper: FirestoreDbHelper) {
 
     this.useFabButton = !this.platform.is('ios');
   }
@@ -37,15 +41,35 @@ export class TabsPage {
     this.fcm.getToken();
     this.fcm.listenToNotifications().pipe(
       tap(msg =>{
-        const toast = this.toastCtrl.create({
-          message: msg.body,
-          duration: 3000,
-          position: 'top'
-        });
-
-        toast.present();
+        const selectedTab = this.tabRef.getSelected();
+        if(selectedTab.tabTitle != 'inbox'){
+          const toast = this.toastCtrl.create({
+            message: msg.body,
+            duration: 3000,
+            position: 'top'
+          });
+  
+          toast.present();
+          this.badgeCount++;
+        } else {
+          this.updateBadgeCount();
+        }
       })
     ).subscribe();
+
+    this.updateBadgeCount();
+  }
+
+  private async updateBadgeCount(){
+    const firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+
+    return this.firestoreDbHelper.GetUnreadChatCount(firebaseUid)
+      .then((count)=>{
+        this.badgeCount = count;
+      })
+      .catch(error=>{
+        console.error(error);
+      });
   }
 
 

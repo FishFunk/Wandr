@@ -72,9 +72,11 @@ export class MockDataGenerator
             this.randomWord(),
             this.randomFirstName(),
             '',
+            true,
             this.randomWord(),
             this.randomFirstName(),
             '',
+            false,
             this.randomSentence(),
             new Date().getTime().toString());
             
