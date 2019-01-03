@@ -141,7 +141,7 @@ export class ProfilePage {
   }
 
   //***** start Bound Elements ***** //
-  private updateSearchResults(){
+  updateSearchResults(){
     if (this.autoComplete.input == '') {
       this.autoCompleteItems = [];
       return;
@@ -157,9 +157,35 @@ export class ProfilePage {
     });
   }
 
-  private selectSearchResult(item){
+  selectSearchResult(item){
     this.autoComplete.input = item.description;
     this.autoCompleteItems = [];
+  }
+
+  getGuruStatus(){
+
+    const friendCount = this.userData.friends.length;
+
+    if(friendCount < 10)
+    {
+      return "Newbie";
+    }
+    else if (friendCount > 10 && friendCount < 20)
+    {
+      return "Junior Explorer";
+    }
+    else if (friendCount > 20 && friendCount < 40)
+    {
+      return "Top Traveller";
+    }
+    else if (friendCount > 40 && friendCount < 50)
+    {
+      return "Master of Adventure";
+    }
+    else if (friendCount > 50)
+    {
+      return "Travel Guru";
+    }
   }
   //******* end Bound Elements ***** //
 
