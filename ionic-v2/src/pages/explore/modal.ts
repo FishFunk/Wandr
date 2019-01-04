@@ -1,5 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
-import { ViewController, NavParams, Slides, LoadingController } from "ionic-angular";
+import { ViewController, NavParams, Slides, LoadingController, ToastController } from "ionic-angular";
 import { IUser } from '../../models/user';
 import _ from "underscore";
 import { AngularFireFunctions } from "angularfire2/functions";
@@ -21,7 +21,6 @@ export class ModalPage
   focusedConnection = <IUser> {};
   showProfileSlide: boolean = false;
   disableMessageButton: boolean = false;
-  roomkey: string;
   currentUserId: string;
   locationStringFormat: string;
 
@@ -30,7 +29,8 @@ export class ModalPage
     params: NavParams,
     private firebaseFunctionsModule: AngularFireFunctions,
     private firestore: AngularFirestore,
-    private loadingCtrl: LoadingController) {
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController) {
       let firstConnections = params.get('firstConnections'); 
       let secondConnections = params.get('secondConnections');
       this.firstConnections = firstConnections;
@@ -48,12 +48,10 @@ export class ModalPage
     this.slides.lockSwipes(false);
     this.focusedConnection = user;
 
-    this.roomkey = this.currentUserId + '_' + this.focusedConnection.app_uid;
-
     // Enable or Disable message button and go to slide
-    this.firestore.collection('chats').doc(this.roomkey).get().toPromise()
-      .then((snapshot)=>{
-        if(snapshot.exists){
+    this._checkIfChatExists()
+      .then((doesExist)=>{
+        if(doesExist){
           // Chat with roomkey already exists, disable contact button
           this.disableMessageButton = true;
         } else {
@@ -98,18 +96,24 @@ export class ModalPage
       timestamp: new Date().getTime().toString()
     };
 
-    const sendMessage = this.firebaseFunctionsModule.functions.httpsCallable('createChat');
+    const createChat = this.firebaseFunctionsModule.functions.httpsCallable('createChat');
     
-    sendMessage(data).then((result)=>{
-      alert("Message sent!"); // TODO: Navigate to chat?
-      this.disableMessageButton = true;
-      loading.dismiss();
-    })
-    .catch(error=>{
-      console.error(error);
-      loading.dismiss();
-    });
-
+    createChat(data)
+      .then((result)=>{
+        this.disableMessageButton = true;
+        loading.dismiss();
+        // TODO: Navigate to new chat view?
+        const toast = this.toastCtrl.create({
+          message: "Message sent!",
+          position: 'top',
+          duration: 2000
+        });
+        toast.present();
+      })
+      .catch(error=>{
+        console.error(error);
+        loading.dismiss();
+      });
   }
 
   backSlide(){
@@ -121,5 +125,25 @@ export class ModalPage
 
   closeModal() {
     this.viewCtrl.dismiss();
+  }
+
+  private async _checkIfChatExists(){
+    // Check if chat exists to prevent duplicates
+    let possibleRoomkey = this.currentUserId + '_' + this.focusedConnection.app_uid;
+    let snapshot = await this.firestore.collection('chats').doc(possibleRoomkey).get().toPromise();
+    if(snapshot.exists){
+      // Chat with roomkey already exists
+      return true;
+    }
+    
+    possibleRoomkey = this.focusedConnection.app_uid + '_' + this.currentUserId;
+    snapshot = await this.firestore.collection('chats').doc(possibleRoomkey).get().toPromise();
+
+    if(snapshot.exists){
+      // Chat with roomkey already exists
+      return true;
+    }
+
+    return false;
   }
 }

@@ -5,6 +5,7 @@ import { MessagesPage } from './messages';
 import { Constants } from '../../helpers/constants';
 import { IUser } from '../../models/user';
 import { IChat } from '../../models/chat';
+import _ from 'underscore';
 
 @IonicPage()
 @Component({
@@ -71,13 +72,15 @@ export class InboxPage {
         return Promise.reject(error);
       });
     
+    let temp: IChat[] = [];
     this.chats = [];
     snapshots.forEach((snapshot)=> {
       if(snapshot.exists){
-        this.chats.push(<IChat> snapshot.data());
+        temp.push(<IChat> snapshot.data());
       }
     });
 
+    this.chats = _.sortBy(temp, (chat)=> +chat.timestamp * -1);
     return Promise.resolve();
   }
 }
