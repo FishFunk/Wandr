@@ -4,10 +4,10 @@ import { IonicPageModule } from 'ionic-angular';
 
 @NgModule({
   declarations: [
-    InboxPage,
+    InboxPage
   ],
   imports: [
-    IonicPageModule.forChild(InboxPage),
+    IonicPageModule.forChild(InboxPage)
   ],
   exports: [
     InboxPage

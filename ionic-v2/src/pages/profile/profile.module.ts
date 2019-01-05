@@ -4,10 +4,10 @@ import { IonicPageModule } from 'ionic-angular';
 
 @NgModule({
   declarations: [
-    ProfilePage,
+    ProfilePage
   ],
   imports: [
-    IonicPageModule.forChild(ProfilePage),
+    IonicPageModule.forChild(ProfilePage)
   ],
   exports: [
     ProfilePage

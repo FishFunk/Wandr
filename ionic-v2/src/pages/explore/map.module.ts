@@ -4,10 +4,10 @@ import { IonicPageModule } from 'ionic-angular';
 
 @NgModule({
   declarations: [
-    MapPage,
+    MapPage
   ],
   imports: [
-    IonicPageModule.forChild(MapPage),
+    IonicPageModule.forChild(MapPage)
   ],
   exports: [
     MapPage

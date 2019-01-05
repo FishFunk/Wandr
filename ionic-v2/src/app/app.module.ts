@@ -28,16 +28,18 @@ import { Facebook } from '@ionic-native/facebook/ngx';
 //***********  Tabs **************/
 import { TabsPage } from '../pages/tabs/tabs';
 
-//***********  Views **************/
-import { ProfilePage } from '../pages/profile/profile';
-import { InboxPage } from '../pages/messages/inbox';
-import { InvitePage } from '../pages/invite/invite';
-import { MapPage } from '../pages/explore/map';
-import { SettingsPage } from '../pages/settings/settings';
-import { MessagesPage } from '../pages/messages/messages';
+//***********  Page Modules **************/
+import { ProfilePageModule } from '../pages/profile/profile.module';
+import { InboxPageModule } from '../pages/messages/inbox.module';
+import { InvitePageModule } from '../pages/invite/invite.module';
+import { MapPageModule } from '../pages/explore/map.module';
+import { SettingsPageModule } from '../pages/settings/settings.module';
+import { MessagesPageModule } from '../pages/messages/messages.module';
+import { IntroPageModule } from '../pages/intro/intro.module';
+
+//*********** Modal Pages **************/
 import { ContactPage } from '../pages/settings/contact';
 import { AboutPage } from '../pages/settings/about';
-import { IntroPage } from '../pages/intro/intro';
 
 
 //*********** Provider **************/
@@ -67,15 +69,8 @@ export const config = {
 @NgModule({
   declarations: [
     MyApp,
-    IntroPage,
     TabsPage,
-    ProfilePage,
-    InboxPage,
-    InvitePage,
-    MapPage,
     ModalPage,
-    SettingsPage,
-    MessagesPage,
     ContactPage,
     AboutPage
   ],
@@ -90,20 +85,20 @@ export const config = {
     AngularFireAuthModule,
     AngularFireFunctionsModule,
     AngularFirestoreModule,
-    AngularFireModule.initializeApp(config)
+    AngularFireModule.initializeApp(config),
+    IntroPageModule,
+    ProfilePageModule,
+    InboxPageModule,
+    InvitePageModule,
+    MapPageModule,
+    SettingsPageModule,
+    MessagesPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    IntroPage,
     TabsPage,
-    ProfilePage,
-    InboxPage,
-    InvitePage,
-    MapPage,
     ModalPage,
-    SettingsPage,
-    MessagesPage,
     ContactPage,
     AboutPage
   ],

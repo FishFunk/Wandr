@@ -4,10 +4,10 @@ import { IonicPageModule } from 'ionic-angular';
 
 @NgModule({
   declarations: [
-    IntroPage,
+    IntroPage
   ],
   imports: [
-    IonicPageModule.forChild(IntroPage),
+    IonicPageModule.forChild(IntroPage)
   ],
   exports: [
     IntroPage
