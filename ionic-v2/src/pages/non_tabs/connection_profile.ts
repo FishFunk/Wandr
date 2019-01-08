@@ -6,6 +6,7 @@ import { Constants } from '../../helpers/constants';
 import { IChat } from '../../models/chat';
 import { AngularFireFunctions } from 'angularfire2/functions';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { Utils } from '../../helpers/utils';
  
 @Component({
   selector: 'connection-profile-page',
@@ -53,31 +54,8 @@ export class ConnectionProfilePage {
             });
     }
 
-    // TODO: Consolidate duplicate method (copied from Profile.ts)
-    getGuruStatus(){
-
-        const friendCount = this.userData.friends.length;
-    
-        if(friendCount < 10)
-        {
-          return "Newbie";
-        }
-        else if (friendCount > 10 && friendCount < 20)
-        {
-          return "Junior Explorer";
-        }
-        else if (friendCount > 20 && friendCount < 40)
-        {
-          return "Top Traveller";
-        }
-        else if (friendCount > 40 && friendCount < 50)
-        {
-          return "Master of Adventure";
-        }
-        else if (friendCount > 50)
-        {
-          return "Travel Guru";
-        }
+    getUserRank(){
+      return Utils.getUserRank(this.userData.friends.length);
     }
 
     onClickSendMessage(){

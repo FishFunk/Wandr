@@ -6,6 +6,7 @@ import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { Utils } from '../../helpers/utils';
 
 @IonicPage()
 @Component({
@@ -96,7 +97,7 @@ export class ProfilePage {
 
         // Always update email
         this.userData.email = fbUserData.email;
-        
+
         // Always update Facebook photo URL
         this.userData.profile_img_url = fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
       }
@@ -167,30 +168,8 @@ export class ProfilePage {
     this.autoCompleteItems = [];
   }
 
-  getGuruStatus(){
-
-    const friendCount = this.userData.friends.length;
-
-    if(friendCount < 10)
-    {
-      return "Newbie";
-    }
-    else if (friendCount > 10 && friendCount < 20)
-    {
-      return "Junior Explorer";
-    }
-    else if (friendCount > 20 && friendCount < 40)
-    {
-      return "Top Traveller";
-    }
-    else if (friendCount > 40 && friendCount < 50)
-    {
-      return "Master of Adventure";
-    }
-    else if (friendCount > 50)
-    {
-      return "Travel Guru";
-    }
+  getUserRank(){
+    return Utils.getUserRank(this.userData.friends.length);
   }
   //******* end Bound Elements ***** //
 

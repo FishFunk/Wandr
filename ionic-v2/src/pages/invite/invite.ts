@@ -3,6 +3,7 @@ import { IonicPage, LoadingController, ToastController } from 'ionic-angular';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Constants } from '../../helpers/constants';
+import { Utils } from '../../helpers/utils';
 
 @IonicPage()
 @Component({
@@ -55,6 +56,10 @@ export class InvitePage {
     this.secondConnectionCount = secondConnecitons.length;
 
     loading.dismiss();
+  }
+
+  getUserStatus(){
+    return Utils.getUserRank(this.firstConnectionCount);
   }
 
   facebookShare(){

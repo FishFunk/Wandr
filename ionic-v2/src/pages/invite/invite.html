@@ -8,9 +8,11 @@
 <ion-content>
     <ion-card text-center>
         <ion-card-header>
-            Grow Your Network!
+            <p>Grow Your Network to</p>
+            <p>Improve Your Rank!</p>
         </ion-card-header>    
         <ion-card-content>
+            <label>Rank:</label>&nbsp;<span>{{getUserStatus()}}</span><br>
             <label>1st Degree Connections:</label>&nbsp;<span>{{firstConnectionCount}}</span><br>
             <label>2nd Degree Connections:</label>&nbsp;<span>{{secondConnectionCount}}</span><br>
         </ion-card-content>     
@@ -18,31 +20,31 @@
     <ion-list>
         <ion-item>
             <button ion-item padding (click)="facebookShare()">
-                <ion-icon name="logo-facebook" item-start></ion-icon>
+                <ion-icon class="facebook_blue" name="logo-facebook" item-start></ion-icon>
                 Facebook
             </button>
         </ion-item>
         <ion-item>
         <button ion-item padding (click)="instagramShare()">
-            <ion-icon name="logo-instagram" item-start></ion-icon>
+            <ion-icon class="instagram_magenta" name="logo-instagram" item-start></ion-icon>
             Instagram
         </button>
     </ion-item>
         <ion-item>
         <button ion-item padding (click)="twitterShare()">
-            <ion-icon name="logo-twitter" item-start></ion-icon>
+            <ion-icon class="twitter_blue" name="logo-twitter" item-start></ion-icon>
             Twitter
         </button>
     </ion-item>
         <ion-item>
         <button ion-item padding (click)="smsShare()">
-            <ion-icon name="text" item-start></ion-icon>
+            <ion-icon class="message_blue" name="text" item-start></ion-icon>
             Message
         </button>
     </ion-item>
         <ion-item>
         <button ion-item padding (click)="whatsAppShare()">
-            <ion-icon name="logo-whatsapp" item-start></ion-icon>
+            <ion-icon class="whatsapp_green" name="logo-whatsapp" item-start></ion-icon>
             WhatsApp
         </button>
     </ion-item>
