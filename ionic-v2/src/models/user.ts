@@ -3,6 +3,7 @@ export interface IUser{
     facebook_uid: string;
     first_name: string;
     last_name: string;
+    email: string;
     bio?: string;
     location: ILocation;
     friends: Array<IFacebookFriend>;
@@ -69,6 +70,7 @@ export class User implements IUser{
         public facebook_uid: string,
         public first_name: string,
         public last_name: string,
+        public email: string,
         public location: ILocation,
         public friends: Array<IFacebookFriend>,
         public services: IUserServices,

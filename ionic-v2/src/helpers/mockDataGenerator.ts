@@ -28,6 +28,7 @@ export class MockDataGenerator
         id ? id : this.randomWord(), 
         this.randomFirstName(),
         this.randomLastName(),
+        this.randomSentence(),
         this.randomLocation(),
         [this.randomFacebookFriend(1,maxCount), this.randomFacebookFriend(1,maxCount)],
         this.randomServices(),

@@ -307,7 +307,7 @@ export class MapPage {
     controlText.innerHTML = 'Random';
     controlUI.appendChild(controlText);
 
-    // Setup the click event listeners: simply set the map to Chicago.
+    // Setup the click event listeners
     controlUI.addEventListener('click', ()=> {
       var keys = _.keys(this.locationMap);
       var randomIdx = _.random(0, keys.length - 1);

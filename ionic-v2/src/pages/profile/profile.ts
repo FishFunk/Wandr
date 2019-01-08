@@ -16,7 +16,7 @@ export class ProfilePage {
   googleAutoComplete: any;
   autoComplete: any = { input: '' };
   autoCompleteItems: any[] = [];
-  userData = new User('','','','',new Location(),[],new UserServices(),[],'','');
+  userData = new User('','','','', '',new Location(),[],new UserServices(),[],'','');
   editMode: boolean = false;
   loadingPopup;
   countries: any[] = [];
@@ -78,10 +78,13 @@ export class ProfilePage {
         // Get Facebook friends list
         this.userData.friends = await this.facebookApi.getFriendList(facebookUid);
 
+        // Email
+        this.userData.email = fbUserData.email;
+
         // Get Facebook photo URL
         this.userData.profile_img_url = fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
         
-        // Create user ref
+        // Create new user ref
         const newUsr = this.getPlainUserObject();
         await this.firestore.collection('users').doc(firebaseUid).set(newUsr);
       } else {
@@ -91,6 +94,9 @@ export class ProfilePage {
         // Always update Facebook friends list
         this.userData.friends = await this.facebookApi.getFriendList(facebookUid);
 
+        // Always update email
+        this.userData.email = fbUserData.email;
+        
         // Always update Facebook photo URL
         this.userData.profile_img_url = fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
       }
@@ -110,7 +116,7 @@ export class ProfilePage {
       await this.writeUserDataToDb();
     } else {
       // Debug or Browser path
-      this.userData = new User('', '', 'Johnny', 'Appleseed', 
+      this.userData = new User('', '', 'Johnny', 'Appleseed', '',
         { stringFormat: 'Washington, DC', latitude: '', longitude: ''}, 
         [],
         { host: true, tips: true, meetup: true, emergencyContact: true},
@@ -279,6 +285,7 @@ export class ProfilePage {
       facebook_uid: this.userData.facebook_uid,
       first_name: this.userData.first_name,
       last_name: this.userData.last_name,
+      email: this.userData.email,
       bio: this.userData.bio,
       location: Object.assign({}, this.userData.location),
       friends: this.userData.friends.map((obj)=> {return Object.assign({}, obj)}),

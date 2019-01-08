@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, NavParams, ToastController } from 'ionic-angular';
+import { LoadingController, NavParams, ToastController } from 'ionic-angular';
 import { IUser } from '../../models/user';
 import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
