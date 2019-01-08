@@ -3,7 +3,6 @@ export interface IUser{
     facebook_uid: string;
     first_name: string;
     last_name: string;
-    age?: number;
     bio?: string;
     location: ILocation;
     friends: Array<IFacebookFriend>;
@@ -12,12 +11,21 @@ export interface IUser{
     last_login: string;
     settings: IUserSettings;
     profile_img_url?: string;
+    mutualConnectionInfo?: IMutualConnectionInfo;
 }
 
 export interface ILocation{
     stringFormat: string; // TODO: Need to ensure consistent format and data validation
     latitude: string;
     longitude: string;
+}
+
+export interface IMutualConnectionInfo {
+    app_uid: string;
+    facebook_uid: string;
+    first_name: string;
+    last_name: string;
+    profile_img_url: string;
 }
 
 export interface IUserServices{
@@ -67,7 +75,6 @@ export class User implements IUser{
         public roomkeys: string[],
         public last_login: string,
         public profile_img_url: string,
-        public age: number,
         public bio: string = '',
         public settings: any = {},
         public ghost_mode: boolean = false)

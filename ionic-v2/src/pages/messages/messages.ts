@@ -1,8 +1,8 @@
 import { Component, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
-import { Content, LoadingController, NavParams, Button, Platform } from 'ionic-angular';
+import { Content, LoadingController, NavParams, Button } from 'ionic-angular';
 import { Constants } from '../../helpers/constants';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
-import { AngularFirestore, DocumentData } from 'angularfire2/firestore';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription, Observable } from 'rxjs';
 import { IMessage, IChat } from '../../models/chat';
 import _ from 'underscore';

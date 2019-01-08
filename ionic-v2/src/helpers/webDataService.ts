@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IUser } from '../models/user';
 import { MockDataGenerator } from './mockDataGenerator';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { IChat, IMessage } from '../models/chat';
-import { Observable } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { HttpHeaders } from '@angular/common/http';
 import { _throw } from 'rxjs/observable/throw';
 
 @Injectable()
@@ -14,7 +10,7 @@ export class WebDataService {
     requestOptions: any;
     mockDataGenerator: MockDataGenerator;
  
-    constructor(private http: HttpClient) {
+    constructor() {
       this.mockDataGenerator = new MockDataGenerator();
       let headers = new HttpHeaders();
       headers.append("Content-Type", "application/json");

@@ -4,7 +4,6 @@ import { Location, UserServices, User, IUser } from '../../models/user';
 import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
-import _ from 'underscore';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { AngularFirestore } from 'angularfire2/firestore';
 
@@ -17,7 +16,7 @@ export class ProfilePage {
   googleAutoComplete: any;
   autoComplete: any = { input: '' };
   autoCompleteItems: any[] = [];
-  userData = new User('','','','',new Location(),[],new UserServices(),[],'','',0);
+  userData = new User('','','','',new Location(),[],new UserServices(),[],'','');
   editMode: boolean = false;
   loadingPopup;
   countries: any[] = [];
@@ -118,7 +117,6 @@ export class ProfilePage {
         [],
         '',
         '../../assets/avatar_man.png',
-        28,
         'This is fake data, for running in the browser.');
     }
     this.loadingPopup.dismiss();
@@ -131,11 +129,12 @@ export class ProfilePage {
       return this.saveProfileEdits()
         .then(()=>{
           this.loadingPopup.dismiss();
+          this.presentToast("top", "Profile updates saved!");
         })
         .catch(error=>{
-          alert("Failed to update profile info");
           console.error(error);
           this.loadingPopup.dismiss();
+          this.presentToast("top", "Failed to save profile updates");
         });
     }
   }

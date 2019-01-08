@@ -66,7 +66,7 @@
                             &nbsp;
                             <ion-icon class="mini-icon" *ngIf="user.services.emergencyContact" name="call"></ion-icon>
                         </div>
-                        <p>{{user.bio}}</p>
+                        <p>Mutual friend: {{user.mutualConnectionInfo.first_name}} {{user.mutualConnectionInfo.last_name}}</p>
                     </button>
                 </ion-list>
             </div>
@@ -79,8 +79,10 @@
                     </ion-avatar>
                     <h1>{{focusedConnection.first_name}} {{focusedConnection.last_name}}</h1>
                 </ion-card-header>
-                <strong>Age: </strong><span>{{focusedConnection.age}}</span><br>
                 <strong>Lives in: </strong><span>{{focusedConnection.location.stringFormat}}</span>
+                <div *ngIf="focusedConnection.mutualConnectionInfo">
+                    <strong>Mutual friend: </strong><span>{{focusedConnection.mutualConnectionInfo.first_name}} {{focusedConnection.mutualConnectionInfo.last_name}}</span>
+                </div>
                 <hr>
                 <ion-list no-lines text-wrap>
                     <ion-list-header>
