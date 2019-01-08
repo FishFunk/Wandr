@@ -19,7 +19,7 @@ export class FacebookApi{
   
     public getUser(userId, accessToken)
     {
-        return this.executeApiCall(`/${userId}?fields=id,name,link,gender,picture.width(150).height(150),location&access_token=${accessToken}`);
+        return this.executeApiCall(`/${userId}?fields=id,name,email,link,gender,picture.width(150).height(150),location&access_token=${accessToken}`);
     }
 
     public getProfilePhoto(userId): Promise<string>

@@ -36,6 +36,8 @@ import { MapPageModule } from '../pages/explore/map.module';
 import { SettingsPageModule } from '../pages/settings/settings.module';
 import { MessagesPageModule } from '../pages/messages/messages.module';
 import { IntroPageModule } from '../pages/intro/intro.module';
+import { ConnectionListModule } from '../pages/non_tabs/connection_list.module';
+import { ConnectionProfileModule } from '../pages/non_tabs/connection_profile.module';
 
 //*********** Modal Pages **************/
 import { ContactPage } from '../pages/settings/contact';
@@ -44,7 +46,6 @@ import { AboutPage } from '../pages/settings/about';
 
 //*********** Provider **************/
 import { WebDataService } from '../helpers/webDataService';
-import { ModalPage } from '../pages/explore/modal';
 import { FacebookApi } from '../helpers/facebookApi';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { FcmProvider } from '../providers/fcm/fcm';
@@ -70,7 +71,6 @@ export const config = {
   declarations: [
     MyApp,
     TabsPage,
-    ModalPage,
     ContactPage,
     AboutPage
   ],
@@ -92,13 +92,14 @@ export const config = {
     InvitePageModule,
     MapPageModule,
     SettingsPageModule,
-    MessagesPageModule
+    MessagesPageModule,
+    ConnectionListModule,
+    ConnectionProfileModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     TabsPage,
-    ModalPage,
     ContactPage,
     AboutPage
   ],

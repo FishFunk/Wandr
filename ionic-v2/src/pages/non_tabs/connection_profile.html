@@ -1,0 +1,69 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title><ion-icon name="md-globe">&nbsp;Travel Guru</ion-icon></ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content padding>
+    <ion-avatar>
+        <img src="{{userData.profile_img_url}}"/>
+    </ion-avatar>
+    <h1>{{userData.first_name}} {{userData.last_name}}</h1>
+    <div>
+        <strong>Lives in: </strong><span>{{userData.location.stringFormat}}</span>
+    </div>
+    <div *ngIf="userData.mutualConnectionInfo">
+        <strong>Mutual friend: </strong><span>{{userData.mutualConnectionInfo.first_name}} {{userData.mutualConnectionInfo.last_name}}</span>
+    </div>
+    <div>
+        <strong>Rank: </strong><span>{{getGuruStatus()}}</span>
+    </div>
+    <hr>
+
+    <!--***********  About  ***********-->
+    <ion-list no-lines text-wrap>
+        <ion-list-header>
+            <h2>About</h2>
+        </ion-list-header>
+        <ion-item>
+            <p>{{userData.bio}}</p>
+        </ion-item>
+    </ion-list>
+
+    <!--***********  Services  ***********-->
+    <ion-list no-lines text-wrap>
+        <ion-list-header>
+        <h2>Services</h2>
+        </ion-list-header>
+        <ion-item>
+        <ion-grid text-center item-content>
+            <ion-row>
+                <ion-col *ngIf="userData.services.host">
+                    <ion-icon name="home"></ion-icon><br>
+                    <p>Host</p>
+                </ion-col>
+                <ion-col *ngIf="userData.services.tips">
+                    <ion-icon name="information-circle"></ion-icon><br>
+                    <p>Local Tips</p>
+                </ion-col>
+                <ion-col *ngIf="userData.services.meetup">
+                    <ion-icon name="contacts"></ion-icon><br>
+                    <p>Meetup</p>
+                </ion-col>
+                <ion-col *ngIf="userData.services.emergencyContact">
+                    <ion-icon name="call"></ion-icon><br>
+                    <p>Emergency Contact</p>
+                </ion-col>            
+            </ion-row>
+        </ion-grid> 
+        </ion-item>
+        <ion-item text-center>
+            <button ion-button large icon-end (click)="onClickSendMessage()" [disabled]="disableMessageButton">
+                <div *ngIf="!disableMessageButton">
+                    <span>Send Message</span>
+                    <ion-icon name="text"></ion-icon>
+                </div>
+                <span *ngIf="disableMessageButton">Chat Created</span>
+            </button>
+        </ion-item>
+    </ion-list>
+</ion-content>    

@@ -1,11 +1,13 @@
 import { Component, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
-import { Content, LoadingController, NavParams, Button } from 'ionic-angular';
+import { Content, LoadingController, NavParams, Button, NavController } from 'ionic-angular';
 import { Constants } from '../../helpers/constants';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription, Observable } from 'rxjs';
 import { IMessage, IChat } from '../../models/chat';
 import _ from 'underscore';
+import { ConnectionProfilePage } from '../non_tabs/connection_profile';
+import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 
  
 @Component({
@@ -18,6 +20,7 @@ export class MessagesPage {
     @ViewChildren('messageListItems') messageListItems: QueryList<ElementRef>;
     @ViewChild('sendButton') sendButton: Button;
 
+    headerName: string;
     uid: string;
     messages: Array<any> = [];
     message: string = '';
@@ -32,11 +35,20 @@ export class MessagesPage {
     constructor(
         params: NavParams,
         private loadingCtrl: LoadingController,
+        private navCtrl: NavController,
         private keyboard: Keyboard,
-        private firestore: AngularFirestore) {
+        private firestore: AngularFirestore,
+        private firestoreDbHelper: FirestoreDbHelper) {
         
         this.chat = params.get('chat');
         this.uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+
+        if(this.uid == this.chat.userA_id){
+            this.headerName = this.chat.userB_name;
+        } else {
+            this.headerName = this.chat.userA_name;
+        }
+
         this.firstName = window.localStorage.getItem(Constants.userFirstNameKey);
     }
 
@@ -98,6 +110,30 @@ export class MessagesPage {
             this.updateChatReadReceipt()
                 .catch(error => console.error(error));
         });
+    }
+
+    onClickProfile(){
+        const loading = this.loadingCtrl.create();
+        loading.present();
+
+        let targetUid;
+        if(this.uid == this.chat.userA_id){
+            targetUid = this.chat.userB_id;
+        } else {
+            targetUid = this.chat.userA_id;
+        }
+
+        this.firestoreDbHelper.ReadUserByFirebaseUid(targetUid)
+            .then((user)=>{
+                loading.dismiss();
+                this.navCtrl.push(ConnectionProfilePage, 
+                    { user: user }, 
+                    { animate: true, direction: 'forward' });
+            })
+            .catch(error=>{
+                console.error(error);
+                loading.dismiss();
+            });
     }
 
     async sendMessage() {

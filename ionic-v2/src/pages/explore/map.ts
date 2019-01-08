@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController, LoadingController, Loading } from 'ionic-angular';
+import { NavController, LoadingController, Loading } from 'ionic-angular';
 import { IUser } from '../../models/user';
-import { ModalPage } from './modal';
 import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
+import { ConnectionListPage } from '../non_tabs/connection_list';
 
 declare var google;
  
@@ -66,7 +66,6 @@ export class MapPage {
   userMap: _.Dictionary<any> // First & Second degree connections mapped by string location
 
   constructor(public navCtrl: NavController,
-    private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private firestoreDbHelper: FirestoreDbHelper) {
 
@@ -192,7 +191,11 @@ export class MapPage {
       return obj == latLng;
     });
 
-    this.presentPopover(e, this.userMap[str_location]['1'], this.userMap[str_location]['2']);
+    const firstConnections = this.userMap[str_location]['1'];
+    const secondConnections = this.userMap[str_location]['2'];
+    this.navCtrl.push(ConnectionListPage, 
+      { firstConnections: firstConnections, secondConnections: secondConnections, locationStringFormat: str_location }, 
+      { animate: true, direction: 'forward' });
   }
 
   private initHeatMap(geoData: google.maps.LatLng[]){
@@ -214,12 +217,6 @@ export class MapPage {
         'rgba(103, 0, 169, 1)'
       ]
     });
-  }
-
-  private presentPopover(myEvent, firstConnections: IUser[], secondConnections: IUser[]) {
-    let popover = this.modalCtrl.create(ModalPage,
-      { firstConnections: firstConnections, secondConnections: secondConnections });
-    popover.present({ ev: myEvent });
   }
 
   private bindEvents(){
