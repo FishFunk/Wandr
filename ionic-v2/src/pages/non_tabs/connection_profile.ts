@@ -17,7 +17,8 @@ export class ConnectionProfilePage {
     secondConnectionCount: number;
     currentUserId: string;
     userData: IUser;
-    disableMessageButton: boolean = false;
+    showChatButton: boolean;
+    disableMessageButton: boolean;
 
     constructor(
         params: NavParams,
@@ -27,6 +28,7 @@ export class ConnectionProfilePage {
         private firebaseFunctionsModule: AngularFireFunctions){
 
         this.userData = params.get('user');
+        this.showChatButton = params.get('showChatButton');
         this.currentUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
 
     }

@@ -56,7 +56,7 @@
             </ion-row>
         </ion-grid> 
         </ion-item>
-        <ion-item text-center>
+        <ion-item text-center *ngIf="showChatButton">
             <button ion-button large icon-end (click)="onClickSendMessage()" [disabled]="disableMessageButton">
                 <div *ngIf="!disableMessageButton">
                     <span>Send Message</span>

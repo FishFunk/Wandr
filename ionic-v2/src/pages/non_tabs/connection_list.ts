@@ -26,6 +26,8 @@ export class ConnectionListPage {
     }
 
     onClickProfile(user: IUser){
-        this.navCtrl.push(ConnectionProfilePage, { user: user }, { animate: true, direction: 'forward' });
+        this.navCtrl.push(ConnectionProfilePage, 
+            { user: user, showChatButton: true }, 
+            { animate: true, direction: 'forward' });
     }
 }

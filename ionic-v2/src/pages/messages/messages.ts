@@ -127,7 +127,7 @@ export class MessagesPage {
             .then((user)=>{
                 loading.dismiss();
                 this.navCtrl.push(ConnectionProfilePage, 
-                    { user: user }, 
+                    { user: user, showChatButton: false }, 
                     { animate: true, direction: 'forward' });
             })
             .catch(error=>{
