@@ -12,24 +12,25 @@
             <p>Improve Your Rank!</p>
         </ion-card-header>    
         <ion-card-content>
-            <label>Rank:</label>&nbsp;<span>{{getUserStatus()}}</span><br>
+            <label>Current Rank:</label>&nbsp;<span>{{getUserStatus()}}</span><br>
             <label>1st Degree Connections:</label>&nbsp;<span>{{firstConnectionCount}}</span><br>
             <label>2nd Degree Connections:</label>&nbsp;<span>{{secondConnectionCount}}</span><br>
-        </ion-card-content>     
+            <hr>
+        </ion-card-content>   
+        <ion-item no-lines text-center>
+            <button ion-button large clear icon-only (click)="facebookShare()">
+                <ion-icon class="facebook_blue" name="logo-facebook"></ion-icon>
+            </button>
+            <button ion-button large clear icon-only (click)="twitterShare()">
+                <ion-icon class="twitter_blue" name="logo-twitter"></ion-icon>
+            </button>
+            <button ion-button large clear icon-only (click)="smsShare()">
+                <ion-icon class="message_blue" name="text"></ion-icon>
+            </button>
+            <button ion-button large clear icon-only (click)="whatsAppShare()">
+                <ion-icon class="whatsapp_green" name="logo-whatsapp"></ion-icon>
+            </button>
+        </ion-item>  
     </ion-card>
-    <ion-item no-lines text-center>
-        <button ion-button large clear icon-only (click)="facebookShare()">
-            <ion-icon class="facebook_blue" name="logo-facebook"></ion-icon>
-        </button>
-        <button ion-button large clear icon-only (click)="twitterShare()">
-            <ion-icon class="twitter_blue" name="logo-twitter"></ion-icon>
-        </button>
-        <button ion-button large clear icon-only (click)="smsShare()">
-            <ion-icon class="message_blue" name="text"></ion-icon>
-        </button>
-        <button ion-button large clear icon-only (click)="whatsAppShare()">
-            <ion-icon class="whatsapp_green" name="logo-whatsapp"></ion-icon>
-        </button>
-    </ion-item>
 </ion-content>
   
