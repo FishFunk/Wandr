@@ -12,6 +12,7 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { Firebase } from '@ionic-native/firebase/ngx';
 import { Badge } from '@ionic-native/badge/ngx';
+import { Contacts } from '@ionic-native/contacts/ngx';
 
 import { MyApp } from './app.component';
 
@@ -118,7 +119,8 @@ export const config = {
     Device,
     Firebase,
     FcmProvider,
-    Badge
+    Badge,
+    Contacts
   ]
 })
 export class AppModule {}

@@ -47,6 +47,9 @@
         </config-file>
     </platform>
     <platform name="ios">
+        <config-file parent="NSContactsUsageDescription" target="*-Info.plist">
+            <string>Travel Guru would like to access your contacts</string>
+        </config-file>
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -98,6 +101,7 @@
     <plugin name="cordova-plugin-statusbar" spec="~2.4.2" />
     <plugin name="cordova-plugin-firebase" spec="~2.0.5" />
     <plugin name="cordova-plugin-badge" spec="~0.8.8" />
+    <plugin name="cordova-plugin-contacts" spec="~3.0.1" />
     <engine name="android" spec="^7.1.4" />
     <engine name="ios" spec="~4.5.5" />
 </widget>

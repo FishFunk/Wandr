@@ -4,6 +4,8 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Constants } from '../../helpers/constants';
 import { Utils } from '../../helpers/utils';
+import { Contacts } from '@ionic-native/contacts/ngx';
+import _ from 'underscore';
 
 @IonicPage()
 @Component({
@@ -23,7 +25,8 @@ export class InvitePage {
     public loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private socialSharing: SocialSharing,
-    private firestoreDbHelper: FirestoreDbHelper) {
+    private firestoreDbHelper: FirestoreDbHelper,
+    private contactsNative: Contacts) {
   }
 
   ionViewDidLoad(){
@@ -101,17 +104,24 @@ export class InvitePage {
   }
 
   smsShare(){
-    // TODO: I think need to open contacts and select one or multiple numbers to share with
-    this.presentToast("Not yet implemented");
+    this.contactsNative.pickContact()
+      .then(contact=>{
+        if(contact){
+          let targetPhone;
+          let targets = _.filter(contact.phoneNumbers, (phoneObj)=>phoneObj.type=="mobile");
+          targetPhone = _.first(targets);
+          
+          if(!targetPhone){
+            targetPhone = _.first(contact.phoneNumbers);
+          }
 
-    // this.socialSharing.shareViaSMS(this.shareMessage, "mobile-no")
-    // .then(()=>{
-
-    // })
-    // .catch((error)=>{
-    //   console.log(error);
-    //   this.presentToast('Unable to share via SMS');
-    // });
+          this.socialSharing.shareViaSMS(this.shareMessage, targetPhone.value)
+            .catch(error=>console.error(error));
+        }
+      })
+      .catch(error=> {
+        console.error(error);
+      });
   }
 
 
