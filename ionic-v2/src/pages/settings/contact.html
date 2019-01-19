@@ -15,11 +15,11 @@
             </ion-select>
         </ion-item>
         <ion-item>
-            <ion-textarea [(ngModel)]="text" placeholder="Enter your text here...">
+            <ion-textarea [(ngModel)]="text" placeholder="Enter your comments here...">
             </ion-textarea>
         </ion-item>
-        <ion-item>
-            <button ion-button round large center (click)="onSubmit()">
+        <ion-item text-center no-lines>
+            <button ion-button round large (click)="onSubmit()">
                 Submit&nbsp;&nbsp;<ion-icon name="checkmark"></ion-icon>
             </button>
         </ion-item>
