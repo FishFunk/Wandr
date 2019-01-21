@@ -95,21 +95,13 @@ export class FirestoreDbHelper {
       let firstConnectionFacebookIds = [];
       let secondConnectionFacebookIds = [];
       let secondConnections: IUser[] = [];
-      let facebookIdToMutualMap: _.Dictionary<IMutualConnectionInfo> = {};
   
-      _.each(firstConnections, (user)=>{
-        firstConnectionFacebookIds.push(user.facebook_uid);
-        _.each(user.friends, (friendObj) => {
+      _.each(firstConnections, (firstConnectionUser)=>{
+        firstConnectionFacebookIds.push(firstConnectionUser.facebook_uid);
+        _.each(firstConnectionUser.friends, (secondConnectionFriendObj) => {
           // Exclude current user
-          if(friendObj.id != targetFacebookId){
-            secondConnectionFacebookIds.push(friendObj.id);
-            facebookIdToMutualMap[friendObj.id] = {
-              app_uid: user.app_uid,
-              facebook_uid: user.facebook_uid,
-              first_name: user.first_name,
-              last_name: user.last_name,
-              profile_img_url: user.profile_img_url
-            };
+          if(secondConnectionFriendObj.id != targetFacebookId){
+            secondConnectionFacebookIds.push(secondConnectionFriendObj.id);
           }
         });
       });
@@ -136,7 +128,6 @@ export class FirestoreDbHelper {
         docSnapshots.forEach((snapshot)=>{
           if(snapshot.exists){
             let usr = <IUser> snapshot.data();
-            usr.mutualConnectionInfo = facebookIdToMutualMap[usr.facebook_uid];
             secondConnections.push(usr);
           }
         });

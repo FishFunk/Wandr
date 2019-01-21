@@ -12,7 +12,6 @@ export interface IUser{
     last_login: string;
     settings: IUserSettings;
     profile_img_url?: string;
-    mutualConnectionInfo?: IMutualConnectionInfo;
 }
 
 export interface ILocation{

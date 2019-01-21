@@ -105,7 +105,8 @@ export class ProfilePage {
       // Cache some user data
       window.localStorage.setItem(Constants.userFirstNameKey, this.userData.first_name);
       window.localStorage.setItem(Constants.userLastNameKey, this.userData.last_name);
-      localStorage.setItem(Constants.profileImageUrlKey, this.userData.profile_img_url);
+      window.localStorage.setItem(Constants.profileImageUrlKey, this.userData.profile_img_url);
+      window.localStorage.setItem(Constants.userFacebookFriendsKey, JSON.stringify(this.userData.friends));
 
       // Calculate second degree connections
       this.secondConnectionCount = await this.countSecondConnections();

@@ -1,0 +1,18 @@
+page-conneciton-profile{
+    .profile-image {
+        display: block;
+        border-radius: 50%;
+        width: auto;
+        height: 110px;
+        margin: 0 auto 0;
+        border-width: 2px;
+        border-style: solid;
+        border-color: rgba(255, 255, 255,0.1);
+        border-image: initial;
+    }
+
+    .profile-name {
+        color: #444;
+        font-size: 22px;
+    }
+}
