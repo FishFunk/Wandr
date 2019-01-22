@@ -1,7 +1,7 @@
 <ion-header >
     <ion-navbar>
         <ion-title>Chat with {{headerName}}</ion-title>
-        <ion-buttons end>
+        <ion-buttons *ngIf="showProfileButton" end>
             <button ion-button clear (click)="onClickProfile()">Profile</button>
         </ion-buttons>
     </ion-navbar>

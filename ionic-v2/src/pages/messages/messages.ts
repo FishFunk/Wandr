@@ -26,6 +26,7 @@ export class MessagesPage {
     message: string = '';
     firstName: string;
     chat: IChat;
+    showProfileButton: boolean;
     messagesObservable: Observable<any>;
 
     keyboardShowObservable: Subscription;
@@ -41,6 +42,7 @@ export class MessagesPage {
         private firestoreDbHelper: FirestoreDbHelper) {
         
         this.chat = params.get('chat');
+        this.showProfileButton = !!params.get('showProfileButton');
         this.uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
 
         if(this.uid == this.chat.userA_id){

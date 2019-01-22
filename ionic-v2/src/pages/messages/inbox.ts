@@ -45,7 +45,9 @@ export class InboxPage {
   }
 
   onClickChat(chat: IChat){
-    this.navCtrl.push(MessagesPage, { chat: chat }, { animate: true, direction: 'forward' });
+    this.navCtrl.push(MessagesPage, 
+      { chat: chat, showProfileButton: true }, 
+      { animate: true, direction: 'forward' });
   }
 
   getClass(chat: IChat){

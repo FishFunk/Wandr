@@ -57,12 +57,17 @@
             </ion-grid> 
         </ion-item>
         <ion-item text-center *ngIf="showChatButton">
-            <button ion-button large icon-end (click)="onClickSendMessage()" [disabled]="disableMessageButton">
-                <div *ngIf="!disableMessageButton">
+            <button *ngIf="!chatExists" ion-button large icon-end (click)="onClickSendMessage()">
+                <div>
                     <span>Send Message</span>
                     <ion-icon name="text"></ion-icon>
                 </div>
-                <span *ngIf="disableMessageButton">Chat Created</span>
+            </button>
+            <button *ngIf="chatExists" ion-button large icon-end (click)="onClickGoToChat()">
+                <div>
+                    <span>Go To Chat</span>
+                    <ion-icon name="text"></ion-icon>
+                </div>
             </button>
         </ion-item>
     </ion-list>
