@@ -24,7 +24,7 @@ exports.newUserNotification =
             (Location: ' + userLoc + ') \
             (Friends:' + JSON.stringify(friendsToNotify));
 
-        if(!friendsToNotify || friendsToNotify.length == 0){
+        if(!friendsToNotify || friendsToNotify.length === 0){
             return Promise.resolve();
         }
 
@@ -55,7 +55,7 @@ exports.newUserNotification =
             return Promise.reject(error);
         });
 
-        let appIdsToNotify = _collectDataFromSnapshots(
+        const appIdsToNotify = _collectDataFromSnapshots(
             querySnapshots, 'app_uid', 'newUserNotification - query user IDs');
         console.trace('UIDs to be notified: ' + JSON.stringify(appIdsToNotify));
 
@@ -73,7 +73,7 @@ exports.newUserNotification =
             return Promise.reject(error);
         });
 
-        let notificationTokens = _collectDataFromSnapshots(
+        const notificationTokens = _collectDataFromSnapshots(
             querySnapshots, 'token', 'newUserNotification - query tokens');
         console.trace('Notification tokens: ' + JSON.stringify(notificationTokens));
 
@@ -115,7 +115,7 @@ exports.createChat = functions.https.onCall((chatData, context) => {
 
     return _createChatRoom(chatData)
         .then(()=>{
-            return { status: 'chat-created' };
+            return chatData;
         })
         .catch(error => {
             throw error;
@@ -255,12 +255,12 @@ async function _createAndSendFirstMessage(chatData: any){
 }
 
 function _collectDataFromSnapshots(querySnapshots: QuerySnapshot[], property: string, traceFunctionName: string){
-    let data = [];
+    const data = [];
     querySnapshots.forEach((querySnapshot)=> {
-        let docSnapshots = querySnapshot.docs;        
+        const docSnapshots = querySnapshot.docs;        
         docSnapshots.forEach((snapshot)=>{
           if(snapshot.exists){
-            let doc = snapshot.data();
+            const doc = snapshot.data();
             console.trace(traceFunctionName + ': ' + JSON.stringify(doc));
             console.trace(traceFunctionName + ': ' + doc[property]);
             data.push(doc[property]);

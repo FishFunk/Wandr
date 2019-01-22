@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "wanderlust-app-220020",
+  "private_key_id": "8b6593aa54004cb114c01137fcf6ae0e20673ec1",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCsXbRhhnHXns7q\nVqw5iEaBkFWEMZQL7kVvlBJvq4IKbLM/jvbTSybMAtV4h72/ya7w4UpITexMRA0h\ns5J6dAICmmK3/cHZ4IVtDYxos7mQ47eA8moo4CixJr5C/KjbZcLHyBus38ddIh80\n35PPA6LpAhx8cuTQmRgW1wn0/cbml0lL9B+qkAUrxZ1KNFRrrB9DWExGFXM3YseH\ngEvU+2jcZfxTce9ShcqAr56svE8GGkHXIFnUU9PAF5fp/463r1orhsEO+oQrndqk\nminbX9zzQ58ig4ykPOvUHOZgvpWZS10+1vfmQ7cOy2cl8rb+Hz2QHIGaBZ3MinFp\n6p88m4gZAgMBAAECggEAGj8klgsub6p3kJiFHjehoN4VH42bIRv1x9FQ419G7IZz\n3xRKgo85h6xQzEtDOh6gfH6Z3Ju9BToBk+WvwuTCX5oZuTGzYJV/S8VZ4aGoeqcq\nTMDdKH9FwwAGzdWCcvIycFCI4lCrH4PwI5F+BPJlTrzrEIpATIFbeTLiicNRE9Cq\nZzegc3p8omYEYTx0MA6MwkRmcR+hSxU2As0p3cUGSKE/AoWGJ2fcmVTlQ5MR6Mfs\nyCYsrEjzLmxUNt65F71vh2XANc2jbXwI+GVV5Hi5rKOi0XXj1iJwaJ6XWak21hJI\n+/9+L4wARGs7vF7cR1j4iD/DZKbJWqHuzhS4YLK/uQKBgQDn8stluS7RLejSiPL7\nxg7RGT+x0cp8JbdLLJlVX4XzKwRrzKA2DnXSPk/OakTQMWrz5wxk0bGF+AhuaWZr\nRqWnWFcIJ78/6KHUxcts8ctfsOH7lvz9dnnIy6ayIB99T612UJUFaMYjrImb0AFs\n7i86g+kvWOpl6zSVOwjU9NyqhQKBgQC+PULZY+hC1ak12RP0utX9TKIb0dVJN0oO\nCSsn5KCKuVu5mjYzTAo5NOgkSROay8MOKd/V6FZB8jF+nM4I+BKHaYdwRD0lbJF5\n34SbffbjjW7TS3qFRrcUOuHEJOb17nHD7uzXDcGCL5FGXORUty+e3mCbeA/4L9nB\nJRuS3CR9hQKBgGqRnDA1oDQNst4ge/t/6UjbH++0YyMdNRT9/clC5UlvZ02cK7QK\nesnJRWOiYdGCExDTBFfCHJ1f84e/N4ZsZCn6JaqikHVtjgUzh56bjYR+waWVntFZ\nwOSn5QQMTEuH8zvcFEvy8q5rVKJZNH53BQ4Ok3HkmXWQVo2GHS2y/zv9AoGAV6HG\nondILUlY2eo2LBzIqBbd8ey10DU80rxcedLyNRTvcM7dusGDUBjT+qsC8eJ85pBZ\ngKK24UfcjtNSgYUsm937urZkaFHbrYVOA4aB7Q5gh8qUFMKfYR1ClGTfU1hUZYow\n5Vt70SlyRTRTJccAk7EiVVt4F76LE1KxofPwhzUCgYAtcDka1z55NdPFCR74XDp0\n1ldpx0vZdAONVmrvwS1+AsijT2buZtRrohWY6FSOR9XBLpYw9XJ1UTnNMvf1yp3U\nXuDTjmNeLZs8tZuHOEG27C2k1BzbecNysW57Y208DZFqriTm+wy0lgq1VbVD7yMI\nYF2JGpEys30whrV3eNZuAw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "wanderlust-app-220020@appspot.gserviceaccount.com",
+  "client_id": "101887388707485058124",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/wanderlust-app-220020%40appspot.gserviceaccount.com"
+}
