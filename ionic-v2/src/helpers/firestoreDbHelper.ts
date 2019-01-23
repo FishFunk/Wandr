@@ -14,7 +14,8 @@ export class FirestoreDbHelper {
       
       const snapshot = await this.firestore.collection('users').doc(firebaseUserId).get().toPromise();
       if(!snapshot.exists){
-        return Promise.reject("No user matching ID: " + firebaseUserId);
+        // User doesn't exist yet
+        return Promise.resolve(0);
       }
 
       const usr = <IUser> snapshot.data();

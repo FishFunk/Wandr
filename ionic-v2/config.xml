@@ -102,6 +102,6 @@
     <plugin name="cordova-plugin-firebase" spec="~2.0.5" />
     <plugin name="cordova-plugin-badge" spec="~0.8.8" />
     <plugin name="cordova-plugin-contacts" spec="~3.0.1" />
-    <engine name="android" spec="^7.1.4" />
     <engine name="ios" spec="~4.5.5" />
+    <engine name="android" spec="~7.1.4" />
 </widget>

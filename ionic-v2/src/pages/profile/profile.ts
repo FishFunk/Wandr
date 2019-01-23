@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, LoadingController, ToastController, Platform } from 'ionic-angular';
+import { IonicPage, LoadingController, ToastController, Platform, AlertController } from 'ionic-angular';
 import { Location, UserServices, User, IUser } from '../../models/user';
 import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { FacebookApi } from '../../helpers/facebookApi';
@@ -30,6 +30,7 @@ export class ProfilePage {
   constructor(
     public loadingCtrl: LoadingController, 
     private toastCtrl: ToastController,
+    private alertCtrl: AlertController,
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
     private facebookApi: FacebookApi,
@@ -49,6 +50,19 @@ export class ProfilePage {
       return this.toggleEdit();
     }
   }
+
+  // TODO: Make sure required profile data is entered
+  // ionViewCanLeave(): boolean {
+  //   if (!this.userData.location.stringFormat) {
+  //       let alert = this.alertCtrl.create({
+  //           title: 'Hang on, you need to update your location info!',
+  //           subTitle: 'Use the edit button in the top right corner.',
+  //           buttons: ['Ok']
+  //       });
+  //       alert.present();
+  //   }
+  //   return !this.userData.location.stringFormat;
+  // }
 
   async load(){
     this.showLoadingPopup();
@@ -72,19 +86,24 @@ export class ProfilePage {
         this.userData.last_name = names[1];
 
         // Get Facebook location and geocode it
-        this.userData.location.stringFormat = fbUserData.location.name;
-        this.autoComplete.input = fbUserData.location.name;
-        await this.forwardGeocode(fbUserData.location.name);
+        if(fbUserData.location) {
+          this.userData.location.stringFormat = fbUserData.location.name;
+          this.autoComplete.input = fbUserData.location.name;
+          await this.forwardGeocode(fbUserData.location.name);
+        }
 
         // Get Facebook friends list
         this.userData.friends = await this.facebookApi.getFriendList(facebookUid);
 
         // Email
-        this.userData.email = fbUserData.email;
+        this.userData.email = fbUserData.email || '';
 
         // Get Facebook photo URL
-        this.userData.profile_img_url = fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
-        
+        if(fbUserData.picture){
+          this.userData.profile_img_url = 
+            fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
+        }
+
         // Create new user ref
         const newUsr = this.getPlainUserObject();
         await this.firestore.collection('users').doc(firebaseUid).set(newUsr);
@@ -96,10 +115,13 @@ export class ProfilePage {
         this.userData.friends = await this.facebookApi.getFriendList(facebookUid);
 
         // Always update email
-        this.userData.email = fbUserData.email;
+        this.userData.email = fbUserData.email || '';
 
         // Always update Facebook photo URL
-        this.userData.profile_img_url = fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
+        if(fbUserData.picture){
+          this.userData.profile_img_url = 
+            fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
+        }
       }
 
       // Cache some user data
