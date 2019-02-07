@@ -39,7 +39,7 @@ export class MockFacebookApi{
         return Promise.resolve();
     }
 
-    public getFriendList(userId): Promise<any[]>
+    public getFriendList(userId, accessToken): Promise<any[]>
     {
         return Promise.resolve([]);
     }
@@ -47,11 +47,6 @@ export class MockFacebookApi{
     public getUser(userId, accessToken)
     {
         return Promise.resolve(this.mockData.getMockFacebookUser());
-    }
-
-    public getProfilePhoto(userId): Promise<string>
-    {
-        return Promise.resolve("");
     }
 
     public facebookLogout(): Promise<any>

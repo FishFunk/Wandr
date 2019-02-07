@@ -8,4 +8,7 @@ export abstract class Constants {
     public static userFirstNameKey = "firstName";
     public static userLastNameKey = "lastName";
     public static appBotId = "travel_guru_bot";
+
+
+    public static updateBadgeCountEventName = "onUpdateBadgeCountEvent";
 }

@@ -3,7 +3,7 @@ import { ProfilePage } from '../profile/profile';
 import { InboxPage } from '../messages/inbox';
 import { InvitePage } from '../invite/invite';
 import { MapPage } from '../explore/map';
-import { Tabs, Platform, ToastController } from 'ionic-angular';
+import { Tabs, Platform, ToastController, Events } from 'ionic-angular';
 import { SettingsPage } from '../settings/settings';
 import { FcmProvider } from '../../providers/fcm/fcm';
 import { tap } from 'rxjs/operators';
@@ -32,7 +32,8 @@ export class TabsPage {
     public toastCtrl: ToastController,
     public fcm: FcmProvider,
     private platform: Platform,
-    private firestoreDbHelper: FirestoreDbHelper) {
+    private firestoreDbHelper: FirestoreDbHelper,
+    private events: Events) {
 
     this.useFabButton = !this.platform.is('ios');
   }
@@ -50,12 +51,15 @@ export class TabsPage {
           });
   
           toast.present();
-          this.badgeCount++;
-        } else {
-          this.updateBadgeCount();
         }
+        
+        this.updateBadgeCount();
       })
     ).subscribe();
+
+    this.events.subscribe(Constants.updateBadgeCountEventName, (newCount: number)=>{
+      this.badgeCount = newCount;
+    });
 
     this.updateBadgeCount();
   }

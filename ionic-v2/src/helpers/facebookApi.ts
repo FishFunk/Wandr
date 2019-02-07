@@ -12,19 +12,14 @@ export class FacebookApi{
         {
         }
 
-    public getFriendList(userId): Promise<any[]>
+    public getFriendList(userId, accessToken): Promise<any[]>
     {
-        return this.executeApiCall<any[]>(`/${userId}/friends`, 'data');
+        return this.executeApiCall<any[]>(`/${userId}/friends?access_token=${accessToken}`, 'data');
     }
   
     public getUser(userId, accessToken)
     {
         return this.executeApiCall(`/${userId}?fields=id,name,email,link,gender,picture.width(150).height(150),location&access_token=${accessToken}`);
-    }
-
-    public getProfilePhoto(userId): Promise<string>
-    {
-        return this.executeApiCall<string>(`/${userId}/picture`);
     }
 
     public facebookLogout(): Promise<any>

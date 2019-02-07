@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, Loading } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, Loading, Events } from 'ionic-angular';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { MessagesPage } from './messages';
 import { Constants } from '../../helpers/constants';
@@ -20,7 +20,8 @@ export class InboxPage {
   
   constructor(public navCtrl: NavController, 
     public loadingCtrl: LoadingController,
-    private firestore: AngularFirestore) {
+    private firestore: AngularFirestore,
+    private events: Events) {
       this.userId = window.localStorage.getItem(Constants.firebaseUserIdKey);
   }
 
@@ -40,6 +41,8 @@ export class InboxPage {
     } else {
       this.chats = [];
     }
+
+    this.events.publish(Constants.updateBadgeCountEventName, this.getBadgeCount());
 
     this.loading.dismiss();
   }
@@ -78,11 +81,26 @@ export class InboxPage {
     this.chats = [];
     snapshots.forEach((snapshot)=> {
       if(snapshot.exists){
-        temp.push(<IChat> snapshot.data());
+        const chatObj = <IChat> snapshot.data();
+        temp.push(chatObj);
       }
     });
 
     this.chats = _.sortBy(temp, (chat)=> +chat.timestamp * -1);
     return Promise.resolve();
+  }
+
+  private getBadgeCount(): number{
+    let badgeCount = 0;
+
+    _.each(this.chats, (chatObj)=>{
+      if(this.userId == chatObj.userA_id && chatObj.userA_unread) {
+        badgeCount++;
+      } else if (this.userId == chatObj.userB_id && chatObj.userB_unread) {
+        badgeCount++;
+      }
+    });
+    
+    return badgeCount;
   }
 }

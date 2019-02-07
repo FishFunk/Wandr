@@ -93,7 +93,7 @@ export class ProfilePage {
         }
 
         // Get Facebook friends list
-        this.userData.friends = await this.facebookApi.getFriendList(facebookUid);
+        this.userData.friends = await this.facebookApi.getFriendList(facebookUid, token);
 
         // Email
         this.userData.email = fbUserData.email || '';
@@ -112,7 +112,7 @@ export class ProfilePage {
         this.userData = <User> snapshot.data();
         
         // Always update Facebook friends list
-        this.userData.friends = await this.facebookApi.getFriendList(facebookUid);
+        this.userData.friends = await this.facebookApi.getFriendList(facebookUid, token);
 
         // Always update email
         this.userData.email = fbUserData.email || '';

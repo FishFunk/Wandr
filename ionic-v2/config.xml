@@ -41,10 +41,6 @@
         <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
-        <config-file parent="/resources" target="./res/values/strings.xml">
-            <string name="fb_app_id">244138132926081</string>
-            <string name="fb_app_name">myApplication</string>
-        </config-file>
     </platform>
     <platform name="ios">
         <config-file parent="NSContactsUsageDescription" target="*-Info.plist">
@@ -88,10 +84,6 @@
     <plugin name="cordova-plugin-whitelist" spec="1.3.3" />
     <plugin name="cordova-plugin-ionic-webview" spec="^2.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
-    <plugin name="cordova-plugin-facebook4" spec="3.1.0">
-        <variable name="APP_ID" value="244138132926081" />
-        <variable name="APP_NAME" value="Wanderlust" />
-    </plugin>
     <plugin name="cordova-plugin-x-socialsharing" spec="5.4.1" />
     <plugin name="cordova-plugin-nativegeocoder" spec="3.1.2">
         <variable name="LOCATION_WHEN_IN_USE_DESCRIPTION" value="Use geocoder service" />
@@ -102,6 +94,12 @@
     <plugin name="cordova-plugin-firebase" spec="~2.0.5" />
     <plugin name="cordova-plugin-badge" spec="~0.8.8" />
     <plugin name="cordova-plugin-contacts" spec="~3.0.1" />
+    <plugin name="cordova-plugin-facebook4" spec="~4.1.0">
+        <variable name="APP_ID" value="244138132926081" />
+        <variable name="APP_NAME" value="Travel Guru" />
+        <variable name="FACEBOOK_HYBRID_APP_EVENTS" value="false" />
+        <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="4.38.1" />
+    </plugin>
     <engine name="ios" spec="~4.5.5" />
     <engine name="android" spec="~7.1.4" />
 </widget>

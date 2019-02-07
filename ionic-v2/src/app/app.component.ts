@@ -20,7 +20,6 @@ export class MyApp {
   @ViewChild(Content) content: Content;
 
   rootPage: any;
-  showIntro: boolean = false;
 
   constructor(public platform: Platform, 
     private statusBar: StatusBar,
@@ -47,8 +46,6 @@ public readonly firebaseInitOptions: any = {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       
       this.statusBar.styleDefault();
       firebase.initializeApp(
