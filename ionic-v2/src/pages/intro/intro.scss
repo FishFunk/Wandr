@@ -8,7 +8,7 @@ page-intro {
       }
       
       .swiper-pagination-bullet-active {
-        background: #6700a9;
+        background: color($colors, secondary);
       }
 
       .slide-image {
@@ -22,7 +22,7 @@ page-intro {
         font-weight: 500;
       }
       h2{
-        color:#ffffff;
+        color:color($colors, light);
         font-weight:300 !important;
         font-size:24px !important;
       }
@@ -31,11 +31,7 @@ page-intro {
         font-weight: 300 !important;
         font-size:.9em;
         line-height: 1.5;
-        color: #ffffff;
-
-        b {
-          color: #ffeb3b;
-        }
+        color: color($colors, light);
       }
 
 }

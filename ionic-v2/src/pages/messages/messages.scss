@@ -1,7 +1,7 @@
 page-messages {
 
     textarea {
-        background-color: rgb(255, 255, 255);
+        background-color: white;
         resize: none;
         border: none;
     }
@@ -16,7 +16,7 @@ page-messages {
 
     .message {
         p {
-            color: #8a898b;
+            color: color($colors, dark);
             font-size: 14px;
             font-weight: bold;
             margin: 0px;
@@ -24,7 +24,7 @@ page-messages {
             box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
             padding: 10px 15px 10px 7px;
             margin: 5px 0;
-            background: white;
+            background: color($colors, light);
             white-space: pre-wrap;
         }
     }
@@ -32,12 +32,12 @@ page-messages {
         margin: 0 auto;
         width: 85%;
         p {
-            color: white;
+            color: color($colors, light);
             border-radius: 11px 11px 11px 11px;
             background: color($colors, primary);
         }
         .message-time {
-            color: color($colors, secondary);
+            color: color($colors, dark);
             text-align: center;
             font-size: small;
         }
@@ -52,10 +52,10 @@ page-messages {
         p {
             color: white;
             border-radius: 0 11px 11px 11px;
-            background: #B9C0E9;
+            background: color($colors, secondary);
         }
         .message-time {
-            color: color($colors, secondary);
+            color: color($colors, dark);
             float: left;
             font-size: small;
         }
@@ -70,7 +70,7 @@ page-messages {
             border-radius: 11px 11px 0 11px;
         }
         .message-time {
-            color: color($colors, secondary);
+            color: color($colors, dark);
             float: right;
             font-size: small;
         }

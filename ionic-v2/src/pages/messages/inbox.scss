@@ -5,16 +5,16 @@ page-inbox {
         top: 8px;
         right: 16px;
         font-size: 12px;
-        color: #888;
+        color: color($colors, myGrey);
     }
 
     .list-header{
-        color: #888;
+        color: color($colors, myGrey);
         text-align: left;
     }
 
     .unread {
-        color: black;
+        color: color($colors, dark);
         font-weight: bold;
     }
 
@@ -30,7 +30,7 @@ page-inbox {
     .noChatsText{
         font-size: 16px;
         font-weight: bold;
-        color: rgb(58, 58, 58);
+        color: color($colors, myGrey);
         position: relative;
         top: 50%;
         transform: translateY(-50%);

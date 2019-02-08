@@ -7,12 +7,12 @@ page-conneciton-profile{
         margin: 0 auto 0;
         border-width: 2px;
         border-style: solid;
-        border-color: rgba(255, 255, 255,0.1);
+        border-color: color($colors, myGrey);
         border-image: initial;
     }
 
     .profile-name {
-        color: #444;
+        color: color($colors, dark);
         font-size: 22px;
     }
 }
