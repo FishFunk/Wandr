@@ -135,6 +135,7 @@ export class MessagesPage {
             .catch(error=>{
                 console.error(error);
                 loading.dismiss();
+                alert(`${this.headerName} has deleted their account.`);
             });
     }
 

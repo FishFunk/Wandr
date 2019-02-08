@@ -1,18 +1,18 @@
 import { Injectable } from "@angular/core";
-import { IUser, IMutualConnectionInfo } from "../models/user";
+import { IUser } from "../models/user";
 import _ from 'underscore';
 import { AngularFirestore } from "angularfire2/firestore";
 import { IChat } from "../models/chat";
 
 @Injectable()
 export class FirestoreDbHelper {
-    constructor(private firestore: AngularFirestore){
+    constructor(private angularFirestore: AngularFirestore){
 
     }
 
     public async GetUnreadChatCount(firebaseUserId: string){
       
-      const snapshot = await this.firestore.collection('users').doc(firebaseUserId).get().toPromise();
+      const snapshot = await this.angularFirestore.collection('users').doc(firebaseUserId).get().toPromise();
       if(!snapshot.exists){
         // User doesn't exist yet
         return Promise.resolve(0);
@@ -20,7 +20,7 @@ export class FirestoreDbHelper {
 
       const usr = <IUser> snapshot.data();
       const promises = usr.roomkeys.map((key)=> {
-        return this.firestore
+        return this.angularFirestore
           .collection('chats')
           .doc(key)
           .get()
@@ -50,7 +50,7 @@ export class FirestoreDbHelper {
     }
 
     public async ReadUserByFirebaseUid(firebaseUserId: string){
-      const snapshot = await this.firestore.collection('users').doc(firebaseUserId).get().toPromise();
+      const snapshot = await this.angularFirestore.collection('users').doc(firebaseUserId).get().toPromise();
       if(!snapshot.exists){
         return Promise.reject("No user matching ID: " + firebaseUserId);
       }
@@ -58,17 +58,38 @@ export class FirestoreDbHelper {
       return <IUser> snapshot.data();
     }
 
+    public async DeleteUserByFirebaseUid(firebaseUserId){
+      
+      const userSnapshot = await this.angularFirestore.collection('users').doc(firebaseUserId).get().toPromise();
+      const tokenSnapshots = await this.angularFirestore
+        .collection('devices', ref=> ref.where('userId', '==', firebaseUserId))
+        .get()
+        .toPromise();
+
+      // Create batch operation
+      var batch = this.angularFirestore.firestore.batch();
+
+      // For each doc, add a delete operation to the batch
+      batch.delete(userSnapshot.ref);
+      tokenSnapshots.forEach(function(doc) {
+          batch.delete(doc.ref);
+      });
+
+      // Commit the batch
+      await batch.commit();
+    }
+
     public async ReadFirstConnections(firebaseUserId: string){
       let firstConnections: IUser[] = [];
 
-      const snapshot = await this.firestore.collection('users').doc(firebaseUserId).get().toPromise();
+      const snapshot = await this.angularFirestore.collection('users').doc(firebaseUserId).get().toPromise();
       if(!snapshot.exists){
         return Promise.reject("No user matching ID: " + firebaseUserId);
       }
 
       const user = <IUser> snapshot.data();
       const promises = user.friends.map((friend)=> {
-        return this.firestore
+        return this.angularFirestore
           .collection('users', ref=> ref.where('facebook_uid', '==', friend.id))
           .get()
           .toPromise();
@@ -113,7 +134,7 @@ export class FirestoreDbHelper {
   
       // Get 2nd Connections Users from DB by Facebook UID
       const promises = secondConnectionFacebookIds.map((facebook_uid)=> {
-        return this.firestore
+        return this.angularFirestore
           .collection('users', ref=> ref.where('facebook_uid', '==', facebook_uid))
           .get()
           .toPromise();

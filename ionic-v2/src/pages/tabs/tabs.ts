@@ -39,7 +39,13 @@ export class TabsPage {
   }
 
   ionViewDidLoad(){
-    this.fcm.getToken();
+    this.load()
+      .catch(error=> console.error(error));
+  }
+
+  private async load(){
+    const token = await this.fcm.getToken();
+    await this.fcm.saveTokenToFirestore(token);
     this.fcm.listenToNotifications().pipe(
       tap(msg =>{
         const selectedTab = this.tabRef.getSelected();
@@ -61,7 +67,7 @@ export class TabsPage {
       this.badgeCount = newCount;
     });
 
-    this.updateBadgeCount();
+    await this.updateBadgeCount();
   }
 
   private async updateBadgeCount(){

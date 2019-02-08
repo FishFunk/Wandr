@@ -10,6 +10,7 @@ import { Constants } from '../helpers/constants';
 import { TabsPage } from '../pages/tabs/tabs';
 import { IntroPage } from '../pages/intro/intro';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
+import { FacebookApi } from '../helpers/facebookApi';
 
 @Component({
   templateUrl: 'app.html'
@@ -24,7 +25,8 @@ export class MyApp {
   constructor(public platform: Platform, 
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
-    private keyboard: Keyboard) {
+    private keyboard: Keyboard,
+    private facebookApi: FacebookApi) {
       this.initializeApp();
   }
 
@@ -64,20 +66,19 @@ public readonly firebaseInitOptions: any = {
         });
       }
 
-      var dateInMilliSecStr = window.localStorage.getItem(Constants.facebookExpireKey);
-      if(dateInMilliSecStr){
-        var expireDate = +dateInMilliSecStr;
-        var currentDate = new Date().getTime();
-        if(expireDate >= currentDate){
-          this.rootPage = IntroPage;
-        } else {
-          this.rootPage = TabsPage;
-        }
-      } else {
-        this.rootPage = IntroPage;
-      }
-  
-      this.splashScreen.hide();
+      this.facebookApi.facebookLoginStatus()
+        .then((statusResponse)=>{
+          if (statusResponse.status == 'connected') {
+            this.rootPage = TabsPage;     
+          } else {
+            this.rootPage = IntroPage;
+          }
+
+          this.splashScreen.hide();
+        })
+        .catch(error=>{
+          alert("Application failed to initialize.");
+        });
     });
   }
 

@@ -78,14 +78,13 @@ export class IntroPage {
 
     const firebaseData = await this.fbApi.firebaseLogin(statusResponse.authResponse.accessToken);
     const expiresIn = +statusResponse.authResponse.expiresIn;
-    const expireDateInMillis = new Date().setTime(expiresIn * 1000);
+    // const expireDateInMillis = new Date().setTime(expiresIn * 1000);
 
-    // TODO: Utilize profile and other info in firebaseData?
+    // TODO: Cache profile and other info in firebaseData?
     this.cacheFacebookTokens(
       statusResponse.authResponse.userID, 
       firebaseData.user.uid,
-      statusResponse.authResponse.accessToken,
-      expireDateInMillis);
+      statusResponse.authResponse.accessToken);
   }
 
   private presentAlert(title) {
@@ -96,12 +95,11 @@ export class IntroPage {
     alert.present();
   }
 
-  private cacheFacebookTokens(facebookUid: string, firebaseUid: string, accessToken: string, expireDateInMillis: number){
+  private cacheFacebookTokens(facebookUid: string, firebaseUid: string, accessToken: string){
     if(window.localStorage){
       window.localStorage.setItem(Constants.facebookUserIdKey, facebookUid);
       window.localStorage.setItem(Constants.firebaseUserIdKey, firebaseUid);
       window.localStorage.setItem(Constants.accessTokenKey, accessToken);
-      window.localStorage.setItem(Constants.facebookExpireKey, expireDateInMillis.toString());
     } else {
       throw new Error("Local storage not available");
     }

@@ -7,6 +7,7 @@ import { Constants } from '../../helpers/constants';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { IUserSettings, IUser } from '../../models/user';
 import { IntroPage } from '../intro/intro';
+import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 
 @IonicPage()
 @Component({
@@ -26,15 +27,15 @@ export class SettingsPage {
         private toastCtrl: ToastController,
         private alertCtrl: AlertController,
         private fbApi: FacebookApi,
-        private firestore: AngularFirestore){
+        private firestore: AngularFirestore,
+        private firestoreDbHelper: FirestoreDbHelper){
 
         this.firebaseUid = localStorage.getItem(Constants.firebaseUserIdKey);
     }
 
     ionViewDidLoad(){
-        this.firestore.collection('users').doc(this.firebaseUid).get().toPromise()
-            .then((snapshot)=>{
-                const usr = <IUser> snapshot.data();
+        this.firestoreDbHelper.ReadUserByFirebaseUid(this.firebaseUid)
+            .then((usr)=>{
                 if(usr && usr.settings){
                     this.pushNotifications = usr.settings.notifications;
                     this.ghostMode = usr.settings.ghostMode;
@@ -93,7 +94,7 @@ export class SettingsPage {
     private logout() {
         this.fbApi.facebookLogout()
             .then(()=>{
-                window.localStorage.removeItem(Constants.facebookExpireKey);
+                window.localStorage.clear();
                 this.appCtrl.getRootNav().setRoot(IntroPage);
             })
             .catch((error)=>{
@@ -103,7 +104,14 @@ export class SettingsPage {
     }
 
     private deleteUser(){
-        alert("Not yet implemented");
+        this.firestoreDbHelper.DeleteUserByFirebaseUid(this.firebaseUid)
+            .then(()=>{
+                this.logout();
+            })
+            .catch(error=> {
+                console.error(error);
+                this.presentToast('top', 'Failed to delete account!');
+            });
     }
 
     private presentToast(position: string,message: string) {

@@ -19,10 +19,6 @@ export class FcmProvider {
     private platform: Platform) {
   }
 
-  public clearBadges(){
-    this.firebaseNative.setBadgeNumber(0);
-  }
-
   async getToken(){
     let token;
     
@@ -42,10 +38,10 @@ export class FcmProvider {
 
     }
 
-    return this.saveTokenToFirestore(token);
+    return token;
   }
 
-  private saveTokenToFirestore(token){
+  async saveTokenToFirestore(token){
     if(!token) return;
     
     const devicesRef = this.afs.collection('devices');
