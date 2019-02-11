@@ -4,7 +4,6 @@ import { IUser, IFacebookFriend } from '../../models/user';
 import _ from 'underscore';
 import { ConnectionProfilePage } from './connection_profile';
 import { Constants } from '../../helpers/constants';
-import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
  
 @Component({
   selector: 'connection-list-page',

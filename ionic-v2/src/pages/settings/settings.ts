@@ -5,7 +5,7 @@ import { ContactPage } from './contact';
 import { AboutPage } from './about';
 import { Constants } from '../../helpers/constants';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { IUserSettings, IUser } from '../../models/user';
+import { IUserSettings } from '../../models/user';
 import { IntroPage } from '../intro/intro';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 

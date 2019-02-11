@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, LoadingController, ToastController, Platform, AlertController } from 'ionic-angular';
+import { IonicPage, LoadingController, ToastController, Platform } from 'ionic-angular';
 import { Location, UserServices, User, IUser } from '../../models/user';
 import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { FacebookApi } from '../../helpers/facebookApi';
@@ -30,7 +30,6 @@ export class ProfilePage {
   constructor(
     public loadingCtrl: LoadingController, 
     private toastCtrl: ToastController,
-    private alertCtrl: AlertController,
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
     private facebookApi: FacebookApi,

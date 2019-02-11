@@ -6,7 +6,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 import firebase from 'firebase';
-import { Constants } from '../helpers/constants';
 import { TabsPage } from '../pages/tabs/tabs';
 import { IntroPage } from '../pages/intro/intro';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
@@ -49,36 +48,48 @@ public readonly firebaseInitOptions: any = {
   initializeApp() {
     this.platform.ready().then(() => {
       
-      this.statusBar.styleDefault();
-      firebase.initializeApp(
-        this.firebaseInitOptions
-      );
+      try
+      {
+        this.statusBar.styleDefault();
+        
+        firebase.initializeApp(
+          this.firebaseInitOptions
+        );
 
+        // Handle tab hiding defect for android devices
+        if (this.platform.is('android')) {
+          this.keyboard.onKeyboardShow().subscribe(() => {
+            document.body.classList.add('keyboard-is-open');
+          });
+      
+          this.keyboard.onKeyboardHide().subscribe(() => {
+            document.body.classList.remove('keyboard-is-open');
+          });
+        }
 
-      // Handle tab hiding defect for android devices
-      if (this.platform.is('android')) {
-        this.keyboard.onKeyboardShow().subscribe(() => {
-          document.body.classList.add('keyboard-is-open');
-        });
-    
-        this.keyboard.onKeyboardHide().subscribe(() => {
-          document.body.classList.remove('keyboard-is-open');
-        });
+        if(this.platform.is('cordova')){
+          this.facebookApi.facebookLoginStatus()
+          .then((statusResponse)=>{
+            if (statusResponse.status == 'connected') {
+              this.rootPage = TabsPage;     
+            } else {
+              this.rootPage = IntroPage;
+            }
+
+            this.splashScreen.hide();
+          })
+          .catch(error=>{
+            console.error(error);
+            alert("Application failed to initialize.");
+          });
+        } else {
+          // Running in web browser
+          this.rootPage = TabsPage;
+        }
       }
-
-      this.facebookApi.facebookLoginStatus()
-        .then((statusResponse)=>{
-          if (statusResponse.status == 'connected') {
-            this.rootPage = TabsPage;     
-          } else {
-            this.rootPage = IntroPage;
-          }
-
-          this.splashScreen.hide();
-        })
-        .catch(error=>{
-          alert("Application failed to initialize.");
-        });
+      catch(ex){
+        console.error(ex);
+      }
     });
   }
 

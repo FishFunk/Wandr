@@ -77,7 +77,7 @@ export class IntroPage {
     }
 
     const firebaseData = await this.fbApi.firebaseLogin(statusResponse.authResponse.accessToken);
-    const expiresIn = +statusResponse.authResponse.expiresIn;
+    // const expiresIn = +statusResponse.authResponse.expiresIn;
     // const expireDateInMillis = new Date().setTime(expiresIn * 1000);
 
     // TODO: Cache profile and other info in firebaseData?
