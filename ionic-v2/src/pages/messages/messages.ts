@@ -1,5 +1,5 @@
 import { Component, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
-import { Content, LoadingController, NavParams, Button, NavController } from 'ionic-angular';
+import { Content, LoadingController, NavParams, Button, NavController, Events } from 'ionic-angular';
 import { Constants } from '../../helpers/constants';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -39,7 +39,8 @@ export class MessagesPage {
         private navCtrl: NavController,
         private keyboard: Keyboard,
         private firestore: AngularFirestore,
-        private firestoreDbHelper: FirestoreDbHelper) {
+        private firestoreDbHelper: FirestoreDbHelper,
+        private events: Events) {
         
         this.chat = params.get('chat');
         this.showProfileButton = !!params.get('showProfileButton');
@@ -109,9 +110,10 @@ export class MessagesPage {
             
         this.messagesObservable.subscribe(async data =>{
             this.messages = _.map(data, (obj, key)=> obj);
-            this.updateChatReadReceipt()
-                .catch(error => console.error(error));
         });
+
+        this.updateChatReadReceipt()
+            .catch(error => console.error(error));
     }
 
     onClickProfile(){
@@ -220,9 +222,14 @@ export class MessagesPage {
         } else {
             chatUpdate = { userB_unread: false };
         }
-        return this.firestore
+
+        await this.firestore
             .collection('chats')
             .doc(this.chat.roomkey)
             .update(chatUpdate);
+
+        const newBadgeCount = await this.firestoreDbHelper.GetUnreadChatCount(this.uid);
+
+        this.events.publish(Constants.updateBadgeCountEventName, newBadgeCount);
     }
 }

@@ -1,3 +1,5 @@
+import { IChat } from "../models/chat";
+
 export class Utils
 {
     public static getUserRank(friendCount){
@@ -22,5 +24,20 @@ export class Utils
         {
           return "Triber Master";
         }
+    }
+
+    public static getBadgeCount(userId: string, chats: IChat[]): number
+    {
+        let badgeCount = 0;
+    
+        chats.forEach((chatObj)=>{
+          if(userId == chatObj.userA_id && chatObj.userA_unread) {
+            badgeCount++;
+          } else if (userId == chatObj.userB_id && chatObj.userB_unread) {
+            badgeCount++;
+          }
+        });
+        
+        return badgeCount;
     }
 }

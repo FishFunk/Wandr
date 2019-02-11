@@ -36,7 +36,7 @@ export class InboxPage {
     var snapshot = await this.firestore.collection('users').doc(this.userId).get().toPromise();
     var user = <IUser> snapshot.data();
     
-    if(user.roomkeys && user.roomkeys.length > 0){
+    if(user && user.roomkeys && user.roomkeys.length > 0){
       await this.queryChats(user.roomkeys);
     } else {
       this.chats = [];
