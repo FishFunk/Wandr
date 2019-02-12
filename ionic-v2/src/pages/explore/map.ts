@@ -94,11 +94,8 @@ export class MapPage {
       // Generate heat map data from users location information
       this.createMarkersAndHeatMap(firstConnections, secondConnections);
 
-      // Create the DIV to hold the control and call the createRandomControl()
-      // constructor passing in this DIV.
-      var controlDiv = document.createElement('div');
-      this.createRandomControl(controlDiv);
-      this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);
+      // Add custom control to map
+      this.createRandomControl();
 
       // Bind map events
       this.bindEvents();
@@ -282,7 +279,13 @@ export class MapPage {
    * This constructor takes the control DIV as an argument.
    * @constructor
    */
-  private createRandomControl(controlDiv) {
+  private createRandomControl() {
+
+    // Create DIV to hold the control and call the createRandomControl()
+    // constructor passing in this DIV.
+    var controlDiv = document.createElement('div');
+    controlDiv.style.paddingTop = '5px';
+    controlDiv.style.paddingRight = '5px';
 
     // Set CSS for the control border.
     var controlUI = document.createElement('div');
@@ -293,18 +296,17 @@ export class MapPage {
     controlUI.style.cursor = 'pointer';
     controlUI.style.marginBottom = '22px';
     controlUI.style.textAlign = 'center';
-    controlUI.title = 'Click to find random city with connections';
+    controlUI.title = 'Go to random city with connections';
     controlDiv.appendChild(controlUI);
 
     // Set CSS for the control interior.
     var controlText = document.createElement('div');
     controlText.style.color = 'rgb(25,25,25)';
-    controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-    controlText.style.fontSize = '12px';
     controlText.style.lineHeight = '38px';
-    controlText.style.paddingLeft = '5px';
-    controlText.style.paddingRight = '5px';
-    controlText.innerHTML = 'Random';
+    controlText.style.paddingLeft = '6px';
+    controlText.style.paddingRight = '6px';
+    controlText.style.paddingTop = '5px';
+    controlText.innerHTML = '<i class="fas fa-dice fa-2x"></i>';
     controlUI.appendChild(controlText);
 
     // Setup the click event listeners
@@ -316,5 +318,11 @@ export class MapPage {
       this.map.panTo(latLng);
       this.map.setZoom(this.maxZoomLevel);
     });
+
+    // const paddingDiv = document.createElement('div');
+    // paddingDiv.style.height = '5px';
+
+    // this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(paddingDiv);
+    this.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(controlDiv);
   }
 }

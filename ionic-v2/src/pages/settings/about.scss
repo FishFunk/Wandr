@@ -1,0 +1,14 @@
+page-about {
+
+    .text-content {
+        color: color($colors, dark);
+        font-size: 16px;
+    }
+
+    ion-footer{
+        p {
+            color: color($colors, myGrey);
+        }
+    }
+  }
+  

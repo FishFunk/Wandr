@@ -21,7 +21,7 @@ export class ContactPage {
 
     onSubmit(){
         if(!this.reason){
-            alert("Please select a reason");
+            alert("Please select a contact reason");
             return;
         }
 
