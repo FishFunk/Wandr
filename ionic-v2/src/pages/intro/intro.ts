@@ -15,7 +15,7 @@ export class IntroPage {
 
   slides = [
     {
-      title: "Welcome, Travel Guru",
+      title: "Welcome, Wander",
       description: "See where your network can take you.",
       image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
     },

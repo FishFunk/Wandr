@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavParams, ToastController, NavController } from 'ionic-angular';
+import { LoadingController, NavParams, ToastController, NavController, AlertController } from 'ionic-angular';
 import { IUser, IFacebookFriend } from '../../models/user';
 import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
@@ -7,7 +7,6 @@ import { IChat } from '../../models/chat';
 import { AngularFireFunctions } from 'angularfire2/functions';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Utils } from '../../helpers/utils';
-import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { MessagesPage } from '../messages/messages';
  
 @Component({
@@ -29,6 +28,7 @@ export class ConnectionProfilePage {
         params: NavParams,
         private loadingCtrl: LoadingController,
         private toastCtrl: ToastController,
+        private alertCtrl: AlertController,
         private firestore: AngularFirestore,
         private firebaseFunctionsModule: AngularFireFunctions,
         private navCtrl: NavController){
@@ -75,6 +75,10 @@ export class ConnectionProfilePage {
 
     getUserRank(){
       return Utils.getUserRank(this.viewUserData.friends.length);
+    }
+
+    onClickReport(){
+      this.presentConfirmation();
     }
 
     onClickGoToChat(){
@@ -159,5 +163,61 @@ export class ConnectionProfilePage {
         }
     
         return false;
+    }
+
+    private confirmReportUser(inputData: any){
+
+      const reason = inputData.reason.trim();
+      if(!reason){
+        alert("Please add your reason for the report!");
+        return;
+      }
+
+      const reportData = {
+        dateReported: new Date(),
+        from: this.currentUserId,
+        reportInfo: {
+          uid: this.viewUserData.app_uid,
+          first_name: this.viewUserData.first_name,
+          last_name: this.viewUserData.last_name,
+          reason: inputData
+        }
+      };
+
+      this.firestore.firestore.collection('reports').add(reportData)
+        .then(()=>{
+          const toast = this.toastCtrl.create({
+            message: 'Report successfully submitted!',
+            duration: 2000
+          });
+
+          toast.present();
+        })
+        .catch(error => console.error(error));
+    }
+
+    private presentConfirmation(){
+      const confirm = this.alertCtrl.create({
+          title: `Are you sure you want to report ${this.viewUserData.first_name}?`,
+          message: `We take reports very seriously in order to maintain a safe \
+            and enjoyable app experience for everyone. \
+            We will review your report and ${this.viewUserData.first_name}'s profile. \
+            If they are in violation of our user agreement they will be banned.`,
+          inputs: [
+            {
+              name: 'reason',
+              placeholder: 'Please enter your reason...'
+            }],
+          buttons: [
+            {
+              text: 'Cancel',
+              handler:  ()=>{}
+            },
+            {
+              text: 'Confirm',
+              handler: this.confirmReportUser.bind(this)
+            }]
+        });
+        confirm.present();
     }
 }

@@ -319,10 +319,6 @@ export class MapPage {
       this.map.setZoom(this.maxZoomLevel);
     });
 
-    // const paddingDiv = document.createElement('div');
-    // paddingDiv.style.height = '5px';
-
-    // this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(paddingDiv);
     this.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(controlDiv);
   }
 }
