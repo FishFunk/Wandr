@@ -108,10 +108,9 @@ exports.newMessageNotification =
         return admin.messaging().sendToDevice(tokens, payload);
     });
 
-// Saves a message to the Firebase Realtime Database but sanitizes the text by removing swearwords.
 exports.createChat = functions.https.onCall((chatData, context) => {
 
-    chatData.lastMessage = `Hey ${chatData.userB_name}! Looks like you and ${chatData.userA_name} have a network connection! Why don't you get to know each other?\n\n- Travel Guru Bot`;
+    chatData.lastMessage = `Hey ${chatData.userB_name}! Looks like you and ${chatData.userA_name} have a network connection! You can now message each other here!\n\n- Travel Guru Bot`;
 
     return _createChatRoom(chatData)
         .then(()=>{
