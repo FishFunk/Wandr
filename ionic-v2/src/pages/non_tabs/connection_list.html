@@ -1,6 +1,11 @@
 <ion-header>
     <ion-navbar>
         <ion-title>{{locationStringFormat}}</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only clear (click)="presentPopover($event)">
+                <ion-icon name="list"></ion-icon>
+            </button>
+        </ion-buttons>
     </ion-navbar>
 </ion-header>
 <ion-content>

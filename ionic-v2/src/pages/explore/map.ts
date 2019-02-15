@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, LoadingController, Loading } from 'ionic-angular';
 import { IUser } from '../../models/user';
 import _ from 'underscore';
@@ -74,7 +74,11 @@ export class MapPage {
   }
  
   ionViewDidLoad(){
-    this.loadMap();
+    // TODO: Splash/fade to hide map loading delay?
+    this.loadMap()
+      .catch(error=>{
+        console.error(error);
+      });
   }
  
   async loadMap(){

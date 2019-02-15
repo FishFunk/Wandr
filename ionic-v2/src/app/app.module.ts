@@ -50,6 +50,8 @@ import { WebDataService } from '../helpers/webDataService';
 import { FacebookApi } from '../helpers/facebookApi';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { FcmProvider } from '../providers/fcm/fcm';
+import { PopoverPage } from '../pages/non_tabs/popover_options';
+import { PopoverPageModule } from '../pages/non_tabs/popover_options.module';
 
 //import firebase from 'firebase';
 //********** firebase configuration  ************ */
@@ -95,7 +97,8 @@ export const config = {
     SettingsPageModule,
     MessagesPageModule,
     ConnectionListModule,
-    ConnectionProfileModule
+    ConnectionProfileModule,
+    PopoverPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

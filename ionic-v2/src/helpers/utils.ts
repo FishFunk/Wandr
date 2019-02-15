@@ -4,25 +4,29 @@ export class Utils
 {
     public static getUserRank(friendCount){
     
+        // TODO: Need a ranking system that makes sense. 
+        // Commented examples for if we used the "Birdy" name/brand concept.
+        // https://icons8.com/icon/set/bird/color
+
         if(friendCount < 10)
         {
-          return "Newbie";
+          return "Newbie"; // Egg / Nest
         }
         else if (friendCount > 10 && friendCount < 20)
         {
-          return "Junior Triber";
+          return "Hotshot"; // Crow
         }
         else if (friendCount > 20 && friendCount < 40)
         {
-          return "Tribe Leader";
+          return "Hero"; // Kiwi
         }
         else if (friendCount > 40 && friendCount < 50)
         {
-          return "Top Triber";
+          return "Superstar"; // Dove
         }
         else if (friendCount > 50)
         {
-          return "Triber Master";
+          return "Champion"; // Eagle
         }
     }
 
