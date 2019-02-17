@@ -5,12 +5,12 @@ import * as firebase from 'firebase/app';
 @Injectable()
 export class FacebookApi{
 
-    private facebookPermissions: ['public_profile','user_location','email','user_friends','user_gender'];
+    private facebookPermissions: string[];
 
-    constructor(
-        private fb: Facebook)
-        {
-        }
+    constructor(private fb: Facebook)
+    {
+        this.facebookPermissions = ['public_profile','user_location','email','user_friends','user_gender'];
+    }
 
     public getFriendList(userId, accessToken): Promise<any[]>
     {

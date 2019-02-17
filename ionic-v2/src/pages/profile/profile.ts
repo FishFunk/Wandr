@@ -50,19 +50,6 @@ export class ProfilePage {
     }
   }
 
-  // TODO: Make sure required profile data is entered
-  // ionViewCanLeave(): boolean {
-  //   if (!this.userData.location.stringFormat) {
-  //       let alert = this.alertCtrl.create({
-  //           title: 'Hang on, you need to update your location info!',
-  //           subTitle: 'Use the edit button in the top right corner.',
-  //           buttons: ['Ok']
-  //       });
-  //       alert.present();
-  //   }
-  //   return !this.userData.location.stringFormat;
-  // }
-
   async load(){
     this.showLoadingPopup();
 
@@ -85,7 +72,7 @@ export class ProfilePage {
         this.userData.last_name = names[1];
 
         // Get Facebook location and geocode it
-        if(fbUserData.location) {
+        if(fbUserData.location && fbUserData.location.name) {
           this.userData.location.stringFormat = fbUserData.location.name;
           this.autoComplete.input = fbUserData.location.name;
           await this.forwardGeocode(fbUserData.location.name);

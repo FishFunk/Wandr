@@ -76,6 +76,9 @@ export class MapPage {
   ionViewDidLoad(){
     // TODO: Splash/fade to hide map loading delay?
     this.loadMap()
+      .then(()=>{
+        document.querySelector("#map-container").classList.toggle("flip");
+      })
       .catch(error=>{
         console.error(error);
       });
