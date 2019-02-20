@@ -24,7 +24,6 @@ import { AngularFireFunctionsModule } from 'angularfire2/functions';
 
 //***********  Facebook **************/
 import { Facebook } from '@ionic-native/facebook/ngx';
-// import { MockFacebookApi } from '../helpers/mockFacebookApi';
 
 //***********  Tabs **************/
 import { TabsPage } from '../pages/tabs/tabs';
@@ -46,11 +45,10 @@ import { AboutPage } from '../pages/settings/about';
 
 
 //*********** Provider **************/
-import { WebDataService } from '../helpers/webDataService';
 import { FacebookApi } from '../helpers/facebookApi';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
+import { Logger } from '../helpers/logger';
 import { FcmProvider } from '../providers/fcm/fcm';
-import { PopoverPage } from '../pages/non_tabs/popover_options';
 import { PopoverPageModule } from '../pages/non_tabs/popover_options.module';
 
 //import firebase from 'firebase';
@@ -115,9 +113,9 @@ export const config = {
     SocialSharing,
     Facebook,
     NativeGeocoder,
-    WebDataService,
     FirestoreDbHelper,
     FacebookApi,
+    Logger,
     Keyboard,
     Device,
     Firebase,
