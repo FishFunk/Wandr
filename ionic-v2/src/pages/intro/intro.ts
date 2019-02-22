@@ -15,13 +15,13 @@ export class IntroPage {
 
   slides = [
     {
-      title: "Welcome, Wander",
-      description: "See where your network can take you.",
+      title: "Welcome to Wandr!",
+      description: "Bringing the social back into network.",
       image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
     },
     {
-      title: "Join the Tribe!",
-      description: "Explore. Discover. Connect.",
+      title: "Discover. Connect. Wander.",
+      description: "See which cities your connections live in and connect with them.",
       image: "../../assets/undraw/purple/undraw_connected_8wvi.svg"
     }
   ];

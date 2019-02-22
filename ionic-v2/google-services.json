@@ -36,6 +36,37 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430173647950:android:abc21e7b94688933",
+        "android_client_info": {
+          "package_name": "com.wewandr.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430173647950-25pdjpqa5t9fns79adcq3n2fksrtlcf0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5DoiuGJtELAOLbDnDkRNy8MSmgh4f7vA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

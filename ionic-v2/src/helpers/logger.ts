@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FirebaseFirestore } from 'angularfire2';
 import { Device } from '@ionic-native/device/ngx';
 import { Constants } from './constants';
+import { AngularFirestore } from "angularfire2/firestore";
 
 @Injectable()
 export class Logger{
     
     constructor(
         private device: Device,
-        private firestore: FirebaseFirestore)
+        private firestore: AngularFirestore)
     {
     }
 

@@ -11,7 +11,7 @@ import { Constants } from '../../helpers/constants';
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class FcmProvider {
 
   constructor(public firebaseNative: Firebase,

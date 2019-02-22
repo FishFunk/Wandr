@@ -14,8 +14,7 @@ import _ from 'underscore';
 })
 
 export class InvitePage {
-  shareMessage:  "I just joined Wanderlust! A fun and interactive \
-  social network that enhances your travel experiences. Check it out!";
+  shareMessage:  "I just joined Wandr! A fun and interactive social network. Check it out!";
   imageSrc: "";
   shareUrl: "";
   firstConnectionCount = 0;
