@@ -10,6 +10,29 @@ export class FirestoreDbHelper {
 
     }
 
+    public async ReadUserChats(roomkeys: string[]): Promise<IChat[]>{
+
+      var promises = roomkeys.map((key)=> {
+        return this.angularFirestore.collection('chats').doc(key).get().toPromise();
+      });
+  
+      var snapshots = await Promise.all(promises)
+        .catch((error)=> {
+          return Promise.reject(error);
+        });
+  
+      
+      let temp: IChat[] = [];
+      snapshots.forEach((snapshot)=> {
+        if(snapshot.exists){
+          const chatObj = <IChat> snapshot.data();
+          temp.push(chatObj);
+        }
+      });
+  
+      return _.sortBy(temp, (chat)=> +chat.timestamp * -1);
+    }
+
     public async GetUnreadChatCount(firebaseUserId: string){
       
       const snapshot = await this.angularFirestore.collection('users').doc(firebaseUserId).get().toPromise();
@@ -28,7 +51,6 @@ export class FirestoreDbHelper {
       });
 
       const querySnapshots = await Promise.all(promises).catch((error)=> {
-        console.error(error);
         return Promise.reject(error);
       });
 
@@ -56,6 +78,10 @@ export class FirestoreDbHelper {
       }
 
       return <IUser> snapshot.data();
+    }
+
+    public async UpdateUser(firebaseUserId: string, updateData: any){
+      return this.angularFirestore.collection('users').doc(firebaseUserId).update(updateData);
     }
 
     public async DeleteUserByFirebaseUid(firebaseUserId){
@@ -96,7 +122,6 @@ export class FirestoreDbHelper {
       });
 
       const querySnapshots = await Promise.all(promises).catch((error)=> {
-          console.error(error);
           return Promise.reject(error);
       });
       
@@ -141,7 +166,6 @@ export class FirestoreDbHelper {
       });
   
       const querySnapshots = await Promise.all(promises).catch((error)=> {
-          console.error(error);
           return Promise.reject(error);
         });
   

@@ -8,6 +8,7 @@ import { AngularFireFunctions } from 'angularfire2/functions';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Utils } from '../../helpers/utils';
 import { MessagesPage } from '../messages/messages';
+import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
  
 @Component({
   selector: 'page-connection-profile',
@@ -31,7 +32,8 @@ export class ConnectionProfilePage {
         private alertCtrl: AlertController,
         private firestore: AngularFirestore,
         private firebaseFunctionsModule: AngularFireFunctions,
-        private navCtrl: NavController){
+        private navCtrl: NavController,
+        private dbHelper: FirestoreDbHelper){
 
         this.chatData = null;
         this.viewUserData = params.get('user');
@@ -55,9 +57,12 @@ export class ConnectionProfilePage {
 
     async loadView(){
       const doesExist = await this._checkIfChatExists();
+
+
       if(doesExist){
-        // Chat with roomkey already exists, update UI button
+        // Chat with roomkey already exists, update UI button and verify user has roomkey
         this.chatExists = true;
+        await this._verifyUserHasRoomkey();
       } else {
           this.chatExists = false;
       }
@@ -163,6 +168,21 @@ export class ConnectionProfilePage {
         }
     
         return false;
+    }
+
+    private async _verifyUserHasRoomkey(){
+      try{
+        const user = await this.dbHelper.ReadUserByFirebaseUid(this.currentUserId);
+
+        if(!_.contains(user.roomkeys, this.chatData.roomkey)){
+          console.warn(`Roomkey exists but ${this.currentUserId} does not have it! Updating user roomkeys...`);
+          user.roomkeys.push(this.chatData.roomkey);
+          await this.dbHelper.UpdateUser(this.currentUserId, { roomkeys: user.roomkeys });
+        }
+      }
+      catch(ex){
+        console.error(ex);
+      }
     }
 
     private confirmReportUser(inputData: any){

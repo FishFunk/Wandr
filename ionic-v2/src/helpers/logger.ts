@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 import { Device } from '@ionic-native/device/ngx';
 import { Constants } from './constants';
 import { AngularFirestore } from "angularfire2/firestore";
+import { Platform, AlertController } from 'ionic-angular';
 
 @Injectable()
 export class Logger{
     
     constructor(
         private device: Device,
-        private firestore: AngularFirestore)
+        private firestore: AngularFirestore,
+        private platform: Platform,
+        private alertCtrl: AlertController)
     {
     }
 
@@ -24,7 +27,7 @@ export class Logger{
         console.warn(warn);
     }
 
-    public Error(error: any){
+    public async Error(error: any){
         console.error(error);
 
         if(this.isError(error)){
@@ -35,14 +38,15 @@ export class Logger{
                 message: error.message,
             };
 
-            this.upsertLog(log, 'error');
+            await this.upsertLog(log, 'error');
         } else {
-            // ??
+            await this.upsertLog(error, 'error');
         }
     }
 
     public Fatal(fatal: any){
         console.error(fatal);
+        var promise: Promise<any>;
 
         if(this.isError(fatal)){
             var log = {
@@ -52,12 +56,33 @@ export class Logger{
                 message: fatal.message,
             };
 
-            this.upsertLog(log, 'fatal');
+            promise = this.upsertLog(log, 'fatal');
         } else {
-            // ??
+            promise = this.upsertLog(fatal, 'fatal')
         }
+        
+        promise
+            .then(()=>{
+                this.forceClose();
+            })
+            .catch((error)=>{
+                console.error(error);
+                this.forceClose();
+            });
+    }
 
-        // TODO: Force crash?
+    private forceClose(){
+        this.alertCtrl.create({
+            title: "Oh no! Something isn't right and the app needs to close.",
+            buttons: [
+                {
+                    text: "Ok",
+                    handler: ()=>{
+                        this.platform.exitApp();
+                    }
+                }
+            ]
+        }).present();
     }
 
     private upsertLog(logData: any, logLevel: string): Promise<any>{

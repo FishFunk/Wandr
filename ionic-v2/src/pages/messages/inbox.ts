@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, Loading, Events } from 'ionic-angular';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { IonicPage, NavController, LoadingController, Loading, Events, AlertController } from 'ionic-angular';
 import { MessagesPage } from './messages';
 import { Constants } from '../../helpers/constants';
-import { IUser } from '../../models/user';
 import { IChat } from '../../models/chat';
 import _ from 'underscore';
+import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
+import { Logger } from '../../helpers/logger';
 
 @IonicPage()
 @Component({
@@ -20,7 +20,9 @@ export class InboxPage {
   
   constructor(public navCtrl: NavController, 
     public loadingCtrl: LoadingController,
-    private firestore: AngularFirestore,
+    private alertCtrl: AlertController,
+    private dbHelper: FirestoreDbHelper,
+    private logger: Logger,
     private events: Events) {
       this.userId = window.localStorage.getItem(Constants.firebaseUserIdKey);
   }
@@ -33,8 +35,10 @@ export class InboxPage {
     this.loading = this.loadingCtrl.create();
     this.loading.present();
     
-    var snapshot = await this.firestore.collection('users').doc(this.userId).get().toPromise();
-    var user = <IUser> snapshot.data();
+    var user = await this.dbHelper.ReadUserByFirebaseUid(this.userId)
+      .catch(async error=>{
+        await this.logger.Error(error);
+      });
     
     if(user && user.roomkeys && user.roomkeys.length > 0){
       await this.queryChats(user.roomkeys);
@@ -65,29 +69,26 @@ export class InboxPage {
     }
   }
 
+  private showLoadFailurePrompt(){
+    this.alertCtrl.create({
+      title: "Hmm, looks like something went wrong loading your chats.",
+      buttons: [{
+        text: "Retry?",
+        handler: ()=>{
+          this.loadChats();
+        }
+      }]
+    });
+  }
+
   private async queryChats(roomkeys: string[]): Promise<any>{
 
-    var promises = roomkeys.map((key)=> {
-      return this.firestore.collection('chats').doc(key).get().toPromise();
-    });
-
-    var snapshots = await Promise.all(promises)
-      .catch((error)=> {
-        console.error(error);
-        return Promise.reject(error);
+    this.chats = await this.dbHelper.ReadUserChats(roomkeys)
+      .catch(async error=>{
+        await this.logger.Error(error);
+        this.showLoadFailurePrompt();
+        return Promise.resolve([]);
       });
-    
-    let temp: IChat[] = [];
-    this.chats = [];
-    snapshots.forEach((snapshot)=> {
-      if(snapshot.exists){
-        const chatObj = <IChat> snapshot.data();
-        temp.push(chatObj);
-      }
-    });
-
-    this.chats = _.sortBy(temp, (chat)=> +chat.timestamp * -1);
-    return Promise.resolve();
   }
 
   private getBadgeCount(): number{

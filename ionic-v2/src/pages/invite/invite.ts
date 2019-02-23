@@ -6,6 +6,7 @@ import { Constants } from '../../helpers/constants';
 import { Utils } from '../../helpers/utils';
 import { Contacts } from '@ionic-native/contacts/ngx';
 import _ from 'underscore';
+import { Logger } from '../../helpers/logger';
 
 @IonicPage()
 @Component({
@@ -25,7 +26,8 @@ export class InvitePage {
     private toastCtrl: ToastController,
     private socialSharing: SocialSharing,
     private firestoreDbHelper: FirestoreDbHelper,
-    private contactsNative: Contacts) {
+    private contactsNative: Contacts,
+    private logger: Logger) {
   }
 
   ionViewDidLoad(){
@@ -41,17 +43,16 @@ export class InvitePage {
     const facebookUid = window.localStorage.getItem(Constants.facebookUserIdKey);
 
     const firstConnecitons = await this.firestoreDbHelper.ReadFirstConnections(firebaseUid)
-      .catch(error =>{
-        console.error(error);
+      .catch(async error =>{
+        await this.logger.Error(error);
         loading.dismiss();
         return Promise.resolve([]);
       });
     this.firstConnectionCount = firstConnecitons.length;
 
-    const secondConnecitons = await this.firestoreDbHelper
-      .ReadSecondConnections(facebookUid, firstConnecitons)
-      .catch(error =>{
-        console.error(error);
+    const secondConnecitons = await this.firestoreDbHelper.ReadSecondConnections(facebookUid, firstConnecitons)
+      .catch(async error =>{
+        await this.logger.Error(error);
         loading.dismiss();
         return Promise.resolve([]);
       });
@@ -68,7 +69,7 @@ export class InvitePage {
     this.socialSharing.shareViaFacebook(this.shareMessage, this.imageSrc, this.shareUrl)
     .then(() => {
     }).catch((error) => {
-        console.error(error);
+        this.logger.Warn(error);
         this.presentToast('Unable to share via Facebook.');
     });
   }
@@ -77,8 +78,8 @@ export class InvitePage {
     this.socialSharing.shareViaInstagram(this.shareMessage, this.imageSrc)
     .then(() => {
     }).catch((error) => {
-        console.error(error);
-        this.presentToast('Unable to share via Instagram.');
+      this.logger.Warn(error);
+      this.presentToast('Unable to share via Instagram.');
     });
   }
 
@@ -87,8 +88,8 @@ export class InvitePage {
     .then(() => {
     })
     .catch((error) => {
-        console.error(error);
-        this.presentToast('Unable to share via WhatsApp.');
+      this.logger.Warn(error);
+      this.presentToast('Unable to share via WhatsApp.');
     });
   }
 
@@ -97,8 +98,8 @@ export class InvitePage {
     .then(() => {
     })
     .catch((error) => {
-        console.error(error);
-        this.presentToast('Unable to share via Twitter.');
+      this.logger.Warn(error);
+      this.presentToast('Unable to share via Twitter.');
     });
   }
 
@@ -115,11 +116,11 @@ export class InvitePage {
           }
 
           this.socialSharing.shareViaSMS(this.shareMessage, targetPhone.value)
-            .catch(error=>console.error(error));
+            .catch(error=>this.logger.Warn(error));
         }
       })
       .catch(error=> {
-        console.error(error);
+        this.logger.Warn(error);
       });
   }
 
@@ -128,7 +129,7 @@ export class InvitePage {
     let toast = this.toastCtrl.create({
       message: message,
       position: 'top',
-      duration: 2000
+      duration: 3000
     });
     toast.present();
   }

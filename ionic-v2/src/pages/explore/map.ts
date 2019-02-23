@@ -1,10 +1,11 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, LoadingController, Loading, Events } from 'ionic-angular';
+import { NavController, LoadingController, Loading, Events, AlertController } from 'ionic-angular';
 import { IUser } from '../../models/user';
 import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { ConnectionListPage } from '../non_tabs/connection_list';
+import { Logger } from '../../helpers/logger';
 
 declare var google;
  
@@ -13,6 +14,8 @@ declare var google;
   templateUrl: 'map.html'
 })
 
+// TODO: Add refresh button
+// TODO: Add list view / view all connecitons
 export class MapPage {
   maxZoomLevel = 10;
   minZoomLevel = 2;
@@ -67,7 +70,9 @@ export class MapPage {
 
   constructor(public navCtrl: NavController,
     private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController,
     private firestoreDbHelper: FirestoreDbHelper,
+    private logger: Logger,
     private events: Events) {
 
     this.firebaseUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
@@ -76,18 +81,27 @@ export class MapPage {
  
   ionViewDidLoad(){
     // TODO: Splash/fade to hide map loading delay?
+    this.showLoadingPopup();
     this.loadMap()
       .then(()=>{
-        document.querySelector("#map-container").classList.toggle("flip");
+        // TODO: Show one-time introductory dialog explaining how to use map (tutorial?)
+        this.loadingPopup.dismiss();
       })
       .catch(error=>{
-        console.error(error);
+        this.logger.Error(error)
+          .then(()=>{
+            this.loadingPopup.dismiss();
+            this.showLoadFailurePrompt();
+          })
+          .catch(()=>{
+            this.loadingPopup.dismiss();
+            this.showLoadFailurePrompt();
+          });
       });
   }
  
   async loadMap(){
     try {
-      this.showLoadingPopup();
       this.map = new google.maps.Map(document.getElementById('map'), this.mapOptions);
 
       // Create the search box and link it to the UI element.
@@ -107,11 +121,9 @@ export class MapPage {
 
       // Bind map events
       this.bindEvents();
-      this.loadingPopup.dismiss();
 
     } catch(ex){
-      console.error(ex);
-      this.loadingPopup.dismiss();
+      return Promise.reject(ex);
     }
   }
 
@@ -128,9 +140,28 @@ export class MapPage {
 
     this.loadingPopup.dismiss();
     } catch(ex){
-      console.error(ex);
-      this.loadingPopup.dismiss();
+      this.logger.Error(ex)
+        .then(()=>{
+          this.loadingPopup.dismiss();
+          this.showLoadFailurePrompt();
+        })
+        .catch(()=>{
+          this.loadingPopup.dismiss();
+          this.showLoadFailurePrompt();
+        });
     }
+  }
+
+  private showLoadFailurePrompt(){
+    this.alertCtrl.create({
+      title: "Hmm, looks like something went wrong loading the map.",
+      buttons: [{
+        text: "Retry?",
+        handler: ()=>{
+          this.ionViewDidLoad();
+        }
+      }]
+    });
   }
 
   private createMarkersAndHeatMap(firstConnecitons: IUser[], secondConnections: IUser[]){
