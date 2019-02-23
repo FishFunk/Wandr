@@ -14,7 +14,7 @@ declare var google;
 })
 
 export class MapPage {
-  maxZoomLevel = 12;
+  maxZoomLevel = 10;
   minZoomLevel = 2;
   loadingPopup: Loading;
   users: IUser[] = [];
