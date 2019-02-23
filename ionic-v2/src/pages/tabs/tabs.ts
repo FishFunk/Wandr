@@ -47,19 +47,32 @@ export class TabsPage {
     const token = await this.fcm.getToken();
     await this.fcm.saveTokenToFirestore(token);
     this.fcm.listenToNotifications().pipe(
-      tap(msg =>{
+      tap((msg: INotificationPayload)=>{
         const selectedTab = this.tabRef.getSelected();
-        if(selectedTab.tabTitle != 'inbox'){
+
+        // New message notifications
+        if(msg.title.indexOf('message') > 0 && selectedTab.tabTitle != 'inbox'){
           const toast = this.toastCtrl.create({
-            message: msg.body,
+            message: msg.title,
             duration: 3000,
             position: 'top'
           });
   
           toast.present();
+          this.updateBadgeCount();
         }
-        
-        this.updateBadgeCount();
+
+        // New friend/user notifications
+        if(msg.title.indexOf('network') > 0){
+          const toast = this.toastCtrl.create({
+            message: msg.title,
+            duration: 3000,
+            position: 'top'
+          });
+  
+          toast.present();
+          this.events.publish(Constants.refreshMapDataEventName);
+        }
       })
     ).subscribe();
 
@@ -87,4 +100,9 @@ export class TabsPage {
   onClickExploreButton(){
     this.tabRef.select(2);
   }
+}
+
+interface INotificationPayload{
+  title: string;
+  body: string;
 }

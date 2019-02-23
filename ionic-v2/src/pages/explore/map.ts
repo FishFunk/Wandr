@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, LoadingController, Loading } from 'ionic-angular';
+import { NavController, LoadingController, Loading, Events } from 'ionic-angular';
 import { IUser } from '../../models/user';
 import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
@@ -67,7 +67,8 @@ export class MapPage {
 
   constructor(public navCtrl: NavController,
     private loadingCtrl: LoadingController,
-    private firestoreDbHelper: FirestoreDbHelper) {
+    private firestoreDbHelper: FirestoreDbHelper,
+    private events: Events) {
 
     this.firebaseUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.facebookUserId = window.localStorage.getItem(Constants.facebookUserIdKey);
@@ -108,6 +109,24 @@ export class MapPage {
       this.bindEvents();
       this.loadingPopup.dismiss();
 
+    } catch(ex){
+      console.error(ex);
+      this.loadingPopup.dismiss();
+    }
+  }
+
+  async refreshMarkersAndHeatMap(){
+    try {
+    this.showLoadingPopup();
+
+    // Read first and second degree connection user data
+    let firstConnections = await this.firestoreDbHelper.ReadFirstConnections(this.firebaseUserId);
+    let secondConnections = await this.firestoreDbHelper.ReadSecondConnections(this.facebookUserId, firstConnections);
+
+    // Generate heat map data from users location information
+    this.createMarkersAndHeatMap(firstConnections, secondConnections);
+
+    this.loadingPopup.dismiss();
     } catch(ex){
       console.error(ex);
       this.loadingPopup.dismiss();
@@ -270,6 +289,9 @@ export class MapPage {
       // not valid anymore => return to last valid position
       this.map.panTo(this.mapCenter);
     });
+
+    // Subscribe to event to refresh map data 
+    this.events.subscribe(Constants.refreshMapDataEventName, this.refreshMarkersAndHeatMap.bind(this));
   }
 
   private showLoadingPopup(){

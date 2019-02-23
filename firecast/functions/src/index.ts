@@ -35,7 +35,7 @@ exports.newUserNotification =
         const payload = {
             notification: {
                 title: title,
-                body: "Come explore your connections on the map."
+                body: "Discover new connections on your map."
             }
         }
 
