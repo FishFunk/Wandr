@@ -79,11 +79,11 @@ export class ConnectionListPage {
 
     orderByMutualFriends(){
         this.firstConnections = _.sortBy(this.firstConnections, (user)=>{
-            return this.countMutualFriends(user);
+            return -this.countMutualFriends(user);
         });
 
         this.secondConnections = _.sortBy(this.secondConnections, (user)=>{
-            return this.countMutualFriends(user);
+            return -this.countMutualFriends(user);
         });
     }
 }

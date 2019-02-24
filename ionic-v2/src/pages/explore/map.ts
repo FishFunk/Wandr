@@ -116,8 +116,9 @@ export class MapPage {
       // Generate heat map data from users location information
       this.createMarkersAndHeatMap(firstConnections, secondConnections);
 
-      // Add custom control to map
+      // Add custom controls to map
       this.createRandomControl();
+      this.createListViewControl();
 
       // Bind map events
       this.bindEvents();
@@ -154,9 +155,9 @@ export class MapPage {
 
   private showLoadFailurePrompt(){
     this.alertCtrl.create({
-      title: "Hmm, looks like something went wrong loading the map.",
+      title: "Hmm, looks like something went wrong...",
       buttons: [{
-        text: "Retry?",
+        text: "Reload the map?",
         handler: ()=>{
           this.ionViewDidLoad();
         }
@@ -252,6 +253,31 @@ export class MapPage {
       { animate: true, direction: 'forward' });
   }
 
+  private async onShowAllClick(){
+    this.showLoadingPopup();
+
+    let firstConnections = await this.firestoreDbHelper.ReadFirstConnections(this.firebaseUserId)
+      .catch(async error =>{
+        this.loadingPopup.dismiss();
+        this.showLoadFailurePrompt();
+        await this.logger.Error(error);
+        return Promise.reject();
+      });
+
+    let secondConnections = await this.firestoreDbHelper.ReadSecondConnections(this.facebookUserId, firstConnections)
+      .catch(async error =>{
+        this.loadingPopup.dismiss();
+        this.showLoadFailurePrompt();
+        await this.logger.Error(error);
+        return Promise.reject();
+      });
+
+    this.loadingPopup.dismiss();
+    this.navCtrl.push(ConnectionListPage, 
+      { firstConnections: firstConnections, secondConnections: secondConnections, locationStringFormat: "All Connections," }, 
+      { animate: true, direction: 'forward' });
+  }
+
   private initHeatMap(geoData: google.maps.LatLng[]){
     this.heatmap = new google.maps.visualization.HeatmapLayer({
       data: geoData,
@@ -335,17 +361,14 @@ export class MapPage {
 
   /**
    * The RandomControl adds a control to the map that centers on random map spot
-   * 
-   * This constructor takes the control DIV as an argument.
-   * @constructor
    */
   private createRandomControl() {
 
-    // Create DIV to hold the control and call the createRandomControl()
-    // constructor passing in this DIV.
     var controlDiv = document.createElement('div');
     controlDiv.style.paddingTop = '5px';
     controlDiv.style.paddingRight = '5px';
+    controlDiv.style.height = '50px';
+    controlDiv.style.width = '50px';
 
     // Set CSS for the control border.
     var controlUI = document.createElement('div');
@@ -380,5 +403,44 @@ export class MapPage {
     });
 
     this.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(controlDiv);
+  }
+
+  /**
+   * The ListViewControl adds a control to the map that shows a list of all connections
+   */
+  private createListViewControl() {
+
+    var controlDiv = document.createElement('div');
+    controlDiv.style.paddingTop = '5px';
+    controlDiv.style.paddingLeft = '5px';
+    controlDiv.style.height = '50px';
+    controlDiv.style.width = '50px';
+
+    // Set CSS for the control border.
+    var controlUI = document.createElement('div');
+    controlUI.style.backgroundColor = '#fff';
+    controlUI.style.border = '2px solid #fff';
+    controlUI.style.borderRadius = '50%';
+    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+    controlUI.style.cursor = 'pointer';
+    controlUI.style.marginBottom = '22px';
+    controlUI.style.textAlign = 'center';
+    controlUI.title = 'See full list of connections';
+    controlDiv.appendChild(controlUI);
+
+    // Set CSS for the control interior.
+    var controlText = document.createElement('div');
+    controlText.style.color = 'rgb(25,25,25)';
+    controlText.style.lineHeight = '38px';
+    controlText.style.paddingLeft = '6px';
+    controlText.style.paddingRight = '6px';
+    controlText.style.paddingTop = '5px';
+    controlText.innerHTML = '<i class="fas fa-list fa-2x"></i>';
+    controlUI.appendChild(controlText);
+
+    // Setup the click event listeners
+    controlUI.addEventListener('click', this.onShowAllClick.bind(this));
+
+    this.map.controls[google.maps.ControlPosition.LEFT_TOP].push(controlDiv);
   }
 }
