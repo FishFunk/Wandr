@@ -18,7 +18,7 @@
     </div>
 </ion-content>
 
-<ion-footer id="messageFooter">
+<ion-footer id="message-footer">
     <ion-toolbar>
         <ion-list class="pad">
             <ion-item>
@@ -26,7 +26,7 @@
                     spellcheck="true" 
                     autoComplete="true" 
                     autocorrect="true" 
-                    rows="1"
+                    (input)="udpateHeight()"
                     [(ngModel)]="message" 
                     placeholder="Type your message..." 
                     (keyup.enter)="sendMessage()"></textarea>

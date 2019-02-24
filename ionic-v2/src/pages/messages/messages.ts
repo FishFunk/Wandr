@@ -19,6 +19,7 @@ export class MessagesPage {
     @ViewChild(Content) contentArea: Content;
     @ViewChildren('messageListItems') messageListItems: QueryList<ElementRef>;
     @ViewChild('sendButton') sendButton: Button;
+    @ViewChild('textInput') textarea: ElementRef;
 
     headerName: string;
     uid: string;
@@ -196,6 +197,12 @@ export class MessagesPage {
             return 'bot';
         }
         return this.uid == message.from_uid  ? 'outgoing' : 'incoming';
+    }
+
+    udpateHeight()
+    {
+        this.textarea.nativeElement.style.height = this.initialTextareaScrollHeight+"px";
+        this.textarea.nativeElement.style.height = (this.textarea.nativeElement.scrollHeight)+"px";
     }
 
     private stopBubble(event) {
