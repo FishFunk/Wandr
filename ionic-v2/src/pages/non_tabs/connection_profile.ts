@@ -5,10 +5,10 @@ import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
 import { IChat } from '../../models/chat';
 import { AngularFireFunctions } from 'angularfire2/functions';
-import { AngularFirestore } from 'angularfire2/firestore';
 import { Utils } from '../../helpers/utils';
 import { MessagesPage } from '../messages/messages';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
+import { Logger } from '../../helpers/logger';
  
 @Component({
   selector: 'page-connection-profile',
@@ -27,12 +27,12 @@ export class ConnectionProfilePage {
 
     constructor(
         params: NavParams,
+        private logger: Logger,
         private loadingCtrl: LoadingController,
         private toastCtrl: ToastController,
         private alertCtrl: AlertController,
-        private firestore: AngularFirestore,
-        private firebaseFunctionsModule: AngularFireFunctions,
         private navCtrl: NavController,
+        private firebaseFunctionsModule: AngularFireFunctions,
         private dbHelper: FirestoreDbHelper){
 
         this.chatData = null;
@@ -49,20 +49,23 @@ export class ConnectionProfilePage {
             .then(()=>{
                 loading.dismiss();
             })
-            .catch(error=>{
-                console.error(error);
+            .catch(async error=>{
+                await this.logger.Error(error);
                 loading.dismiss();
+                this.presentAlert("It's not you, it's us... something went wrong. Please try again!");
             });
     }
 
     async loadView(){
       const doesExist = await this._checkIfChatExists();
 
-
       if(doesExist){
         // Chat with roomkey already exists, update UI button and verify user has roomkey
         this.chatExists = true;
-        await this._verifyUserHasRoomkey();
+        await this._verifyUserHasRoomkey()
+          .catch(error =>{
+            return Promise.reject(error);
+          });
       } else {
           this.chatExists = false;
       }
@@ -142,8 +145,8 @@ export class ConnectionProfilePage {
             });
             toast.present();
           })
-          .catch(error=>{
-            console.error(error);
+          .catch(async error=>{
+            await this.logger.Error(error);
             loading.dismiss();
           });
     }
@@ -151,19 +154,19 @@ export class ConnectionProfilePage {
     private async _checkIfChatExists(){
         // Check if chat exists to prevent duplicates
         let possibleRoomkey = this.currentUserId + '_' + this.viewUserData.app_uid;
-        let snapshot = await this.firestore.collection('chats').doc(possibleRoomkey).get().toPromise();
-        if(snapshot.exists){
+        let possibleChat = await this.dbHelper.ReadSingleChat(possibleRoomkey);
+        if(possibleChat){
           // Chat with roomkey already exists
-          this.chatData = <IChat> snapshot.data();
+          this.chatData = possibleChat;
           return true;
         }
         
         possibleRoomkey = this.viewUserData.app_uid + '_' + this.currentUserId;
-        snapshot = await this.firestore.collection('chats').doc(possibleRoomkey).get().toPromise();
-    
-        if(snapshot.exists){
+        possibleChat = await this.dbHelper.ReadSingleChat(possibleRoomkey);
+
+        if(possibleChat){
           // Chat with roomkey already exists
-          this.chatData = <IChat> snapshot.data();
+          this.chatData = possibleChat;
           return true;
         }
     
@@ -175,13 +178,13 @@ export class ConnectionProfilePage {
         const user = await this.dbHelper.ReadUserByFirebaseUid(this.currentUserId);
 
         if(!_.contains(user.roomkeys, this.chatData.roomkey)){
-          console.warn(`Roomkey exists but ${this.currentUserId} does not have it! Updating user roomkeys...`);
+          this.logger.Warn(`Roomkey exists but ${this.currentUserId} does not have it! Updating user roomkeys...`);
           user.roomkeys.push(this.chatData.roomkey);
           await this.dbHelper.UpdateUser(this.currentUserId, { roomkeys: user.roomkeys });
         }
       }
       catch(ex){
-        console.error(ex);
+        return Promise.reject(ex);
       }
     }
 
@@ -189,7 +192,7 @@ export class ConnectionProfilePage {
 
       const reason = inputData.reason.trim();
       if(!reason){
-        alert("Please add your reason for the report!");
+        this.presentAlert("Please add your reason for the report!");
         return;
       }
 
@@ -204,16 +207,23 @@ export class ConnectionProfilePage {
         }
       };
 
-      this.firestore.firestore.collection('reports').add(reportData)
+      this.dbHelper.CreateNewReport(reportData)
         .then(()=>{
-          const toast = this.toastCtrl.create({
+          this.toastCtrl.create({
             message: 'Report successfully submitted!',
             duration: 2000
-          });
-
-          toast.present();
+          }).present();
         })
-        .catch(error => console.error(error));
+        .catch(async error => {
+          await this.logger.Error(error);
+          this.presentAlert("Report failed to send. Please try again.");
+        });
+    }
+
+    private presentAlert(message: string){
+      this.alertCtrl.create({
+        title: message
+      }).present();
     }
 
     private presentConfirmation(){

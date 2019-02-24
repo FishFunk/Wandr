@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Device } from '@ionic-native/device/ngx';
 import { Constants } from '../../helpers/constants';
-import { NavController } from 'ionic-angular';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { NavController, AlertController } from 'ionic-angular';
+import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
+import { Logger } from '../../helpers/logger';
 
 @Component({ 
     selector: 'page-contact',
@@ -15,13 +16,15 @@ export class ContactPage {
 
     constructor(
         private device: Device,
-        private firestore: AngularFirestore,
-        private navCtrl: NavController){
+        private dbHelper: FirestoreDbHelper,
+        private navCtrl: NavController,
+        private alertCtrl: AlertController,
+        private logger: Logger){
     }
 
     onSubmit(){
         if(!this.reason){
-            alert("Please select a contact reason");
+            this.presentAlert("Please select a contact reason.");
             return;
         }
 
@@ -42,17 +45,25 @@ export class ContactPage {
                 userText: this.text.trim()
             }
 
-            this.firestore.collection('reports')
-                .add(reportData)
+            this.dbHelper.CreateNewReport(reportData)
                 .then(()=>{
-                    alert("Thanks for your feedback!");
+                    this.presentAlert("Thanks for your feedback!");
                     this.text = "";
                     this.reason = "";
                     this.navCtrl.pop();
                 })
-                .catch((error)=>{
-                    console.error(error);
+                .catch(async (error)=>{
+                    await this.logger.Error(error);
+                    this.presentAlert("It's not you, it's us.", "Something went wrong. Please try again.");
                 });
         }
+    }
+
+    private presentAlert(title: string, message?: string){
+        this.alertCtrl.create({
+            title: title,
+            message: message
+        })
+        .present();
     }
 }

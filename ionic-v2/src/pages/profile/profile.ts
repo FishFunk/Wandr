@@ -5,8 +5,8 @@ import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderRever
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
-import { AngularFirestore } from 'angularfire2/firestore';
 import { Utils } from '../../helpers/utils';
+import { Logger } from '../../helpers/logger';
 
 @IonicPage()
 @Component({
@@ -35,7 +35,7 @@ export class ProfilePage {
     private facebookApi: FacebookApi,
     private platform: Platform,
     private firestoreDbHelper: FirestoreDbHelper,
-    private firestore: AngularFirestore) {
+    private logger: Logger) {
 
     this.googleAutoComplete = new google.maps.places.AutocompleteService();
   }
@@ -52,88 +52,92 @@ export class ProfilePage {
 
   async load(){
     this.showLoadingPopup();
+    try{
+      if(this.platform.is('cordova')){
+        var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+        var facebookUid = window.localStorage.getItem(Constants.facebookUserIdKey);
+        var token = window.localStorage.getItem(Constants.accessTokenKey);
 
-    if(this.platform.is('cordova')){
-      var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
-      var facebookUid = window.localStorage.getItem(Constants.facebookUserIdKey);
-      var token = window.localStorage.getItem(Constants.accessTokenKey);
+        var fbUserData = await <any> this.facebookApi.getUser(facebookUid, token);
+        var user = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid);
 
-      var fbUserData = await <any> this.facebookApi.getUser(facebookUid, token);
-      var snapshot = await this.firestore.collection('users').doc(firebaseUid).get().toPromise();
+        // If User does not exist yet
+        if(!user) {
+          this.userData.app_uid = firebaseUid;
+          this.userData.facebook_uid = facebookUid;
 
-      // If User does not exist yet
-      if(!snapshot.exists) {
-        this.userData.app_uid = firebaseUid;
-        this.userData.facebook_uid = facebookUid;
+          // Get first and last name
+          var names = fbUserData.name.split(' ');
+          this.userData.first_name = names[0];
+          this.userData.last_name = names[1];
 
-        // Get first and last name
-        var names = fbUserData.name.split(' ');
-        this.userData.first_name = names[0];
-        this.userData.last_name = names[1];
+          // Get Facebook location and geocode it
+          if(fbUserData.location && fbUserData.location.name) {
+            this.userData.location.stringFormat = fbUserData.location.name;
+            this.autoComplete.input = fbUserData.location.name;
+            await this.forwardGeocode(fbUserData.location.name);
+          }
 
-        // Get Facebook location and geocode it
-        if(fbUserData.location && fbUserData.location.name) {
-          this.userData.location.stringFormat = fbUserData.location.name;
-          this.autoComplete.input = fbUserData.location.name;
-          await this.forwardGeocode(fbUserData.location.name);
+          // Get Facebook friends list
+          this.userData.friends = await this.facebookApi.getFriendList(facebookUid, token);
+
+          // Email
+          this.userData.email = fbUserData.email || '';
+
+          // Get Facebook photo URL
+          if(fbUserData.picture){
+            this.userData.profile_img_url = 
+              fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
+          }
+
+          // Create new user ref
+          const newUsr = this.getPlainUserObject();
+          await this.firestoreDbHelper.SetNewUserData(firebaseUid, newUsr);
+        } else {
+          // IF user already has been created
+          this.userData = <User> user;
+          
+          // Always update Facebook friends list
+          this.userData.friends = await this.facebookApi.getFriendList(facebookUid, token);
+
+          // Always update email
+          this.userData.email = fbUserData.email || '';
+
+          // Always update Facebook photo URL
+          if(fbUserData.picture){
+            this.userData.profile_img_url = 
+              fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
+          }
         }
 
-        // Get Facebook friends list
-        this.userData.friends = await this.facebookApi.getFriendList(facebookUid, token);
+        // Cache some user data
+        window.localStorage.setItem(Constants.userFirstNameKey, this.userData.first_name);
+        window.localStorage.setItem(Constants.userLastNameKey, this.userData.last_name);
+        window.localStorage.setItem(Constants.profileImageUrlKey, this.userData.profile_img_url);
+        window.localStorage.setItem(Constants.userFacebookFriendsKey, JSON.stringify(this.userData.friends));
 
-        // Email
-        this.userData.email = fbUserData.email || '';
+        // Calculate second degree connections
+        this.secondConnectionCount = await this.countSecondConnections();
 
-        // Get Facebook photo URL
-        if(fbUserData.picture){
-          this.userData.profile_img_url = 
-            fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
-        }
+        // Always update last login timestamp
+        this.userData.last_login = new Date().toString();
 
-        // Create new user ref
-        const newUsr = this.getPlainUserObject();
-        await this.firestore.collection('users').doc(firebaseUid).set(newUsr);
+        // Update DB
+        await this.writeUserDataToDb();
       } else {
-        // IF user already has been created
-        this.userData = <User> snapshot.data();
-        
-        // Always update Facebook friends list
-        this.userData.friends = await this.facebookApi.getFriendList(facebookUid, token);
-
-        // Always update email
-        this.userData.email = fbUserData.email || '';
-
-        // Always update Facebook photo URL
-        if(fbUserData.picture){
-          this.userData.profile_img_url = 
-            fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
-        }
+        // Debug or Browser path
+        this.userData = new User('', '', 'Johnny', 'Appleseed', '',
+          { stringFormat: 'Washington, DC', latitude: '', longitude: ''}, 
+          [],
+          { host: true, tips: true, meetup: true, emergencyContact: true},
+          [],
+          '',
+          '../../assets/avatar_man.png',
+          'This is fake data, for running in the browser.');
       }
-
-      // Cache some user data
-      window.localStorage.setItem(Constants.userFirstNameKey, this.userData.first_name);
-      window.localStorage.setItem(Constants.userLastNameKey, this.userData.last_name);
-      window.localStorage.setItem(Constants.profileImageUrlKey, this.userData.profile_img_url);
-      window.localStorage.setItem(Constants.userFacebookFriendsKey, JSON.stringify(this.userData.friends));
-
-      // Calculate second degree connections
-      this.secondConnectionCount = await this.countSecondConnections();
-
-      // Always update last login timestamp
-      this.userData.last_login = new Date().toString();
-
-      // Update DB
-      await this.writeUserDataToDb();
-    } else {
-      // Debug or Browser path
-      this.userData = new User('', '', 'Johnny', 'Appleseed', '',
-        { stringFormat: 'Washington, DC', latitude: '', longitude: ''}, 
-        [],
-        { host: true, tips: true, meetup: true, emergencyContact: true},
-        [],
-        '',
-        '../../assets/avatar_man.png',
-        'This is fake data, for running in the browser.');
+    }
+    catch(ex){
+      await this.logger.Error(ex);
     }
     this.loadingPopup.dismiss();
   }
@@ -147,8 +151,8 @@ export class ProfilePage {
           this.loadingPopup.dismiss();
           this.presentToast("top", "Profile updates saved!");
         })
-        .catch(error=>{
-          console.error(error);
+        .catch(async error=>{
+          await this.logger.Error(error);
           this.loadingPopup.dismiss();
           this.presentToast("top", "Failed to save profile updates");
         });
@@ -196,12 +200,7 @@ export class ProfilePage {
 
   private writeUserDataToDb(): Promise<any>{
     const updateData = this.getPlainUserObject();
-    return this.firestore.collection('users')
-      .doc(this.userData.app_uid)
-      .update(updateData)
-      .catch((error)=>{
-        console.error(error);
-      });
+    return this.firestoreDbHelper.UpdateUser(this.userData.app_uid, updateData);
   }
 
   private async forwardGeocode(formattedLocation: string)
@@ -211,7 +210,7 @@ export class ProfilePage {
 
     
     if(!data || data.length == 0) {
-      console.error(`Unable to forward geocode: ${formattedLocation}`);
+      this.logger.Warn(`Unable to forward geocode: ${formattedLocation}`);
       return;
     }
 
@@ -228,7 +227,7 @@ export class ProfilePage {
       await this.nativeGeocoder.reverseGeocode(lat, long, this.geocoderOptions);
 
     if(!data || data.length == 0) {
-      console.error(`Unable to reverse geocode Lat: ${lat}, Long: ${long}`);
+      this.logger.Warn(`Unable to reverse geocode Lat: ${lat}, Long: ${long}`);
       return;
     }
 

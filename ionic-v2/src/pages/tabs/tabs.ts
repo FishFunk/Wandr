@@ -9,6 +9,7 @@ import { FcmProvider } from '../../providers/fcm/fcm';
 import { tap } from 'rxjs/operators';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Constants } from '../../helpers/constants';
+import { Logger } from '../../helpers/logger';
 
 @Component({
   selector: 'tabs-page',
@@ -33,6 +34,7 @@ export class TabsPage {
     public fcm: FcmProvider,
     private platform: Platform,
     private firestoreDbHelper: FirestoreDbHelper,
+    private logger: Logger,
     private events: Events) {
 
     this.useFabButton = !this.platform.is('ios');
@@ -40,7 +42,9 @@ export class TabsPage {
 
   ionViewDidLoad(){
     this.load()
-      .catch(error=> console.error(error));
+      .catch(error=> {
+        this.logger.Error(error);
+      });
   }
 
   private async load(){
@@ -85,13 +89,12 @@ export class TabsPage {
 
   private async updateBadgeCount(){
     const firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
-
     return this.firestoreDbHelper.GetUnreadChatCount(firebaseUid)
       .then((count)=>{
         this.badgeCount = count;
       })
       .catch(error=>{
-        console.error(error);
+        this.logger.Warn(error);
       });
   }
 

@@ -4,10 +4,10 @@ import { FacebookApi } from '../../helpers/facebookApi';
 import { ContactPage } from './contact';
 import { AboutPage } from './about';
 import { Constants } from '../../helpers/constants';
-import { AngularFirestore } from 'angularfire2/firestore';
 import { IUserSettings } from '../../models/user';
 import { IntroPage } from '../intro/intro';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
+import { Logger } from '../../helpers/logger';
 
 @IonicPage()
 @Component({
@@ -19,7 +19,6 @@ export class SettingsPage {
 
     firebaseUid: string;
     pushNotifications: boolean;
-    ghostMode: boolean;
 
     constructor(
         public navCtrl: NavController,
@@ -27,8 +26,8 @@ export class SettingsPage {
         private toastCtrl: ToastController,
         private alertCtrl: AlertController,
         private fbApi: FacebookApi,
-        private firestore: AngularFirestore,
-        private firestoreDbHelper: FirestoreDbHelper){
+        private firestoreDbHelper: FirestoreDbHelper,
+        private logger: Logger){
 
         this.firebaseUid = localStorage.getItem(Constants.firebaseUserIdKey);
     }
@@ -38,29 +37,24 @@ export class SettingsPage {
             .then((usr)=>{
                 if(usr && usr.settings){
                     this.pushNotifications = usr.settings.notifications;
-                    this.ghostMode = usr.settings.ghostMode;
                 }
             })
             .catch(error=>{
-                console.error(error);
+                this.logger.Error(error);
             });
     }
 
     updateUserSettings(){
         const newSettings: IUserSettings = {
-            notifications: !!this.pushNotifications,
-            ghostMode: !!this.ghostMode
+            notifications: !!this.pushNotifications
         }
-        this.firestore.collection('users')
-            .doc(this.firebaseUid)
-            .update({
-                settings: newSettings
-            })
+
+        this.firestoreDbHelper.UpdateUser(this.firebaseUid, { settings: newSettings })
             .then(()=>{
-                // alert("Preferences saved!");
+                this.presentToast('top', "Preferences saved!");
             })
             .catch((error)=> {
-                console.error(error);
+                this.logger.Error(error);
             });
     }
 
@@ -97,8 +91,8 @@ export class SettingsPage {
                 window.localStorage.clear();
                 this.appCtrl.getRootNav().setRoot(IntroPage);
             })
-            .catch((error)=>{
-                console.error(error);
+            .catch(async (error)=>{
+                await this.logger.Error(error);
                 this.presentToast('top', 'Logout failed!');
             });
     }
@@ -108,8 +102,8 @@ export class SettingsPage {
             .then(()=>{
                 this.logout();
             })
-            .catch(error=> {
-                console.error(error);
+            .catch(async error=> {
+                await this.logger.Error(error);
                 this.presentToast('top', 'Failed to delete account!');
             });
     }

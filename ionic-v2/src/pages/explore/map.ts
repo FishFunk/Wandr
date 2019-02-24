@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, LoadingController, Loading, Events, AlertController } from 'ionic-angular';
 import { IUser } from '../../models/user';
 import _ from 'underscore';

@@ -3,11 +3,48 @@ import { IUser } from "../models/user";
 import _ from 'underscore';
 import { AngularFirestore } from "angularfire2/firestore";
 import { IChat } from "../models/chat";
+import { firestore } from "firebase";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class FirestoreDbHelper {
     constructor(private angularFirestore: AngularFirestore){
 
+    }
+
+    public UpdateMessages(roomkey: string, messageData: any): Promise<void>{
+      return this.angularFirestore.collection('messages').doc(roomkey).update(messageData);
+    }
+
+    public UpdateChat(roomkey: string, chatData: any): Promise<void>{
+      return this.angularFirestore.collection('chats').doc(roomkey).update(chatData);
+    }
+
+    public SendMessage(roomkey: string, messageUpdate: any, chatUpdate: any): Promise<void>{
+      // Batch chat and message DB updates
+      var batch = this.angularFirestore.firestore.batch();
+      batch.update(this.angularFirestore.collection('messages').doc(roomkey).ref, messageUpdate);
+      batch.update(this.angularFirestore.collection('chats').doc(roomkey).ref, chatUpdate);
+
+      return batch.commit();
+    }
+
+    public CreateNewReport(reportData: any): Promise<firestore.DocumentReference>{
+      return this.angularFirestore.collection('reports').add(reportData);
+    }
+
+    public GetMessagesObservable(roomkey: string): Observable<{}>{
+      return this.angularFirestore.collection('messages').doc(roomkey).valueChanges();
+    }
+
+    public async ReadSingleChat(roomeky: string): Promise<IChat>{
+      let snapshot = await this.angularFirestore.collection('chats').doc(roomeky).get().toPromise();
+      if(snapshot.exists){
+        // Chat with roomkey already exists
+        return <IChat> snapshot.data();
+      } else {
+        return null;
+      }
     }
 
     public async ReadUserChats(roomkeys: string[]): Promise<IChat[]>{
@@ -69,6 +106,10 @@ export class FirestoreDbHelper {
       });
 
       return count;
+    }
+
+    public SetNewUserData(firebaseUserId: string, newUserData: IUser): Promise<void>{
+      return this.angularFirestore.collection('users').doc(firebaseUserId).set(newUserData);
     }
 
     public async ReadUserByFirebaseUid(firebaseUserId: string){

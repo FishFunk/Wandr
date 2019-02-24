@@ -1,13 +1,13 @@
 import { Component, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
-import { Content, LoadingController, NavParams, Button, NavController, Events } from 'ionic-angular';
+import { Content, LoadingController, NavParams, Button, NavController, Events, AlertController } from 'ionic-angular';
 import { Constants } from '../../helpers/constants';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
-import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription, Observable } from 'rxjs';
 import { IMessage, IChat } from '../../models/chat';
 import _ from 'underscore';
 import { ConnectionProfilePage } from '../non_tabs/connection_profile';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
+import { Logger } from '../../helpers/logger';
 
  
 @Component({
@@ -37,9 +37,10 @@ export class MessagesPage {
         params: NavParams,
         private loadingCtrl: LoadingController,
         private navCtrl: NavController,
+        private alertCtrl: AlertController,
         private keyboard: Keyboard,
-        private firestore: AngularFirestore,
         private firestoreDbHelper: FirestoreDbHelper,
+        private logger: Logger,
         private events: Events) {
         
         this.chat = params.get('chat');
@@ -103,17 +104,21 @@ export class MessagesPage {
 
     async loadMessages(){
 
-        this.messagesObservable = this.firestore
-            .collection('messages')
-            .doc(this.chat.roomkey)
-            .valueChanges();
-            
-        this.messagesObservable.subscribe(async data =>{
-            this.messages = _.map(data, (obj, key)=> obj);
-        });
-
-        this.updateChatReadReceipt()
-            .catch(error => console.error(error));
+        this.messagesObservable = this.firestoreDbHelper.GetMessagesObservable(this.chat.roomkey);
+        
+        if(this.messagesObservable){
+            this.messagesObservable.subscribe(async data =>{
+                this.messages = _.map(data, (obj, key)=> obj);
+            });
+    
+            this.updateChatReadReceipt()
+                .catch(async error => {
+                    await this.logger.Error(error);
+                });
+        } else {
+            this.logger.Error(new Error("GetMessagesObservable returned null!"));
+            this.presentAlert("It's not you, it's us... something went wrong.");
+        }
     }
 
     onClickProfile(){
@@ -134,10 +139,10 @@ export class MessagesPage {
                     { user: user, showChatButton: false }, 
                     { animate: true, direction: 'forward' });
             })
-            .catch(error=>{
-                console.error(error);
+            .catch(async error=>{
+                await this.logger.Error(error);
                 loading.dismiss();
-                alert(`${this.headerName} has deleted their account.`);
+                this.presentAlert(`${this.headerName} has deleted their account!`);
             });
     }
 
@@ -172,16 +177,11 @@ export class MessagesPage {
 
             this.message = '';
 
-            await this.firestore
-                .collection('messages')
-                .doc(this.chat.roomkey)
-                .update(data);
-
-            // Update chat doc
-            await this.firestore
-                .collection('chats')
-                .doc(this.chat.roomkey)
-                .update(chatUpdate);
+            await this.firestoreDbHelper.SendMessage(this.chat.roomkey, data, chatUpdate)
+                .catch(async error =>{
+                    await this.logger.Error(error);
+                    this.presentAlert("It's not you, it's us... Message failed to send :(");
+                });
 
             loading.dismiss();
         }
@@ -205,13 +205,19 @@ export class MessagesPage {
             event.stopPropagation(); //Stops event bubbling
         }
         catch (ex) {
-            console.error(ex);
+            this.logger.Warn(ex);
         }
     }
 
     private stopBubbleAndSendMessage(event) {
         this.stopBubble(event);
         this.sendMessage();
+    }
+
+    private presentAlert(message: string){
+        this.alertCtrl.create({
+            title: message
+        }).present();
     }
 
     private async updateChatReadReceipt(){
@@ -223,12 +229,15 @@ export class MessagesPage {
             chatUpdate = { userB_unread: false };
         }
 
-        await this.firestore
-            .collection('chats')
-            .doc(this.chat.roomkey)
-            .update(chatUpdate);
+        await this.firestoreDbHelper.UpdateChat(this.chat.roomkey, chatUpdate)
+            .catch(async error =>{
+                this.logger.Warn(error);
+            });
 
-        const newBadgeCount = await this.firestoreDbHelper.GetUnreadChatCount(this.uid);
+        const newBadgeCount = await this.firestoreDbHelper.GetUnreadChatCount(this.uid)
+            .catch(async error =>{
+                this.logger.Warn(error);
+            });
 
         this.events.publish(Constants.updateBadgeCountEventName, newBadgeCount);
     }

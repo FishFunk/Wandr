@@ -42,7 +42,7 @@ export interface IFacebookFriend{
 
 export interface IUserSettings{
     notifications: boolean;
-    ghostMode: boolean;
+    //ghostMode: boolean;
     //thirdConnections: boolean;
 }
 
@@ -77,7 +77,6 @@ export class User implements IUser{
         public last_login: string,
         public profile_img_url: string,
         public bio: string = '',
-        public settings: any = {},
-        public ghost_mode: boolean = false)
+        public settings: any = {})
         {}
 }
