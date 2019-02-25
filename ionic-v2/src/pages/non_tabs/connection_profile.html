@@ -16,6 +16,9 @@
         <div>
             <strong>Lives in: </strong><span>{{viewUserData.location.stringFormat}}</span>
         </div>
+        <div>
+            <strong>Last login: </strong><span>{{viewUserData.last_login | date:'MMM dd yyyy'}}</span>
+        </div>
         <div *ngIf="mutualFriends && mutualFriends.length > 0">
             <strong>Mutual Wandrers: </strong><span>{{mutualFriends.length}}</span>
         </div>

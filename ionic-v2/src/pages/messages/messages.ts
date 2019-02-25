@@ -25,6 +25,7 @@ export class MessagesPage {
     uid: string;
     messages: Array<any> = [];
     message: string = '';
+    initialTextareaScrollHeight: number;
     firstName: string;
     chat: IChat;
     showProfileButton: boolean;
@@ -72,6 +73,8 @@ export class MessagesPage {
     }
 
     ngAfterViewInit() {
+        this.initialTextareaScrollHeight = this.textarea.nativeElement.scrollHeight;
+
         // Subscribe listeners
         this.messageListItems.changes.subscribe(async () => {
             await this.scrollToBottom(500);

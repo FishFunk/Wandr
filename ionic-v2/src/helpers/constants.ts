@@ -6,7 +6,7 @@ export abstract class Constants {
     public static userFacebookFriendsKey = "userFacebookFriends";
     public static userFirstNameKey = "firstName";
     public static userLastNameKey = "lastName";
-    public static appBotId = "travel_guru_bot";
+    public static appBotId = "wandr_bot"; // defined in firebase functions index.ts
 
     // Events
     public static updateBadgeCountEventName = "onUpdateBadgeCountEvent";
