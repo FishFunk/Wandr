@@ -83,34 +83,34 @@ exports.newUserNotification =
 
 exports.newMessageNotification = 
     functions.firestore.document('messages/{roomkey}')
-    .onUpdate(async event =>{
-        const messages = event.after.data();
-        const timestamps = _.keys(messages);
-        const sorted = timestamps.sort();
-        const latestMessageKey = _.last(sorted);
-        const newMessage = messages[latestMessageKey];
+        .onUpdate(async event =>{
+            const messages = event.after.data();
+            const timestamps = _.keys(messages);
+            const sorted = timestamps.sort();
+            const latestMessageKey = _.last(sorted);
+            const newMessage = messages[latestMessageKey];
 
-        const payload = {
-            notification: {
-                title: `New message from ${newMessage.name}!`,
-                body: newMessage.text
-            }
-        };
+            const payload = {
+                notification: {
+                    title: `New message from ${newMessage.name}!`,
+                    body: newMessage.text
+                }
+            };
 
-        const idToNotify = newMessage.to_uid;
-        const devicesRef = await admin.firestore().collection('devices').where('userId', '==', idToNotify).get();
-        const tokens = [];
-        devicesRef.forEach(result =>{
-            const token = result.data().token;
-            tokens.push(token);
+            const idToNotify = newMessage.to_uid;
+            const devicesRef = await admin.firestore().collection('devices').where('userId', '==', idToNotify).get();
+            const tokens = [];
+            devicesRef.forEach(result =>{
+                const token = result.data().token;
+                tokens.push(token);
+            });
+
+            return admin.messaging().sendToDevice(tokens, payload);
         });
-
-        return admin.messaging().sendToDevice(tokens, payload);
-    });
 
 exports.createChat = functions.https.onCall((chatData, context) => {
 
-    chatData.lastMessage = `Hey ${chatData.userB_name}! Looks like you and ${chatData.userA_name} have a network connection! You can now message each other here!\n\n- Travel Guru Bot`;
+    chatData.lastMessage = `Hey ${chatData.userB_name}! Looks like you and ${chatData.userA_name} have a network connection! You can now message each other here!\n\n- Wandr Team`;
 
     return _createChatRoom(chatData)
         .then(()=>{
@@ -132,22 +132,26 @@ async function _createChatRoom(chatData: any){
         // Chat already exists
         throw new functions.https.HttpsError('already-exists');
     } else {
+        const batch = admin.firestore().batch();
         // Create new chat room
-        await admin.firestore().collection('chats').doc(chatData.roomkey).set(chatData)
-            .catch((error)=> {
-                console.error(error);
-                throw new functions.https.HttpsError('internal', 'Setting chats/{roomkey}', error);
-            });
+        
+        batch.set(admin.firestore().collection('chats').doc(chatData.roomkey), chatData);
         
         // Give users roomkey
-        await _updateUsersWithRoomkey(chatData.userA_id, chatData.userB_id, chatData.roomkey);
+        await _updateUsersWithRoomkey(batch, chatData.userA_id, chatData.userB_id, chatData.roomkey);
 
         // Send first message in chat
-        return _createAndSendFirstMessage(chatData);
+        await _createAndSendFirstMessage(batch, chatData);
+
+        return batch.commit()
+            .catch(error=>{
+                console.error(error);
+                throw new functions.https.HttpsError('internal', 'Batch commit failed', error);
+            });
     }
 }
 
-async function _updateUsersWithRoomkey(userA_id, userB_id, roomkey){
+async function _updateUsersWithRoomkey(batch: FirebaseFirestore.WriteBatch, userA_id, userB_id, roomkey){
 
     if(!userA_id || !userB_id || !roomkey){
         console.error("_updateUsersWithRoomkey() - Invalid params");
@@ -197,24 +201,11 @@ async function _updateUsersWithRoomkey(userA_id, userB_id, roomkey){
     userA.roomkeys = userA.roomkeys ? userA.roomkeys.concat([roomkey]) : [roomkey];
     userB.roomkeys = userB.roomkeys ? userB.roomkeys.concat([roomkey]) : [roomkey];
 
-    await admin.firestore().collection('users').doc(userA_id).update({
-            roomkeys: userA.roomkeys
-        })
-        .catch(error=>{
-            console.error(error);
-            throw new functions.https.HttpsError('internal', 'Updating user A roomkeys', error);
-        });
-
-    await admin.firestore().collection('users').doc(userB_id).update({
-            roomkeys: userB.roomkeys
-        })
-        .catch(error=>{
-            console.error(error);
-            throw new functions.https.HttpsError('internal', 'Updating user B roomkeys', error);
-        });
+    batch.update(admin.firestore().collection('users').doc(userA_id), { roomkeys: userA.roomkeys});
+    batch.update(admin.firestore().collection('users').doc(userB_id), { roomkeys: userB.roomkeys});
 }
 
-async function _createAndSendFirstMessage(chatData: any){
+async function _createAndSendFirstMessage(batch: FirebaseFirestore.WriteBatch, chatData: any){
     const docRef = await admin.firestore().collection('messages').doc(chatData.roomkey).get()
         .catch(error=>{
             console.error(error);
@@ -233,24 +224,13 @@ async function _createAndSendFirstMessage(chatData: any){
     data[chatData.timestamp] = {
         roomkey: chatData.roomkey,
         to_uid: '',
-        from_uid: 'travel_guru_bot',
-        name: 'Travel Guru Bot',
+        from_uid: 'wandr_bot',
+        name: 'Wandr Bot',
         text: chatData.lastMessage,
         timestamp: chatData.timestamp
     };
     
-    return admin.firestore()
-        .collection('messages')
-        .doc(chatData.roomkey)
-        .set(data)
-        .catch(error=>{
-            console.error(error);
-            throw new functions.https.HttpsError(
-                'internal', 
-                'Setting messages/{roomkey}/{timestamp}', 
-                error); 
-        });
-    
+    batch.set(admin.firestore().collection('messages').doc(chatData.roomkey), data);    
 }
 
 function _collectDataFromSnapshots(querySnapshots: QuerySnapshot[], property: string, traceFunctionName: string){
