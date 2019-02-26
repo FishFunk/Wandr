@@ -21,10 +21,10 @@ exports.newUserNotification =
 
         console.trace('newUserNotification. \
             (User Name: ' + userName + ') \
-            (Location: ' + userLoc + ') \
-            (Friends:' + JSON.stringify(friendsToNotify));
+            (Location: ' + userLoc );
 
         if(!friendsToNotify || friendsToNotify.length === 0){
+            console.info("User has no friend list to send notifications to.");
             return Promise.resolve();
         }
 
@@ -47,6 +47,7 @@ exports.newUserNotification =
                 return db.collection('users')
                     .select('app_uid')
                     .where('facebook_uid', '==', friendFacebookId)
+                    .where('settings.notifications', '==', true)
                     .get();
             });
         
@@ -57,8 +58,11 @@ exports.newUserNotification =
 
         const appIdsToNotify = _collectDataFromSnapshots(
             querySnapshots, 'app_uid', 'newUserNotification - query user IDs');
-        console.trace('UIDs to be notified: ' + JSON.stringify(appIdsToNotify));
 
+        if(!appIdsToNotify || appIdsToNotify.length === 0){
+            console.info("Query found no user IDs to send notifications to.");
+            return Promise.resolve();
+        }
 
         // Get device tokens
         const tokenPromises = appIdsToNotify.map((userId)=>{
@@ -75,8 +79,12 @@ exports.newUserNotification =
 
         const notificationTokens = _collectDataFromSnapshots(
             querySnapshots, 'token', 'newUserNotification - query tokens');
-        console.trace('Notification tokens: ' + JSON.stringify(notificationTokens));
 
+        if(!notificationTokens || notificationTokens.length === 0){
+            console.info("No device tokens to send notifications to.");
+            return Promise.resolve();
+        }
+        
         return admin.messaging().sendToDevice(notificationTokens, payload);
     });
 
@@ -84,28 +92,40 @@ exports.newUserNotification =
 exports.newMessageNotification = 
     functions.firestore.document('messages/{roomkey}')
         .onUpdate(async event =>{
+
             const messages = event.after.data();
             const timestamps = _.keys(messages);
             const sorted = timestamps.sort();
             const latestMessageKey = _.last(sorted);
             const newMessage = messages[latestMessageKey];
-
-            const payload = {
-                notification: {
-                    title: `New message from ${newMessage.name}!`,
-                    body: newMessage.text
-                }
-            };
-
             const idToNotify = newMessage.to_uid;
-            const devicesRef = await admin.firestore().collection('devices').where('userId', '==', idToNotify).get();
-            const tokens = [];
-            devicesRef.forEach(result =>{
-                const token = result.data().token;
-                tokens.push(token);
+
+            // Check if user has notifications enabled
+            let settings: any;
+            const querySnapshot = await admin.firestore().collection('users').where('userId', '==', idToNotify).select('settings').get();
+            querySnapshot.forEach(result =>{
+                settings = result.data();
             });
 
-            return admin.messaging().sendToDevice(tokens, payload);
+            if(!!settings.notifications){
+                const payload = {
+                    notification: {
+                        title: `New message from ${newMessage.name}!`,
+                        body: newMessage.text
+                    }
+                };
+    
+                const devicesRef = await admin.firestore().collection('devices').where('userId', '==', idToNotify).get();
+                const tokens = [];
+                devicesRef.forEach(result =>{
+                    const token = result.data().token;
+                    tokens.push(token);
+                });
+    
+                return admin.messaging().sendToDevice(tokens, payload);
+            } else {
+                return Promise.resolve();
+            }
         });
 
 exports.createChat = functions.https.onCall((chatData, context) => {
