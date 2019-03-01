@@ -77,6 +77,8 @@ export class User implements IUser{
         public last_login: string,
         public profile_img_url: string,
         public bio: string = '',
-        public settings: any = {})
+        public settings: any = {
+            notifications: true
+        })
         {}
 }

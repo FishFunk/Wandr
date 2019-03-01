@@ -17,7 +17,7 @@ export class ProfilePage {
   googleAutoComplete: any;
   autoComplete: any = { input: '' };
   autoCompleteItems: any[] = [];
-  userData = new User('','','','', '',new Location(),[],new UserServices(),[],'','');
+  userData = new User('','','','', '',new Location(),[],new UserServices(),[],'','', '', { notifications: true });
   editMode: boolean = false;
   loadingPopup;
   countries: any[] = [];
@@ -127,13 +127,13 @@ export class ProfilePage {
       } else {
         // Debug or Browser path
         this.userData = new User('', '', 'Johnny', 'Appleseed', '',
-          { stringFormat: 'Washington, DC', latitude: '', longitude: ''}, 
+          { stringFormat: 'Dallas, TX', latitude: '', longitude: ''}, 
           [],
           { host: true, tips: true, meetup: true, emergencyContact: true},
           [],
           '',
           '../../assets/avatar_man.png',
-          'This is fake data, for running in the browser.');
+          'Hey guys! I joined Wandr because I love traveling and meeting new people! Oh, I also have a thing for apples.');
       }
     }
     catch(ex){
