@@ -180,6 +180,7 @@ export class MessagesPage {
             }
 
             this.message = '';
+            this.udpateHeight();
 
             await this.firestoreDbHelper.SendMessage(this.chat.roomkey, data, chatUpdate)
                 .catch(async error =>{
