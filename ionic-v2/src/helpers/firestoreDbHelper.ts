@@ -112,9 +112,9 @@ export class FirestoreDbHelper {
       return this.angularFirestore.collection('users').doc(firebaseUserId).set(newUserData);
     }
 
-    public async ReadUserByFirebaseUid(firebaseUserId: string){
+    public async ReadUserByFirebaseUid(firebaseUserId: string, failIfDoesntExist: boolean = true){
       const snapshot = await this.angularFirestore.collection('users').doc(firebaseUserId).get().toPromise();
-      if(!snapshot.exists){
+      if(failIfDoesntExist && !snapshot.exists){
         return Promise.reject("No user matching ID: " + firebaseUserId);
       }
 

@@ -3,6 +3,7 @@ import { IonicPage, NavController, AlertController, Platform, LoadingController 
 import { TabsPage } from '../tabs/tabs';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
+import { Logger } from '../../helpers/logger';
 
 
 @IonicPage()
@@ -30,7 +31,8 @@ export class IntroPage {
     private alertCtrl: AlertController,
     private fbApi: FacebookApi,
     private platform: Platform,
-    private loadingCtrl: LoadingController) 
+    private loadingCtrl: LoadingController,
+    private logger: Logger) 
     {
       this.cordova = this.platform.is('cordova');
     }
@@ -49,7 +51,7 @@ export class IntroPage {
         })
         .catch((error)=> {
           loadingPopup.dismiss()
-          console.log(error);
+          this.logger.Error(error);
           this.presentAlert("Failed to login with Facebook");
           // TODO: Prompt with 'retry' button?
         });

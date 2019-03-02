@@ -59,7 +59,7 @@ export class ProfilePage {
         var token = window.localStorage.getItem(Constants.accessTokenKey);
 
         var fbUserData = await <any> this.facebookApi.getUser(facebookUid, token);
-        var user = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid);
+        var user = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid, false);
 
         // If User does not exist yet
         if(!user) {
