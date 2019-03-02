@@ -41,6 +41,8 @@ exports.newUserNotification =
 
         const db = admin.firestore();
 
+        console.trace(`Friends to notify: ${JSON.stringify(friendsToNotify)}`);
+
         // Get user IDs to be notified
         const userPromises = 
             friendsToNotify.map((friendFacebookId)=>{
@@ -64,6 +66,8 @@ exports.newUserNotification =
             return Promise.resolve();
         }
 
+        console.trace(`App IDs to notify ${JSON.stringify(appIdsToNotify)}`);
+
         // Get device tokens
         const tokenPromises = appIdsToNotify.map((userId)=>{
             return admin.firestore()
@@ -79,6 +83,8 @@ exports.newUserNotification =
 
         const notificationTokens = _collectDataFromSnapshots(
             querySnapshots, 'token', 'newUserNotification - query tokens');
+
+        console.trace(`Notification tokens: ${JSON.stringify(notificationTokens)}`);    
 
         if(!notificationTokens || notificationTokens.length === 0){
             console.info("No device tokens to send notifications to.");
@@ -100,12 +106,19 @@ exports.newMessageNotification =
             const newMessage = messages[latestMessageKey];
             const idToNotify = newMessage.to_uid;
 
+            console.trace(`New message notification to ID: ${idToNotify}`);
+
             // Check if user has notifications enabled
             let settings: any;
-            const querySnapshot = await admin.firestore().collection('users').where('userId', '==', idToNotify).select('settings').get();
+            const querySnapshot = 
+                await admin.firestore()
+                    .collection('users').select(idToNotify).select('settings').get();
+
             querySnapshot.forEach(result =>{
                 settings = result.data();
             });
+
+            console.trace(`Settings: ${JSON.stringify(settings)}`);
 
             if(!!settings.notifications){
                 const payload = {
