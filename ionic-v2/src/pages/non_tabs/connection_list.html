@@ -1,6 +1,6 @@
 <ion-header>
     <ion-navbar>
-        <ion-title>{{locationStringFormat}}</ion-title>
+        <ion-title>{{displayLocation}}</ion-title>
         <ion-buttons end>
             <button ion-button icon-only clear (click)="presentPopover($event)">
                 <ion-icon name="list"></ion-icon>
@@ -14,8 +14,11 @@
             <ion-segment-button value="first">
             1st Degree
             </ion-segment-button>
-            <ion-segment-button value="second">
+            <ion-segment-button value="second" (click)="loadSecondDegree()">
             2nd Degree
+            </ion-segment-button>
+            <ion-segment-button value="other" (click)="loadOtherUsers()">
+            Other
             </ion-segment-button>
         </ion-segment>
     </div>      
@@ -62,6 +65,27 @@
                 </div>
                 <p>{{user.bio}}</p>
                 <p>Mutual friends: {{countMutualFriends(user)}}</p>
+            </button>
+        </ion-list>
+        <ion-list *ngSwitchCase="'other'">
+            <div *ngIf="otherConnections.length == 0" class="container" text-center>
+                <p>No other Wandr users here... yet!</p>
+            </div>
+            <button ion-item *ngFor="let user of otherConnections" (click)="onClickProfile(user)">
+                <ion-thumbnail item-start>
+                    <img src="{{user.profile_img_url}}">
+                </ion-thumbnail>
+                <label class="list-name">{{user.first_name}}</label>
+                <div>
+                    <ion-icon class="mini-icon" *ngIf="user.services.host" name="home"></ion-icon>
+                    &nbsp;
+                    <ion-icon class="mini-icon" *ngIf="user.services.tips" name="information-circle"></ion-icon>
+                    &nbsp;
+                    <ion-icon class="mini-icon" *ngIf="user.services.meetup" name="contacts"></ion-icon>
+                    &nbsp;
+                    <ion-icon class="mini-icon" *ngIf="user.services.emergencyContact" name="call"></ion-icon>
+                </div>
+                <p>{{user.bio}}</p>
             </button>
         </ion-list>
     </div>

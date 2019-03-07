@@ -66,7 +66,6 @@ export class MapPage {
   maxY = 70;
 
   locationMap: _.Dictionary<google.maps.LatLng>; // { 'string_location' : LatLng Object }
-  userMap: _.Dictionary<any> // First & Second degree connections mapped by string location
 
   constructor(public navCtrl: NavController,
     private loadingCtrl: LoadingController,
@@ -79,22 +78,21 @@ export class MapPage {
     this.facebookUserId = window.localStorage.getItem(Constants.facebookUserIdKey);
   }
  
-  ionViewDidLoad(){
+  async ionViewDidLoad(){
     // TODO: Splash/fade to hide map loading delay?
-    this.showLoadingPopup();
+    await this.showLoadingPopup();
     this.loadMap()
-      .then(()=>{
+      .then(async ()=>{
         // TODO: Show one-time introductory dialog explaining how to use map (tutorial?)
-        this.loadingPopup.dismiss();
+        await this.loadingPopup.dismiss();
       })
-      .catch(error=>{
+      .catch(async error=>{
+        await this.loadingPopup.dismiss();
         this.logger.Error(error)
           .then(()=>{
-            this.loadingPopup.dismiss();
             this.showLoadFailurePrompt();
           })
           .catch(()=>{
-            this.loadingPopup.dismiss();
             this.showLoadFailurePrompt();
           });
       });
@@ -109,12 +107,10 @@ export class MapPage {
       this.searchBox = new google.maps.places.SearchBox(input);
       this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
-      // Read first and second degree connection user data
-      let firstConnections = await this.firestoreDbHelper.ReadFirstConnections(this.firebaseUserId);
-      let secondConnections = await this.firestoreDbHelper.ReadSecondConnections(this.facebookUserId, firstConnections);
+      let allUsers = await this.firestoreDbHelper.ReadAllUsers(this.firebaseUserId);
 
       // Generate heat map data from users location information
-      this.createMarkersAndHeatMap(firstConnections, secondConnections);
+      this.createMarkersAndHeatMap(allUsers);
 
       // Add custom controls to map
       this.createRandomControl();
@@ -130,24 +126,21 @@ export class MapPage {
 
   async refreshMarkersAndHeatMap(){
     try {
-    this.showLoadingPopup();
+    await this.showLoadingPopup();
 
-    // Read first and second degree connection user data
-    let firstConnections = await this.firestoreDbHelper.ReadFirstConnections(this.firebaseUserId);
-    let secondConnections = await this.firestoreDbHelper.ReadSecondConnections(this.facebookUserId, firstConnections);
+    let allUsers = await this.firestoreDbHelper.ReadAllUsers(this.firebaseUserId);
 
     // Generate heat map data from users location information
-    this.createMarkersAndHeatMap(firstConnections, secondConnections);
+    this.createMarkersAndHeatMap(allUsers);
 
-    this.loadingPopup.dismiss();
+    await this.loadingPopup.dismiss();
     } catch(ex){
+      await this.loadingPopup.dismiss();
       this.logger.Error(ex)
         .then(()=>{
-          this.loadingPopup.dismiss();
           this.showLoadFailurePrompt();
         })
         .catch(()=>{
-          this.loadingPopup.dismiss();
           this.showLoadFailurePrompt();
         });
     }
@@ -165,18 +158,13 @@ export class MapPage {
     });
   }
 
-  private createMarkersAndHeatMap(firstConnecitons: IUser[], secondConnections: IUser[]){
+  private createMarkersAndHeatMap(allUsers: IUser[]){
     this.locationMap = {}; // { 'location' : LatLng  }
-    this.userMap = {}; // { 'location' : user[]  }
     var heatMapLatLngs: google.maps.LatLng[] = [];
     var markerLatLngs: google.maps.LatLng[] = [];
 
-    for(let idx = 0; idx < firstConnecitons.length; idx++){
-      this.geoCodeAndCacheData(firstConnecitons[idx], markerLatLngs, heatMapLatLngs, true);
-    }
-
-    for(let idx = 0; idx < secondConnections.length; idx++){
-      this.geoCodeAndCacheData(secondConnections[idx], markerLatLngs, heatMapLatLngs, false);
+    for(let idx = 0; idx < allUsers.length; idx++){
+      this.geoCodeAndCacheData(allUsers[idx], markerLatLngs, heatMapLatLngs);
     }
 
     this.setMarkers(markerLatLngs);    
@@ -186,8 +174,7 @@ export class MapPage {
   private geoCodeAndCacheData(
     user: IUser, 
     markerLatLngs: google.maps.LatLng[], 
-    heatMapLatLngs: google.maps.LatLng[],
-    firstDegree: boolean)
+    heatMapLatLngs: google.maps.LatLng[])
   {
     let formattedLocation = user.location.stringFormat;
       
@@ -201,17 +188,6 @@ export class MapPage {
       markerLatLngs.push(geoCode);
     } else {
       geoCode = this.locationMap[formattedLocation];
-    }
-
-    // Cache user data grouped by common location
-    if(!this.userMap[formattedLocation]){
-      this.userMap[formattedLocation] = { '1': [], '2': []};
-    } 
-    
-    if(firstDegree){
-      this.userMap[formattedLocation]['1'].push(user);
-    } else {
-      this.userMap[formattedLocation]['2'].push(user);
     }
 
     // Add heatmap marker for every location instance
@@ -246,19 +222,17 @@ export class MapPage {
       return obj == latLng;
     });
 
-    const firstConnections = this.userMap[str_location]['1'];
-    const secondConnections = this.userMap[str_location]['2'];
     this.navCtrl.push(ConnectionListPage, 
-      { firstConnections: firstConnections, secondConnections: secondConnections, locationStringFormat: str_location }, 
+      { locationStringFormat: str_location }, 
       { animate: true, direction: 'forward' });
   }
 
   private async onShowAllClick(){
-    this.showLoadingPopup();
+    await this.showLoadingPopup();
 
     let firstConnections = await this.firestoreDbHelper.ReadFirstConnections(this.firebaseUserId)
       .catch(async error =>{
-        this.loadingPopup.dismiss();
+        await this.loadingPopup.dismiss();
         this.showLoadFailurePrompt();
         await this.logger.Error(error);
         return Promise.reject();
@@ -266,15 +240,14 @@ export class MapPage {
 
     let secondConnections = await this.firestoreDbHelper.ReadSecondConnections(this.facebookUserId, firstConnections)
       .catch(async error =>{
-        this.loadingPopup.dismiss();
+        await this.loadingPopup.dismiss();
         this.showLoadFailurePrompt();
         await this.logger.Error(error);
         return Promise.reject();
       });
 
-    this.loadingPopup.dismiss();
-    this.navCtrl.push(ConnectionListPage, 
-      { firstConnections: firstConnections, secondConnections: secondConnections, locationStringFormat: "All Connections," }, 
+    await this.loadingPopup.dismiss();
+    this.navCtrl.push(ConnectionListPage, {}, 
       { animate: true, direction: 'forward' });
   }
 
@@ -351,12 +324,11 @@ export class MapPage {
     this.events.subscribe(Constants.refreshMapDataEventName, this.refreshMarkersAndHeatMap.bind(this));
   }
 
-  private showLoadingPopup(){
+  private async showLoadingPopup(){
     this.loadingPopup = this.loadingCtrl.create({
-      spinner: 'crescent',
-      content: ''
+      spinner: 'crescent'
     });
-    this.loadingPopup.present();
+    await this.loadingPopup.present();
   }
 
   /**

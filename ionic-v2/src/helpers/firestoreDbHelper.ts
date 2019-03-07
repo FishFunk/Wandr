@@ -12,6 +12,33 @@ export class FirestoreDbHelper {
 
     }
 
+    // Reads all users excluding the current user by ID
+    public async ReadAllUsers(firebaseUserId: string, matchLocation?: string): Promise<IUser[]>{
+      let querySnapshot: firestore.QuerySnapshot;
+
+      if(matchLocation){
+        querySnapshot = await this.angularFirestore
+          .collection('users', ref => ref.where('location.stringFormat', '==', matchLocation))
+          .get().toPromise();
+      } else {
+        querySnapshot = await this.angularFirestore.firestore
+          .collection('users')
+          .get();
+      }
+
+      let allUsers: IUser[] = [];
+      querySnapshot.forEach(doc=>{
+        if(doc.exists){
+          const user = <IUser> doc.data();
+          if (user.app_uid != firebaseUserId){
+            allUsers.push(user);
+          }
+        }
+      });
+
+      return allUsers;
+    }
+
     public UpdateMessages(roomkey: string, messageData: any): Promise<void>{
       return this.angularFirestore.collection('messages').doc(roomkey).update(messageData);
     }
@@ -146,7 +173,7 @@ export class FirestoreDbHelper {
       await batch.commit();
     }
 
-    public async ReadFirstConnections(firebaseUserId: string){
+    public async ReadFirstConnections(firebaseUserId: string, matchLocation?: string){
       let firstConnections: IUser[] = [];
 
       const snapshot = await this.angularFirestore.collection('users').doc(firebaseUserId).get().toPromise();
@@ -155,12 +182,25 @@ export class FirestoreDbHelper {
       }
 
       const user = <IUser> snapshot.data();
-      const promises = user.friends.map((friend)=> {
-        return this.angularFirestore
-          .collection('users', ref=> ref.where('facebook_uid', '==', friend.id))
-          .get()
-          .toPromise();
-      });
+      let promises: Promise<firestore.QuerySnapshot>[];
+      if(matchLocation){
+        promises = user.friends.map((friend)=> {
+          return this.angularFirestore
+            .collection('users', 
+              ref=> ref
+                  .where('facebook_uid', '==', friend.id)
+                  .where('location.stringFormat','==', matchLocation))
+            .get()
+            .toPromise();
+        });
+      } else {
+        promises = user.friends.map((friend)=> {
+          return this.angularFirestore
+            .collection('users', ref=> ref.where('facebook_uid', '==', friend.id))
+            .get()
+            .toPromise();
+        });
+      }
 
       const querySnapshots = await Promise.all(promises).catch((error)=> {
           return Promise.reject(error);
@@ -179,7 +219,10 @@ export class FirestoreDbHelper {
       return Promise.resolve(firstConnections);
     }
 
-    public async ReadSecondConnections(targetFacebookId: string, firstConnections: IUser[]): Promise<IUser[]>{
+    public async ReadSecondConnections(
+        targetFacebookId: string, 
+        firstConnections: IUser[],
+        matchLocation?: string): Promise<IUser[]>{
       let firstConnectionFacebookIds = [];
       let secondConnectionFacebookIds = [];
       let secondConnections: IUser[] = [];
@@ -199,12 +242,25 @@ export class FirestoreDbHelper {
       secondConnectionFacebookIds = _.difference(secondConnectionFacebookIds, firstConnectionFacebookIds);
   
       // Get 2nd Connections Users from DB by Facebook UID
-      const promises = secondConnectionFacebookIds.map((facebook_uid)=> {
-        return this.angularFirestore
-          .collection('users', ref=> ref.where('facebook_uid', '==', facebook_uid))
-          .get()
-          .toPromise();
-      });
+      let promises: Promise<firestore.QuerySnapshot>[];
+      if(matchLocation){
+        promises = secondConnectionFacebookIds.map((facebook_uid)=> {
+          return this.angularFirestore
+            .collection('users', 
+              ref=> ref
+                  .where('facebook_uid', '==', facebook_uid)
+                  .where('location.stringFormat','==', matchLocation))
+            .get()
+            .toPromise();
+        });
+      } else {
+        promises = secondConnectionFacebookIds.map((facebook_uid)=> {
+          return this.angularFirestore
+            .collection('users', ref=> ref.where('facebook_uid', '==', facebook_uid))
+            .get()
+            .toPromise();
+        });
+      }
   
       const querySnapshots = await Promise.all(promises).catch((error)=> {
           return Promise.reject(error);

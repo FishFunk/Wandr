@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Events, PopoverController } from 'ionic-angular';
+import { NavController, NavParams, Events, PopoverController, LoadingController } from 'ionic-angular';
 import { IUser, IFacebookFriend } from '../../models/user';
 import _ from 'underscore';
 import { ConnectionProfilePage } from './connection_profile';
 import { Constants } from '../../helpers/constants';
 import { PopoverPage } from './popover_options';
+import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
  
 @Component({
   selector: 'connection-list-page',
@@ -13,28 +14,85 @@ import { PopoverPage } from './popover_options';
 
 export class ConnectionListPage {
 
+    currentUserId: string;
     currentUserFriends: IFacebookFriend[];
-    locationStringFormat: string;
+    locationString: string;
+    displayLocation: string;
     view: string = 'first';
-    firstConnections: IUser[];
-    secondConnections: IUser[];
+    firstConnections: IUser[] = [];
+    secondConnections: IUser[] = [];
+    otherConnections: IUser[] = [];
 
     constructor(
         params: NavParams,
         private navCtrl: NavController,
         private popoverCtrl: PopoverController,
+        private loadingCtrl: LoadingController,
+        private firestoreDbHelper: FirestoreDbHelper,
         private events: Events){
         
-        const temp = params.get('locationStringFormat');
-        this.locationStringFormat = temp.substr(0, temp.indexOf(','));
-        this.firstConnections = params.get('firstConnections');
-        this.secondConnections = params.get('secondConnections');
+        this.locationString = params.get('locationStringFormat');
+        if(this.locationString){
+            this.displayLocation = this.locationString.substr(0, this.locationString.indexOf(','));
+        }else {
+            // Show all connections
+            this.displayLocation = "All Connections";
+        }
+        
         this.currentUserFriends = JSON.parse(window.localStorage.getItem(Constants.userFacebookFriendsKey));
+        this.currentUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
 
         // Subscribe to sort events
         this.events.subscribe(Constants.orderConnectionsByFirstName, this.orderByFirstName.bind(this));
         this.events.subscribe(Constants.orderConnectionsByLastName, this.orderByLastName.bind(this));
         this.events.subscribe(Constants.orderConnectionsByMutual, this.orderByMutualFriends.bind(this));
+    }
+
+    async ionViewDidLoad(){
+        const spinner = this.loadingCtrl.create({
+            spinner: 'crescent'
+        });
+        await spinner.present();
+
+        this.firstConnections = 
+            await this.firestoreDbHelper.ReadFirstConnections(this.currentUserId, this.locationString);
+
+        await spinner.dismiss();
+    }
+
+    async loadSecondDegree(){
+        const spinner = this.loadingCtrl.create({
+            spinner: 'crescent'
+        });
+        await spinner.present();
+
+        const facebookId = window.localStorage.getItem(Constants.facebookUserIdKey);
+
+        this.secondConnections = 
+            await this.firestoreDbHelper.ReadSecondConnections(facebookId, this.firstConnections, this.locationString);
+
+        await spinner.dismiss();
+    }
+
+    async loadOtherUsers(){
+        const spinner = this.loadingCtrl.create({
+            spinner: 'crescent'
+        });
+        await spinner.present();
+
+        const excludeFirstIdMap = _.indexBy(this.firstConnections, (usr)=>usr.app_uid);
+        const excludeSecondIdMap = _.indexBy(this.secondConnections, (usr)=>usr.app_uid);
+        
+        const allUsers = 
+            await this.firestoreDbHelper.ReadAllUsers(this.currentUserId, this.locationString);
+        
+        allUsers.forEach(usr=>{
+            if(!excludeFirstIdMap[usr.app_uid] && !excludeSecondIdMap[usr.app_uid]){
+                this.otherConnections.push(usr);
+            }
+        });
+
+        await spinner.dismiss();
     }
 
     presentPopover(myEvent) {

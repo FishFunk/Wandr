@@ -50,14 +50,13 @@ public readonly firebaseInitOptions: any = {
       
       try
       {
-        this.statusBar.styleDefault();
-        
         firebase.initializeApp(
           this.firebaseInitOptions
         );
 
         // Handle tab hiding defect for android devices
         if (this.platform.is('android')) {
+          this.statusBar.styleLightContent();
           this.keyboard.onKeyboardShow().subscribe(() => {
             document.body.classList.add('keyboard-is-open');
           });
@@ -65,6 +64,8 @@ public readonly firebaseInitOptions: any = {
           this.keyboard.onKeyboardHide().subscribe(() => {
             document.body.classList.remove('keyboard-is-open');
           });
+        } else {
+          this.statusBar.styleDefault();
         }
 
         if(this.platform.is('cordova')){
