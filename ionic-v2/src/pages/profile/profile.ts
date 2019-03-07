@@ -240,8 +240,9 @@ export class ProfilePage {
 
   private showLoadingPopup(){
     this.loadingPopup = this.loadingCtrl.create({
-      spinner: 'crescent',
-      content: ''
+      spinner: 'hide',
+      content:`<img src="../../assets/ring-loader.gif"/>`,
+      cssClass: 'my-loading-class'
     });
     this.loadingPopup.present();
   }

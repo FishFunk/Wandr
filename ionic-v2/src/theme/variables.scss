@@ -94,3 +94,9 @@ $badge-ios-background-color: color($colors, secondary);
 $badge-md-background-color: color($colors, secondary);
 $badge-wp-background-color: color($colors, secondary);
 
+ion-loading.my-loading-class {
+  .loading-wrapper {
+    background: transparent;
+    box-shadow: none;
+  }
+}

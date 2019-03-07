@@ -38,7 +38,7 @@ export class ConnectionListPage {
             // Show all connections
             this.displayLocation = "All Connections";
         }
-        
+
         this.currentUserFriends = JSON.parse(window.localStorage.getItem(Constants.userFacebookFriendsKey));
         this.currentUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
 
@@ -49,9 +49,7 @@ export class ConnectionListPage {
     }
 
     async ionViewDidLoad(){
-        const spinner = this.loadingCtrl.create({
-            spinner: 'crescent'
-        });
+        const spinner = this.createSpinner();
         await spinner.present();
 
         this.firstConnections = 
@@ -61,23 +59,20 @@ export class ConnectionListPage {
     }
 
     async loadSecondDegree(){
-        const spinner = this.loadingCtrl.create({
-            spinner: 'crescent'
-        });
+        const spinner = this.createSpinner();
         await spinner.present();
 
         const facebookId = window.localStorage.getItem(Constants.facebookUserIdKey);
 
         this.secondConnections = 
-            await this.firestoreDbHelper.ReadSecondConnections(facebookId, this.firstConnections, this.locationString);
+            await this.firestoreDbHelper.ReadSecondConnections(
+                facebookId, this.firstConnections, this.locationString);
 
         await spinner.dismiss();
     }
 
     async loadOtherUsers(){
-        const spinner = this.loadingCtrl.create({
-            spinner: 'crescent'
-        });
+        const spinner = this.createSpinner();
         await spinner.present();
 
         const excludeFirstIdMap = _.indexBy(this.firstConnections, (usr)=>usr.app_uid);
@@ -86,11 +81,8 @@ export class ConnectionListPage {
         const allUsers = 
             await this.firestoreDbHelper.ReadAllUsers(this.currentUserId, this.locationString);
         
-        allUsers.forEach(usr=>{
-            if(!excludeFirstIdMap[usr.app_uid] && !excludeSecondIdMap[usr.app_uid]){
-                this.otherConnections.push(usr);
-            }
-        });
+        this.otherConnections = _.filter(allUsers, 
+            (usr)=> !excludeFirstIdMap[usr.app_uid] && !excludeSecondIdMap[usr.app_uid]);
 
         await spinner.dismiss();
     }
@@ -142,6 +134,14 @@ export class ConnectionListPage {
 
         this.secondConnections = _.sortBy(this.secondConnections, (user)=>{
             return -this.countMutualFriends(user);
+        });
+    }
+
+    private createSpinner(){
+        return this.loadingCtrl.create({
+            spinner: 'hide',
+            content:`<img src="../../assets/ring-loader.gif"/>`,
+            cssClass: 'my-loading-class'
         });
     }
 }

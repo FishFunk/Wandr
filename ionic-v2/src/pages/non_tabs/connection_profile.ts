@@ -42,7 +42,11 @@ export class ConnectionProfilePage {
     }
 
     ionViewDidLoad(){
-        const loading = this.loadingCtrl.create();
+        const loading = this.loadingCtrl.create({
+          spinner: 'hide',
+          content:`<img src="../../assets/ring-loader.gif"/>`,
+          cssClass: 'my-loading-class'
+        });
         loading.present();
 
         this.loadView()
@@ -107,7 +111,11 @@ export class ConnectionProfilePage {
           return;
         }
     
-        let loading = this.loadingCtrl.create();
+        let loading = this.loadingCtrl.create({
+          spinner: 'hide',
+          content:`<img src="../../assets/ring-loader.gif"/>`,
+          cssClass: 'my-loading-class'
+        });
         loading.present();
     
         const currentUserFirstName = window.localStorage.getItem(Constants.userFirstNameKey);

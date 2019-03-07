@@ -8,6 +8,7 @@ import _ from 'underscore';
 import { ConnectionProfilePage } from '../non_tabs/connection_profile';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Logger } from '../../helpers/logger';
+import { load } from '@angular/core/src/render3';
 
  
 @Component({
@@ -126,7 +127,11 @@ export class MessagesPage {
     }
 
     onClickProfile(){
-        const loading = this.loadingCtrl.create();
+        const loading = this.loadingCtrl.create({
+            spinner: 'hide',
+            content:`<img src="../../assets/ring-loader.gif"/>`,
+            cssClass: 'my-loading-class'
+        });
         loading.present();
 
         let targetUid;
@@ -154,7 +159,13 @@ export class MessagesPage {
 
         var trimmedText = this.message.trim();
         if (trimmedText.length > 0){
-            let loading = this.loadingCtrl.create();
+            let loading = this.loadingCtrl.create({
+                spinner: 'hide',
+                content:`<img src="../../assets/ring-loader.gif"/>`,
+                cssClass: 'my-loading-class'
+            });
+
+            loading.present();
 
             const isUserA = this.uid == this.chat.userA_id;
 

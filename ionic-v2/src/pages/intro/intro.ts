@@ -40,9 +40,12 @@ export class IntroPage {
   onClickfacebookLogin() {
     if (this.cordova) {
       let loadingPopup = this.loadingCtrl.create({
-        spinner: 'crescent',
-        content: 'Logging in...'
-      });
+            spinner: 'hide',
+            content:`<img src="../../assets/ring-loader.gif"/>`,
+            cssClass: 'my-loading-class'
+        });
+        
+      loadingPopup.present();
 
       this.checkStatusAndLogin()
         .then(()=>{

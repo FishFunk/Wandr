@@ -32,7 +32,11 @@ export class InboxPage {
   }
 
   async loadChats(){
-    this.loading = this.loadingCtrl.create();
+    this.loading = this.loadingCtrl.create({
+      spinner: 'hide',
+      content:`<img src="../../assets/ring-loader.gif"/>`,
+      cssClass: 'my-loading-class'
+    });
     this.loading.present();
     
     var user = await this.dbHelper.ReadUserByFirebaseUid(this.userId)

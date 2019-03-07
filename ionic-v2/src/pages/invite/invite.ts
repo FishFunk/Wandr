@@ -36,7 +36,12 @@ export class InvitePage {
 
   async getConnectionCounts(){
 
-    const loading = this.loadingCtrl.create();
+    const loading = this.loadingCtrl.create({
+      spinner: 'hide',
+      content:`<img src="../../assets/ring-loader.gif"/>`,
+      cssClass: 'my-loading-class'
+    });
+    
     loading.present();
 
     const firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
