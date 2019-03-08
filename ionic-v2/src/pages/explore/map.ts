@@ -19,7 +19,6 @@ declare var google;
 export class MapPage {
   maxZoomLevel = 10;
   minZoomLevel = 2;
-  loadingPopup: Loading;
   users: IUser[] = [];
   searchItems: string[];
   map: google.maps.Map;
@@ -80,14 +79,14 @@ export class MapPage {
  
   async ionViewDidLoad(){
     // TODO: Splash/fade to hide map loading delay?
-    await this.showLoadingPopup();
+    const spinner = await this.showLoadingPopup();
     this.loadMap()
-      .then(async ()=>{
+      .then(()=>{
         // TODO: Show one-time introductory dialog explaining how to use map (tutorial?)
-        await this.loadingPopup.dismiss();
+        spinner.dismiss();
       })
       .catch(async error=>{
-        await this.loadingPopup.dismiss();
+        spinner.dismiss();        
         this.logger.Error(error)
           .then(()=>{
             this.showLoadFailurePrompt();
@@ -125,17 +124,17 @@ export class MapPage {
   }
 
   async refreshMarkersAndHeatMap(){
+    const spinner = await this.showLoadingPopup();
+
     try {
-    await this.showLoadingPopup();
+      let allUsers = await this.firestoreDbHelper.ReadAllUsers(this.firebaseUserId);
 
-    let allUsers = await this.firestoreDbHelper.ReadAllUsers(this.firebaseUserId);
+      // Generate heat map data from users location information
+      this.createMarkersAndHeatMap(allUsers);
 
-    // Generate heat map data from users location information
-    this.createMarkersAndHeatMap(allUsers);
-
-    await this.loadingPopup.dismiss();
+      spinner.dismiss();
     } catch(ex){
-      await this.loadingPopup.dismiss();
+      spinner.dismiss();
       this.logger.Error(ex)
         .then(()=>{
           this.showLoadFailurePrompt();
@@ -228,25 +227,6 @@ export class MapPage {
   }
 
   private async onShowAllClick(){
-    await this.showLoadingPopup();
-
-    let firstConnections = await this.firestoreDbHelper.ReadFirstConnections(this.firebaseUserId)
-      .catch(async error =>{
-        await this.loadingPopup.dismiss();
-        this.showLoadFailurePrompt();
-        await this.logger.Error(error);
-        return Promise.reject();
-      });
-
-    let secondConnections = await this.firestoreDbHelper.ReadSecondConnections(this.facebookUserId, firstConnections)
-      .catch(async error =>{
-        await this.loadingPopup.dismiss();
-        this.showLoadFailurePrompt();
-        await this.logger.Error(error);
-        return Promise.reject();
-      });
-
-    await this.loadingPopup.dismiss();
     this.navCtrl.push(ConnectionListPage, {}, 
       { animate: true, direction: 'forward' });
   }
@@ -255,7 +235,7 @@ export class MapPage {
     this.heatmap = new google.maps.visualization.HeatmapLayer({
       data: geoData,
       map: this.map,
-      radius: 60,
+      radius: 45,
       gradient: [
         'rgba(26, 188, 156, 0)',
         'rgba(26, 188, 156, 1)',
@@ -325,10 +305,15 @@ export class MapPage {
   }
 
   private async showLoadingPopup(){
-    this.loadingPopup = this.loadingCtrl.create({
-      spinner: 'crescent'
-    });
-    await this.loadingPopup.present();
+    const spinner = this.loadingCtrl.create({
+          spinner: 'hide',
+          content:`<img src="../../assets/ring-loader.gif"/>`,
+          cssClass: 'my-loading-class'
+      });
+
+    await spinner.present();
+
+    return spinner;
   }
 
   /**
