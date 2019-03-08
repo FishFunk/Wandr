@@ -106,39 +106,7 @@ exports.newMessageNotification =
             const newMessage = messages[latestMessageKey];
             const idToNotify = newMessage.to_uid;
 
-            console.trace(`New message notification to ID: ${idToNotify}`);
-
-            // Check if user has notifications enabled
-            let settings: any;
-            const querySnapshot = 
-                await admin.firestore()
-                    .collection('users').select(idToNotify).select('settings').get();
-
-            querySnapshot.forEach(result =>{
-                settings = result.data();
-            });
-
-            console.trace(`Settings: ${JSON.stringify(settings)}`);
-
-            if(!!settings.notifications){
-                const payload = {
-                    notification: {
-                        title: `New message from ${newMessage.name}!`,
-                        body: newMessage.text
-                    }
-                };
-    
-                const devicesRef = await admin.firestore().collection('devices').where('userId', '==', idToNotify).get();
-                const tokens = [];
-                devicesRef.forEach(result =>{
-                    const token = result.data().token;
-                    tokens.push(token);
-                });
-    
-                return admin.messaging().sendToDevice(tokens, payload);
-            } else {
-                return Promise.resolve();
-            }
+            return _sendNotificationToId(idToNotify, `New message from ${newMessage.name}!`, newMessage.text);
         });
 
 exports.createChat = functions.https.onCall((chatData, context) => {
@@ -176,11 +144,14 @@ async function _createChatRoom(chatData: any){
         // Send first message in chat
         await _createAndSendFirstMessage(batch, chatData);
 
-        return batch.commit()
+        await batch.commit()
             .catch(error=>{
                 console.error(error);
                 throw new functions.https.HttpsError('internal', 'Batch commit failed', error);
             });
+
+        return _sendNotificationToId(chatData.userB_id, `${chatData.userA_name} connected with you!`, 
+            "Continue the conversation here...");
     }
 }
 
@@ -283,4 +254,49 @@ function _collectDataFromSnapshots(querySnapshots: QuerySnapshot[], property: st
     });
 
     return data;
+}
+
+async function _sendNotificationToId(idToNotify: string, notificationTitle: string, notificationText: string): Promise<any>{
+    console.trace(`New message notification to ID: ${idToNotify}`);
+
+    // Check if user has notifications enabled
+    let data: any;
+    const querySnapshot = 
+        await admin.firestore()
+            .collection('users').select(idToNotify).select('settings').get();
+
+    querySnapshot.forEach(result =>{
+        data = result.data();
+    });
+
+    console.trace(`Settings: ${JSON.stringify(data)}`);
+
+    if(data.settings.notifications){
+        const payload = {
+            notification: {
+                title: notificationTitle,
+                body: notificationText
+            }
+        };
+
+        const devicesRef = await admin.firestore().collection('devices').where('userId', '==', idToNotify).get();
+        const tokens = [];
+        devicesRef.forEach(result =>{
+            const token = result.data().token;
+            tokens.push(token);
+        });
+
+        console.trace(`Notification tokens: ${JSON.stringify(tokens)}`);
+
+        if(tokens.length > 0){
+            return admin.messaging().sendToDevice(tokens, payload);
+        } else {
+            console.info("No notification tokens");
+            return Promise.resolve();
+        }
+
+    } else {
+        console.info("User disabled notification settings");
+        return Promise.resolve();
+    }
 }
