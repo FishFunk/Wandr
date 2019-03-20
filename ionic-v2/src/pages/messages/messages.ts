@@ -8,7 +8,6 @@ import _ from 'underscore';
 import { ConnectionProfilePage } from '../non_tabs/connection_profile';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Logger } from '../../helpers/logger';
-import { load } from '@angular/core/src/render3';
 
  
 @Component({
@@ -77,16 +76,16 @@ export class MessagesPage {
         this.initialTextareaScrollHeight = this.textarea.nativeElement.scrollHeight;
 
         // Subscribe listeners
-        this.messageListItems.changes.subscribe(async () => {
-            await this.scrollToBottom(500);
+        this.messageListItems.changes.subscribe(() => {
+            this.scrollToBottom(0);
         });
 
-        this.keyboardShowObservable = this.keyboard.onKeyboardShow().subscribe(async ()=>{
-            await this.scrollToBottom(500);
+        this.keyboardShowObservable = this.keyboard.onKeyboardShow().subscribe(()=>{
+            this.scrollToBottom(0);
         });
         
-        this.keyboardHideObservable = this.keyboard.onKeyboardHide().subscribe(async ()=>{
-            await this.scrollToBottom(500);
+        this.keyboardHideObservable = this.keyboard.onKeyboardHide().subscribe(()=>{
+            this.scrollToBottom(0);
         });
 
         this.sendButtonElement = this.sendButton._elementRef.nativeElement;     
@@ -101,10 +100,6 @@ export class MessagesPage {
 
     ionViewDidLoad(){
         this.loadMessages();
-    }
-
-    ionViewDidEnter(){
-        this.scrollToBottom(500);
     }
 
     async loadMessages(){
@@ -195,7 +190,7 @@ export class MessagesPage {
             await this.firestoreDbHelper.SendMessage(this.chat.roomkey, data, chatUpdate)
                 .then(()=>{
                     this.udpateHeight();
-                    this.scrollToBottom(500);
+                    this.scrollToBottom(200);
                 })
                 .catch(async error =>{
                     await this.logger.Error(error);

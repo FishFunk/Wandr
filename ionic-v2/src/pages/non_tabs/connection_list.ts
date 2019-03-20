@@ -18,7 +18,6 @@ export class ConnectionListPage {
     currentUserFriends: IFacebookFriend[];
     locationString: string;
     displayLocation: string;
-    view: string = 'first';
     firstConnections: IUser[] = [];
     secondConnections: IUser[] = [];
     otherConnections: IUser[] = [];
@@ -52,35 +51,23 @@ export class ConnectionListPage {
         const spinner = this.createSpinner();
         await spinner.present();
 
+        // First degree
         this.firstConnections = 
             await this.firestoreDbHelper.ReadFirstConnections(this.currentUserId, this.locationString);
 
-        await spinner.dismiss();
-    }
-
-    async loadSecondDegree(){
-        const spinner = this.createSpinner();
-        await spinner.present();
-
+        // Second degree
         const facebookId = window.localStorage.getItem(Constants.facebookUserIdKey);
-
         this.secondConnections = 
             await this.firestoreDbHelper.ReadSecondConnections(
                 facebookId, this.firstConnections, this.locationString);
 
-        await spinner.dismiss();
-    }
-
-    async loadOtherUsers(){
-        const spinner = this.createSpinner();
-        await spinner.present();
-
+        // Others
         const excludeFirstIdMap = _.indexBy(this.firstConnections, (usr)=>usr.app_uid);
         const excludeSecondIdMap = _.indexBy(this.secondConnections, (usr)=>usr.app_uid);
         
         const allUsers = 
             await this.firestoreDbHelper.ReadAllUsers(this.currentUserId, this.locationString);
-        
+
         this.otherConnections = _.filter(allUsers, 
             (usr)=> !excludeFirstIdMap[usr.app_uid] && !excludeSecondIdMap[usr.app_uid]);
 

@@ -8,9 +8,6 @@
         <button ion-item (click)="onClickAbout()">
             About
         </button>
-        <!-- <button ion-item>
-            FAQs
-        </button> -->
         <button ion-item (click)="onClickContact()">
             Contact Us
         </button>
@@ -19,14 +16,6 @@
             <ion-label>Push Notifications</ion-label>
             <ion-toggle [(ngModel)]="pushNotifications" (ionChange)="updateUserSettings()"></ion-toggle>
         </ion-item>
-        <!-- <ion-item>
-            <ion-label>Ghost Mode</ion-label>
-            <ion-toggle [(ngModel)]="ghostMode" (ionChange)="updateUserSettings()"></ion-toggle>
-        </ion-item> -->
-        <!-- <ion-item>
-            <ion-label>3rd Degree Connections</ion-label>
-            <ion-toggle [(ngModel)]="thirdConnections" (ionChange)="updateUserSettings()"></ion-toggle>
-        </ion-item> -->
     </ion-list>
     <ion-footer text-center>
         <button ion-button color="dark" clear (click)="onClickLogout()">

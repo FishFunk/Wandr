@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, Loading, Events, AlertController } from 'ionic-angular';
+import { NavController, LoadingController, Events, AlertController } from 'ionic-angular';
 import { IUser } from '../../models/user';
 import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { ConnectionListPage } from '../non_tabs/connection_list';
 import { Logger } from '../../helpers/logger';
-
-declare var google;
  
 @Component({
   selector: 'map-page',
@@ -15,7 +13,6 @@ declare var google;
 })
 
 // TODO: Add refresh button
-// TODO: Add list view / view all connecitons
 export class MapPage {
   maxZoomLevel = 10;
   minZoomLevel = 2;
@@ -27,9 +24,8 @@ export class MapPage {
   searchBox: google.maps.places.SearchBox;
   
   private firebaseUserId: string;
-  private facebookUserId: string;
 
-  mapOptions = {
+  mapOptions: google.maps.MapOptions = {
     center: this.mapCenter,
     minZoom: this.minZoomLevel,
     maxZoom: this.maxZoomLevel,
@@ -74,7 +70,6 @@ export class MapPage {
     private events: Events) {
 
     this.firebaseUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
-    this.facebookUserId = window.localStorage.getItem(Constants.facebookUserIdKey);
   }
  
   async ionViewDidLoad(){
@@ -102,7 +97,7 @@ export class MapPage {
       this.map = new google.maps.Map(document.getElementById('map'), this.mapOptions);
 
       // Create the search box and link it to the UI element.
-      var input = document.getElementById('searchInput');
+      var input = <HTMLInputElement> document.getElementById('searchInput');
       this.searchBox = new google.maps.places.SearchBox(input);
       this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
@@ -180,7 +175,7 @@ export class MapPage {
     // Cache and map geocode information
     let geoCode: google.maps.LatLng;
     if(!this.locationMap[formattedLocation]){
-      geoCode = new google.maps.LatLng(user.location.latitude, user.location.longitude);
+      geoCode = new google.maps.LatLng(+user.location.latitude, +user.location.longitude);
       this.locationMap[formattedLocation] = geoCode;
 
       // Add clickable marker for each unique location

@@ -9,84 +9,56 @@
     </ion-navbar>
 </ion-header>
 <ion-content>
-    <div padding>
-        <ion-segment [(ngModel)]="view">
-            <ion-segment-button value="first">
-            1st Degree
-            </ion-segment-button>
-            <ion-segment-button value="second" (click)="loadSecondDegree()">
-            2nd Degree
-            </ion-segment-button>
-            <ion-segment-button value="other" (click)="loadOtherUsers()">
-            Other
-            </ion-segment-button>
-        </ion-segment>
-    </div>      
-    <div [ngSwitch]="view">
-        <ion-list *ngSwitchCase="'first'">
-            <div *ngIf="firstConnections.length == 0" class="container" text-center>
-                <p>You have no first degree connections here... yet!</p>
-            </div>
-            <button ion-item *ngFor="let user of firstConnections" (click)="onClickProfile(user)">
+    <ion-list>
+        <div *ngIf="firstConnections.length > 0">
+            <ion-item-divider>
+                <ion-label>
+                1st Degree Connections
+                </ion-label>
+            </ion-item-divider>
+            <ion-item *ngFor="let user of firstConnections" (click)="onClickProfile(user)">
                 <ion-thumbnail item-start>
-                    <img src="{{user.profile_img_url}}">                  
+                    <img [src]="user.profile_img_url">               
                 </ion-thumbnail>
-                <label class="list-name">{{user.first_name}}</label>
-                <div>
-                    <ion-icon class="mini-icon" *ngIf="user.services.host" name="home"></ion-icon>
-                    &nbsp;
-                    <ion-icon class="mini-icon" *ngIf="user.services.tips" name="information-circle"></ion-icon>
-                    &nbsp;
-                    <ion-icon class="mini-icon" *ngIf="user.services.meetup" name="contacts"></ion-icon>
-                    &nbsp;
-                    <ion-icon class="mini-icon" *ngIf="user.services.emergencyContact" name="call"></ion-icon>
-                </div>
-                <p>{{user.bio}}</p>
-                <p>Mutual friends: {{countMutualFriends(user)}}</p>
-            </button>
-        </ion-list>
-        <ion-list *ngSwitchCase="'second'">
-            <div *ngIf="secondConnections.length == 0" class="container" text-center>
-                <p>You have no second degree connections here... yet!</p>
-            </div>
-            <button ion-item *ngFor="let user of secondConnections" (click)="onClickProfile(user)">
+                <ion-label>
+                    <h2>{{user.first_name}}</h2>
+                    <h3>Mutual friends: {{countMutualFriends(user)}}</h3>
+                    <h3>{{user.bio}}</h3>
+                </ion-label>
+            </ion-item>
+        </div>
+        <div *ngIf="secondConnections.length > 0">
+            <ion-item-divider>
+                <ion-label>
+                2nd Degree Connections
+                </ion-label>
+            </ion-item-divider>
+            <ion-item *ngFor="let user of secondConnections" (click)="onClickProfile(user)">
                 <ion-thumbnail item-start>
-                    <img src="{{user.profile_img_url}}">
+                    <img [src]="user.profile_img_url">               
                 </ion-thumbnail>
-                <label class="list-name">{{user.first_name}}</label>
-                <div>
-                    <ion-icon class="mini-icon" *ngIf="user.services.host" name="home"></ion-icon>
-                    &nbsp;
-                    <ion-icon class="mini-icon" *ngIf="user.services.tips" name="information-circle"></ion-icon>
-                    &nbsp;
-                    <ion-icon class="mini-icon" *ngIf="user.services.meetup" name="contacts"></ion-icon>
-                    &nbsp;
-                    <ion-icon class="mini-icon" *ngIf="user.services.emergencyContact" name="call"></ion-icon>
-                </div>
-                <p>{{user.bio}}</p>
-                <p>Mutual friends: {{countMutualFriends(user)}}</p>
-            </button>
-        </ion-list>
-        <ion-list *ngSwitchCase="'other'">
-            <div *ngIf="otherConnections.length == 0" class="container" text-center>
-                <p>No other Wandr users here... yet!</p>
-            </div>
-            <button ion-item *ngFor="let user of otherConnections" (click)="onClickProfile(user)">
+                <ion-label>
+                    <h2>{{user.first_name}}</h2>
+                    <h3>Mutual friends: {{countMutualFriends(user)}}</h3>
+                    <h3>{{user.bio}}</h3>
+                </ion-label>
+            </ion-item>
+        </div>  
+        <div *ngIf="otherConnections.length > 0">
+            <ion-item-divider>
+                <ion-label>
+                Other Wandr Connections
+                </ion-label>
+            </ion-item-divider>
+            <ion-item *ngFor="let user of otherConnections" (click)="onClickProfile(user)">
                 <ion-thumbnail item-start>
-                    <img src="{{user.profile_img_url}}">
+                    <img [src]="user.profile_img_url">                                   
                 </ion-thumbnail>
-                <label class="list-name">{{user.first_name}}</label>
-                <div>
-                    <ion-icon class="mini-icon" *ngIf="user.services.host" name="home"></ion-icon>
-                    &nbsp;
-                    <ion-icon class="mini-icon" *ngIf="user.services.tips" name="information-circle"></ion-icon>
-                    &nbsp;
-                    <ion-icon class="mini-icon" *ngIf="user.services.meetup" name="contacts"></ion-icon>
-                    &nbsp;
-                    <ion-icon class="mini-icon" *ngIf="user.services.emergencyContact" name="call"></ion-icon>
-                </div>
-                <p>{{user.bio}}</p>
-            </button>
-        </ion-list>
-    </div>
+                <ion-label>
+                    <h2>{{user.first_name}}</h2>
+                    <h3>{{user.bio}}</h3>
+                </ion-label>
+            </ion-item>
+        </div>
+    </ion-list>
 </ion-content>

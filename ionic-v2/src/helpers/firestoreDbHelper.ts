@@ -60,7 +60,7 @@ export class FirestoreDbHelper {
       return this.angularFirestore.collection('reports').add(reportData);
     }
 
-    public GetMessagesObservable(roomkey: string): Observable<{}>{
+    public GetMessagesObservable(roomkey: string): Observable<any>{
       return this.angularFirestore.collection('messages').doc(roomkey).valueChanges();
     }
 

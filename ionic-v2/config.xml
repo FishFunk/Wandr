@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.wewandr.app" version="0.0.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.wewandr.app" version="0.0.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Wandr</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="admin@wanderlustlabs.io" href="http://wanderlustlabs.io/">Wanderlust Labs, LLC</author>
@@ -100,6 +100,6 @@
         <variable name="FACEBOOK_HYBRID_APP_EVENTS" value="false" />
         <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="4.38.1" />
     </plugin>
-    <engine name="ios" spec="~4.5.5" />
     <engine name="android" spec="~7.1.4" />
+    <engine name="ios" spec="~4.5.5" />
 </widget>

@@ -11,6 +11,8 @@ import { IntroPage } from '../pages/intro/intro';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { FacebookApi } from '../helpers/facebookApi';
 
+declare var google; // Declare global 'google' variable
+
 @Component({
   templateUrl: 'app.html'
 })

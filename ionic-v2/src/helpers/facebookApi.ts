@@ -14,11 +14,17 @@ export class FacebookApi{
 
     public getFriendList(userId, accessToken): Promise<any[]>
     {
+        if(!accessToken){
+            return Promise.reject(new Error("facebookApi.getFriendList - No Access Token"));
+        }
         return this.executeApiCall<any[]>(`/${userId}/friends?access_token=${accessToken}`, 'data');
     }
   
     public getUser(userId, accessToken)
     {
+        if(!accessToken){
+            return Promise.reject(new Error("facebookApi.getUser - No Access Token"));
+        }
         return this.executeApiCall(`/${userId}?fields=id,name,email,link,gender,picture.width(150).height(150),location&access_token=${accessToken}`);
     }
 

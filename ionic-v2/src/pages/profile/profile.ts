@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, LoadingController, ToastController, Platform } from 'ionic-angular';
+import { IonicPage, LoadingController, ToastController, Platform, App } from 'ionic-angular';
 import { Location, UserServices, User, IUser } from '../../models/user';
 import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { FacebookApi } from '../../helpers/facebookApi';
@@ -7,6 +7,7 @@ import { Constants } from '../../helpers/constants';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Utils } from '../../helpers/utils';
 import { Logger } from '../../helpers/logger';
+import { IntroPage } from '../intro/intro';
 
 @IonicPage()
 @Component({
@@ -30,6 +31,7 @@ export class ProfilePage {
   constructor(
     public loadingCtrl: LoadingController, 
     private toastCtrl: ToastController,
+    private appCtrl: App,
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
     private facebookApi: FacebookApi,
@@ -59,6 +61,15 @@ export class ProfilePage {
         var token = window.localStorage.getItem(Constants.accessTokenKey);
 
         var fbUserData = await <any> this.facebookApi.getUser(facebookUid, token);
+
+        if(!fbUserData){
+          // Need to login to Facebook again
+          this.loadingPopup.dismiss();
+          this.appCtrl.getRootNav().setRoot(IntroPage);
+          this.presentToast('top', 'Login expired. Please login again.');
+          return;
+        }
+
         var user = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid, false);
 
         // If User does not exist yet
@@ -135,11 +146,13 @@ export class ProfilePage {
           '../../assets/avatar_man.png',
           'Hey guys! I joined Wandr because I love traveling and meeting new people! Oh, I also have a thing for apples.');
       }
+
+      this.loadingPopup.dismiss();
     }
     catch(ex){
+      this.loadingPopup.dismiss();
       await this.logger.Error(ex);
     }
-    this.loadingPopup.dismiss();
   }
 
   async toggleEdit(){

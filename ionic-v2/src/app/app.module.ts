@@ -43,7 +43,6 @@ import { ConnectionProfileModule } from '../pages/non_tabs/connection_profile.mo
 import { ContactPage } from '../pages/settings/contact';
 import { AboutPage } from '../pages/settings/about';
 
-
 //*********** Provider **************/
 import { FacebookApi } from '../helpers/facebookApi';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
@@ -54,12 +53,6 @@ import { PopoverPageModule } from '../pages/non_tabs/popover_options.module';
 //import firebase from 'firebase';
 //********** firebase configuration  ************ */
 export const config = { 
-  // apiKey: "AIzaSyCDSds5vBVew16tGl7hRr8CAbtYGMJwvhE",
-  // authDomain: "wanderlust-277a8.firebaseapp.com",
-  // databaseURL: "https://wanderlust-277a8.firebaseio.com",
-  // projectId: "wanderlust-277a8",
-  // storageBucket: "wanderlust-277a8.appspot.com",
-  // messagingSenderId: "346418379043"
   apiKey: "AIzaSyCJOye-L4aFVVZny4n9_XWz61ZPxbCBdyw",
   authDomain: "wanderlust-app-220020.firebaseapp.com",
   databaseURL: "https://wanderlust-app-220020.firebaseio.com",
