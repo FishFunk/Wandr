@@ -143,7 +143,7 @@ export class ProfilePage {
         await this.writeUserDataToDb();
       } else {
         // ionic serve path
-        const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+        const uid = 'XkS98bzJM1co7vpyBlKGUpPgd2Q2'; // Johnny Appleseed
         this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(uid, false);
       }
 
