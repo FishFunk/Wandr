@@ -316,6 +316,7 @@ export class ProfilePage {
         meetup: this.userData.services.meetup,
         emergencyContact: this.userData.services.emergencyContact
       },
+      interests: this.userData.interests,
       roomkeys: this.userData.roomkeys,
       last_login: this.userData.last_login,
       settings: Object.assign({}, this.userData.settings),
