@@ -25,7 +25,7 @@ export class FacebookApi{
         if(!accessToken){
             return Promise.reject(new Error("facebookApi.getUser - No Access Token"));
         }
-        return this.executeApiCall(`/${userId}?fields=id,name,email,link,gender,picture.width(150).height(150),location&access_token=${accessToken}`);
+        return this.executeApiCall(`/${userId}?fields=id,name,email,link,gender,picture.width(360).height(360),location&access_token=${accessToken}`);
     }
 
     public facebookLogout(): Promise<any>

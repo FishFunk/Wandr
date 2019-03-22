@@ -12,6 +12,19 @@ export class FirestoreDbHelper {
 
     }
 
+    public async ReadMetadata<T>(fieldName: string): Promise<T>{
+
+      let querySnapshot: firestore.DocumentSnapshot;
+      querySnapshot  = await this.angularFirestore.collection('metadata').doc(fieldName).get().toPromise();
+
+      if(querySnapshot.exists){
+        const temp = querySnapshot.data();
+        return <T> temp['data'];
+      } else {
+        return Promise.reject("firestoreDbHelper.ReadMetadata - Document does not exist");
+      }
+    }
+
     // Reads all users excluding the current user by ID
     public async ReadAllUsers(firebaseUserId: string, matchLocation?: string): Promise<IUser[]>{
       let querySnapshot: firestore.QuerySnapshot;

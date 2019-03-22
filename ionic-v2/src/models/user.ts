@@ -12,6 +12,7 @@ export interface IUser{
     last_login: string;
     settings: IUserSettings;
     profile_img_url?: string;
+    interests?: Array<IUserInterest>;
 }
 
 export interface ILocation{
@@ -26,6 +27,11 @@ export interface IMutualConnectionInfo {
     first_name: string;
     last_name: string;
     profile_img_url: string;
+}
+
+export interface IUserInterest{
+    label: string,
+    iconClass: string
 }
 
 export interface IUserServices{
@@ -79,6 +85,7 @@ export class User implements IUser{
         public bio: string = '',
         public settings: any = {
             notifications: true
-        })
+        },
+        public interests: Array<IUserInterest> = [])
         {}
 }

@@ -9,73 +9,37 @@
 </ion-header>
 <ion-content id="profileContent" padding>
 
-  <div class="profile-info">
-    <img class="profile-image" [src]="userData.profile_img_url"/>
-    <h3 class="profile-name">{{userData.first_name}} {{userData.last_name}}</h3>
-    
-    <!-- DISPLAY MODE -->
-    <div *ngIf="!editMode">
-      <p class="profile-location">{{userData.location.stringFormat}}</p>
-      <ion-grid>
-        <ion-row class="profile-numbers">
-          <ion-col width-33>
-            <span>{{userData.friends.length}}</span>
-            <p>1st Connections</p>
-          </ion-col>
-          <ion-col width-33>      
-            <span>{{secondConnectionCount}}</span>
-            <p>2nd Connections</p>
-          </ion-col>
-          <ion-col width-33>   
-            <span>{{getUserRank()}}</span>
-            <p>Profile Rank</p>
-          </ion-col>
+    <ion-grid>
+        <ion-row>
+            <ion-col text-center>
+              <img id="profile-img" [src]="userData.profile_img_url"/>
+            </ion-col>
+            <ion-col align-self-center text-center>
+                <div class="user-info">
+                    <ion-row>
+                        <strong>{{userData.first_name}} {{userData.last_name}}</strong>
+                    </ion-row>
+                    <ion-row>
+                        <span>{{userData.location.stringFormat}}</span>
+                    </ion-row>
+                    <ion-row>
+                        <strong>Connections:</strong>&nbsp;<span>{{userData.friends.length + secondConnectionCount}}</span>
+                    </ion-row>
+                    <!-- <ion-row>
+                        <span *ngFor="let iconClass of getUserRank()">
+                            <i [ngClass]="iconClass"></i>
+                        </span>
+                    </ion-row> -->
+                    <!-- <ion-row>
+                        <strong>Last login: </strong><span>{{userData.last_login | date:'MMM dd yyyy'}}</span>
+                    </ion-row> -->
+                </div>
+            </ion-col>
         </ion-row>
-      </ion-grid>
-
-      <!--***********  About  ***********-->
-      <ion-list no-lines text-wrap>
-          <ion-list-header>
-            <h2>About</h2>
-          </ion-list-header>
-          <ion-item>
-            <p>{{userData.bio}}</p>
-          </ion-item>
-      </ion-list>
-
-      <!--***********  Services  ***********-->
-      <ion-list no-lines text-wrap>
-        <ion-list-header>
-          <h2>Services</h2>
-        </ion-list-header>
-        <ion-item>
-          <ion-grid text-center item-content>
-            <ion-row>
-                <ion-col *ngIf="userData.services.host">
-                    <ion-icon name="home"></ion-icon><br>
-                    <p>Host</p>
-                </ion-col>
-                <ion-col *ngIf="userData.services.tips">
-                    <ion-icon name="information-circle"></ion-icon><br>
-                    <p>Local Tips</p>
-                </ion-col>
-                <ion-col *ngIf="userData.services.meetup">
-                    <ion-icon name="contacts"></ion-icon><br>
-                    <p>Meetup</p>
-                </ion-col>
-                <ion-col *ngIf="userData.services.emergencyContact">
-                    <ion-icon name="call"></ion-icon><br>
-                    <p>Emergency Contact</p>
-                </ion-col>            
-            </ion-row>
-          </ion-grid> 
-        </ion-item>
-      </ion-list>
-    </div>
-
-    <!-- EDIT MODE -->
+    </ion-grid>
+    <br>
+    <br>
     <div *ngIf="editMode">
-      <!--***********  Location  ***********-->
       <ion-label color="dark" stacked>Where Do You Live?</ion-label>
       <ion-searchbar 
         [(ngModel)]="autoComplete.input" 
@@ -87,49 +51,46 @@
           {{ item.description }}
         </ion-item>
       </ion-list>
-      <br>
-      <!--***********  About  ***********-->
-      <ion-list no-lines text-wrap>
-          <ion-list-header>
-            <h2>About</h2>
-          </ion-list-header>
-          <ion-item>
-            <ion-textarea placeholder="A bit about yourself..." [(ngModel)]="userData.bio"></ion-textarea>
-          </ion-item>
-      </ion-list>
-
-      <!--***********  Services  ***********-->
-      <ion-list no-lines text-wrap>
-        <ion-list-header>
-          <h2>Services</h2>
-        </ion-list-header>
-        <ion-item>
-          <ion-grid text-center item-content>
-            <ion-row>
-                <ion-col>
-                  <ion-checkbox [(ngModel)]="userData.services.host"></ion-checkbox>
-                  <ion-icon name="home"></ion-icon><br>
-                  <p>Host</p>
-                </ion-col>
-                <ion-col>    
-                  <ion-checkbox [(ngModel)]="userData.services.tips"></ion-checkbox>
-                  <ion-icon name="information-circle"></ion-icon><br>
-                  <p>Local Tips</p>
-                </ion-col>
-                <ion-col>
-                  <ion-checkbox [(ngModel)]="userData.services.meetup"></ion-checkbox>
-                  <ion-icon name="contacts"></ion-icon><br>
-                  <p>Meetup</p>
-                </ion-col>
-                <ion-col>
-                  <ion-checkbox [(ngModel)]="userData.services.emergencyContact"></ion-checkbox>
-                  <ion-icon name="call"></ion-icon><br>
-                  <p>Emergency Contact</p>
-                </ion-col>            
-            </ion-row>
-          </ion-grid> 
-        </ion-item>
-      </ion-list>
     </div>
-  </div>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col col-12>
+            <h2>ABOUT</h2>
+            <p *ngIf="!editMode">{{userData.bio}}</p>
+            <ion-textarea 
+                *ngIf="editMode" 
+                placeholder="A bit about yourself..." 
+                [(ngModel)]="userData.bio">
+            </ion-textarea>
+        </ion-col>
+      </ion-row>
+      <br><br>
+      <ion-row>
+        <ion-col col-12>
+          <ion-grid no-padding>
+              <h2>INTERESTS</h2>
+              <ion-row *ngIf="!editMode">
+                  <ion-col *ngFor="let item of userData.interests">
+                    <i [class]="item.iconClass"></i>
+                    <p>{{item.label}}</p>
+                  </ion-col>
+              </ion-row>
+              <ion-row *ngIf="editMode">
+                <ion-col *ngFor="let item of userInterests" col-3>
+                  <ion-checkbox [(ngModel)]="item.checked"></ion-checkbox>
+                  <i [class]="item.iconClass"></i>
+                  <p>{{item.label}}</p>
+                </ion-col>
+              </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+      <br><br>
+      <ion-row *ngIf="!editMode">
+        <ion-col col-12>
+            <button ion-button block clear (click)="onClickCreateNewPlan()">Create New Travel Plan</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 </ion-content>

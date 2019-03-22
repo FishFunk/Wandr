@@ -1,6 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { IonicPage, LoadingController, ToastController, Platform, App } from 'ionic-angular';
-import { Location, UserServices, User, IUser } from '../../models/user';
+import { Location, UserServices, User, IUser, IUserInterest } from '../../models/user';
 import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
@@ -8,6 +8,7 @@ import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Utils } from '../../helpers/utils';
 import { Logger } from '../../helpers/logger';
 import { IntroPage } from '../intro/intro';
+import _ from 'underscore';
 
 @IonicPage()
 @Component({
@@ -18,7 +19,9 @@ export class ProfilePage {
   googleAutoComplete: any;
   autoComplete: any = { input: '' };
   autoCompleteItems: any[] = [];
-  userData = new User('','','','', '',new Location(),[],new UserServices(),[],'','', '', { notifications: true });
+  userData: IUser = new User('','','','', '',
+    new Location(),[],new UserServices(),[],'','', '', { notifications: true }, []);
+  userInterests: IUserInterest[] = [];
   editMode: boolean = false;
   loadingPopup;
   countries: any[] = [];
@@ -54,6 +57,9 @@ export class ProfilePage {
 
   async load(){
     this.showLoadingPopup();
+
+    this.userInterests = await this.firestoreDbHelper.ReadMetadata<IUserInterest[]>('user_interests');
+
     try{
       if(this.platform.is('cordova')){
         var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
@@ -136,15 +142,9 @@ export class ProfilePage {
         // Update DB
         await this.writeUserDataToDb();
       } else {
-        // Debug or Browser path
-        this.userData = new User('', '', 'Johnny', 'Appleseed', '',
-          { stringFormat: 'Dallas, TX', latitude: '', longitude: ''}, 
-          [],
-          { host: true, tips: true, meetup: true, emergencyContact: true},
-          [],
-          '',
-          '../../assets/avatar_man.png',
-          'Hey guys! I joined Wandr because I love traveling and meeting new people! Oh, I also have a thing for apples.');
+        // ionic serve path
+        const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+        this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(uid, false);
       }
 
       this.loadingPopup.dismiss();
@@ -169,6 +169,15 @@ export class ProfilePage {
           this.loadingPopup.dismiss();
           this.presentToast("top", "Failed to save profile updates");
         });
+    } else {
+      this.userData.interests.forEach(unchecked=>{
+        const match = _.find(this.userInterests, (checked)=>{
+          return unchecked.label === checked.label;
+        });
+        if(match){
+          match['checked'] = true;
+        }
+      });
     }
   }
 
@@ -197,6 +206,10 @@ export class ProfilePage {
   getUserRank(){
     return Utils.getUserRank(this.userData.friends.length);
   }
+
+  onClickCreateNewPlan(){
+    this.presentToast('top', 'Not yet implemented');
+  }
   //******* end Bound Elements ***** //
 
   private async saveProfileEdits(){
@@ -207,6 +220,13 @@ export class ProfilePage {
       await this.forwardGeocode(this.autoComplete.input);
       await this.reverseGeocode();
     }
+
+    this.userData.interests = [];
+    this.userInterests.forEach(item =>{
+      if(item['checked']){
+        this.userData.interests.push(item);
+      }
+    });
 
     await this.writeUserDataToDb()
   }
