@@ -11,7 +11,11 @@
         <button ion-item (click)="onClickContact()">
             Contact Us
         </button>
-        <a ion-item href="https://wanderlustlabs.io/privacy-policy/">Privacy Policy</a>
+        <!-- <button ion-item (click)="openPrivacyPolicy()">
+            Privacy Policy
+            <ion-icon name="open" item-end></ion-icon>
+        </button> -->
+        <a ion-item detail-none href="https://wanderlustlabs.io/privacy-policy/">Privacy Policy <i class="fas fa-external-link-alt" item-end></i></a>
         <ion-item>
             <ion-label>Push Notifications</ion-label>
             <ion-toggle [(ngModel)]="pushNotifications" (ionChange)="updateUserSettings()"></ion-toggle>

@@ -16,4 +16,13 @@ page-profile {
     font-size: 18px;
     color: color($colors, myGrey);
   }
+
+  .user-info{
+    label{
+      color: color($colors, myGrey);
+    }
+    span{
+      color: color($colors, myGrey);
+    }
+  }
 }

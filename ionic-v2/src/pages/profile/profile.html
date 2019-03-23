@@ -13,16 +13,16 @@
             <ion-col text-center>
               <img id="profile-img" [src]="userData.profile_img_url"/>
             </ion-col>
-            <ion-col align-self-center text-center>
+            <ion-col align-self-center>
                 <div class="user-info">
                     <ion-row>
                         <h2>{{userData.first_name}} {{userData.last_name}}</h2>
                     </ion-row>
                     <ion-row>
-                        <strong>Connections:</strong>&nbsp;<span>{{userData.friends.length + secondConnectionCount}}</span>
+                        <span>{{userData.location.stringFormat}}</span>
                     </ion-row>
                     <ion-row>
-                        <span>{{userData.location.stringFormat}}</span>
+                        <label>Connections:</label>&nbsp;<span>{{userData.friends.length + secondConnectionCount}}</span>
                     </ion-row>
                     <!-- <ion-row>
                         <span *ngFor="let iconClass of getUserRank()">
