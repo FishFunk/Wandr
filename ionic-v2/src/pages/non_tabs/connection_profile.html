@@ -18,10 +18,13 @@
                         <h2>{{viewUserData.first_name}} {{viewUserData.last_name}}</h2>
                     </ion-row>
                     <ion-row>
-                        <strong>Connections:</strong>&nbsp;<span>{{viewUserData.friends.length + secondConnectionCount}}</span>
-                    </ion-row>
-                    <ion-row>
                         <span>{{viewUserData.location.stringFormat}}</span>
+                    </ion-row>
+                    <!-- <ion-row>
+                        <strong>Connections:</strong>&nbsp;<span>{{viewUserData.friends.length + secondConnectionCount}}</span>
+                    </ion-row> -->
+                    <ion-row>
+                        <strong>Mutual Friends:</strong>&nbsp;<span>{{mutualFriends.length}}</span>
                     </ion-row>
                 </div>
             </ion-col>

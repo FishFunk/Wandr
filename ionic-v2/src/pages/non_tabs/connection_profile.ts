@@ -20,7 +20,7 @@ export class ConnectionProfilePage {
     secondConnectionCount: number;
     currentUserId: string;
     viewUserData: IUser;
-    mutualFriends: string[];
+    mutualFriends: string[] = [];
     showChatButton: boolean;
     chatExists: boolean;
     chatData: IChat;
@@ -74,6 +74,10 @@ export class ConnectionProfilePage {
           this.chatExists = false;
       }
 
+      // const firstConnections = await this.dbHelper.ReadFirstConnections(this.viewUserData.app_uid);
+      // const secondConnections = await this.dbHelper.ReadSecondConnections(this.viewUserData.facebook_uid, firstConnections);
+
+      // this.secondConnectionCount = secondConnections.length;
       this.countMutualConnections();
     }
 
