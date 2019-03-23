@@ -1,17 +1,33 @@
 page-invite {
-    ion-card-header {
-        p {
-            color: color($colors, dark) !important;
-            font-size: 18px !important;
-        }
+
+    .header {
+        font-size: 2.5em;
+        color: color($colors, primary);
+        font-weight: bold;
+        font-family: Ionicons;
     }
 
-    ion-card-content{
-        label{
-            font-weight: bold;
-        }
+    .subheader{
+        font-size: 1.5em;
+        color: color($colors, primary);
+        font-family: Ionicons;
+        padding: 0 5px 0 5px;
     }
-    
+
+    .stats > label{
+        font-size: 1.2em;
+        font-weight: bold;
+        font-family: Ionicons;
+        color: color($colors, myGrey);
+
+    }
+
+    .stats > span{
+        font-size: 1.2em;
+        font-weight: bold;
+        color: color($colors, myGrey);
+    }
+
     .facebook_blue {
         color: #3B5998;
     };

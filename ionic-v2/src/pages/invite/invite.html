@@ -6,33 +6,44 @@
 </ion-header>
   
 <ion-content>
-    <ion-card text-center>
-        <ion-card-header>
-            <p>Grow Your Network to</p>
-            <p>Improve Your Rank!</p>
-        </ion-card-header>    
-        <ion-card-content>
-            <label>Current Rank:</label>&nbsp;<span>{{getUserStatus()}}</span><br>
-            <label>1st Degree Connections:</label>&nbsp;<span>{{firstConnectionCount}}</span><br>
-            <label>2nd Degree Connections:</label>&nbsp;<span>{{secondConnectionCount}}</span><br>
-            <br>
-            <br>
-            <hr>
-        </ion-card-content>   
-        <ion-item no-lines text-center>
-            <button ion-button large clear icon-only (click)="facebookShare()">
-                <ion-icon class="facebook_blue" name="logo-facebook"></ion-icon>
-            </button>
-            <button ion-button large clear icon-only (click)="twitterShare()">
-                <ion-icon class="twitter_blue" name="logo-twitter"></ion-icon>
-            </button>
-            <button ion-button large clear icon-only (click)="smsShare()">
-                <ion-icon class="message_blue" name="text"></ion-icon>
-            </button>
-            <button ion-button large clear icon-only (click)="whatsAppShare()">
-                <ion-icon class="whatsapp_green" name="logo-whatsapp"></ion-icon>
-            </button>
-        </ion-item>  
-    </ion-card>
+    <ion-grid text-center>
+        <ion-row>
+            <ion-col col-12>
+                <p class="header">Know someone that might like Wandr?</p>
+                <p class="subheader">Tell your friends! A larger network means more opportunity to Wandr.</p>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-12 class="stats">
+                <label>Your 1st Degree Connections:</label>&nbsp;<span>{{firstConnectionCount}}</span><br>
+                <label>Your 2nd Degree Connections:</label>&nbsp;<span>{{secondConnectionCount}}</span><br>
+            </ion-col>
+        </ion-row>
+        <br>
+        <br>
+        <hr>
+        <ion-row>
+            <ion-col col-6>
+                <button ion-button large full clear icon-only (click)="facebookShare()">
+                    <ion-icon class="facebook_blue" name="logo-facebook"></ion-icon>
+                </button>
+            </ion-col>
+            <ion-col col-6>
+                <button ion-button large full clear icon-only (click)="twitterShare()">
+                    <ion-icon class="twitter_blue" name="logo-twitter"></ion-icon>
+                </button>
+            </ion-col>
+            <ion-col col-6>
+                <button ion-button large full clear icon-only (click)="smsShare()">
+                    <ion-icon class="message_blue" name="text"></ion-icon>
+                </button>
+            </ion-col>
+            <ion-col col-6>
+                <button ion-button large full clear icon-only (click)="whatsAppShare()">
+                    <ion-icon class="whatsapp_green" name="logo-whatsapp"></ion-icon>
+                </button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>
   
