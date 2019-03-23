@@ -139,7 +139,7 @@ export class MessagesPage {
             targetUid = this.chat.userA_id;
         }
 
-        this.firestoreDbHelper.ReadUserByFirebaseUid(targetUid)
+        this.firestoreDbHelper.ReadUserByFirebaseUid(targetUid, true)
             .then((user)=>{
                 loading.dismiss();
                 this.navCtrl.push(ConnectionProfilePage, 
@@ -147,8 +147,8 @@ export class MessagesPage {
                     { animate: true, direction: 'forward' });
             })
             .catch(async error=>{
-                await this.logger.Error(error);
                 loading.dismiss();
+                await this.logger.Error(error);
                 this.presentAlert(`${this.headerName} has deleted their account!`);
             });
     }

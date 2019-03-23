@@ -92,8 +92,8 @@ export class SettingsPage {
                 this.appCtrl.getRootNav().setRoot(IntroPage);
             })
             .catch(async (error)=>{
-                await this.logger.Error(error);
                 this.presentToast('top', 'Logout failed!');
+                await this.logger.Error(error);
             });
     }
 
@@ -103,8 +103,8 @@ export class SettingsPage {
                 this.logout();
             })
             .catch(async error=> {
-                await this.logger.Error(error);
                 this.presentToast('top', 'Failed to delete account!');
+                await this.logger.Error(error);
             });
     }
 

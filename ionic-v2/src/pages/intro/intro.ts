@@ -21,7 +21,7 @@ export class IntroPage {
       image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
     },
     {
-      title: "Discover. Connect. Wander.",
+      title: "Discover. Connect. Wandr.",
       description: "See which cities your connections live in and connect with them.",
       image: "../../assets/undraw/purple/undraw_connected_8wvi.svg"
     }

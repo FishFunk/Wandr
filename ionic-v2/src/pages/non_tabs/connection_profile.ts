@@ -227,8 +227,8 @@ export class ConnectionProfilePage {
           }).present();
         })
         .catch(async error => {
-          await this.logger.Error(error);
           this.presentAlert("Report failed to send. Please try again.");
+          await this.logger.Error(error);
         });
     }
 
