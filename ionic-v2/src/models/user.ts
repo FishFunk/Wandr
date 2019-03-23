@@ -4,15 +4,16 @@ export interface IUser{
     first_name: string;
     last_name: string;
     email: string;
-    bio?: string;
+    bio: string;
     location: ILocation;
     friends: Array<IFacebookFriend>;
-    services: IUserServices;
     roomkeys: string[];
     last_login: string;
     settings: IUserSettings;
-    profile_img_url?: string;
-    interests?: Array<IUserInterest>;
+    profile_img_url: string;
+    interests: Array<ICheckboxOption>;
+    lifestyle: Array<ICheckboxOption>;
+    travel_info: string;
 }
 
 export interface ILocation{
@@ -29,16 +30,9 @@ export interface IMutualConnectionInfo {
     profile_img_url: string;
 }
 
-export interface IUserInterest{
+export interface ICheckboxOption{
     label: string,
     iconClass: string
-}
-
-export interface IUserServices{
-    host: boolean;
-    tips: boolean;
-    meetup: boolean;
-    emergencyContact: boolean;
 }
 
 export interface IFacebookFriend{
@@ -60,15 +54,6 @@ export class Location implements ILocation{
     {}
 }
 
-export class UserServices implements IUserServices{
-    constructor(
-        public host: boolean = false,
-        public tips: boolean = false,
-        public meetup: boolean = false,
-        public emergencyContact: boolean = false)
-        {}
-}
-
 export class User implements IUser{
     constructor(
         public app_uid: string,
@@ -78,14 +63,15 @@ export class User implements IUser{
         public email: string,
         public location: ILocation,
         public friends: Array<IFacebookFriend>,
-        public services: IUserServices,
-        public roomkeys: string[],
-        public last_login: string,
-        public profile_img_url: string,
-        public bio: string = '',
+        public roomkeys: string[] = [],
+        public last_login: string = "",
+        public profile_img_url: string = "",
+        public bio: string = "",
         public settings: any = {
             notifications: true
         },
-        public interests: Array<IUserInterest> = [])
+        public lifestyle: Array<ICheckboxOption> = [],
+        public interests: Array<ICheckboxOption> = [],
+        public travel_info: string = "")
         {}
 }

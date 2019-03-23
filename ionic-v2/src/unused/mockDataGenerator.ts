@@ -1,4 +1,4 @@
-import { User, ILocation, IUserServices, IFacebookFriend } from '../models/user';
+import { User, ILocation, IFacebookFriend } from '../models/user';
 import { Chat, Message } from '../models/chat';
 import { FacebookLoginResponse } from '@ionic-native/facebook';
 import firebase from 'firebase';
@@ -31,7 +31,6 @@ export class MockDataGenerator
         this.randomSentence(),
         this.randomLocation(),
         [this.randomFacebookFriend(1,maxCount), this.randomFacebookFriend(1,maxCount)],
-        this.randomServices(),
         [],
         new Date().toString(),
         Math.round(Math.random()) ? '../../assets/avatar_man.png' : '../../assets/avatar_woman.png',
@@ -119,15 +118,6 @@ export class MockDataGenerator
           { stringFormat: "Barcelona, Spain", latitude: "41.3851", longitude: "2.1734" }
         ]
         return <ILocation> locations[this.randomNumber(0,locations.length - 1)];
-      }
-    
-      public randomServices(){
-        return <IUserServices> {
-          host: !!Math.round(Math.random()),
-          tips: !!Math.round(Math.random()),
-          meetup: !!Math.round(Math.random()),
-          emergencyContact: !!Math.round(Math.random())
-        };
       }
     
       public randomNumber(min, max){

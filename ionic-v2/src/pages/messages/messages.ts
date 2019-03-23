@@ -72,10 +72,9 @@ export class MessagesPage {
         this.sendButtonElement.removeEventListener('mouseup', this.stopBubbleAndSendMessage.bind(this));
     }
 
-    ngAfterViewInit() {
+    ionViewWillEnter() {
         this.initialTextareaScrollHeight = this.textarea.nativeElement.scrollHeight;
 
-        // Subscribe listeners
         this.messageListItems.changes.subscribe(() => {
             this.scrollToBottom(0);
         });
@@ -96,6 +95,10 @@ export class MessagesPage {
         this.sendButtonElement.addEventListener('touchstart', this.stopBubble.bind(this));
         this.sendButtonElement.addEventListener('touchend', this.stopBubbleAndSendMessage.bind(this));
         this.sendButtonElement.addEventListener('mouseup', this.sendMessage.bind(this));
+
+        setTimeout(()=>{
+            this.scrollToBottom(0);
+        },10);
     }
 
     ionViewDidLoad(){
@@ -190,7 +193,7 @@ export class MessagesPage {
             await this.firestoreDbHelper.SendMessage(this.chat.roomkey, data, chatUpdate)
                 .then(()=>{
                     this.udpateHeight();
-                    this.scrollToBottom(200);
+                    //this.scrollToBottom(200);
                 })
                 .catch(async error =>{
                     await this.logger.Error(error);

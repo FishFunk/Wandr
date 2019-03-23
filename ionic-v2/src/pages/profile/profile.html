@@ -7,8 +7,7 @@
       </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content id="profileContent" padding>
-
+<ion-content padding>
     <ion-grid>
         <ion-row>
             <ion-col text-center>
@@ -17,13 +16,13 @@
             <ion-col align-self-center text-center>
                 <div class="user-info">
                     <ion-row>
-                        <strong>{{userData.first_name}} {{userData.last_name}}</strong>
-                    </ion-row>
-                    <ion-row>
-                        <span>{{userData.location.stringFormat}}</span>
+                        <h2>{{userData.first_name}} {{userData.last_name}}</h2>
                     </ion-row>
                     <ion-row>
                         <strong>Connections:</strong>&nbsp;<span>{{userData.friends.length + secondConnectionCount}}</span>
+                    </ion-row>
+                    <ion-row>
+                        <span>{{userData.location.stringFormat}}</span>
                     </ion-row>
                     <!-- <ion-row>
                         <span *ngFor="let iconClass of getUserRank()">
@@ -56,7 +55,7 @@
     <ion-grid>
       <ion-row>
         <ion-col col-12>
-            <h2>ABOUT</h2>
+            <h3 *ngIf="editMode || userData.bio">ABOUT</h3>
             <p *ngIf="!editMode">{{userData.bio}}</p>
             <ion-textarea 
                 *ngIf="editMode" 
@@ -65,11 +64,10 @@
             </ion-textarea>
         </ion-col>
       </ion-row>
-      <br><br>
       <ion-row>
         <ion-col col-12>
           <ion-grid no-padding>
-              <h2>INTERESTS</h2>
+              <h3 *ngIf="editMode || userData.interests && userData.interests.length > 0">INTERESTS</h3>
               <ion-row *ngIf="!editMode">
                   <ion-col *ngFor="let item of userData.interests">
                     <i [class]="item.iconClass"></i>
@@ -86,10 +84,37 @@
           </ion-grid>
         </ion-col>
       </ion-row>
-      <br><br>
-      <ion-row *ngIf="!editMode">
+      <ion-row>
         <ion-col col-12>
-            <button ion-button block clear (click)="onClickCreateNewPlan()">Create New Travel Plan</button>
+          <ion-grid no-padding>
+              <h3 *ngIf="editMode || userData.lifestyle && userData.lifestyle.length > 0">LIFESTYLE</h3>
+              <ion-row *ngIf="!editMode">
+                  <ion-col *ngFor="let item of userData.lifestyle">
+                    <i [class]="item.iconClass"></i>
+                    <p>{{item.label}}</p>
+                  </ion-col>
+              </ion-row>
+              <ion-row *ngIf="editMode">
+                <ion-col *ngFor="let item of lifestyleOptions" col-3>
+                  <ion-checkbox [(ngModel)]="item.checked"></ion-checkbox>
+                  <i [class]="item.iconClass"></i>
+                  <p>{{item.label}}</p>
+                </ion-col>
+              </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-12>
+          <ion-grid no-padding>
+              <h3 *ngIf="userData.travel_info || editMode">PAST & FUTURE TRIPS</h3>
+              <p *ngIf="!editMode">{{userData.travel_info}}</p>
+              <ion-textarea 
+                  *ngIf="editMode" 
+                  placeholder="Where have you been and where do you want to go?" 
+                  [(ngModel)]="userData.travel_info">
+              </ion-textarea>
+          </ion-grid>
         </ion-col>
       </ion-row>
     </ion-grid>

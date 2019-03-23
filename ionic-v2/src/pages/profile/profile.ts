@@ -1,6 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { IonicPage, LoadingController, ToastController, Platform, App } from 'ionic-angular';
-import { Location, UserServices, User, IUser, IUserInterest } from '../../models/user';
+import { Location, User, IUser, ICheckboxOption } from '../../models/user';
 import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
@@ -20,8 +20,9 @@ export class ProfilePage {
   autoComplete: any = { input: '' };
   autoCompleteItems: any[] = [];
   userData: IUser = new User('','','','', '',
-    new Location(),[],new UserServices(),[],'','', '', { notifications: true }, []);
-  userInterests: IUserInterest[] = [];
+    new Location(),[],[],'','', '', { notifications: true }, []);
+  userInterests: ICheckboxOption[] = [];
+  lifestyleOptions: ICheckboxOption[] = [];
   editMode: boolean = false;
   loadingPopup;
   countries: any[] = [];
@@ -58,7 +59,8 @@ export class ProfilePage {
   async load(){
     this.showLoadingPopup();
 
-    this.userInterests = await this.firestoreDbHelper.ReadMetadata<IUserInterest[]>('user_interests');
+    this.userInterests = await this.firestoreDbHelper.ReadMetadata<ICheckboxOption[]>('user_interests');
+    this.lifestyleOptions = await this.firestoreDbHelper.ReadMetadata<ICheckboxOption[]>('user_lifestyle');
 
     try{
       if(this.platform.is('cordova')){
@@ -178,6 +180,15 @@ export class ProfilePage {
           match['checked'] = true;
         }
       });
+
+      this.userData.lifestyle.forEach(unchecked=>{
+        const match = _.find(this.lifestyleOptions, (checked)=>{
+          return unchecked.label === checked.label;
+        });
+        if(match){
+          match['checked'] = true;
+        }
+      });
     }
   }
 
@@ -225,6 +236,13 @@ export class ProfilePage {
     this.userInterests.forEach(item =>{
       if(item['checked']){
         this.userData.interests.push(item);
+      }
+    });
+
+    this.userData.lifestyle = [];
+    this.lifestyleOptions.forEach(item =>{
+      if(item['checked']){
+        this.userData.lifestyle.push(item);
       }
     });
 
@@ -306,19 +324,15 @@ export class ProfilePage {
       facebook_uid: this.userData.facebook_uid,
       first_name: this.userData.first_name,
       last_name: this.userData.last_name,
-      email: this.userData.email,
-      bio: this.userData.bio,
+      email: this.userData.email || "",
+      bio: this.userData.bio || "",
       location: Object.assign({}, this.userData.location),
       friends: this.userData.friends.map((obj)=> {return Object.assign({}, obj)}),
-      services: {
-        host: this.userData.services.host,
-        tips: this.userData.services.tips,
-        meetup: this.userData.services.meetup,
-        emergencyContact: this.userData.services.emergencyContact
-      },
-      interests: this.userData.interests,
+      interests: this.userData.interests || [],
+      lifestyle: this.userData.lifestyle || [],
+      travel_info: this.userData.travel_info || "",
       roomkeys: this.userData.roomkeys,
-      last_login: this.userData.last_login,
+      last_login: this.userData.last_login || new Date().toString(),
       settings: Object.assign({}, this.userData.settings),
       profile_img_url: this.userData.profile_img_url
     }
