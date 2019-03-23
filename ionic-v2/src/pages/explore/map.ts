@@ -212,6 +212,13 @@ export class MapPage {
   }
 
   private onMarkerClick(latLng: google.maps.LatLng, e: Event){
+    const currentZoom = this.map.getZoom();
+    if(currentZoom < this.maxZoomLevel){
+      this.map.setZoom(currentZoom * 2);
+      this.map.panTo(latLng);
+      return;
+    }
+
     var str_location = _.findKey(this.locationMap, (obj)=>{
       return obj == latLng;
     });
