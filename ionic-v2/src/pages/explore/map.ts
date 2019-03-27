@@ -81,9 +81,12 @@ export class MapPage {
       .then(()=>{
         // TODO: Show one-time introductory dialog explaining how to use map (tutorial?)
         spinner.dismiss();
-        if(!!window.localStorage.getItem(Constants.hideMapTutorial)){
-          const popover = this.popoverCtrl.create(MapTutorialPopover);
-          popover.present();
+        const hideTutorial = window.localStorage.getItem(Constants.hideMapTutorial) == "true";
+        if(!hideTutorial){
+          setTimeout(()=>{
+            const popover = this.popoverCtrl.create(MapTutorialPopover);
+            popover.present();
+          }, 250);
         }
       })
       .catch(async error=>{
