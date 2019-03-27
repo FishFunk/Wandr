@@ -48,7 +48,8 @@ import { FacebookApi } from '../helpers/facebookApi';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
 import { FcmProvider } from '../providers/fcm/fcm';
-import { PopoverPageModule } from '../pages/non_tabs/popover_options.module';
+import { SortOptionsPopoverModule } from '../pages/non_tabs/sort_option_popover.module';
+import { MapTutorialPopoverModule } from '../pages/explore/tutorial_popover.module';
 
 //import firebase from 'firebase';
 //********** firebase configuration  ************ */
@@ -89,7 +90,8 @@ export const config = {
     MessagesPageModule,
     ConnectionListModule,
     ConnectionProfileModule,
-    PopoverPageModule
+    SortOptionsPopoverModule,
+    MapTutorialPopoverModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

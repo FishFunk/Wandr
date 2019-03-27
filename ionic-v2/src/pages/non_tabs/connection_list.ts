@@ -4,7 +4,7 @@ import { IUser, IFacebookFriend } from '../../models/user';
 import _ from 'underscore';
 import { ConnectionProfilePage } from './connection_profile';
 import { Constants } from '../../helpers/constants';
-import { PopoverPage } from './popover_options';
+import { SortOptionsPopover } from './sort_option_popover';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
  
 @Component({
@@ -75,7 +75,7 @@ export class ConnectionListPage {
     }
 
     presentPopover(myEvent) {
-        let popover = this.popoverCtrl.create(PopoverPage);
+        let popover = this.popoverCtrl.create(SortOptionsPopover);
         popover.present({
           ev: myEvent
         });

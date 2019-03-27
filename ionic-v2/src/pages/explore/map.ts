@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, Events, AlertController } from 'ionic-angular';
+import { NavController, LoadingController, Events, AlertController, PopoverController } from 'ionic-angular';
 import { IUser } from '../../models/user';
 import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { ConnectionListPage } from '../non_tabs/connection_list';
 import { Logger } from '../../helpers/logger';
+import { MapTutorialPopover } from './tutorial_popover';
  
 @Component({
   selector: 'map-page',
@@ -65,6 +66,7 @@ export class MapPage {
   constructor(public navCtrl: NavController,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
+    private popoverCtrl: PopoverController,
     private firestoreDbHelper: FirestoreDbHelper,
     private logger: Logger,
     private events: Events) {
@@ -79,6 +81,10 @@ export class MapPage {
       .then(()=>{
         // TODO: Show one-time introductory dialog explaining how to use map (tutorial?)
         spinner.dismiss();
+        if(!!window.localStorage.getItem(Constants.hideMapTutorial)){
+          const popover = this.popoverCtrl.create(MapTutorialPopover);
+          popover.present();
+        }
       })
       .catch(async error=>{
         spinner.dismiss();        

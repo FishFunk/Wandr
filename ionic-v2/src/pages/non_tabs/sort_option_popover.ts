@@ -3,10 +3,10 @@ import { Component } from "@angular/core";
 import { Constants } from "../../helpers/constants";
 
 @Component({
-    templateUrl: 'popover_options.html'
+    templateUrl: 'sort_option_popover.html'
 })
 
-export class PopoverPage {
+export class SortOptionsPopover {
 
     constructor(public viewCtrl: ViewController,
         private events: Events) {}
