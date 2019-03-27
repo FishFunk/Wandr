@@ -65,18 +65,21 @@ export class TabsPage {
           toast.present();
           this.updateBadgeCount();
         }
-
-        // New friend/user notifications
-        if(msg.title.indexOf('network') > 0){
+        else {
           const toast = this.toastCtrl.create({
             message: msg.title,
             duration: 3000,
             position: 'top'
           });
-  
+
           toast.present();
+        }
+
+        // New friend/user notifications
+        if(msg.title.indexOf('network') > 0){
           this.events.publish(Constants.refreshMapDataEventName);
         }
+
       })
     ).subscribe();
 
