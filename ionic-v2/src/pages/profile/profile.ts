@@ -330,7 +330,7 @@ export class ProfilePage {
       friends: this.userData.friends.map((obj)=> {return Object.assign({}, obj)}),
       interests: this.userData.interests || [],
       lifestyle: this.userData.lifestyle || [],
-      travel_info: this.userData.travel_info || "",
+      //travel_info: this.userData.travel_info || "",
       roomkeys: this.userData.roomkeys,
       last_login: this.userData.last_login || new Date().toString(),
       settings: Object.assign({}, this.userData.settings),

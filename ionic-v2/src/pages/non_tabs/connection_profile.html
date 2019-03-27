@@ -65,14 +65,14 @@
                 </ion-grid>
             </ion-col>
         </ion-row>
-        <ion-row>
+        <!-- <ion-row>
             <ion-col col-12 *ngIf="viewUserData.travel_info">
                 <ion-grid no-padding>
                     <h3>PAST & FUTURE TRIPS</h3>
                     <p>{{viewUserData.travel_info}}</p>
                 </ion-grid>
             </ion-col>
-        </ion-row>
+        </ion-row> -->
         <ion-row *ngIf="showChatButton">
             <ion-col col-12 text-center>
                 <button *ngIf="!chatExists" ion-button large icon-end (click)="onClickSendMessage()">
