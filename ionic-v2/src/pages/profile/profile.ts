@@ -112,6 +112,9 @@ export class ProfilePage {
           // Create new user ref
           const newUsr = this.getPlainUserObject();
           await this.firestoreDbHelper.SetNewUserData(firebaseUid, newUsr);
+
+          // Enable edit mode
+          this.editMode = true;
         } else {
           // IF user already has been created
           this.userData = <User> user;

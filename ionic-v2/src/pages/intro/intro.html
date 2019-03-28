@@ -1,12 +1,12 @@
 <ion-content no-bounce>
   <ion-slides pager="true">
-    <ion-slide *ngFor="let slide of slides" [ngStyle]="{'background-color':'#1ABC9C'}"> 
-    <img [src]="slide.image" class="slide-image"/>
-    <h2 class="slide-title" [innerHTML]="slide.title"></h2>
-    <p [innerHTML]="slide.description"></p>
+    <ion-slide *ngFor="let slide of slides" class="animated animatedFadeInUp fadeInUp"> 
+      <img [src]="slide.image" class="slide-image"/>
+      <h2 class="slide-title" [innerHTML]="slide.title"></h2>
+      <p [innerHTML]="slide.description"></p>
     </ion-slide>
 
-    <ion-slide [ngStyle]="{'background-color':'#1ABC9C'}">
+    <ion-slide>
         <img src="../../assets/undraw/purple/undraw_online_world_mc1t.svg" class="slide-image"/>
         <br><br>
         <button ion-button outline round color="secondary" margin-top (click)="onClickfacebookLogin()">

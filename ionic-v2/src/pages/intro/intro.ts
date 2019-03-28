@@ -17,12 +17,12 @@ export class IntroPage {
   slides = [
     {
       title: "Welcome to Wandr!",
-      description: "Bringing the social back into network.",
+      description: "The global travel network.",
       image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
     },
     {
       title: "Discover. Connect. Wandr.",
-      description: "See which cities your connections live in and connect with them.",
+      description: "See your network on the map and connect with them.",
       image: "../../assets/undraw/purple/undraw_connected_8wvi.svg"
     }
   ];
