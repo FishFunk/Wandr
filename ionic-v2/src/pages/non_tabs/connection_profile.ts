@@ -111,56 +111,54 @@ export class ConnectionProfilePage {
           });
 
           toast.present();
-
-          return;
-        }
-    
-        let loading = this.loadingCtrl.create({
-          spinner: 'hide',
-          content:`<img src="../../assets/ring-loader.gif"/>`,
-          cssClass: 'my-loading-class'
-        });
-        loading.present();
-    
-        const currentUserFirstName = window.localStorage.getItem(Constants.userFirstNameKey);
-        const currentUserPhotoUrl = window.localStorage.getItem(Constants.profileImageUrlKey);
-    
-        const focusedConnectionUid = this.viewUserData.app_uid;
-        const roomkey = this.currentUserId + '_' + focusedConnectionUid;
-    
-        const data: IChat = {
-          roomkey: roomkey,
-          userA_id: this.currentUserId,
-          userA_name: currentUserFirstName,
-          userA_photoUrl: currentUserPhotoUrl,
-          userA_unread: true,
-          userB_id: focusedConnectionUid,
-          userB_name: this.viewUserData.first_name,
-          userB_photoUrl: this.viewUserData.profile_img_url,
-          userB_unread: true,
-          lastMessage: '',
-          timestamp: new Date().getTime().toString()
-        };
-    
-        const createChat = this.firebaseFunctionsModule.functions.httpsCallable('createChat');
-        
-        createChat(data)
-          .then((result)=>{
-            this.chatData = result.data;
-            this.chatExists = true;
-            loading.dismiss();
-            // TODO: Navigate to new chat view?
-            const toast = this.toastCtrl.create({
-              message: "Message sent!",
-              position: 'top',
-              duration: 2000
-            });
-            toast.present();
-          })
-          .catch(async error=>{
-            await this.logger.Error(error);
-            loading.dismiss();
+        } else {
+          let loading = this.loadingCtrl.create({
+            spinner: 'hide',
+            content:`<img src="../../assets/ring-loader.gif"/>`,
+            cssClass: 'my-loading-class'
           });
+          loading.present();
+      
+          const currentUserFirstName = window.localStorage.getItem(Constants.userFirstNameKey);
+          const currentUserPhotoUrl = window.localStorage.getItem(Constants.profileImageUrlKey);
+      
+          const focusedConnectionUid = this.viewUserData.app_uid;
+          const roomkey = this.currentUserId + '_' + focusedConnectionUid;
+      
+          const data: IChat = {
+            roomkey: roomkey,
+            userA_id: this.currentUserId,
+            userA_name: currentUserFirstName,
+            userA_photoUrl: currentUserPhotoUrl,
+            userA_unread: true,
+            userB_id: focusedConnectionUid,
+            userB_name: this.viewUserData.first_name,
+            userB_photoUrl: this.viewUserData.profile_img_url,
+            userB_unread: true,
+            lastMessage: '',
+            timestamp: new Date().getTime().toString()
+          };
+      
+          const createChat = this.firebaseFunctionsModule.functions.httpsCallable('createChat');
+          
+          createChat(data)
+            .then((result)=>{
+              this.chatData = result.data;
+              this.chatExists = true;
+              loading.dismiss();
+              // TODO: Navigate to new chat view?
+              const toast = this.toastCtrl.create({
+                message: "Message sent!",
+                position: 'top',
+                duration: 2000
+              });
+              toast.present();
+            })
+            .catch(async error=>{
+              await this.logger.Error(error);
+              loading.dismiss();
+            });
+        }
     }
 
     private async _checkIfChatExists(){
