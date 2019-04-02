@@ -55,7 +55,7 @@ export class InvitePage {
       });
     this.firstConnectionCount = firstConnecitons.length;
 
-    const secondConnecitons = await this.firestoreDbHelper.ReadSecondConnections(facebookUid, firstConnecitons)
+    const secondConnecitons = await this.firestoreDbHelper.ReadSecondConnections(firebaseUid, facebookUid)
       .catch(async error =>{
         await this.logger.Error(error);
         loading.dismiss();

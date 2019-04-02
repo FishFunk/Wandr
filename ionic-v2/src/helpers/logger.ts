@@ -40,7 +40,7 @@ export class Logger{
 
             await this.upsertLog(log, 'error');
         } else {
-            await this.upsertLog(error, 'error');
+            await this.upsertLog({data : error}, 'error');
         }
     }
 
@@ -58,7 +58,7 @@ export class Logger{
 
             promise = this.upsertLog(log, 'fatal');
         } else {
-            promise = this.upsertLog(fatal, 'fatal')
+            promise = this.upsertLog({data : fatal}, 'fatal')
         }
         
         promise

@@ -233,12 +233,14 @@ export class FirestoreDbHelper {
     }
 
     public async ReadSecondConnections(
+        targetAppUid: string,
         targetFacebookId: string, 
-        firstConnections: IUser[],
         matchLocation?: string): Promise<IUser[]>{
       let firstConnectionFacebookIds = [];
       let secondConnectionFacebookIds = [];
       let secondConnections: IUser[] = [];
+        
+      let firstConnections = await this.ReadFirstConnections(targetAppUid);
   
       _.each(firstConnections, (firstConnectionUser)=>{
         firstConnectionFacebookIds.push(firstConnectionUser.facebook_uid);

@@ -54,12 +54,12 @@ import { MapTutorialPopoverModule } from '../pages/explore/tutorial_popover.modu
 //import firebase from 'firebase';
 //********** firebase configuration  ************ */
 export const config = { 
-  apiKey: "AIzaSyCJOye-L4aFVVZny4n9_XWz61ZPxbCBdyw",
-  authDomain: "wanderlust-app-220020.firebaseapp.com",
-  databaseURL: "https://wanderlust-app-220020.firebaseio.com",
-  projectId: "wanderlust-app-220020",
-  storageBucket: "wanderlust-app-220020.appspot.com",
-  messagingSenderId: "430173647950"
+  apiKey: "AIzaSyDom_qhKKrsGwmYZjonTZSWc3qgTR_ioyE",
+  authDomain: "brave-smile-236417.firebaseapp.com",
+  databaseURL: "https://brave-smile-236417.firebaseio.com",
+  projectId: "brave-smile-236417",
+  storageBucket: "brave-smile-236417.appspot.com",
+  messagingSenderId: "614834936291"
 };
   
 @NgModule({

@@ -106,7 +106,7 @@ export class ProfilePage {
           // Get Facebook photo URL
           if(fbUserData.picture){
             this.userData.profile_img_url = 
-              fbUserData.picture.data ? fbUserData.picture.data.url : ''; // TODO: Default image
+              fbUserData.picture.data ? fbUserData.picture.data.url : '../../assets/avatar_man.png'; // TODO: Default image
           }
 
           // Create new user ref
@@ -150,6 +150,7 @@ export class ProfilePage {
         // ionic serve path
         const uid = 'XkS98bzJM1co7vpyBlKGUpPgd2Q2'; // Johnny Appleseed
         this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(uid, false);
+        this.userData.profile_img_url = '../../assets/avatar_man.png';
       }
 
       this.loadingPopup.dismiss();
@@ -230,9 +231,20 @@ export class ProfilePage {
 
     // TODO: Input validtaion
     // TODO: Save breaks if geocode fails. Handle errors.
-    if(this.autoComplete.input){
-      await this.forwardGeocode(this.autoComplete.input);
-      await this.reverseGeocode();
+    if(this.autoComplete.input)
+    {
+      let data = await this.forwardGeocode(this.autoComplete.input);
+      let formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
+
+      // geocode again to ensure generic city lat long
+      data = await this.forwardGeocode(formattedLocation);
+      formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
+
+      this.userData.location = {
+        stringFormat: formattedLocation,
+        latitude: data.latitude,
+        longitude: data.longitude
+      };
     }
 
     this.userData.interests = [];
@@ -257,7 +269,7 @@ export class ProfilePage {
     return this.firestoreDbHelper.UpdateUser(this.userData.app_uid, updateData);
   }
 
-  private async forwardGeocode(formattedLocation: string)
+  private async forwardGeocode(formattedLocation: string): Promise<NativeGeocoderForwardResult>
   {
     var data: NativeGeocoderForwardResult[] = 
       await this.nativeGeocoder.forwardGeocode(formattedLocation, this.geocoderOptions);
@@ -265,30 +277,26 @@ export class ProfilePage {
     
     if(!data || data.length == 0) {
       this.logger.Warn(`Unable to forward geocode: ${formattedLocation}`);
-      return;
+      return {latitude: '', longitude: ''};
     }
 
-    this.userData.location.latitude = data[0].latitude;
-    this.userData.location.longitude = data[0].longitude;
+    return data[0];
   }
 
-  private async reverseGeocode()
+  private async reverseGeocode(lat: number, lng: number): Promise<string>
   {
-    var lat = +this.userData.location.latitude;
-    var long = +this.userData.location.longitude;
-
     var data: NativeGeocoderReverseResult[] = 
-      await this.nativeGeocoder.reverseGeocode(lat, long, this.geocoderOptions);
+      await this.nativeGeocoder.reverseGeocode(lat, lng, this.geocoderOptions);
 
     if(!data || data.length == 0) {
-      this.logger.Warn(`Unable to reverse geocode Lat: ${lat}, Long: ${long}`);
+      this.logger.Warn(`Unable to reverse geocode Lat: ${lat}, Long: ${lng}`);
       return;
     }
 
     if(data[0].countryCode == "US"){
-      this.userData.location.stringFormat = `${data[0].locality}, ${data[0].administrativeArea}`;
+      return `${data[0].locality}, ${data[0].administrativeArea}`;
     } else {
-      this.userData.location.stringFormat = `${data[0].locality}, ${data[0].countryName}`;
+      return `${data[0].locality}, ${data[0].countryName}`;
     }
   }
 

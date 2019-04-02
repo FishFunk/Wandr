@@ -183,7 +183,7 @@ export class MapPage {
       
     // Cache and map geocode information
     let geoCode: google.maps.LatLng;
-    if(!this.locationMap[formattedLocation]){
+    if(!this.locationMap[formattedLocation] && user.location.latitude && user.location.longitude){
       geoCode = new google.maps.LatLng(+user.location.latitude, +user.location.longitude);
       this.locationMap[formattedLocation] = geoCode;
 

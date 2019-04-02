@@ -59,7 +59,7 @@ export class ConnectionListPage {
         const facebookId = window.localStorage.getItem(Constants.facebookUserIdKey);
         this.secondConnections = 
             await this.firestoreDbHelper.ReadSecondConnections(
-                facebookId, this.firstConnections, this.locationString);
+                this.currentUserId ,facebookId, this.locationString);
 
         // Others
         const excludeFirstIdMap = _.indexBy(this.firstConnections, (usr)=>usr.app_uid);
