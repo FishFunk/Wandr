@@ -18,7 +18,7 @@
             </ion-item-divider>
             <ion-item *ngFor="let user of firstConnections" (click)="onClickProfile(user)">
                 <ion-thumbnail item-start>
-                    <img [src]="user.profile_img_url || '../../assets/avatar_man.png'">               
+                    <img [src]="user.profile_img_url">               
                 </ion-thumbnail>
                 <ion-label>
                     <h2>{{user.first_name}}</h2>
@@ -35,7 +35,7 @@
             </ion-item-divider>
             <ion-item *ngFor="let user of secondConnections" (click)="onClickProfile(user)">
                 <ion-thumbnail item-start>
-                    <img [src]="user.profile_img_url || '../../assets/avatar_man.png'">               
+                    <img [src]="user.profile_img_url">               
                 </ion-thumbnail>
                 <ion-label>
                     <h2>{{user.first_name}}</h2>
@@ -52,7 +52,7 @@
             </ion-item-divider>
             <ion-item *ngFor="let user of otherConnections" (click)="onClickProfile(user)">
                 <ion-thumbnail item-start>
-                    <img [src]="user.profile_img_url || '../../assets/avatar_man.png'">                                   
+                    <img [src]="user.profile_img_url">                                   
                 </ion-thumbnail>
                 <ion-label>
                     <h2>{{user.first_name}}</h2>
