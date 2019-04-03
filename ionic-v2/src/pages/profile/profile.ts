@@ -323,8 +323,7 @@ export class ProfilePage {
     const currentUserFirebaseId = localStorage.getItem(Constants.firebaseUserIdKey);
     const currentUserFacebookId = localStorage.getItem(Constants.facebookUserIdKey);
 
-    const firstConnections = await this.firestoreDbHelper.ReadFirstConnections(currentUserFirebaseId);
-    const secondConnections = await this.firestoreDbHelper.ReadSecondConnections(currentUserFacebookId, firstConnections);
+    const secondConnections = await this.firestoreDbHelper.ReadSecondConnections(currentUserFirebaseId, currentUserFacebookId);
 
     return Promise.resolve(secondConnections.length);
   }

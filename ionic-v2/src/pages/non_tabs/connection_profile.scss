@@ -4,14 +4,14 @@ page-connection-profile{
         height:100%;
         max-height: 360px;
         max-width: 360px;
-        border-width: 1px;
-        border-style: solid;
-        --border-color: color($colors, dark);
+        // border-width: 1px;
+        // border-style: solid;
+        // --border-color: color($colors, dark);
         border-radius: 50%;
     }
 
-    h3{
-        padding-top: 10px;
+    .subtext{
+        padding-top: 2px;
         font-size: 18px;
         color: color($colors, myGrey);
     }

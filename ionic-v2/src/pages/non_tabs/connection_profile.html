@@ -10,21 +10,21 @@
     <ion-grid>
         <ion-row>
             <ion-col text-center>
-                <img id="profile-img" [src]="viewUserData.profile_img_url || '../../assets/avatar_man.png'"/>
+                <img id="profile-img" [src]="viewUserData.profile_img_url"/>
             </ion-col>
             <ion-col align-self-center text-center>
                 <div class="user-info">
                     <ion-row>
                         <h2>{{viewUserData.first_name}} {{viewUserData.last_name}}</h2>
                     </ion-row>
-                    <ion-row>
+                    <ion-row class="subtext">
                         <span>{{viewUserData.location.stringFormat}}</span>
                     </ion-row>
                     <!-- <ion-row>
                         <strong>Connections:</strong>&nbsp;<span>{{viewUserData.friends.length + secondConnectionCount}}</span>
                     </ion-row> -->
-                    <ion-row>
-                        <strong>Mutual Friends:</strong>&nbsp;<span>{{mutualFriends.length}}</span>
+                    <ion-row class="subtext">
+                        <span>Mutual Friends:&nbsp;{{mutualFriends.length}}</span>
                     </ion-row>
                 </div>
             </ion-col>
