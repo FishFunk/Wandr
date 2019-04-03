@@ -2,39 +2,35 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
-	<string>ca-app-pub-3940256099942544/2934735716</string>
-	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
-	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>430173647950-bu7pudmv94ajujptb0fr8k21q0ll6qq3.apps.googleusercontent.com</string>
+	<string>614834936291-08onjuj7bor73m541sjjif1a8t47f22j.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.430173647950-bu7pudmv94ajujptb0fr8k21q0ll6qq3</string>
+	<string>com.googleusercontent.apps.614834936291-08onjuj7bor73m541sjjif1a8t47f22j</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDvMP-WS62yUGHZVqBB_AOIoLSRFW7n6k8</string>
+	<string>AIzaSyB5smQtpkJZCJZnnGFD5RRLMaa8WCO0asc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>430173647950</string>
+	<string>614834936291</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.wewandr.app</string>
 	<key>PROJECT_ID</key>
-	<string>wanderlust-app-220020</string>
+	<string>brave-smile-236417</string>
 	<key>STORAGE_BUCKET</key>
-	<string>wanderlust-app-220020.appspot.com</string>
+	<string>brave-smile-236417.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true></true>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
 	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false></false>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
 	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:430173647950:ios:abc21e7b94688933</string>
+	<string>1:614834936291:ios:abc21e7b94688933</string>
 	<key>DATABASE_URL</key>
-	<string>https://wanderlust-app-220020.firebaseio.com</string>
+	<string>https://brave-smile-236417.firebaseio.com</string>
 </dict>
 </plist>
