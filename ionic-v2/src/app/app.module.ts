@@ -50,8 +50,8 @@ import { Logger } from '../helpers/logger';
 import { FcmProvider } from '../providers/fcm/fcm';
 import { SortOptionsPopoverModule } from '../pages/non_tabs/sort_option_popover.module';
 import { MapTutorialPopoverModule } from '../pages/explore/tutorial_popover.module';
+import { ConnectivityServiceProvider } from '../providers/connectivity-service/connectivity-service';
 
-//import firebase from 'firebase';
 //********** firebase configuration  ************ */
 export const config = { 
   apiKey: "AIzaSyDom_qhKKrsGwmYZjonTZSWc3qgTR_ioyE",
@@ -116,7 +116,8 @@ export const config = {
     Firebase,
     FcmProvider,
     Badge,
-    Contacts
+    Contacts,
+    ConnectivityServiceProvider
   ]
 })
 export class AppModule {}

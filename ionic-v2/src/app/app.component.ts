@@ -58,7 +58,7 @@ public readonly firebaseInitOptions: any = {
 
         // Handle tab hiding defect for android devices
         if (this.platform.is('android')) {
-          this.statusBar.styleLightContent();
+          this.statusBar.styleLightContent(); // Make phone status bar visible
           this.keyboard.onKeyboardShow().subscribe(() => {
             document.body.classList.add('keyboard-is-open');
           });
