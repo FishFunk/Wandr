@@ -263,15 +263,13 @@ async function _sendNotificationToId(idToNotify: string, notificationTitle: stri
     let data: any;
     const querySnapshot = 
         await admin.firestore()
-            .collection('users').select(idToNotify).select('settings').get();
+            .collection('users').where('app_uid', '==', idToNotify).select('settings').get();
 
     querySnapshot.forEach(result =>{
         data = result.data();
     });
 
-    console.trace(`Settings: ${JSON.stringify(data)}`);
-
-    if(data.settings.notifications){
+    if(data.settings && data.settings.notifications){
         const payload = {
             notification: {
                 title: notificationTitle,
