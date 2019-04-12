@@ -25,6 +25,7 @@ export class MapPage {
   searchBox: google.maps.places.SearchBox;
   
   private firebaseUserId: string;
+  private currentRandomLocation: string;
 
   mapOptions: google.maps.MapOptions = {
     center: this.mapCenter,
@@ -363,11 +364,27 @@ export class MapPage {
     // Setup the click event listeners
     controlUI.addEventListener('click', ()=> {
       var keys = _.keys(this.locationMap);
-      var randomIdx = _.random(0, keys.length - 1);
-      var randomKey = keys[randomIdx];
-      var latLng = this.locationMap[randomKey];
-      this.map.panTo(latLng);
-      this.map.setZoom(this.maxZoomLevel);
+      if(keys.length == 0){
+        const alert = this.alertCtrl.create({
+          message: "No connections yet!"
+        });
+        alert.present();
+      } else if (keys.length == 1){
+        const latLng = this.locationMap[keys[0]];
+        this.map.panTo(latLng);
+        this.map.setZoom(this.maxZoomLevel);
+      } else {
+        var randomIdx = _.random(0, keys.length - 1);
+        var newLocation = keys[randomIdx];
+        if(newLocation == this.currentRandomLocation){
+          controlUI.click();
+        } else {
+          this.currentRandomLocation = newLocation;
+          var latLng = this.locationMap[newLocation];
+          this.map.panTo(latLng);
+          this.map.setZoom(this.maxZoomLevel);
+        }
+      }
     });
 
     this.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(controlDiv);

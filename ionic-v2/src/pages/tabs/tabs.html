@@ -4,7 +4,7 @@
 
     <ion-fab center bottom *ngIf="useFabButton">
       <button color="primary" ion-fab (click)="onClickExploreButton()">
-        <ion-icon name="md-globe"></ion-icon>
+        <ion-icon #fabIcon id="fabIcon" name="md-globe"></ion-icon>
       </button>
     </ion-fab>
     <ion-tab *ngIf="useFabButton" [root]="tab3Root" tabIcon="deliberately_invalid" tabTitle=""></ion-tab>

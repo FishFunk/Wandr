@@ -94,7 +94,7 @@ export class ProfilePage {
           if(fbUserData.location && fbUserData.location.name) {
             this.userData.location.stringFormat = fbUserData.location.name;
             this.autoComplete.input = fbUserData.location.name;
-            await this.forwardGeocode(fbUserData.location.name);
+            await this.extractLocationAndGeoData();
           }
 
           // Get Facebook friends list
@@ -233,18 +233,7 @@ export class ProfilePage {
     // TODO: Save breaks if geocode fails. Handle errors.
     if(this.autoComplete.input)
     {
-      let data = await this.forwardGeocode(this.autoComplete.input);
-      let formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
-
-      // geocode again to ensure generic city lat long
-      data = await this.forwardGeocode(formattedLocation);
-      formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
-
-      this.userData.location = {
-        stringFormat: formattedLocation,
-        latitude: data.latitude,
-        longitude: data.longitude
-      };
+      await this.extractLocationAndGeoData();
     }
 
     this.userData.interests = [];
@@ -262,6 +251,21 @@ export class ProfilePage {
     });
 
     await this.writeUserDataToDb()
+  }
+
+  private async extractLocationAndGeoData(){
+    let data = await this.forwardGeocode(this.autoComplete.input);
+    let formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
+
+    // geocode again to ensure generic city lat long
+    data = await this.forwardGeocode(formattedLocation);
+    formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
+
+    this.userData.location = {
+      stringFormat: formattedLocation,
+      latitude: data.latitude,
+      longitude: data.longitude
+    };
   }
 
   private writeUserDataToDb(): Promise<any>{
