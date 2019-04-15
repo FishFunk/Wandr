@@ -20,7 +20,7 @@ export class ConnectionProfilePage {
     secondConnectionCount: number;
     currentUserId: string;
     viewUserData: IUser;
-    mutualFriends: string[] = [];
+    mutualFriends: IUser[] = [];
     showChatButton: boolean;
     chatExists: boolean;
     chatData: IChat;
@@ -74,23 +74,16 @@ export class ConnectionProfilePage {
           this.chatExists = false;
       }
 
-      // const firstConnections = await this.dbHelper.ReadFirstConnections(this.viewUserData.app_uid);
-      // const secondConnections = await this.dbHelper.ReadSecondConnections(this.viewUserData.facebook_uid, firstConnections);
-
-      // this.secondConnectionCount = secondConnections.length;
-      this.countMutualConnections();
+      await this.readMutualConnectionInfo();
     }
 
-    countMutualConnections() {
+    async readMutualConnectionInfo(){
       const currentUserFriends: IFacebookFriend[] = JSON.parse(window.localStorage.getItem(Constants.userFacebookFriendsKey));
       const currentUserFriendIds = _.map(currentUserFriends, (friendObj)=>friendObj.id);
       const connectionUserFriendIds = _.map(this.viewUserData.friends, (user)=>user.id);
 
-      this.mutualFriends = _.intersection(currentUserFriendIds, connectionUserFriendIds);
-    }
-
-    getUserRank(){
-      return Utils.getUserRank(this.viewUserData.friends.length);
+      var mutualFriendIds = _.intersection(currentUserFriendIds, connectionUserFriendIds);
+      this.mutualFriends = await this.dbHelper.ReadUsersByFacebookId(mutualFriendIds);
     }
 
     onClickReport(){
@@ -155,8 +148,8 @@ export class ConnectionProfilePage {
               toast.present();
             })
             .catch(async error=>{
-              await this.logger.Error(error);
               loading.dismiss();
+              await this.logger.Error(error);
             });
         }
     }

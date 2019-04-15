@@ -31,6 +31,7 @@ export class ProfilePage {
   secondConnectionCount: number = 0;
 
   private geocoderOptions: NativeGeocoderOptions = { useLocale: true, maxResults: 1 };
+  private geocoder: google.maps.Geocoder;
 
   constructor(
     public loadingCtrl: LoadingController, 
@@ -44,6 +45,7 @@ export class ProfilePage {
     private logger: Logger) {
 
     this.googleAutoComplete = new google.maps.places.AutocompleteService();
+    this.geocoder = new google.maps.Geocoder();
   }
 
   ionViewDidLoad(){
@@ -261,10 +263,13 @@ export class ProfilePage {
     data = await this.forwardGeocode(formattedLocation);
     formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
 
+    const lat = +data.latitude;
+    const lng = +data.longitude;
+
     this.userData.location = {
       stringFormat: formattedLocation,
-      latitude: data.latitude,
-      longitude: data.longitude
+      latitude: lat.toFixed(6).toString(),
+      longitude: lng.toFixed(6).toString()
     };
   }
 
@@ -273,35 +278,77 @@ export class ProfilePage {
     return this.firestoreDbHelper.UpdateUser(this.userData.app_uid, updateData);
   }
 
-  private async forwardGeocode(formattedLocation: string): Promise<NativeGeocoderForwardResult>
+  private async forwardGeocode(formattedLocation: string): Promise<any>
   {
-    var data: NativeGeocoderForwardResult[] = 
-      await this.nativeGeocoder.forwardGeocode(formattedLocation, this.geocoderOptions);
+    // var data: NativeGeocoderForwardResult[] = 
+    //   await this.nativeGeocoder.forwardGeocode(formattedLocation, this.geocoderOptions);
 
     
-    if(!data || data.length == 0) {
-      this.logger.Warn(`Unable to forward geocode: ${formattedLocation}`);
-      return {latitude: '', longitude: ''};
-    }
+    // if(!data || data.length == 0) {
+    //   this.logger.Warn(`Unable to forward geocode: ${formattedLocation}`);
+    //   return {latitude: '', longitude: ''};
+    // }
 
-    return data[0];
+    // return data[0];
+
+    return new Promise((resolve, reject)=>{
+      this.geocoder.geocode({ address: formattedLocation }, (results, status)=>{
+        if(status == google.maps.GeocoderStatus.OK){
+          var result = _.first(results);
+          resolve({ latitude: result.geometry.location.lat(), longitude: result.geometry.location.lng() });
+        } else {
+          reject(new Error(`Unable to forward geocode ${formattedLocation}`));
+        }
+      });
+    });
   }
 
-  private async reverseGeocode(lat: number, lng: number): Promise<string>
+  private async reverseGeocode(lat: number, lng: number): Promise<any>
   {
-    var data: NativeGeocoderReverseResult[] = 
-      await this.nativeGeocoder.reverseGeocode(lat, lng, this.geocoderOptions);
+    // var data: NativeGeocoderReverseResult[] = 
+    //   await this.nativeGeocoder.reverseGeocode(lat, lng, this.geocoderOptions);
 
-    if(!data || data.length == 0) {
-      this.logger.Warn(`Unable to reverse geocode Lat: ${lat}, Long: ${lng}`);
-      return;
-    }
+    // if(!data || data.length == 0) {
+    //   this.logger.Warn(`Unable to reverse geocode Lat: ${lat}, Long: ${lng}`);
+    //   return;
+    // }
 
-    if(data[0].countryCode == "US"){
-      return `${data[0].locality}, ${data[0].administrativeArea}`;
-    } else {
-      return `${data[0].locality}, ${data[0].countryName}`;
-    }
+    // if(data[0].countryCode == "US"){
+    //   return `${data[0].locality}, ${data[0].administrativeArea}`;
+    // } else {
+    //   return `${data[0].locality}, ${data[0].countryName}`;
+    // }
+    return new Promise((resolve, reject)=>{
+      var country: string;
+      var locality: string;
+      var administrativeArea_1: string;
+      this.geocoder.geocode({ location: {lat: lat, lng: lng} }, (results, status)=>{
+        if(status == google.maps.GeocoderStatus.OK){
+            results.forEach(val=>{
+              val.address_components.forEach(comp=>{
+                if(_.indexOf(comp.types, 'administrative_area_level_1') >= 0){
+                  administrativeArea_1 = comp.long_name;
+                }
+                if (_.indexOf(comp.types, 'locality') >= 0){
+                  locality = comp.long_name;
+                }
+                if (_.indexOf(comp.types, 'country') >= 0){
+                  country = comp.short_name;
+                }
+              });
+            });
+      
+          if(country == 'US'){
+            resolve(`${locality}, ${administrativeArea_1}`);
+          } else {
+            resolve(`${locality}, ${country}`);
+          }
+        }
+        else {
+          reject(new Error(`Unable to reverse geocode lat: ${lat}, lng: ${lng}`));
+        }
+      });
+    });
   }
 
   private showLoadingPopup(){

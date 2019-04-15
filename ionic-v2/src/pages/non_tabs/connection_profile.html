@@ -20,9 +20,6 @@
                     <ion-row class="subtext">
                         <span>{{viewUserData.location.stringFormat}}</span>
                     </ion-row>
-                    <!-- <ion-row>
-                        <strong>Connections:</strong>&nbsp;<span>{{viewUserData.friends.length + secondConnectionCount}}</span>
-                    </ion-row> -->
                     <ion-row class="subtext">
                         <span>Mutual Friends:&nbsp;{{mutualFriends.length}}</span>
                     </ion-row>
@@ -58,8 +55,23 @@
                     <h3>LIFESTYLE</h3>
                     <ion-row>
                         <ion-col *ngFor="let item of viewUserData.lifestyle">
-                        <i [class]="item.iconClass"></i>
-                        <p>{{item.label}}</p>
+                            <i [class]="item.iconClass"></i>
+                            <p>{{item.label}}</p>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="mutualFriends && mutualFriends.length > 0">
+            <ion-col col-12>
+                <ion-grid no-padding>
+                    <h3>MUTUAL FRIENDS</h3>
+                    <ion-row>
+                        <ion-col *ngFor="let user of mutualFriends">
+                            <ion-avatar>
+                                <img [src]="user.profile_img_url">
+                            </ion-avatar>
+                            <label>{{user.first_name}} {{user.last_name}}</label>
                         </ion-col>
                     </ion-row>
                 </ion-grid>

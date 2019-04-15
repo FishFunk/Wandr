@@ -52,6 +52,25 @@ export class FirestoreDbHelper {
       return allUsers;
     }
 
+    public async ReadUsersByFacebookId(facebookIds: string[]): Promise<IUser[]>
+    {
+      const snapshotPromises = _.map(facebookIds, (id)=>{
+        return this.angularFirestore
+          .collection('users', ref => ref.where('facebook_uid', '==', id)).get().toPromise();
+      });
+      
+      var users = [];
+      const snapshots = await Promise.all(snapshotPromises);
+      snapshots.forEach(querySnapshot=>{
+        querySnapshot.docs.forEach(docSnapshot=>{
+          const temp = <IUser> docSnapshot.data()
+          users.push(temp);
+        });
+      });
+
+      return users;
+    }
+
     public UpdateMessages(roomkey: string, messageData: any): Promise<void>{
       return this.angularFirestore.collection('messages').doc(roomkey).update(messageData);
     }
