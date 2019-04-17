@@ -26,18 +26,14 @@ export class TabsPage {
   tab4Root = InvitePage;
   tab5Root = SettingsPage;
 
-  useFabButton: boolean;
   badgeCount = 0;
 
   constructor(
     public toastCtrl: ToastController,
     public fcm: FcmProvider,
-    private platform: Platform,
     private firestoreDbHelper: FirestoreDbHelper,
     private logger: Logger,
     private events: Events) {
-
-    this.useFabButton = !this.platform.is('ios');
   }
 
   ionViewDidLoad(){
@@ -50,6 +46,7 @@ export class TabsPage {
   private async load(){
     const token = await this.fcm.getToken();
     await this.fcm.saveTokenToFirestore(token);
+
     this.fcm.listenToNotifications().pipe(
       tap((msg: INotificationPayload)=>{
         const selectedTab = this.tabRef.getSelected();
@@ -99,12 +96,6 @@ export class TabsPage {
       .catch(error=>{
         this.logger.Warn(error);
       });
-  }
-
-
-  // FAB button action for Android/Windows Only
-  onClickExploreButton(){
-    this.tabRef.select(2);
   }
 }
 

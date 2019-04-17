@@ -1,7 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { IonicPage, LoadingController, ToastController, Platform, App } from 'ionic-angular';
 import { Location, User, IUser, ICheckboxOption } from '../../models/user';
-import { NativeGeocoderOptions, NativeGeocoderForwardResult, NativeGeocoderReverseResult, NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
@@ -30,7 +29,6 @@ export class ProfilePage {
   selectState: boolean = false;
   secondConnectionCount: number = 0;
 
-  private geocoderOptions: NativeGeocoderOptions = { useLocale: true, maxResults: 1 };
   private geocoder: google.maps.Geocoder;
 
   constructor(
@@ -38,7 +36,6 @@ export class ProfilePage {
     private toastCtrl: ToastController,
     private appCtrl: App,
     private zone: NgZone,
-    private nativeGeocoder: NativeGeocoder,
     private facebookApi: FacebookApi,
     private platform: Platform,
     private firestoreDbHelper: FirestoreDbHelper,

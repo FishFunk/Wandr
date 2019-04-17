@@ -44,14 +44,13 @@ export class FcmProvider {
   async saveTokenToFirestore(token){
     if(!token) return;
     
-    const devicesRef = this.afs.collection('devices');
     const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     const docData = {
       token,
       userId: uid
     }
 
-    return devicesRef.doc(token).set(docData);
+    return this.afs.collection('devices').doc(token).set(docData);
   }
 
   listenToNotifications(): Observable<any>{

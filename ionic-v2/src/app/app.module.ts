@@ -7,7 +7,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { Firebase } from '@ionic-native/firebase/ngx';
@@ -107,7 +106,6 @@ export const config = {
     IonicErrorHandler,
     SocialSharing,
     Facebook,
-    NativeGeocoder,
     FirestoreDbHelper,
     FacebookApi,
     Logger,
