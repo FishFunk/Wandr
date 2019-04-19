@@ -10,6 +10,7 @@ import { tap } from 'rxjs/operators';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Constants } from '../../helpers/constants';
 import { Logger } from '../../helpers/logger';
+import { TimeLine } from '../trips/time-line';
 
 @Component({
   selector: 'tabs-page',
@@ -23,7 +24,7 @@ export class TabsPage {
   tab1Root = ProfilePage;
   tab2Root = InboxPage;
   tab3Root = MapPage;
-  tab4Root = InvitePage;
+  tab4Root = TimeLine;
   tab5Root = SettingsPage;
 
   badgeCount = 0;

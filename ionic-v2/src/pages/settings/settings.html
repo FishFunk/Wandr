@@ -18,17 +18,19 @@
         <a ion-item detail-none href="https://wanderlustlabs.io/privacy-policy/">Privacy Policy <i class="fas fa-external-link-alt" item-end></i></a>
         <ion-item>
             <ion-label>Push Notifications</ion-label>
-            <ion-toggle [(ngModel)]="pushNotifications" (ionChange)="updateUserSettings()"></ion-toggle>
+            <ion-toggle color="secondary"  [(ngModel)]="pushNotifications" (ionChange)="updateUserSettings()"></ion-toggle>
         </ion-item>
     </ion-list>
-    <ion-footer text-center>
-        <button ion-button color="dark" clear (click)="onClickLogout()">
+    <!-- <ion-footer text-center>
+        <button ion-button color="secondary" clear (click)="onClickLogout()">
             Logout
         </button>
-        <br>
-        <button ion-button color="danger" clear (click)="onClickDeleteAccount()">
-            Delete Account
-        </button>
         <br><br>
-    </ion-footer>
+    </ion-footer> -->
+    <ion-footer style="border: 0px">
+        <div margin top>
+          <button class="bottom" ion-button type="button" clear full color="secondary" (click)="onLogout()">LOGOUT</button>
+        </div>
+      </ion-footer>
+      <br><br>      
 </ion-content>
