@@ -1,0 +1,29 @@
+<ion-header class="hello1">
+  <ion-navbar color="myDarkBlue" style="background: none; border-bottom: none">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title text-center>
+      <!-- <img class="title-image" src="assets/heading/Group_2.svg" width="100" height="20" /> -->
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<!-- <ion-content elastic-header class="outer-content" [ngStyle]="{'background-color': '#091F3A'}"> -->
+  <ion-content elastic-header class="outer-content" [ngStyle]="{'background-image': 'linear-gradient(to top, #b4d4ba, #cbd7ba, #dfdac0, #eedecc, #f7e3da)'}">
+    
+  <div class="image-container">
+    <img class="title-image" src="assets/images/wander-orig.png" />
+    <div>
+      <br>
+
+      <br>
+    </div>  
+  </div>
+</ion-content>
+
+<ion-footer>
+  <button ion-button outline round color="secondary" margin-top (click)="onClickfacebookLogin()">
+    <ion-icon id="facebook" name="logo-facebook" color="secondary">&nbsp;&nbsp;Facebook Login</ion-icon>
+</button>
+</ion-footer>

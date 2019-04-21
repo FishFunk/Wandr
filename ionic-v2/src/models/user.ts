@@ -14,6 +14,7 @@ export interface IUser{
     interests: Array<ICheckboxOption>;
     lifestyle: Array<ICheckboxOption>;
     travel_info: string;
+    onboardcomplete: boolean;
 }
 
 export interface ILocation{
@@ -72,6 +73,7 @@ export class User implements IUser{
         },
         public lifestyle: Array<ICheckboxOption> = [],
         public interests: Array<ICheckboxOption> = [],
-        public travel_info: string = "")
+        public travel_info: string = "",
+        public onboardcomplete: boolean = false)
         {}
 }

@@ -4,6 +4,7 @@ import { TabsPage } from '../tabs/tabs';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
 import { Logger } from '../../helpers/logger';
+import { MainPage } from '../auth/main/main';
 
 
 @IonicPage()
@@ -16,15 +17,40 @@ export class IntroPage {
 
   slides = [
     {
-      title: "Welcome to Wandr!",
-      description: "The global travel network.",
+      title: "*What's your location?",
+      description: "Enter your location",
       image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
     },
     {
-      title: "Discover. Connect. Wandr.",
-      description: "See your network on the map and connect with them.",
+      title: "*Describe yourself in a couple of sentenes:",
+      description: "(e.g) Forget nudes, send me your playlist...",
       image: "../../assets/undraw/purple/undraw_connected_8wvi.svg"
-    }
+    },
+    {
+      title: "*Tell us what you're cool with?",
+      description: "Options, Politics, Religion, Age, Lifestyles, Genders",
+      image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
+    },
+    {
+      title: "*Where you been to?",
+      description: "Enter your location",
+      image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
+    },
+    {
+      title: "*Where you going to?",
+      description: "Enter your location",
+      image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
+    },
+    {
+      title: "*What're you seeking?",
+      description: "Host, friend, opinion, romance",
+      image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
+    },
+    {
+      title: "*What're you offering?",
+      description: "Host, friend, opion, romance",
+      image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
+    },
   ];
 
   constructor(public navCtrl: NavController,
@@ -32,8 +58,7 @@ export class IntroPage {
     private fbApi: FacebookApi,
     private platform: Platform,
     private loadingCtrl: LoadingController,
-    private logger: Logger) 
-    {
+    private logger: Logger){
       this.cordova = this.platform.is('cordova');
     }
 
@@ -69,7 +94,7 @@ export class IntroPage {
   }
   
   private next(): void {
-    this.navCtrl.setRoot(TabsPage);
+    this.navCtrl.setRoot(MainPage);
   }
 
   private async checkStatusAndLogin() {

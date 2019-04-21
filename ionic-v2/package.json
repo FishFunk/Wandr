@@ -38,7 +38,6 @@
     "@types/underscore": "^1.8.9",
     "angularfire2": "^5.1.1",
     "cordova-android": "~7.1.4",
-    "cordova-ios": "~4.5.5",
     "cordova-plugin-add-swift-support": "^1.7.1",
     "cordova-plugin-badge": "~0.8.8",
     "cordova-plugin-contacts": "~3.0.1",
@@ -56,7 +55,6 @@
     "firebase": "^5.7.2",
     "ionic-angular": "^3.9.2",
     "ionicons": "^3.0.0",
-    "ios-deploy": "^1.9.4",
     "latest": "^0.2.0",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.3.3",
@@ -67,7 +65,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-optimizer": "^0.0.24",
-    "@ionic/app-scripts": "^3.2.1",
+    "@ionic/app-scripts": "3.2.3",
     "typescript": "^3.1.1"
   },
   "description": "An Ionic project",
@@ -94,7 +92,6 @@
       "cordova-plugin-network-information": {}
     },
     "platforms": [
-      "ios",
       "android"
     ]
   }

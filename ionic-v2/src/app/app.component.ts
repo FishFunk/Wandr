@@ -74,7 +74,7 @@ public readonly firebaseInitOptions: any = {
           this.facebookApi.facebookLoginStatus()
           .then((statusResponse)=>{
             if (statusResponse.status == 'connected') {
-              this.rootPage = TabsPage;     
+              this.rootPage = TabsPage;
             } else {
               this.rootPage = IntroPage;
             }
@@ -87,7 +87,7 @@ public readonly firebaseInitOptions: any = {
           });
         } else {
           // Running in web browser
-          this.rootPage = TabsPage;
+          this.rootPage = IntroPage;
         }
       }
       catch(ex){

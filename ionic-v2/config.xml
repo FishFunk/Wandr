@@ -98,6 +98,5 @@
         <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="4.38.1" />
     </plugin>
     <plugin name="cordova-plugin-network-information" spec="~2.0.1" />
-    <engine name="ios" spec="~4.5.5" />
     <engine name="android" spec="~7.1.4" />
 </widget>
