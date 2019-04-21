@@ -1,7 +1,9 @@
 page-intro {
       ion-slide{
         height: 100%;
-        background-color: color($colors, primary);
+        // background-color: color($colors, primary);
+        background-image: linear-gradient(to top, #b4d4ba, #cbd7ba, #dfdac0, #eedecc, #f7e3da);
+
       }
 
       #facebook-logo{
