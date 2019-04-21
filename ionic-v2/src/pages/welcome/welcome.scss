@@ -55,8 +55,24 @@ page-welcome {
     font-size: 14px;
   }
 
+  ion-slide{
+    height: 100px;
+    // background-color: color($colors, primary);
+  }
 
+  #facebook-logo{
+    font-size: 1.2em;
+  }
+  
+  .swiper-pagination-bullet-active {
+    background: color($colors, secondary);
+  }
 
+  .slide-image {
+    height: 70% !important;
+    width: 70% !important;
+    max-width: 600px;
+  }
   ion-select.customWidth{
     max-width: 100% !important;
   }

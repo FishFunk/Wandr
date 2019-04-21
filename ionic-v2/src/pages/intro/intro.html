@@ -1,6 +1,8 @@
-<ion-content no-bounce>
+<!-- <ion-content no-bounce> -->
+    <ion-content elastic-header class="outer-content" [ngStyle]="{'background-image': 'linear-gradient(to top, #b4d4ba, #cbd7ba, #dfdac0, #eedecc, #f7e3da)'}">
+
   <ion-slides pager="true">
-    <ion-slide *ngFor="let slide of slides" class="animated animatedFadeInUp fadeInUp"> 
+    <ion-slide color="black" *ngFor="let slide of slides" class="animated animatedFadeInUp fadeInUp"> 
       <img [src]="slide.image" class="slide-image"/>
       <h2 class="slide-title" [innerHTML]="slide.title"></h2>
       <p [innerHTML]="slide.description"></p>

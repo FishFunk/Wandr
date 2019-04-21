@@ -10,6 +10,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { IntroPage } from '../pages/intro/intro';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { FacebookApi } from '../helpers/facebookApi';
+import { WelcomePage } from '../pages/welcome/welcome';
 
 declare var google; // Declare global 'google' variable
 
@@ -76,7 +77,7 @@ public readonly firebaseInitOptions: any = {
             if (statusResponse.status == 'connected') {
               this.rootPage = TabsPage;
             } else {
-              this.rootPage = IntroPage;
+              this.rootPage = WelcomePage;
             }
 
             this.splashScreen.hide();
@@ -87,7 +88,7 @@ public readonly firebaseInitOptions: any = {
           });
         } else {
           // Running in web browser
-          this.rootPage = IntroPage;
+          this.rootPage = WelcomePage;
         }
       }
       catch(ex){

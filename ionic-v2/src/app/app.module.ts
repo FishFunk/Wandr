@@ -52,6 +52,8 @@ import { MapTutorialPopoverModule } from '../pages/explore/tutorial_popover.modu
 import { ConnectivityServiceProvider } from '../providers/connectivity-service/connectivity-service';
 import { TimeLine } from '../pages/trips/time-line';
 import { TimeLineModule } from '../pages/trips/time-line.module';
+import { WelcomePage } from '../pages/welcome/welcome';
+import { WelcomeModule } from '../pages/welcome/welcome-module';
 
 //********** firebase configuration  ************ */
 export const config = { 
@@ -93,7 +95,8 @@ export const config = {
     ConnectionProfileModule,
     SortOptionsPopoverModule,
     MapTutorialPopoverModule,
-    TimeLineModule
+    TimeLineModule,
+    WelcomeModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

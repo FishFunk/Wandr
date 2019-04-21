@@ -26,6 +26,46 @@ import { IntroPage } from '../intro/intro';
 export class WelcomePage implements OnDestroy, OnInit {
     cordova: boolean = false;
 
+
+    slides = [
+        {
+          title: "*What's your location?",
+          description: "Enter your location",
+          image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
+        },
+        {
+          title: "*Describe yourself in a couple of sentenes:",
+          description: "(e.g) Forget nudes, send me your playlist...",
+          image: "../../assets/undraw/purple/undraw_connected_8wvi.svg"
+        },
+        {
+          title: "*Tell us what you're cool with?",
+          description: "Options, Politics, Religion, Age, Lifestyles, Genders",
+          image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
+        },
+        {
+          title: "*Where you been to?",
+          description: "Enter your location",
+          image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
+        },
+        {
+          title: "*Where you going to?",
+          description: "Enter your location",
+          image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
+        },
+        {
+          title: "*What're you seeking?",
+          description: "Host, friend, opinion, romance",
+          image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
+        },
+        {
+          title: "*What're you offering?",
+          description: "Host, friend, opion, romance",
+          image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
+        },
+      ];
+    
+
     constructor(public navCtrl: NavController,
         private alertCtrl: AlertController,
         private fbApi: FacebookApi,

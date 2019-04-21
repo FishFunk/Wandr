@@ -4,7 +4,6 @@ import { TabsPage } from '../tabs/tabs';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
 import { Logger } from '../../helpers/logger';
-import { MainPage } from '../auth/main/main';
 
 
 @IonicPage()
@@ -17,9 +16,9 @@ export class IntroPage {
 
   slides = [
     {
-      title: "*What's your location?",
-      description: "Enter your location",
-      image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
+      title: "Thinking of where to go next?",
+      description: "What city are you thinking about?",
+      image: "../../assets/onboarding/undraw_directions_x53j.svg"
     },
     {
       title: "*Describe yourself in a couple of sentenes:",
@@ -88,13 +87,13 @@ export class IntroPage {
       // DEBUG/Browser Mode
       window.localStorage.setItem(Constants.facebookUserIdKey, "00001");
       window.localStorage.setItem(Constants.firebaseUserIdKey, "00001");
-      this.presentAlert('cordova is not available.');
+      // this.presentAlert('cordova is not available.');
       this.next();
     }
   }
   
   private next(): void {
-    this.navCtrl.setRoot(MainPage);
+    this.navCtrl.setRoot(TabsPage);
   }
 
   private async checkStatusAndLogin() {
