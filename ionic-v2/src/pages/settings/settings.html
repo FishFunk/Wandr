@@ -1,36 +1,21 @@
-<ion-header>
-    <ion-navbar>
-        <ion-title><ion-icon name="md-globe">&nbsp;Wandr</ion-icon></ion-title>
-    </ion-navbar>
-</ion-header>
 <ion-content>
+    <br>
     <ion-list>
-        <button ion-item (click)="onClickAbout()">
-            About
-        </button>
-        <button ion-item (click)="onClickContact()">
-            Contact Us
-        </button>
-        <!-- <button ion-item (click)="openPrivacyPolicy()">
-            Privacy Policy
-            <ion-icon name="open" item-end></ion-icon>
-        </button> -->
-        <a ion-item detail-none href="https://wanderlustlabs.io/privacy-policy/">Privacy Policy <i class="fas fa-external-link-alt" item-end></i></a>
+        <ion-item-divider color="white" style="color:#1ABC9C;">
+            <div class="item item-divider custom-item-divider">
+                SETTINGS
+            </div>
+        </ion-item-divider>
+        <br>
+        <img center  src="../../assets/undraw/purple/undraw_adjustments_p22m.svg" />
+        <button ion-item (click)="onClickPrefs()">Preferences</button>      
         <ion-item>
             <ion-label>Push Notifications</ion-label>
             <ion-toggle color="secondary"  [(ngModel)]="pushNotifications" (ionChange)="updateUserSettings()"></ion-toggle>
         </ion-item>
-    </ion-list>
-    <!-- <ion-footer text-center>
-        <button ion-button color="secondary" clear (click)="onClickLogout()">
-            Logout
-        </button>
-        <br><br>
-    </ion-footer> -->
-    <ion-footer style="border: 0px">
-        <div margin top>
-          <button class="bottom" ion-button type="button" clear full color="secondary" (click)="onLogout()">LOGOUT</button>
-        </div>
-      </ion-footer>
-      <br><br>      
+        <button ion-item (click)="onClickContact()">Contact Us</button>
+        <a ion-item detail-none href="https://wanderlustlabs.io/privacy-policy/">Privacy Policy <i class="fas fa-external-link-alt" color="#6700a9" item-end></i></a>
+        <button ion-item (click)="onClickAccount">Account</button>     
+        <button ion-item (click)="onClickLogout">Logout</button>      
+    </ion-list>  
 </ion-content>

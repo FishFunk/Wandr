@@ -77,7 +77,7 @@ public readonly firebaseInitOptions: any = {
             if (statusResponse.status == 'connected') {
               this.rootPage = TabsPage;
             } else {
-              this.rootPage = WelcomePage;
+              this.rootPage = IntroPage;
             }
 
             this.splashScreen.hide();
@@ -88,7 +88,7 @@ public readonly firebaseInitOptions: any = {
           });
         } else {
           // Running in web browser
-          this.rootPage = WelcomePage;
+          this.rootPage = IntroPage;
         }
       }
       catch(ex){

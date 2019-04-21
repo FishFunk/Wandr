@@ -11,7 +11,11 @@ page-intro {
         font-size: 1.2em;
       }
       
-      .swiper-pagination-bullet-active {
+      // .swiper-pagination-bullet-active {
+      //   background: color($colors, secondary);
+      // }
+
+      .swiper-pagination-bullet {
         background: color($colors, light);
       }
 

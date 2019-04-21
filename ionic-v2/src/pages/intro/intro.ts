@@ -16,39 +16,19 @@ export class IntroPage {
 
   slides = [
     {
-      title: "Thinking of where to go next?",
-      description: "What city are you thinking about?",
-      image: "../../assets/onboarding/undraw_directions_x53j.svg"
+      title: "Wandr-ing where to go next?",
+      description: "Wandr makes it easy to explore where friends are located!",
+      image: "../../assets/undraw/purple/undraw_directions_x53j.svg"
     },
     {
-      title: "*Describe yourself in a couple of sentenes:",
-      description: "(e.g) Forget nudes, send me your playlist...",
-      image: "../../assets/undraw/purple/undraw_connected_8wvi.svg"
-    },
-    {
-      title: "*Tell us what you're cool with?",
-      description: "Options, Politics, Religion, Age, Lifestyles, Genders",
+      title: "Explore the Wandr map.",
+      description: "See all your connections on an interactive map.",
       image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
     },
     {
-      title: "*Where you been to?",
-      description: "Enter your location",
-      image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
-    },
-    {
-      title: "*Where you going to?",
-      description: "Enter your location",
-      image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
-    },
-    {
-      title: "*What're you seeking?",
-      description: "Host, friend, opinion, romance",
-      image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
-    },
-    {
-      title: "*What're you offering?",
-      description: "Host, friend, opion, romance",
-      image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
+      title: "Instantly chat with connections!.",
+      description: "Talk with your connections and make plans.",
+      image: "../../assets/undraw/purple/undraw_chatting_2yvo (1).svg"
     },
   ];
 

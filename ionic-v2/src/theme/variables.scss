@@ -10,21 +10,13 @@ $font-path: "../assets/fonts";
 // rtl styles in your app. For more info, please see:
 // http://ionicframework.com/docs/theming/rtl-support/
 $app-direction: ltr;
-
-
 @import "ionic.globals";
-
-
 // Shared Variables
 // --------------------------------------------------
 // To customize the look and feel of this app, you can override
 // the Sass variables found in Ionic's source scss files.
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/theming/overriding-ionic-variables/
-
-
-
-
 // Named Color Variables
 // --------------------------------------------------
 // Named colors makes it easy to reuse colors on various components.
@@ -45,8 +37,17 @@ $colors: (
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here
+// $item-ios-color: (#00E1AD);
 
+// $tabs-md-background: color($colors, myDarkBlue);
+// $tabs-md-tab-icon-color-active: color($colors, myTeal);
+// $tabs-md-tab-icon-color-inactive: #8c8c8c;
+// $tabs-md-tab-icon-color: #8c8c8c;
 
+// $tabs-ios-background: color($colors, myDarkBlue);
+// $tabs-ios-tab-icon-color-active: color($colors, myTeal);
+// $tabs-ios-tab-icon-color-inactive: #8c8c8c;
+// $tabs-ios-tab-icon-color: #8c8c8c;
 
 
 // App Material Design Variables
@@ -101,21 +102,21 @@ ion-loading.my-loading-class {
   }
 }
 
-ion-app.md{
-  font-family: Ionicons !important;
-}
+// ion-app.md{
+//   font-family: Ionicons !important;
+// }
 
-ion-app.ios{
-  font-family: Ionicons !important;
-}
+// ion-app.ios{
+//   font-family: Ionicons !important;
+// }
 
 
 /* 1# Global Settings Font Style Section
 ================================================*/
 // @import "open-sans";
 // @import "fontello.svg";
-$font-family-md-base: 'Open Sans', sans-serif !default;
-$font-family-ios-base: 'Open Sans', sans-serif !default;
+$font-family-md-base: 'noto-sans', sans-serif !default;
+$font-family-ios-base: 'noto-sans', sans-serif !default;
 
 
 /* 2# Global Settings Font Size Section
@@ -144,97 +145,12 @@ $item-ios-thumbnail-size: 120px;
 /* 5# Global Item Size Section
 ================================================*/
 // Settings For Android
-$item-md-padding-top: 25px;
-$item-md-padding-bottom: 25px;
+$item-md-padding-top: 5px;
+$item-md-padding-bottom: 5px;
 // Settings For Ios
-$item-ios-padding-top: 30px;
-$item-ios-padding-bottom: 30px;
+$item-ios-padding-top: 10px;
+$item-ios-padding-bottom: 10px;
 
 /* 6# Global Border Radius Section
 ================================================*/
 $border-radius: 4px;
-
-
-
-$colors: (
-  primary:  #1ABC9C,
-  secondary:  #6700a9,
-  danger:     #ED1C24,
-  light:      #f4f4f4,
-  dark:       #222,
-  myGrey: #888);
-
-
-
-  .toolbar{
-    box-shadow: 0px 2px 0px #ffffff !important;
-  }
-  
-  $badge-ios-background-color: color($colors, secondary);
-  $badge-md-background-color: color($colors, secondary);
-  $badge-wp-background-color: color($colors, secondary);
-  
-  ion-loading.my-loading-class {
-    .loading-wrapper {
-      background: transparent;
-      box-shadow: none;
-    }
-  }
-  
-  ion-app.md{
-    font-family: Ionicons !important;
-  }
-  
-  ion-app.ios{
-    font-family: Ionicons !important;
-  }
-
-// App iOS Variables
-// --------------------------------------------------
-// iOS only Sass variables can go here
-
-
-
-
-// App Material Design Variables
-// --------------------------------------------------
-// Material Design only Sass variables can go here
-
-
-
-// App Windows Variables
-// --------------------------------------------------
-// Windows only Sass variables can go here
-
-
-
-
-// App Theme
-// --------------------------------------------------
-// Ionic apps can have different themes applied, which can
-// then be future customized. This import comes last
-// so that the above variables are used and Ionic's
-// default are overridden.
-
-@import "ionic.theme.default";
-
-
-// Ionicons
-// --------------------------------------------------
-// The premium icon font for Ionic. For more info, please see:
-// http://ionicframework.com/docs/ionicons/
-
-@import "ionic.ionicons";
-
-
-// // App Fontelo Style
-//--------------------------------------------------
-// @import "fontello";
-
-@import "ionicons";
-
-// Fonts
-// --------------------------------------------------
-
-@import "roboto";
-@import "noto-sans";
