@@ -90,7 +90,7 @@ export const config = {
     ConnectionListModule,
     ConnectionProfileModule,
     SortOptionsPopoverModule,
-    MapTutorialPopoverModule
+    MapTutorialPopoverModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [

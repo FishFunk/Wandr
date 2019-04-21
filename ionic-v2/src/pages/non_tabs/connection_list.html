@@ -2,6 +2,9 @@
     <ion-navbar>
         <ion-title>{{displayLocation}}</ion-title>
         <ion-buttons end>
+            <button *ngIf="showForumButton" ion-button clear (click)="onClickForum()">
+                Forum
+            </button>
             <button ion-button icon-only clear (click)="presentPopover($event)">
                 <ion-icon name="list"></ion-icon>
             </button>

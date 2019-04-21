@@ -6,6 +6,7 @@ import { ConnectionProfilePage } from './connection_profile';
 import { Constants } from '../../helpers/constants';
 import { SortOptionsPopover } from './sort_option_popover';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
+import { ForumPage } from './forum';
  
 @Component({
   selector: 'connection-list-page',
@@ -21,6 +22,7 @@ export class ConnectionListPage {
     firstConnections: IUser[] = [];
     secondConnections: IUser[] = [];
     otherConnections: IUser[] = [];
+    showForumButton: boolean;
 
     constructor(
         params: NavParams,
@@ -33,9 +35,11 @@ export class ConnectionListPage {
         this.locationString = params.get('locationStringFormat');
         if(this.locationString){
             this.displayLocation = this.locationString.substr(0, this.locationString.indexOf(','));
+            this.showForumButton = true;
         }else {
             // Show all connections
             this.displayLocation = "All Connections";
+            this.showForumButton = false;
         }
 
         this.currentUserFriends = JSON.parse(window.localStorage.getItem(Constants.userFacebookFriendsKey));
@@ -79,6 +83,13 @@ export class ConnectionListPage {
         popover.present({
           ev: myEvent
         });
+    }
+
+    onClickForum(){
+        this.navCtrl.push(
+            ForumPage, 
+            {locationStringFormat: this.locationString},
+            { animate: true, direction: 'forward' });
     }
 
     onClickProfile(user: IUser){
