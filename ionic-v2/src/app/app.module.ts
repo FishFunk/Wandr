@@ -50,6 +50,8 @@ import { FcmProvider } from '../providers/fcm/fcm';
 import { SortOptionsPopoverModule } from '../pages/non_tabs/sort_option_popover.module';
 import { MapTutorialPopoverModule } from '../pages/explore/tutorial_popover.module';
 import { ConnectivityServiceProvider } from '../providers/connectivity-service/connectivity-service';
+import { TimeLine } from '../pages/trips/time-line';
+import { TimeLineModule } from '../pages/trips/time-line.module';
 
 //********** firebase configuration  ************ */
 export const config = { 
@@ -91,6 +93,7 @@ export const config = {
     ConnectionProfileModule,
     SortOptionsPopoverModule,
     MapTutorialPopoverModule,
+    TimeLineModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

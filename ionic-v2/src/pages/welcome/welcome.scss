@@ -1,0 +1,83 @@
+page-welcome {
+  .welcome-container {
+    color: white;
+    position: absolute;
+    top: 0;
+    padding: 420px 30px 10px 30px;
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+    z-index: 2;
+    h1 {
+      text-align: center;
+      font-size: 52px;
+      font-family: 'Open Sans';
+    }
+  }
+  .welcome-message {
+    color: white;
+    position: relative;
+    text-align: center;
+    padding: 420px 30px 10px 30px;
+  }
+
+
+
+  
+  .image-container {
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .myColor {
+    background-color:#00E1AD;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    color: #091F3A;
+  }
+  .submit-box {
+    margin-top: 10px;
+    text-align: center;
+  }
+
+
+
+  a, a div, a span, a ion-icon, a ion-label, button, button div, button span, button ion-icon, button ion-label{
+    color: #00E1AD;
+  }
+
+
+  [tappable], [tappable] div, [tappable] span, [tappable] ion-icon, [tappable] ion-label, input, textarea {
+    color: #00E1AD;
+    font-size: 14px;
+  }
+
+
+
+  ion-select.customWidth{
+    max-width: 100% !important;
+  }
+
+  .tellUsHeading{
+    color: white !important;
+    //padding-left: 20px !important; // margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .tellUsText{
+    color: #ffff !important;
+    padding-left: 20px !important; // margin-bottom: 10px;
+    background-color: transparent !important;
+    font-size: 12px;
+    font-weight: lighter;
+  }
+
+
+
+  .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before{
+    height: 0px;
+  }
+}
