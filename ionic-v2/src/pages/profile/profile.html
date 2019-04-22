@@ -1,8 +1,11 @@
 <ion-header transparent no-border>
     <ion-navbar>
         <ion-buttons end>
-            <button ion-button icon-only clear (click)="toggleEdit()">
-                <ion-icon name="create"></ion-icon>
+            <button *ngIf="!editMode" ion-button icon-only clear (click)="toggleEdit()">
+                <i class="far fa-edit"></i>
+            </button>
+            <button *ngIf="editMode" ion-button icon-only clear (click)="toggleEdit()">
+                <i class="far fa-save"></i>
             </button>
         </ion-buttons>
     </ion-navbar>
