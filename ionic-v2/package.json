@@ -61,7 +61,9 @@
     "sw-toolbox": "^3.6.0",
     "typings": "^2.1.1",
     "underscore": "^1.9.1",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "cordova-plugin-network-information": "~2.0.1",
+    "cordova-ios": "~4.5.5"
   },
   "devDependencies": {
     "@angular-devkit/build-optimizer": "^0.0.24",
@@ -92,7 +94,8 @@
       "cordova-plugin-network-information": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
