@@ -149,7 +149,7 @@ export class ProfilePage {
         // ionic serve path
         const uid = 'XkS98bzJM1co7vpyBlKGUpPgd2Q2'; // Johnny Appleseed
         this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(uid, false);
-        this.userData.profile_img_url = '../../assets/avatar_man.png';
+        this.userData.profile_img_url = '../../assets/undraw/purple/undraw_profile_pic_ic5t.svg';
       }
 
       this.loadingPopup.dismiss();

@@ -1,10 +1,12 @@
-<ion-header>
-    <ion-navbar>
-        <ion-title><ion-icon name="md-globe">&nbsp;Wandr</ion-icon></ion-title>
-    </ion-navbar>
-</ion-header>
+
 <ion-content>
+    <br>
     <!----- TODO: If list is empty: "No messages here yet!"------->
+    <ion-item-divider style="color:#1ABC9C;background-color:#fff">
+            <div class="item item-divider custom-item-divider">
+                DIRECT MESSAGES
+            </div>
+        </ion-item-divider>
     <ion-list *ngIf="chats.length > 0">
         <div *ngFor="let chat of chats">
             <!----- TODO: Params sent to messages page? ------->
@@ -20,8 +22,21 @@
             </button>
         </div>
     </ion-list>
-    <div *ngIf="chats.length == 0" class="container" text-center>
-        <p class="noChatsText">You have no chats here... yet!</p>
+    <div *ngIf="chats.length == 0" class="image-container" text-center>
+        <br><br><br><br>
+        <img height="200px" width="300px" src="../../assets/undraw/purple/undraw_no_data_qbuo.svg">
+        <br>
+        <h2 class="noChatsText">Wandr-ing where to go?</h2>
+        <br>
+            <span style="font-size: 14px;font-weight: lighter;">
+                Start planning your next adventure and <br>
+                connect with locals!
+            </span>
+        <br>
+        <br>
+        <button ion-button square outline color="secondary" margin-top (click)="onClickExplore()" margin-top>
+            <span style="color:secondary;font-size:12pt;font-weight:lighter;">Explore Wandr</span>
+        </button>
     </div>
 </ion-content>
   

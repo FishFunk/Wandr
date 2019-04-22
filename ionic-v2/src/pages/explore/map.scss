@@ -7,6 +7,7 @@
       #map {
         width: 100%;
         height: 100%;
+        // height: 75%;
       }
 
       .pac-card {
@@ -51,5 +52,17 @@
       #pac-input:focus {
         border-color: #4d90fe;
       }
+
+      // .controls{
+      // }
+
+      .wide-item {
+        width: 10000px;
+      /*  overflow-x: scroll; /*
+      /*  -webkit-overflow-scrolling: touch;  */
+      }
+      ion-slides {
+        height: 100px;
+     }
     }
 }

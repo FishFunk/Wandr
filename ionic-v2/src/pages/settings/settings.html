@@ -1,7 +1,7 @@
-<ion-content>
+<ion-content class="outer-content" [ngStyle]="{'background-color': '#fff'}" nobounce>
     <br>
     <ion-list>
-        <ion-item-divider color="white" style="color:#1ABC9C;">
+        <ion-item-divider style="color:#1ABC9C;background-color:#fff">
             <div class="item item-divider custom-item-divider">
                 SETTINGS
             </div>
@@ -12,6 +12,7 @@
         </div>
         <br>
         <button ion-item (click)="onClickPrefs()">Preferences</button>      
+        <button ion-item (click)="onClickShare()">Share</button>    
         <!-- <ion-item>
             <ion-label>Push Notifications</ion-label>
             <ion-toggle color="secondary"  [(ngModel)]="pushNotifications" (ionChange)="updateUserSettings()"></ion-toggle>

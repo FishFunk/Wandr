@@ -27,6 +27,8 @@ export class MapPage {
   private firebaseUserId: string;
   private currentRandomLocation: string;
 
+  pageloaded=false;
+
   mapOptions: google.maps.MapOptions = {
     center: this.mapCenter,
     minZoom: this.minZoomLevel,
@@ -63,6 +65,26 @@ export class MapPage {
   maxY = 70;
 
   locationMap: _.Dictionary<google.maps.LatLng>; // { 'string_location' : LatLng Object }
+
+
+  slides = [
+    {
+      title: "<br>Wandr-ing where to go next?",
+      description: "Wandr makes it easy to explore where friends are located!",
+      image: "../../assets/undraw/purple/"
+    },
+    {
+      title: "Explore the Wandr map",
+      description: "See all your connections on an interactive map",
+      image: "../../assets/undraw/purple/"
+    },
+    {
+      title: "Instantly chat with connections",
+      description: "Make plans and go have fun",
+      image: "../../assets/undraw/purple/"
+    },
+  ];
+
 
   constructor(public navCtrl: NavController,
     private loadingCtrl: LoadingController,
@@ -427,5 +449,6 @@ export class MapPage {
     controlUI.addEventListener('click', this.onShowAllClick.bind(this));
 
     this.map.controls[google.maps.ControlPosition.LEFT_TOP].push(controlDiv);
+    this.pageloaded=true;
   }
 }

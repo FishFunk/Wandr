@@ -21,13 +21,13 @@ export class IntroPage {
       image: "../../assets/undraw/purple/undraw_directions_x53j.svg"
     },
     {
-      title: "Explore the Wandr map.",
-      description: "See all your connections on an interactive map.",
+      title: "Explore the Wandr map",
+      description: "See all your connections on an interactive map",
       image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
     },
     {
-      title: "Instantly chat with connections!.",
-      description: "Talk with your connections and make plans.",
+      title: "Instantly chat with connections",
+      description: "Make plans and go have fun",
       image: "../../assets/undraw/purple/undraw_chatting_2yvo (1).svg"
     },
   ];
@@ -73,7 +73,8 @@ export class IntroPage {
   }
   
   private next(): void {
-    this.navCtrl.setRoot(TabsPage);
+    // this.navCtrl.setRoot(TabsPage);
+    this.navCtrl.setRoot(TabsPage, null, { animate: true, direction: 'forward' });
   }
 
   private async checkStatusAndLogin() {

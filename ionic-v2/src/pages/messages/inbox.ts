@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, Loading, Events, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, Loading, Events, AlertController, App } from 'ionic-angular';
 import { MessagesPage } from './messages';
 import { Constants } from '../../helpers/constants';
 import { IChat } from '../../models/chat';
 import _ from 'underscore';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Logger } from '../../helpers/logger';
+import { MapPage } from '../explore/map';
 
 @IonicPage()
 @Component({
@@ -23,7 +24,9 @@ export class InboxPage {
     private alertCtrl: AlertController,
     private dbHelper: FirestoreDbHelper,
     private logger: Logger,
-    private events: Events) {
+    private events: Events,
+    private appCtrl: App,
+    ) {
       this.userId = window.localStorage.getItem(Constants.firebaseUserIdKey);
   }
 
@@ -107,5 +110,13 @@ export class InboxPage {
     });
     
     return badgeCount;
+  }
+
+  onClickExplore(){
+    // this.appCtrl.getRootNav().select(2);
+    // this.navCtrl.setRoot(MapPage);
+    let tab = this.navCtrl.parent;
+    tab.select(2);
+
   }
 }

@@ -1,13 +1,6 @@
-<ion-header>
-  <ion-navbar>
-      <ion-title><ion-icon name="md-globe">&nbsp;Wandr</ion-icon></ion-title>
-      <ion-buttons end>
-        <button ion-button icon-only *ngIf="!editMode" (click)="toggleEdit()"><ion-icon name="create"></ion-icon></button>
-        <button ion-button icon-only *ngIf="editMode" (click)="toggleEdit()">Done</button>
-      </ion-buttons>
-  </ion-navbar>
-</ion-header>
 <ion-content padding>
+    <br>
+  <br>
     <ion-grid>
         <ion-row>
             <ion-col text-center>
@@ -16,7 +9,7 @@
             <ion-col align-self-center>
                 <div class="user-info">
                     <ion-row>
-                        <h2>{{userData.first_name}} {{userData.last_name}}</h2>
+                        <h1>{{userData.first_name}} {{userData.last_name}}</h1>
                     </ion-row>
                     <ion-row>
                         <span>{{userData.location.stringFormat}}</span>
