@@ -1,4 +1,3 @@
-
 <ion-content>
     <br>
     <!----- TODO: If list is empty: "No messages here yet!"------->
@@ -6,7 +5,7 @@
             <div class="item item-divider custom-item-divider">
                 DIRECT MESSAGES
             </div>
-        </ion-item-divider>
+    </ion-item-divider>
     <ion-list *ngIf="chats.length > 0">
         <div *ngFor="let chat of chats">
             <!----- TODO: Params sent to messages page? ------->
