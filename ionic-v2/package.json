@@ -63,10 +63,6 @@
     "typings": "^2.1.1",
     "underscore": "^1.9.1",
     "zone.js": "^0.8.26",
-<<<<<<< HEAD
-    "cordova-plugin-network-information": "~2.0.1",
-=======
->>>>>>> 01361059ecd98f8c4fe35a38a351e8ce207a683d
     "cordova-ios": "~4.5.5"
   },
   "devDependencies": {

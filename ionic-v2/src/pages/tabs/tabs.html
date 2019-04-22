@@ -1,8 +1,7 @@
-<!-- <ion-tabs #appTabs ngstyle="{'background': 'linear-gradient(to bottom, #1abc9c, #2ac4a5, #37cdae, #42d5b8, #4ddec1, #4ddec1, #4ddec1, #4ddec1, #42d5b8, #37cdae, #2ac4a5, #1abc9c)'}" selectedIndex="0"> -->
 <ion-tabs #appTabs color="primary" selectedIndex="0">    
-    <ion-tab [root]="tab1Root" tabIcon="person"></ion-tab>
-    <ion-tab [root]="tab2Root" tabIcon="chatbubbles" [tabBadge]="badgeCount || ''"></ion-tab>
-    <ion-tab [root]="tab3Root" tabIcon="md-globe" ></ion-tab>
-    <ion-tab [root]="tab4Root" tabIcon="paper-plane"> </ion-tab>
-    <ion-tab [root]="tab5Root" tabIcon="settings"></ion-tab>
+    <ion-tab [root]="tab1Root" tabIcon="person" tabTitle="profile"></ion-tab>
+    <ion-tab [root]="tab2Root" tabIcon="chatbubbles" tabTitle="chats" [tabBadge]="badgeCount || ''"></ion-tab>
+    <ion-tab [root]="tab3Root" tabIcon="md-globe" tabTitle="explore"></ion-tab>
+    <ion-tab [root]="tab4Root" tabIcon="paper-plane" tabTitle="share"></ion-tab>
+    <ion-tab [root]="tab5Root" tabIcon="settings" tabTitle="options"></ion-tab>
 </ion-tabs>
