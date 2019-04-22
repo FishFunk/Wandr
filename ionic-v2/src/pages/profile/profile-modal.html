@@ -1,0 +1,58 @@
+<!-- <ion-header class="hello1">
+    <ion-navbar color="myDarkBlue" style="background:light; border-bottom: none">
+      <ion-title text-center>
+        <img class="title-image" src="assets/heading/Group_2.svg" width="100" height="20" />
+      </ion-title>
+
+    <ion-buttons end>
+        <button ion-button icon-only  (click)="close()"><ion-icon name="close" color="myOrange"></ion-icon></button>
+    </ion-buttons>
+    </ion-navbar>
+  
+</ion-header> -->
+<ion-content class="outer-content" [ngStyle]="{'background-color': '#091F3A'}">
+
+  <ion-item-divider color="myDarkBlue" style="color:#00E1AD;">
+        <!-- <div class="item item-divider custom-item-divider"> -->
+          EDIT PROFILE
+        <!-- </div> -->
+        
+  </ion-item-divider>
+
+      
+
+
+
+    <div class="login-container">
+
+    <form [formGroup]="faveForm" novalidate>
+        <ion-item>
+          <ion-label stacked>ITEM NAME</ion-label>
+          <ion-input [(ngModel)]="temp.Name" tappable formControlName="name" type="text" placeholder="i.e. Nature's Path Granolo Bar"></ion-input>
+        </ion-item>
+       
+        <ion-item>
+            <ion-label stacked>PROTEIN</ion-label>
+            <ion-input [(ngModel)]="temp.Protein" tappable formControlName="phone" type="number" placeholder="Total Protien in grams"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>FAT</ion-label>
+            <ion-input [(ngModel)]="temp.TotalFat" tappable formControlName="phone" type="number" placeholder="Total Fat in grams" ></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>CARBOHYDRATE</ion-label>
+            <ion-input [(ngModel)]="temp.Carb" tappable formControlName="phone" type="number" placeholder="Net Carbs (Total Carbs - Fiber) in grams" ></ion-input>
+        </ion-item>
+      </form>
+        
+    </div>
+    <br>
+    
+    
+
+</ion-content>
+<ion-footer>
+<div margin top>
+  <button class="bottom" ion-button type="button" clear full color="primary" (click)="addItem()">SAVE?</button>
+</div>
+</ion-footer>
