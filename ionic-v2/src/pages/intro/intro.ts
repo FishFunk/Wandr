@@ -22,12 +22,12 @@ export class IntroPage {
     },
     {
       title: "Explore the Wandr map",
-      description: "See all your connections on an interactive map",
+      description: "See your connections on an interactive map",
       image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
     },
     {
       title: "Instantly chat with connections",
-      description: "Make plans and go have fun",
+      description: "Make plans and go have fun!",
       image: "../../assets/undraw/purple/undraw_chatting_2yvo (1).svg"
     },
   ];
