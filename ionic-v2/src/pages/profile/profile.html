@@ -1,16 +1,12 @@
-<ion-header transparent no-border>
-    <ion-navbar>
-        <ion-buttons end>
-            <button *ngIf="!editMode" ion-button icon-only clear (click)="toggleEdit()">
-                <i class="far fa-edit"></i>
-            </button>
-            <button *ngIf="editMode" ion-button icon-only clear (click)="toggleEdit()">
-                <i class="far fa-save"></i>
-            </button>
-        </ion-buttons>
-    </ion-navbar>
-</ion-header>
 <ion-content padding>
+    <div id="edit-button">
+        <button *ngIf="!editMode" ion-button icon-only clear (click)="toggleEdit()">
+            <i class="far fa-edit"></i>
+        </button>
+        <button *ngIf="editMode" ion-button icon-only clear (click)="toggleEdit()">
+            <i class="far fa-save"></i>
+        </button>
+    </div>
     <ion-grid>
         <ion-row>
             <ion-col text-center>
