@@ -10,10 +10,13 @@
       <img [src]="slide.image" class="slide-image"/>
       <h2 class="slide-title" [innerHTML]="slide.title"></h2>
       <p [innerHTML]="slide.description"></p>
+      <br>
     </ion-slide>
 
     <ion-slide>
-        <img src="../../assets/undraw/purple/undraw_refreshing_ncum.svg" />
+        <h2 class="slide-title">Welcome to the Wandr tribe!</h2>
+        <br>
+        <img class="slide-image" src="../../assets/undraw/purple/undraw_having_fun_iais.svg" />
         <br><br>
       <button ion-button round color="secondary" margin-top (click)="onClickfacebookLogin()" margin-top>
         <ion-icon id="facebook" name="logo-facebook" color="light"></ion-icon>

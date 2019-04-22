@@ -16,17 +16,17 @@ export class IntroPage {
 
   slides = [
     {
-      title: "<br>Wandr-ing where to go next?",
-      description: "Wandr makes it easy to explore where friends are located!",
+      title: '<br>Wandr-ing where to go next?',
+      // description: "Easily explore where friends are located!",
       image: "../../assets/undraw/purple/undraw_directions_x53j.svg"
     },
     {
-      title: "Explore the Wandr map",
-      description: "See your connections on an interactive map",
+      title: "Explore your Wandr map!",
+      description: "Visualize and engage with your network in a whole new way.",
       image: "../../assets/undraw/purple/undraw_map_light_6ttm.svg"
     },
     {
-      title: "Instantly chat with connections",
+      title: "Connect and chat with other Wandrers!",
       description: "Make plans and go have fun!",
       image: "../../assets/undraw/purple/undraw_chatting_2yvo (1).svg"
     },
