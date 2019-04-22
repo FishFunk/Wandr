@@ -84,6 +84,18 @@ export class SettingsPage {
             ()=>{});
     }
 
+    onClickAccount(){
+        alert("not implemented");
+    }
+
+    onClickPrefs(){
+        alert("not implemented");
+    }
+
+    onClickShare(){
+        alert("not implemented");
+    }
+
 
     private logout() {
         this.fbApi.facebookLogout()

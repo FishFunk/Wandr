@@ -24,7 +24,7 @@ export class TabsPage {
   tab1Root = ProfilePage;
   tab2Root = InboxPage;
   tab3Root = MapPage;
-  tab4Root = TimeLine;
+  tab4Root = InvitePage;
   tab5Root = SettingsPage;
 
   badgeCount = 0;

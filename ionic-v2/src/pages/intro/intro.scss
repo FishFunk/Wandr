@@ -1,5 +1,6 @@
 page-intro {
       ion-slide{
+        overflow-y: hidden;
         height: 100%;
         color: black;
         background-color: color($colors, primary);
