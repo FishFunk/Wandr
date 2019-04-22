@@ -6,6 +6,10 @@
         <button *ngIf="editMode" ion-button icon-only clear (click)="toggleEdit()">
             <i class="far fa-save"></i>
         </button>
+
+        <button ion-button icon-only clear (click)="onEdit()">
+            EDIT
+        </button>
     </div>
     <ion-grid>
         <ion-row>

@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, LoadingController, ToastController, Platform, App } from 'ionic-angular';
+import { IonicPage, LoadingController, ToastController, Platform, App, NavController, ModalController } from 'ionic-angular';
 import { Location, User, IUser, ICheckboxOption } from '../../models/user';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
@@ -8,6 +8,7 @@ import { Utils } from '../../helpers/utils';
 import { Logger } from '../../helpers/logger';
 import { IntroPage } from '../intro/intro';
 import _ from 'underscore';
+import { ProfileModal } from './profile-modal';
 
 @IonicPage()
 @Component({
@@ -32,9 +33,11 @@ export class ProfilePage {
   private geocoder: google.maps.Geocoder;
 
   constructor(
+    public modalController: ModalController,
     public loadingCtrl: LoadingController, 
     private toastCtrl: ToastController,
     private appCtrl: App,
+    private navCtrl: NavController,
     private zone: NgZone,
     private facebookApi: FacebookApi,
     private platform: Platform,
@@ -159,6 +162,14 @@ export class ProfilePage {
       await this.logger.Error(ex);
     }
   }
+
+  onEdit(){
+    let obj = null;
+    let index = -1;
+    let slidingItem = null;
+      const modal = this.modalController.create(ProfileModal, {userObj: obj, index: index, slidingItem: slidingItem });
+      modal.present();  
+    }
 
   async toggleEdit(){
     this.editMode = !this.editMode;
