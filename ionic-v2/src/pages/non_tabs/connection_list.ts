@@ -117,6 +117,10 @@ export class ConnectionListPage {
         this.secondConnections = _.sortBy(this.secondConnections, (user)=>{
             return user.first_name;
         });
+
+        this.otherConnections = _.sortBy(this.otherConnections, (user)=>{
+            return user.first_name;
+        });
     }
 
     orderByLastName(){
@@ -127,6 +131,10 @@ export class ConnectionListPage {
         this.secondConnections = _.sortBy(this.secondConnections, (user)=>{
             return user.last_name;
         });
+
+        this.otherConnections = _.sortBy(this.otherConnections, (user)=>{
+            return user.last_name;
+        });
     }
 
     orderByMutualFriends(){
@@ -135,6 +143,10 @@ export class ConnectionListPage {
         });
 
         this.secondConnections = _.sortBy(this.secondConnections, (user)=>{
+            return -this.countMutualFriends(user);
+        });
+
+        this.otherConnections = _.sortBy(this.otherConnections, (user)=>{
             return -this.countMutualFriends(user);
         });
     }
