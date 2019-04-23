@@ -1,26 +1,18 @@
 <ion-content class="outer-content" [ngStyle]="{'background-color': '#fff'}" nobounce>
     <br>
     <ion-list>
-        <!-- <ion-item-divider style="color:#1ABC9C;background-color:#fff">
-            <div class="item item-divider custom-item-divider">
-                SETTINGS
-            </div>
-        </ion-item-divider> -->
         <br>
         <div class="image-container">
             <img height="200px" width="300px" src="../../assets/undraw/purple/undraw_adjustments_p22m.svg" />
         </div>
         <br>
-        <!-- <button ion-item (click)="onClickPrefs()">Preferences</button>       -->
-        <!-- <button ion-item (click)="onClickShare()">Share</button>     -->
         <ion-item>
             <ion-label>Push Notifications</ion-label>
             <ion-toggle color="primary"  [(ngModel)]="pushNotifications" (ionChange)="updateUserSettings()"></ion-toggle>
         </ion-item>
+        <button ion-item (click)="onClickAbout()">Our Story</button>
         <button ion-item (click)="onClickContact()">Contact Us</button>
         <a ion-item detail-none href="https://wanderlustlabs.io/privacy-policy/">Privacy Policy <i class="fas fa-external-link-alt" color="#6700a9" item-end></i></a>
-        <!-- <button ion-item (click)="onClickAccount()">Account</button>      -->
-        <!-- <button ion-item (click)="onClickLogout()">Logout</button>       -->
     </ion-list> 
     <button ion-button clear block color="danger" (click)="onClickLogout()">Logout</button>      
 

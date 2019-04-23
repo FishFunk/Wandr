@@ -5,7 +5,6 @@ import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
 import { IChat } from '../../models/chat';
 import { AngularFireFunctions } from 'angularfire2/functions';
-import { Utils } from '../../helpers/utils';
 import { MessagesPage } from '../messages/messages';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Logger } from '../../helpers/logger';

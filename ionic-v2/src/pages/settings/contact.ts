@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Device } from '@ionic-native/device/ngx';
 import { Constants } from '../../helpers/constants';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, ToastController } from 'ionic-angular';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Logger } from '../../helpers/logger';
 
@@ -18,13 +18,13 @@ export class ContactPage {
         private device: Device,
         private dbHelper: FirestoreDbHelper,
         private navCtrl: NavController,
-        private alertCtrl: AlertController,
+        private toastCtrl: ToastController,
         private logger: Logger){
     }
 
     onSubmit(){
         if(!this.reason){
-            this.presentAlert("Please select a contact reason.");
+            this.presentToast("Please select a contact reason.");
             return;
         }
 
@@ -47,23 +47,25 @@ export class ContactPage {
 
             this.dbHelper.CreateNewReport(reportData)
                 .then(()=>{
-                    this.presentAlert("Thanks for your feedback!");
+                    this.presentToast("Thanks for your feedback!");
                     this.text = "";
                     this.reason = "";
                     this.navCtrl.pop();
                 })
                 .catch(async (error)=>{
+                    this.presentToast("Something went wrong. Please try again.");
                     await this.logger.Error(error);
-                    this.presentAlert("It's not you, it's us.", "Something went wrong. Please try again.");
                 });
         }
     }
 
-    private presentAlert(title: string, message?: string){
-        this.alertCtrl.create({
-            title: title,
-            message: message
-        })
-        .present();
+    private presentToast(message: string){
+        const toast = this.toastCtrl.create({
+            message: message,
+            position: 'top',
+            duration: 3000
+        });
+
+        toast.present();
     }
 }

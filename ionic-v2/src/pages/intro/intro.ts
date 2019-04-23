@@ -16,7 +16,7 @@ export class IntroPage {
 
   slides = [
     {
-      title: '<br>Wandr-ing where to go next?',
+      title: '<br>Welcome fellow Wandrer!',
       // description: "Easily explore where friends are located!",
       image: "../../assets/undraw/purple/undraw_directions_x53j.svg"
     },

@@ -16,18 +16,17 @@
     </ion-list>
     <div *ngIf="chats.length == 0" class="image-container" text-center>
         <br><br><br><br>
-        <img height="200px" width="300px" src="../../assets/undraw/purple/undraw_no_data_qbuo.svg">
+        <img height="200px" width="300px" src="../../assets/undraw/purple/undraw_messages1_9ah2.svg">
         <br>
-        <h2 class="noChatsText">Wandr-ing where to go?</h2>
         <br>
-            <span style="font-size: 14px;font-weight: lighter;">
-                Start planning your next adventure and <br>
-                connect with locals!
-            </span>
+        <h2 class="noChatsText">Your messages can be found here.</h2>
         <br>
+        <p class="subtext">
+            First explore the Wandr network and start chatting with a local!
+        </p>
         <br>
         <button ion-button square outline color="secondary" margin-top (click)="onClickExplore()" margin-top>
-            <span style="color:secondary;font-size:12pt;font-weight:lighter;">Explore Wandr</span>
+            <span style="color:secondary;font-size:12pt;font-weight:lighter;">Explore</span>
         </button>
     </div>
 </ion-content>

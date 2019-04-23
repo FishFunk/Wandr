@@ -1,9 +1,14 @@
 <ion-header>
     <ion-navbar>
-        <ion-title><ion-icon name="md-globe">&nbsp;Wandr</ion-icon></ion-title>
+        <ion-title>Contact Us</ion-title>
     </ion-navbar>
 </ion-header>
 <ion-content>
+    <br>
+    <div class="image-container">
+        <img height="200px" width="300px" src="../../assets/undraw/teal/undraw_online_world_mc1t.svg" />
+    </div>
+    <br>
     <ion-list>
         <ion-item>
             <ion-label>Reason for Contacting</ion-label>
@@ -19,8 +24,8 @@
             </ion-textarea>
         </ion-item>
         <ion-item text-center no-lines>
-            <button ion-button round large (click)="onSubmit()">
-                Submit&nbsp;&nbsp;<ion-icon name="checkmark"></ion-icon>
+            <button ion-button square outline large color="secondary" (click)="onSubmit()">
+                Submit
             </button>
         </ion-item>
     </ion-list>
