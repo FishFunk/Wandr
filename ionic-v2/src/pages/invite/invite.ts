@@ -4,7 +4,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Constants } from '../../helpers/constants';
 import { Utils } from '../../helpers/utils';
-import { Contacts } from '@ionic-native/contacts/ngx';
+import { Contacts, IContactField } from '@ionic-native/contacts/ngx';
 import _ from 'underscore';
 import { Logger } from '../../helpers/logger';
 
@@ -15,7 +15,7 @@ import { Logger } from '../../helpers/logger';
 })
 
 export class InvitePage {
-  shareMessage:  "I just joined Wandr! A fun and interactive social network. Check it out!";
+  shareMessage:  "Check out Wandr - an interactive travel network!";
   imageSrc: "";
   shareUrl: "";
   firstConnectionCount = 0;
@@ -112,16 +112,16 @@ export class InvitePage {
     this.contactsNative.pickContact()
       .then(contact=>{
         if(contact){
-          let targetPhone;
+          let targetContact: IContactField;
           let targets = _.filter(contact.phoneNumbers, (phoneObj)=>phoneObj.type=="mobile");
-          targetPhone = _.first(targets);
+          targetContact = _.first(targets);
           
-          if(!targetPhone){
-            targetPhone = _.first(contact.phoneNumbers);
+          if(targetContact){
+            this.socialSharing.shareViaSMS(this.shareMessage, targetContact.value)
+              .catch(error=>this.logger.Warn(error));
+          } else {
+            this.presentToast('No mobile number found for that contact.');
           }
-
-          this.socialSharing.shareViaSMS(this.shareMessage, targetPhone.value)
-            .catch(error=>this.logger.Warn(error));
         }
       })
       .catch(error=> {
