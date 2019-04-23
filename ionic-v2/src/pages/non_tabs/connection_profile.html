@@ -1,21 +1,26 @@
-<ion-header>
-    <ion-navbar>
-        <ion-title><ion-icon name="md-globe">&nbsp;Wandr</ion-icon></ion-title>
-        <ion-buttons end>
-            <button ion-button icon-only clear (click)="onClickReport()"><ion-icon name="flag"></ion-icon></button>
-        </ion-buttons>
-    </ion-navbar>
+<ion-header class="custom-header">
+    <ion-grid>
+        <ion-row>
+            <ion-col col-2>
+                <button ion-button icon-only clear (click)="onClickBack()"><ion-icon name="arrow-back"></ion-icon></button>
+            </ion-col>
+            <ion-col col-8></ion-col>
+            <ion-col col-2>
+                <button ion-button icon-only clear (click)="onClickReport()"><ion-icon name="flag"></ion-icon></button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-header>
-<ion-content padding>
+<ion-content>
     <ion-grid>
         <ion-row>
             <ion-col text-center>
                 <img id="profile-img" [src]="viewUserData.profile_img_url"/>
             </ion-col>
-            <ion-col align-self-center text-center>
+            <ion-col align-self-center>
                 <div class="user-info">
                     <ion-row>
-                        <h2>{{viewUserData.first_name}} {{viewUserData.last_name}}</h2>
+                        <h1>{{viewUserData.first_name}} {{viewUserData.last_name}}</h1>
                     </ion-row>
                     <ion-row class="subtext">
                         <span>{{viewUserData.location.stringFormat}}</span>
@@ -77,26 +82,16 @@
                 </ion-grid>
             </ion-col>
         </ion-row>
-        <!-- <ion-row>
-            <ion-col col-12 *ngIf="viewUserData.travel_info">
-                <ion-grid no-padding>
-                    <h3>PAST & FUTURE TRIPS</h3>
-                    <p>{{viewUserData.travel_info}}</p>
-                </ion-grid>
-            </ion-col>
-        </ion-row> -->
         <ion-row *ngIf="showChatButton">
             <ion-col col-12 text-center>
-                <button *ngIf="!chatExists" ion-button large icon-end (click)="onClickSendMessage()">
+                <button *ngIf="!chatExists" ion-button square outline large color="secondary" (click)="onClickSendMessage()">
                     <div>
                         <span>Send Message</span>
-                        <ion-icon name="text"></ion-icon>
                     </div>
                 </button>
-                <button *ngIf="chatExists" ion-button large icon-end (click)="onClickGoToChat()">
+                <button *ngIf="chatExists" ion-button square outline large color="secondary" (click)="onClickGoToChat()">
                     <div>
                         <span>Go To Chat</span>
-                        <ion-icon name="text"></ion-icon>
                     </div>
                 </button>
             </ion-col>

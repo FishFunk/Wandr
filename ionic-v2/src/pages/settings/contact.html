@@ -1,10 +1,16 @@
-<ion-header>
-    <ion-navbar>
-        <ion-title>Contact Us</ion-title>
-    </ion-navbar>
+<ion-header class="custom-header">
+    <ion-grid>
+        <ion-row>
+            <ion-col col-2>
+                <button ion-button icon-only clear (click)="onClickBack()">
+                    <ion-icon name="arrow-back"></ion-icon>
+                </button>
+            </ion-col>
+            <ion-col col-10></ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-header>
 <ion-content>
-    <br>
     <div class="image-container">
         <img height="200px" width="300px" src="../../assets/undraw/teal/undraw_online_world_mc1t.svg" />
     </div>

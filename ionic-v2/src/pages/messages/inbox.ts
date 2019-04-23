@@ -6,7 +6,6 @@ import { IChat } from '../../models/chat';
 import _ from 'underscore';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Logger } from '../../helpers/logger';
-import { MapPage } from '../explore/map';
 
 @IonicPage()
 @Component({
@@ -24,13 +23,11 @@ export class InboxPage {
     private alertCtrl: AlertController,
     private dbHelper: FirestoreDbHelper,
     private logger: Logger,
-    private events: Events,
-    private appCtrl: App,
-    ) {
+    private events: Events) {
       this.userId = window.localStorage.getItem(Constants.firebaseUserIdKey);
   }
 
-  ionViewDidEnter(){
+  ionViewDidLoad(){
     this.loadChats();
   }
 
@@ -113,8 +110,6 @@ export class InboxPage {
   }
 
   onClickExplore(){
-    // this.appCtrl.getRootNav().select(2);
-    // this.navCtrl.setRoot(MapPage);
     let tab = this.navCtrl.parent;
     tab.select(2);
 

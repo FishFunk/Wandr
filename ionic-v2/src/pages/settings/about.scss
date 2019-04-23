@@ -1,8 +1,22 @@
 page-about {
 
-    #header-img {
+    // Header //
+    .custom-header > * > * > * {
+        padding: 0;
+    }
+
+    .grid {
+        padding: 0;
+    }
+
+    .custom-header{
+        padding-top: 20px;
+    }
+    //
+
+
+    #wandr-img {
         height: 50px;
-        padding-top: 10px;
     }
 
     .image-container {

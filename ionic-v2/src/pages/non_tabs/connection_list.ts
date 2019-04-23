@@ -85,6 +85,10 @@ export class ConnectionListPage {
         });
     }
 
+    onClickBack(){
+        this.navCtrl.pop({animate: true, direction: 'back'});
+    }
+
     onClickForum(){
         this.navCtrl.push(
             ForumPage, 

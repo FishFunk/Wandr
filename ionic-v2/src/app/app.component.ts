@@ -10,7 +10,6 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { IntroPage } from '../pages/intro/intro';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { FacebookApi } from '../helpers/facebookApi';
-import { WelcomePage } from '../pages/welcome/welcome';
 
 declare var google; // Declare global 'google' variable
 

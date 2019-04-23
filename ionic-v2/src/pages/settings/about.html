@@ -1,10 +1,18 @@
-<ion-header>
-    <ion-navbar>
-    </ion-navbar>
+<ion-header class="custom-header">
+    <ion-grid>
+        <ion-row>
+            <ion-col col-2>
+                <button ion-button icon-only clear (click)="onClickBack()">
+                    <ion-icon name="arrow-back"></ion-icon>
+                </button>
+            </ion-col>
+            <ion-col col-10></ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-header>
 <ion-content padding>
     <div class="image-container">
-        <img id="header-img" src="../../assets/images/wandr-text.png">
+        <img id="wandr-img" src="../../assets/images/wandr-text.png">
     </div>
     <br>
     <p class="text-content">

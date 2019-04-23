@@ -1,15 +1,19 @@
-<ion-header>
-    <ion-navbar>
-        <ion-title>{{displayLocation}}</ion-title>
-        <ion-buttons end>
-            <!-- <button *ngIf="showForumButton" ion-button clear (click)="onClickForum()">
-                Forum
-            </button> -->
-            <button ion-button icon-only clear (click)="presentPopover($event)">
-                <ion-icon name="list"></ion-icon>
-            </button>
-        </ion-buttons>
-    </ion-navbar>
+<ion-header class="custom-header">
+    <ion-grid>
+        <ion-row>
+            <ion-col col-2>
+                <button ion-button icon-only clear (click)="onClickBack()"><ion-icon name="arrow-back"></ion-icon></button>
+            </ion-col>
+            <ion-col col-8 text-center>
+                <p class="header-text">{{displayLocation}}</p>
+            </ion-col>
+            <ion-col col-2>
+                <button ion-button icon-only clear (click)="presentPopover($event)">
+                    <ion-icon name="list"></ion-icon>
+                </button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-header>
 <ion-content>
     <ion-list>

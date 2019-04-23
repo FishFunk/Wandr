@@ -82,7 +82,7 @@ export class ProfileModal {
     this.events.publish(Constants.refreshProfileDataEvent);
     loader.dismiss();
 
-    this.viewCtrl.dismiss();
+    this.viewCtrl.dismiss(null, '', { animate: true, direction: 'down'});
   }
 
   //***** start Bound Elements ***** //

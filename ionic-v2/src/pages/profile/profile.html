@@ -1,4 +1,5 @@
 <ion-content padding>
+    <br>
     <div id="edit-button">
         <button ion-button icon-only clear (click)="onClickEdit()">
             <i class="far fa-edit"></i>
@@ -14,10 +15,10 @@
                     <ion-row>
                         <h1>{{userData.first_name}} {{userData.last_name}}</h1>
                     </ion-row>
-                    <ion-row>
+                    <ion-row class="subtext">
                         <span>{{userData.location.stringFormat}}</span>
                     </ion-row>
-                    <ion-row>
+                    <ion-row class="subtext">
                         <label>Connections:</label>&nbsp;<span>{{userData.friends.length + secondConnectionCount}}</span>
                     </ion-row>
                 </div>

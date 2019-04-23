@@ -1,12 +1,22 @@
-<ion-header >
-    <ion-navbar>
-        <ion-title>Chat with {{headerName}}</ion-title>
-        <ion-buttons *ngIf="showProfileButton" end>
-            <button ion-button clear (click)="onClickProfile()">Profile</button>
-        </ion-buttons>
-    </ion-navbar>
+<ion-header class="custom-header">
+    <ion-grid>
+        <ion-row>
+            <ion-col col-2>
+                <button ion-button icon-only clear (click)="onClickBack()">
+                    <ion-icon name="arrow-back"></ion-icon>
+                </button>
+            </ion-col>
+            <ion-col col-8 text-center>
+                <p class="header-text">Chat with {{headerName}}</p>
+            </ion-col>
+            <ion-col col-2>
+                <button *ngIf="showProfileButton" ion-button icon-only clear (click)="onClickProfile()">
+                    Profile
+                </button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-header>
-    
 <ion-content #messageContent id="messageContent">
     <div padding>
         <div #messageListItems class="message" 

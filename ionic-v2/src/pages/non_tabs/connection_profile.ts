@@ -85,6 +85,10 @@ export class ConnectionProfilePage {
       this.mutualFriends = await this.dbHelper.ReadUsersByFacebookId(mutualFriendIds);
     }
 
+    onClickBack(){
+      this.navCtrl.pop({animate: true, direction: 'back'});
+    }
+
     onClickReport(){
       this.presentConfirmation();
     }

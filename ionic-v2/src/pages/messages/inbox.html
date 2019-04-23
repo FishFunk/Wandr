@@ -1,4 +1,6 @@
 <ion-content>
+    <br>
+    <hr>
     <ion-list *ngIf="chats.length > 0">
         <div *ngFor="let chat of chats">
             <!----- TODO: Params sent to messages page? ------->
@@ -14,12 +16,15 @@
             </button>
         </div>
     </ion-list>
+    <div *ngIf="chats.length > 0 && chats.length < 4" class="image-container">
+        <img id="filler-img" src="../../assets/undraw/purple/undraw_mail_box_kd5i.svg">
+    </div>
     <div *ngIf="chats.length == 0" class="image-container" text-center>
         <br><br><br><br>
         <img height="200px" width="300px" src="../../assets/undraw/purple/undraw_messages1_9ah2.svg">
         <br>
         <br>
-        <h2 class="noChatsText">Your messages can be found here.</h2>
+        <h2 class="headline">Your messages can be found here.</h2>
         <br>
         <p class="subtext">
             First explore the Wandr network and start chatting with a local!

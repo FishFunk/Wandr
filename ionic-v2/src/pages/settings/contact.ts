@@ -22,6 +22,10 @@ export class ContactPage {
         private logger: Logger){
     }
 
+    onClickBack(){
+        this.navCtrl.pop({animate: true, direction: 'back'});
+    }
+
     onSubmit(){
         if(!this.reason){
             this.presentToast("Please select a contact reason.");

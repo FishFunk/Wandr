@@ -124,6 +124,10 @@ export class MessagesPage {
         }
     }
 
+    onClickBack(){
+        this.navCtrl.pop({animate: true, direction: 'back'});
+    }
+
     onClickProfile(){
         const loading = this.loadingCtrl.create({
             spinner: 'hide',

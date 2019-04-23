@@ -3,14 +3,13 @@ import { ProfilePage } from '../profile/profile';
 import { InboxPage } from '../messages/inbox';
 import { InvitePage } from '../invite/invite';
 import { MapPage } from '../explore/map';
-import { Tabs, Platform, ToastController, Events } from 'ionic-angular';
+import { Tabs, ToastController, Events } from 'ionic-angular';
 import { SettingsPage } from '../settings/settings';
 import { FcmProvider } from '../../providers/fcm/fcm';
 import { tap } from 'rxjs/operators';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Constants } from '../../helpers/constants';
 import { Logger } from '../../helpers/logger';
-import { TimeLine } from '../trips/time-line';
 
 @Component({
   selector: 'tabs-page',

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams } from 'ionic-angular';
+import { NavParams, NavController } from 'ionic-angular';
 
 @Component({ 
     selector: 'page-about',
@@ -7,6 +7,11 @@ import { NavParams } from 'ionic-angular';
 
 export class AboutPage {
 
-    constructor(params: NavParams){
+    constructor(params: NavParams,
+        private navCtrl: NavController){
+    }
+
+    onClickBack(){
+        this.navCtrl.pop({animate: true, direction: 'back'});
     }
 }
