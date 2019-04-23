@@ -66,7 +66,7 @@ export class IntroPage {
     else {
       // DEBUG/Browser Mode
       window.localStorage.setItem(Constants.facebookUserIdKey, "00001");
-      window.localStorage.setItem(Constants.firebaseUserIdKey, "00001");
+      window.localStorage.setItem(Constants.firebaseUserIdKey, "XkS98bzJM1co7vpyBlKGUpPgd2Q2");
       // this.presentAlert('cordova is not available.');
       this.next();
     }

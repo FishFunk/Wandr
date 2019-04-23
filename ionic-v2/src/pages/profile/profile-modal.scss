@@ -1,18 +1,12 @@
 profile-modal {
 
-    .list-name {
-        font-weight: bold;
-        font-size: 14px;
+    .far{
+        font-size: 30px;
     }
 
     .mini-icon {
-        color: #800040; // myDarkPurple
+        color: color($colors, secondary);
         font-size: 1em !important;
-    }
-
-    .image-md {
-        height: 6em;
-        width: 6em;
     }
 
     .scroll {
@@ -21,23 +15,17 @@ profile-modal {
         height: auto;
     }
 
-    ion-avatar{
-        margin: auto;
-    }
+//   a, a div, a span, a ion-icon, a ion-label, button, button div, button span, button ion-icon, button ion-label{
+//     color: #00E1AD;
+//   }
 
 
+//   [tappable], [tappable] div, [tappable] span, [tappable] ion-icon, [tappable] ion-label, input, textarea {
+//     color: #00E1AD;
+//     font-size: 14px;
+//   }
 
-  a, a div, a span, a ion-icon, a ion-label, button, button div, button span, button ion-icon, button ion-label{
-    color: #00E1AD;
-  }
-
-
-  [tappable], [tappable] div, [tappable] span, [tappable] ion-icon, [tappable] ion-label, input, textarea {
-    color: #00E1AD;
-    font-size: 14px;
-  }
-
-  item-cover disable-hover item-cover-ios item-cover-default item-cover-default-ios{
-      background: #091F3A;
-  }
+//   item-cover disable-hover item-cover-ios item-cover-default item-cover-default-ios{
+//       background: #091F3A;
+//   }
 }

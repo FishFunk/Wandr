@@ -37,10 +37,13 @@ import { MessagesPageModule } from '../pages/messages/messages.module';
 import { IntroPageModule } from '../pages/intro/intro.module';
 import { ConnectionListModule } from '../pages/non_tabs/connection_list.module';
 import { ConnectionProfileModule } from '../pages/non_tabs/connection_profile.module';
+// import { TimeLineModule } from '../pages/trips/time-line.module';
+// import { WelcomeModule } from '../pages/welcome/welcome-module';
 
 //*********** Modal Pages **************/
 import { ContactPage } from '../pages/settings/contact';
 import { AboutPage } from '../pages/settings/about';
+import { ProfileModal } from '../pages/profile/profile-modal';
 
 //*********** Provider **************/
 import { FacebookApi } from '../helpers/facebookApi';
@@ -50,10 +53,6 @@ import { FcmProvider } from '../providers/fcm/fcm';
 import { SortOptionsPopoverModule } from '../pages/non_tabs/sort_option_popover.module';
 import { MapTutorialPopoverModule } from '../pages/explore/tutorial_popover.module';
 import { ConnectivityServiceProvider } from '../providers/connectivity-service/connectivity-service';
-import { TimeLine } from '../pages/trips/time-line';
-import { TimeLineModule } from '../pages/trips/time-line.module';
-import { WelcomePage } from '../pages/welcome/welcome';
-import { WelcomeModule } from '../pages/welcome/welcome-module';
 
 //********** firebase configuration  ************ */
 export const config = { 
@@ -70,7 +69,8 @@ export const config = {
     MyApp,
     TabsPage,
     ContactPage,
-    AboutPage
+    AboutPage,
+    ProfileModal
   ],
   imports: [
     BrowserModule,
@@ -95,15 +95,16 @@ export const config = {
     ConnectionProfileModule,
     SortOptionsPopoverModule,
     MapTutorialPopoverModule,
-    TimeLineModule,
-    WelcomeModule
+    // TimeLineModule,
+    // WelcomeModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     TabsPage,
     ContactPage,
-    AboutPage
+    AboutPage,
+    ProfileModal
   ],
   providers: [
     StatusBar,

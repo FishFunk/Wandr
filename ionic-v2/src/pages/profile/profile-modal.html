@@ -1,58 +1,74 @@
-<!-- <ion-header class="hello1">
-    <ion-navbar color="myDarkBlue" style="background:light; border-bottom: none">
+<ion-header>
+    <ion-navbar>
       <ion-title text-center>
-        <img class="title-image" src="assets/heading/Group_2.svg" width="100" height="20" />
+        Edit Profile
       </ion-title>
-
-    <ion-buttons end>
-        <button ion-button icon-only  (click)="close()"><ion-icon name="close" color="myOrange"></ion-icon></button>
-    </ion-buttons>
+      <ion-buttons end>
+          <button ion-button icon-only  (click)="onClickSave()">
+            <i class="far fa-save"></i>            
+          </button>
+      </ion-buttons>
     </ion-navbar>
-  
-</ion-header> -->
-<ion-content class="outer-content" [ngStyle]="{'background-color': '#091F3A'}">
-
-  <ion-item-divider color="myDarkBlue" style="color:#00E1AD;">
-        <!-- <div class="item item-divider custom-item-divider"> -->
-          EDIT PROFILE
-        <!-- </div> -->
+</ion-header>
+<ion-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-12>
+            <h3>Where do you live?</h3>
+            <ion-searchbar 
+              [(ngModel)]="autoComplete.input" 
+              (ionInput)="updateSearchResults()" 
+              placeholder="Search for a place">
+            </ion-searchbar>
+            <ion-list [hidden]="autoCompleteItems.length == 0">
+              <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">
+                {{ item.description }}
+              </ion-item>
+            </ion-list>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-12>
+            <h3>Bio</h3>
+            <ion-textarea 
+                placeholder="A bit about yourself..." 
+                [(ngModel)]="userData.bio">
+            </ion-textarea>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-12>
+          <ion-grid no-padding>
+              <h3>Interests</h3>
+              <ion-row>
+                <ion-col *ngFor="let item of userInterests" col-3>
+                  <ion-checkbox [(ngModel)]="item.checked"></ion-checkbox>
+                  <i [class]="item.iconClass"></i>
+                  <p>{{item.label}}</p>
+                </ion-col>
+              </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-12>
+          <ion-grid no-padding>
+              <h3>Lifestyle</h3>
+              <ion-row>
+                <ion-col *ngFor="let item of lifestyleOptions" col-3>
+                  <ion-checkbox [(ngModel)]="item.checked"></ion-checkbox>
+                  <i [class]="item.iconClass"></i>
+                  <p>{{item.label}}</p>
+                </ion-col>
+              </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
         
-  </ion-item-divider>
-
-      
-
-
-
-    <div class="login-container">
-
-    <form [formGroup]="faveForm" novalidate>
-        <ion-item>
-          <ion-label stacked>ITEM NAME</ion-label>
-          <ion-input [(ngModel)]="temp.Name" tappable formControlName="name" type="text" placeholder="i.e. Nature's Path Granolo Bar"></ion-input>
-        </ion-item>
-       
-        <ion-item>
-            <ion-label stacked>PROTEIN</ion-label>
-            <ion-input [(ngModel)]="temp.Protein" tappable formControlName="phone" type="number" placeholder="Total Protien in grams"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label stacked>FAT</ion-label>
-            <ion-input [(ngModel)]="temp.TotalFat" tappable formControlName="phone" type="number" placeholder="Total Fat in grams" ></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label stacked>CARBOHYDRATE</ion-label>
-            <ion-input [(ngModel)]="temp.Carb" tappable formControlName="phone" type="number" placeholder="Net Carbs (Total Carbs - Fiber) in grams" ></ion-input>
-        </ion-item>
-      </form>
-        
-    </div>
-    <br>
-    
-    
-
 </ion-content>
 <ion-footer>
-<div margin top>
-  <button class="bottom" ion-button type="button" clear full color="primary" (click)="addItem()">SAVE?</button>
-</div>
+  <div margin top>
+    <button class="bottom" ion-button type="button" clear full color="primary" (click)="onClickSave()">SAVE</button>
+  </div>
 </ion-footer>

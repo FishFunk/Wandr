@@ -15,5 +15,6 @@ export abstract class Constants {
     public static orderConnectionsByLastName = "onOrderConnectionsByLast";
     public static orderConnectionsByMutual = "onOrderConnectionsByMutual";
     public static refreshMapDataEventName = "onRefreshMapDataEvent";
+    public static refreshProfileDataEvent = "onRefreshProfileDataEvent";
 
 }
