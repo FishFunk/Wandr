@@ -8,11 +8,44 @@ admin.initializeApp();
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
+exports.updateUser = functions.firestore
+    .document('users/{userId}')
+    .onUpdate(async (change, context) => {
+    
+      console.trace('Start updateUser function.');
 
-// TODO: Need to test this function
+      // Get an object representing the document
+      const newValue = change.after.data();
+      const newLocation = newValue.location.stringFormat;
+
+      // Previous value before this update
+      const previousValue = change.before.data();
+      const oldLocation = previousValue.location.stringFormat;
+
+      // If location has been modified, trigger notification event
+      if(newLocation !== oldLocation){
+        const friendsToNotify = _.map(newValue.friends, (friend)=>friend.id);
+        const notificationTokens = await _getDeviceTokensFromFacebookIds(friendsToNotify);
+
+        if(!notificationTokens || notificationTokens.length === 0){
+            console.info("No device tokens to send notifications to.");
+            return Promise.resolve();
+        }
+
+        const payload = {
+            notification: {
+                title: `${newValue.first_name} updated their home town!`,
+                body: `Open Wandr and search for ${newLocation}`
+            }
+        }
+        
+        return admin.messaging().sendToDevice(notificationTokens, payload);
+      }
+});
+
 exports.newUserNotification = 
     functions.firestore.document('users/{userId}')
-    .onCreate(async event =>{
+        .onCreate(async event =>{
 
         const newUser = event.data();
         const userName = newUser.first_name;
@@ -23,8 +56,10 @@ exports.newUserNotification =
             (User Name: ' + userName + ') \
             (Location: ' + userLoc );
 
-        if(!friendsToNotify || friendsToNotify.length === 0){
-            console.info("User has no friend list to send notifications to.");
+        const notificationTokens = await _getDeviceTokensFromFacebookIds(friendsToNotify);
+        
+        if(!notificationTokens || notificationTokens.length === 0){
+            console.info("No device tokens to send notifications to.");
             return Promise.resolve();
         }
 
@@ -37,58 +72,6 @@ exports.newUserNotification =
                 title: title,
                 body: "Discover new connections on your map."
             }
-        }
-
-        const db = admin.firestore();
-
-        console.trace(`Friends to notify: ${JSON.stringify(friendsToNotify)}`);
-
-        // Get user IDs to be notified
-        const userPromises = 
-            friendsToNotify.map((friendFacebookId)=>{
-                return db.collection('users')
-                    .select('app_uid')
-                    .where('facebook_uid', '==', friendFacebookId)
-                    .where('settings.notifications', '==', true)
-                    .get();
-            });
-        
-        let querySnapshots = await Promise.all(userPromises).catch((error)=> {
-            console.error('newUserNotification - userPromises', error);
-            return Promise.reject(error);
-        });
-
-        const appIdsToNotify = _collectDataFromSnapshots(
-            querySnapshots, 'app_uid', 'newUserNotification - query user IDs');
-
-        if(!appIdsToNotify || appIdsToNotify.length === 0){
-            console.info("Query found no user IDs to send notifications to.");
-            return Promise.resolve();
-        }
-
-        console.trace(`App IDs to notify ${JSON.stringify(appIdsToNotify)}`);
-
-        // Get device tokens
-        const tokenPromises = appIdsToNotify.map((userId)=>{
-            return admin.firestore()
-                .collection('devices')
-                .where('userId', '==', userId)
-                .get();
-        });
-
-        querySnapshots = await Promise.all(tokenPromises).catch((error)=>{
-            console.error('newUserNotification - tokenPromises', error);
-            return Promise.reject(error);
-        });
-
-        const notificationTokens = _collectDataFromSnapshots(
-            querySnapshots, 'token', 'newUserNotification - query tokens');
-
-        console.trace(`Notification tokens: ${JSON.stringify(notificationTokens)}`);    
-
-        if(!notificationTokens || notificationTokens.length === 0){
-            console.info("No device tokens to send notifications to.");
-            return Promise.resolve();
         }
         
         return admin.messaging().sendToDevice(notificationTokens, payload);
@@ -239,13 +222,15 @@ async function _createAndSendFirstMessage(batch: FirebaseFirestore.WriteBatch, c
 
 function _collectDataFromSnapshots(querySnapshots: QuerySnapshot[], property: string, traceFunctionName: string){
     const data = [];
+    console.trace(`function: _collectDataFromSnapshots,
+        trace function: ${traceFunctionName},
+        target property: ${property}`);
+
     querySnapshots.forEach((querySnapshot)=> {
         const docSnapshots = querySnapshot.docs;        
         docSnapshots.forEach((snapshot)=>{
           if(snapshot.exists){
             const doc = snapshot.data();
-            console.trace(traceFunctionName + ': ' + JSON.stringify(doc));
-            console.trace(traceFunctionName + ': ' + doc[property]);
             data.push(doc[property]);
           } else {
             console.trace(traceFunctionName + ': snapshot does not exist');
@@ -297,4 +282,62 @@ async function _sendNotificationToId(idToNotify: string, notificationTitle: stri
         console.info("User disabled notification settings");
         return Promise.resolve();
     }
+}
+
+async function _getDeviceTokensFromFacebookIds(facebookIds: string[]): Promise<string[]>
+{
+    const db = admin.firestore();
+        console.trace("Start method _getDeviceTokensFromFacebookIds");
+
+        if(!facebookIds || facebookIds.length === 0){
+            console.trace("No Facebook IDs. Terminating method.");
+            return Promise.resolve([]);
+        }
+
+        console.trace(`Facebook IDs to notify: ${JSON.stringify(facebookIds)}`);
+
+        // Get user IDs to be notified
+        const userPromises = 
+            facebookIds.map((facebookId)=>{
+                return db.collection('users')
+                    .select('app_uid')
+                    .where('facebook_uid', '==', facebookId)
+                    .where('settings.notifications', '==', true)
+                    .get();
+            });
+
+        let querySnapshots = await Promise.all(userPromises).catch((error)=> {
+            console.error('_getDeviceTokensFromFacebookIds - userPromises', error);
+            return Promise.reject(error);
+        });
+
+        const appIdsToNotify = _collectDataFromSnapshots(
+            querySnapshots, 'app_uid', '_getDeviceTokensFromFacebookIds - query user IDs');
+
+        if(!appIdsToNotify || appIdsToNotify.length === 0){
+            console.info("Query found no user IDs to send notifications to.");
+            return Promise.resolve([]);
+        }
+
+        console.trace(`App IDs to notify ${JSON.stringify(appIdsToNotify)}`);
+
+        // Get device tokens
+        const tokenPromises = appIdsToNotify.map((userId)=>{
+            return admin.firestore()
+                .collection('devices')
+                .where('userId', '==', userId)
+                .get();
+        });
+
+        querySnapshots = await Promise.all(tokenPromises).catch((error)=>{
+            console.error('_getDeviceTokensFromFacebookIds - tokenPromises', error);
+            return Promise.reject(error);
+        });
+
+        const notificationTokens = _collectDataFromSnapshots(
+            querySnapshots, 'token', '_getDeviceTokensFromFacebookIds - query tokens');
+        
+        console.trace(`Notification tokens: ${JSON.stringify(notificationTokens)}`);    
+
+        return notificationTokens;
 }
