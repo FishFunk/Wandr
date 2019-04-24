@@ -42,11 +42,13 @@ page-messages {
             font-weight: bold;
             margin: 0px;
             width: auto;
+            max-width: 75%;
             box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
             padding: 10px 15px 10px 7px;
             margin: 5px 0;
             background: color($colors, light);
             white-space: pre-wrap;
+            word-wrap: break-word;
         }
     }
     .message.bot{

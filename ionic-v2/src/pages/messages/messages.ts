@@ -8,6 +8,7 @@ import _ from 'underscore';
 import { ConnectionProfilePage } from '../non_tabs/connection_profile';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Logger } from '../../helpers/logger';
+import { Utils } from '../../helpers/utils';
 
  
 @Component({
@@ -161,6 +162,7 @@ export class MessagesPage {
 
         var trimmedText = this.message.trim();
         if (trimmedText.length > 0){
+            let formattedText = trimmedText;
             let loading = this.loadingCtrl.create({
                 spinner: 'hide',
                 content:`<img src="../../assets/ring-loader.gif"/>`,
@@ -168,6 +170,8 @@ export class MessagesPage {
             });
 
             loading.present();
+
+            formattedText = Utils.convertLinkValuesInString(trimmedText);
 
             const isUserA = this.uid == this.chat.userA_id;
 
@@ -181,7 +185,7 @@ export class MessagesPage {
                 to_uid: isUserA ? this.chat.userB_id : this.chat.userA_id,
                 from_uid: this.uid, 
                 name: this.firstName, 
-                text: this.message, 
+                text: formattedText, 
                 timestamp: dateInMillis
             }
 

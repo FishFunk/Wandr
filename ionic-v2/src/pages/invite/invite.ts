@@ -66,10 +66,6 @@ export class InvitePage {
     loading.dismiss();
   }
 
-  getUserStatus(){
-    return Utils.getUserRank(this.firstConnectionCount);
-  }
-
   facebookShare(){
     this.socialSharing.shareViaFacebook(this.shareMessage, this.imageSrc, this.shareUrl)
     .then(() => {

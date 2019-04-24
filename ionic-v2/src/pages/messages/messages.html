@@ -9,7 +9,7 @@
             <ion-col col-8 text-center>
                 <p class="header-text">Chat with {{headerName}}</p>
             </ion-col>
-            <ion-col col-2>
+            <ion-col col-2 class="justify-right">
                 <button *ngIf="showProfileButton" ion-button icon-only clear (click)="onClickProfile()">
                     Profile
                 </button>
@@ -23,7 +23,7 @@
                 *ngFor="let message of messages" 
                 [ngClass]="getClass(message)">
             <div class="message-time">{{message.timestamp | date:'EEE h:mm a'}}</div>
-            <p>{{ message.text }}</p>
+            <p [innerHTML]="message.text"></p>
         </div>
     </div>
 </ion-content>

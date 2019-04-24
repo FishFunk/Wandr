@@ -16,7 +16,7 @@ import { MapTutorialPopover } from './tutorial_popover';
 // TODO: Add refresh button
 export class MapPage {
   maxZoomLevel = 10;
-  minZoomLevel = 2;
+  minZoomLevel = 3;
   users: IUser[] = [];
   searchItems: string[];
   map: google.maps.Map;
@@ -246,8 +246,8 @@ export class MapPage {
   private onMarkerClick(latLng: google.maps.LatLng, e: Event){
     const currentZoom = this.map.getZoom();
     if(currentZoom < this.maxZoomLevel){
-      this.map.setZoom(currentZoom * 2);
       this.map.panTo(latLng);
+      this.map.setZoom(currentZoom * 2);
       return;
     }
 
@@ -383,7 +383,7 @@ export class MapPage {
     controlText.innerHTML = '<i class="fas fa-dice fa-2x"></i>';
     controlUI.appendChild(controlText);
 
-    // Setup the click event listeners
+    // Setup the Random click event listener
     controlUI.addEventListener('click', ()=> {
       var keys = _.keys(this.locationMap);
       if(keys.length == 0){
