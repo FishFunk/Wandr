@@ -189,6 +189,7 @@ export class MessagesPage {
                 timestamp: dateInMillis
             }
 
+            // Update chat summary
             let chatUpdate = {
                 lastMessage: this.message,
                 timestamp: dateInMillis,

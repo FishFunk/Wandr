@@ -77,7 +77,9 @@ export class MockDataGenerator
             '',
             false,
             this.randomSentence(),
-            new Date().getTime().toString());
+            new Date().getTime().toString(),
+            false,
+            false);
             
           chats.push(chat);
         }

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, Loading, Events, AlertController, App } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, Loading, Events, AlertController, ItemSliding } from 'ionic-angular';
 import { MessagesPage } from './messages';
 import { Constants } from '../../helpers/constants';
-import { IChat } from '../../models/chat';
+import { IChat, IMessage } from '../../models/chat';
 import _ from 'underscore';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Logger } from '../../helpers/logger';
@@ -17,6 +17,8 @@ export class InboxPage {
   userId: string;
   chats:  IChat[] = [];
   loading: Loading;
+
+  private user_roomkeys: string[] = [];
   
   constructor(public navCtrl: NavController, 
     public loadingCtrl: LoadingController,
@@ -27,7 +29,7 @@ export class InboxPage {
       this.userId = window.localStorage.getItem(Constants.firebaseUserIdKey);
   }
 
-  ionViewDidLoad(){
+  ionViewWillEnter(){
     this.loadChats();
   }
 
@@ -45,6 +47,7 @@ export class InboxPage {
       });
     
     if(user && user.roomkeys && user.roomkeys.length > 0){
+      this.user_roomkeys = user.roomkeys;
       await this.queryChats(user.roomkeys);
     } else {
       this.chats = [];
@@ -61,6 +64,50 @@ export class InboxPage {
       { animate: true, direction: 'forward' });
   }
 
+  onClickDeleteChat(slidingItem: ItemSliding, chat: IChat){
+    this.showConfirmationPrompt(async ()=>{
+
+      let isUserA = this.userId == chat.userA_id;
+      let message = `${isUserA ? chat.userA_name : chat.userB_name} has left the chat.`;
+      let dateInMillis = new Date().getTime().toString();
+
+      let messageData = {};
+      messageData[dateInMillis] = <IMessage> {
+          roomkey: chat.roomkey,
+          to_uid: isUserA ? chat.userB_id : chat.userA_id,
+          from_uid: Constants.appBotId, 
+          name: 'Wandr Bot', 
+          text: message, 
+          timestamp: dateInMillis
+      }
+
+      // Update chat summary
+      let chatUpdate = <IChat> {
+          lastMessage: message,
+          timestamp: dateInMillis,
+          userA_unread: !isUserA,
+          userB_unread: isUserA,
+          userA_deleted: isUserA,
+          userB_deleted: !isUserA
+      }
+
+      const new_roomkeys = this.user_roomkeys.filter((key)=>{
+        return key !== chat.roomkey;
+      });
+
+      await this.dbHelper.UpdateUser(this.userId, { roomkeys: new_roomkeys })
+        .catch(error => this.logger.Error(error));
+
+      await this.dbHelper.SendMessage(chat.roomkey, messageData, chatUpdate)
+        .catch(error => this.logger.Error(error));
+
+      await this.loadChats();
+    },
+    ()=> {
+      slidingItem.close();
+    });
+  }
+
   getClass(chat: IChat){
     if(this.userId == chat.userA_id){
       return chat.userA_unread ? 'unread' : '';
@@ -73,8 +120,27 @@ export class InboxPage {
     }
   }
 
+  private showConfirmationPrompt(confirmHandler: ()=>any, cancelHandler: ()=>any){
+    const prompt = this.alertCtrl.create({
+      title: "Are you sure you want to delete and leave this chat?",
+      buttons: [{
+        text: "Nevermind",
+        handler: ()=>{
+          cancelHandler();
+        }
+      },{
+        text: "Yes, I'm sure",
+        handler: ()=>{
+          confirmHandler();
+        }
+      }]
+    });
+
+    prompt.present();
+  }
+
   private showLoadFailurePrompt(){
-    this.alertCtrl.create({
+    const prompt = this.alertCtrl.create({
       title: "Hmm, looks like something went wrong loading your chats.",
       buttons: [{
         text: "Retry?",
@@ -83,6 +149,8 @@ export class InboxPage {
         }
       }]
     });
+
+    prompt.present();
   }
 
   private async queryChats(roomkeys: string[]): Promise<any>{

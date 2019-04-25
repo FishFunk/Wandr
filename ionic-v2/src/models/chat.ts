@@ -10,7 +10,9 @@ export class Chat implements IChat {
         public userB_photoUrl: string,
         public userB_unread: boolean,
         public lastMessage: string,
-        public timestamp: string){}
+        public timestamp: string,
+        public userA_deleted: boolean,
+        public userB_deleted: boolean){}
 }
 
 export class Message implements IMessage {
@@ -37,6 +39,8 @@ export interface IChat{
     userB_unread: boolean;
     lastMessage: string;
     timestamp: string;
+    userA_deleted: boolean;
+    userB_deleted: boolean;
 }
 
 export interface IMessage{

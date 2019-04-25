@@ -10,21 +10,19 @@
                 <p class="header-text">Chat with {{headerName}}</p>
             </ion-col>
             <ion-col col-2 class="justify-right">
-                <button *ngIf="showProfileButton" ion-button icon-only clear (click)="onClickProfile()">
+                <button *ngIf="showProfileButton" ion-button clear (click)="onClickProfile()">
                     Profile
                 </button>
             </ion-col>
         </ion-row>
     </ion-grid>
 </ion-header>
-<ion-content #messageContent id="messageContent">
-    <div padding>
-        <div #messageListItems class="message" 
-                *ngFor="let message of messages" 
-                [ngClass]="getClass(message)">
-            <div class="message-time">{{message.timestamp | date:'EEE h:mm a'}}</div>
-            <p [innerHTML]="message.text"></p>
-        </div>
+<ion-content id="messageContent" padding>
+    <div #messageListItems class="message" 
+            *ngFor="let message of messages" 
+            [ngClass]="getClass(message)">
+        <div class="message-time">{{message.timestamp | date:'EEE h:mm a'}}</div>
+        <p [innerHTML]="message.text"></p>
     </div>
 </ion-content>
 

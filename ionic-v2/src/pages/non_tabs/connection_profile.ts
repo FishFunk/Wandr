@@ -132,7 +132,9 @@ export class ConnectionProfilePage {
             userB_photoUrl: this.viewUserData.profile_img_url,
             userB_unread: true,
             lastMessage: '',
-            timestamp: new Date().getTime().toString()
+            timestamp: new Date().getTime().toString(),
+            userA_deleted: false,
+            userB_deleted: false
           };
       
           const createChat = this.firebaseFunctionsModule.functions.httpsCallable('createChat');

@@ -40,7 +40,6 @@ page-messages {
             color: color($colors, dark);
             font-size: 14px;
             font-weight: bold;
-            margin: 0px;
             width: auto;
             max-width: 75%;
             box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
@@ -53,15 +52,15 @@ page-messages {
     }
     .message.bot{
         margin: 0 auto;
-        width: 85%;
+        text-align: center;
         p {
+            margin: 0 auto;
             color: color($colors, light);
             border-radius: 11px 11px 11px 11px;
             background: color($colors, primary);
         }
         .message-time {
             color: color($colors, dark);
-            text-align: center;
             font-size: small;
         }
     }
@@ -97,5 +96,9 @@ page-messages {
             float: right;
             font-size: small;
         }
+    }
+
+    #messageContent{
+        width: 100%;
     }
 }

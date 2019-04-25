@@ -6,6 +6,7 @@ import _ from "underscore";
 import { FormBuilder } from "@angular/forms";
 import { FirestoreDbHelper } from "../../helpers/firestoreDbHelper";
 import { Constants } from "../../helpers/constants";
+import { Utils } from "../../helpers/utils";
 
 @Component({
     selector: 'profile-modal',
@@ -211,7 +212,7 @@ export class ProfileModal {
     return new Promise((resolve, reject)=>{
       this.geocoder.geocode({ location: {lat: lat, lng: lng} }, (results, status)=>{
         if(status == google.maps.GeocoderStatus.OK){
-          const formattedLocation = Utils.formatGeocoderResults(reults);
+          const formattedLocation = Utils.formatGeocoderResults(results);
           resolve(formattedLocation);
         }
         else {
