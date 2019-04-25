@@ -116,12 +116,12 @@ export class MessagesPage {
             });
     
             this.updateChatReadReceipt()
-                .catch(async error => {
-                    await this.logger.Error(error);
+                .catch(error => {
+                    this.logger.Error(error);
                 });
         } else {
-            this.logger.Error(new Error("GetMessagesObservable returned null!"));
             this.presentAlert("It's not you, it's us... something went wrong.");
+            this.logger.Error(new Error("GetMessagesObservable returned null!"));
         }
     }
 
@@ -151,10 +151,10 @@ export class MessagesPage {
                     { user: user, showChatButton: false }, 
                     { animate: true, direction: 'forward' });
             })
-            .catch(async error=>{
+            .catch(error=>{
                 loading.dismiss();
-                await this.logger.Error(error);
                 this.presentAlert(`${this.headerName} has deleted their account!`);
+                this.logger.Error(error);
             });
     }
 
@@ -203,9 +203,9 @@ export class MessagesPage {
                     this.udpateHeight();
                     //this.scrollToBottom(200);
                 })
-                .catch(async error =>{
-                    await this.logger.Error(error);
+                .catch(error =>{
                     this.presentAlert("It's not you, it's us... Message failed to send :(");
+                    this.logger.Error(error);
                 });
 
             loading.dismiss();

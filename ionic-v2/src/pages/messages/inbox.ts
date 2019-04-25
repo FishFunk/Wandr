@@ -40,8 +40,8 @@ export class InboxPage {
     this.loading.present();
     
     var user = await this.dbHelper.ReadUserByFirebaseUid(this.userId)
-      .catch(async error=>{
-        await this.logger.Error(error);
+      .catch(error=>{
+        this.logger.Error(error);
       });
     
     if(user && user.roomkeys && user.roomkeys.length > 0){
@@ -88,9 +88,9 @@ export class InboxPage {
   private async queryChats(roomkeys: string[]): Promise<any>{
 
     this.chats = await this.dbHelper.ReadUserChats(roomkeys)
-      .catch(async error=>{
-        await this.logger.Error(error);
+      .catch(error=>{
         this.showLoadFailurePrompt();
+        this.logger.Error(error);
         return Promise.resolve([]);
       });
   }
@@ -112,6 +112,10 @@ export class InboxPage {
   onClickExplore(){
     let tab = this.navCtrl.parent;
     tab.select(2);
+  }
 
+  onClickInvite(){
+    let tab = this.navCtrl.parent;
+    tab.select(3);
   }
 }

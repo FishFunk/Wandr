@@ -48,17 +48,17 @@ export class InvitePage {
     const facebookUid = window.localStorage.getItem(Constants.facebookUserIdKey);
 
     const firstConnecitons = await this.firestoreDbHelper.ReadFirstConnections(firebaseUid)
-      .catch(async error =>{
-        await this.logger.Error(error);
+      .catch(error =>{
         loading.dismiss();
+        this.logger.Error(error);
         return Promise.resolve([]);
       });
     this.firstConnectionCount = firstConnecitons.length;
 
     const secondConnecitons = await this.firestoreDbHelper.ReadSecondConnections(firebaseUid, facebookUid)
       .catch(async error =>{
-        await this.logger.Error(error);
         loading.dismiss();
+        this.logger.Error(error);
         return Promise.resolve([]);
       });
     this.secondConnectionCount = secondConnecitons.length;

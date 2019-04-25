@@ -209,30 +209,10 @@ export class ProfileModal {
   private async reverseGeocode(lat: number, lng: number): Promise<any>
   {
     return new Promise((resolve, reject)=>{
-      var country: string;
-      var locality: string;
-      var administrativeArea_1: string;
       this.geocoder.geocode({ location: {lat: lat, lng: lng} }, (results, status)=>{
         if(status == google.maps.GeocoderStatus.OK){
-            results.forEach(val=>{
-              val.address_components.forEach(comp=>{
-                if(_.indexOf(comp.types, 'administrative_area_level_1') >= 0){
-                  administrativeArea_1 = comp.long_name;
-                }
-                if (_.indexOf(comp.types, 'locality') >= 0){
-                  locality = comp.long_name;
-                }
-                if (_.indexOf(comp.types, 'country') >= 0){
-                  country = comp.short_name;
-                }
-              });
-            });
-      
-          if(country == 'US'){
-            resolve(`${locality}, ${administrativeArea_1}`);
-          } else {
-            resolve(`${locality}, ${country}`);
-          }
+          const formattedLocation = Utils.formatGeocoderResults(reults);
+          resolve(formattedLocation);
         }
         else {
           reject(new Error(`Unable to reverse geocode lat: ${lat}, lng: ${lng}`));

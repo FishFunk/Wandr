@@ -112,15 +112,10 @@ export class MapPage {
           }, 250);
         }
       })
-      .catch(async error=>{
-        spinner.dismiss();        
-        this.logger.Error(error)
-          .then(()=>{
-            this.showLoadFailurePrompt();
-          })
-          .catch(()=>{
-            this.showLoadFailurePrompt();
-          });
+      .catch(error=>{
+        spinner.dismiss();
+        this.showLoadFailurePrompt();
+        this.logger.Error(error);
       });
   }
  
@@ -162,13 +157,8 @@ export class MapPage {
       spinner.dismiss();
     } catch(ex){
       spinner.dismiss();
-      this.logger.Error(ex)
-        .then(()=>{
-          this.showLoadFailurePrompt();
-        })
-        .catch(()=>{
-          this.showLoadFailurePrompt();
-        });
+      this.showLoadFailurePrompt();
+      this.logger.Error(ex);
     }
   }
 

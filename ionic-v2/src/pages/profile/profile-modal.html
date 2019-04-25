@@ -14,11 +14,11 @@
     <ion-grid>
       <ion-row>
         <ion-col col-12>
-            <h3>Where do you live?</h3>
+            <h3>What city do you live in?</h3>
             <ion-searchbar 
               [(ngModel)]="autoComplete.input" 
               (ionInput)="updateSearchResults()" 
-              placeholder="Search for a place">
+              placeholder="ie. Sydney, Australia">
             </ion-searchbar>
             <ion-list [hidden]="autoCompleteItems.length == 0">
               <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">

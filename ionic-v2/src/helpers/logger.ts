@@ -27,41 +27,34 @@ export class Logger{
         console.warn(warn);
     }
 
-    public async Error(error: any){
+    public Error(error: any){
         console.error(error);
 
-        if(this.isError(error)){
-            var log = {
-                time: this.getTimeStamp(),
-                device: this.getDeviceInfo(),
-                name: error.name,
-                message: error.message,
-            };
+        var log = this.initLogObject();
 
-            await this.upsertLog(log, 'error');
+        if(this.isError(error)){
+            log['error_name'] = error.name;
+            log['message'] = error.message;
         } else {
-            await this.upsertLog({data : error}, 'error');
+            log['data'] = error;
         }
+
+        this.upsertLog({data : error}, 'error');
     }
 
     public Fatal(fatal: any){
         console.error(fatal);
-        var promise: Promise<any>;
+        
+        var log = this.initLogObject();
 
         if(this.isError(fatal)){
-            var log = {
-                time: this.getTimeStamp(),
-                device: this.getDeviceInfo(),
-                name: fatal.name,
-                message: fatal.message,
-            };
-
-            promise = this.upsertLog(log, 'fatal');
+            log['error_name'] = fatal.name;
+            log['message'] = fatal.message;
         } else {
-            promise = this.upsertLog({data : fatal}, 'fatal')
+            log['data'] = fatal;
         }
         
-        promise
+        this.upsertLog(log, 'fatal')
             .then(()=>{
                 this.forceClose();
             })
@@ -83,6 +76,20 @@ export class Logger{
                 }
             ]
         }).present();
+    }
+
+    private initLogObject(): any{
+        var log = {
+            user: {
+                first_name: window.localStorage.getItem(Constants.userFirstNameKey),
+                last_name: window.localStorage.getItem(Constants.userLastNameKey),
+                uid: window.localStorage.getItem(Constants.firebaseUserIdKey)
+            },
+            time: this.getTimeStamp(),
+            device: this.getDeviceInfo()
+        }
+
+        return log;
     }
 
     private upsertLog(logData: any, logLevel: string): Promise<any>{

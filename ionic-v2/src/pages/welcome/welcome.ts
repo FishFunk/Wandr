@@ -106,8 +106,8 @@ export class WelcomePage implements OnDestroy, OnInit {
             })
             .catch((error)=> {
               loadingPopup.dismiss()
-              this.logger.Error(error);
               this.presentAlert("Failed to login with Facebook");
+              this.logger.Error(error);
               // TODO: Prompt with 'retry' button?
             });
         }

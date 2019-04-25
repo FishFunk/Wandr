@@ -1,8 +1,34 @@
 import { IChat } from "../models/chat";
+import _ from 'underscore';
 declare var is; // is-js
 
 export class Utils
 {
+  public static formatGeocoderResults(data: google.maps.GeocoderResult[]){
+    var country: string;
+    var locality: string;
+    var administrativeArea_1: string;
+    data.forEach(val=>{
+      val.address_components.forEach(comp=>{
+        if(_.indexOf(comp.types, 'administrative_area_level_1') >= 0){
+          administrativeArea_1 = comp.long_name;
+        }
+        if (_.indexOf(comp.types, 'locality') >= 0){
+          locality = comp.long_name;
+        }
+        if (_.indexOf(comp.types, 'country') >= 0){
+          country = comp.short_name;
+        }
+      });
+    });
+
+    if(country == 'US'){
+      return `${locality}, ${administrativeArea_1}`;
+    } else {
+      return `${locality}, ${country}`;
+    }
+  }
+
   public static convertLinkValuesInString(plainText: string): string{
     let formattedText = plainText;
 

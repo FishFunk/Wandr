@@ -56,9 +56,9 @@ export class ContactPage {
                     this.reason = "";
                     this.navCtrl.pop();
                 })
-                .catch(async (error)=>{
+                .catch((error)=>{
                     this.presentToast("Something went wrong. Please try again.");
-                    await this.logger.Error(error);
+                    this.logger.Error(error);
                 });
         }
     }

@@ -52,10 +52,10 @@ export class ConnectionProfilePage {
             .then(()=>{
                 loading.dismiss();
             })
-            .catch(async error=>{
-                await this.logger.Error(error);
+            .catch(error=>{
                 loading.dismiss();
                 this.presentAlert("It's not you, it's us... something went wrong. Please try again!");
+                this.logger.Error(error);
             });
     }
 
@@ -150,9 +150,9 @@ export class ConnectionProfilePage {
               });
               toast.present();
             })
-            .catch(async error=>{
+            .catch(error=>{
               loading.dismiss();
-              await this.logger.Error(error);
+              this.logger.Error(error);
             });
         }
     }
@@ -220,9 +220,9 @@ export class ConnectionProfilePage {
             duration: 2000
           }).present();
         })
-        .catch(async error => {
+        .catch(error => {
           this.presentAlert("Report failed to send. Please try again.");
-          await this.logger.Error(error);
+          this.logger.Error(error);
         });
     }
 

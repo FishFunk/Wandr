@@ -20,18 +20,20 @@
         <img id="filler-img" src="../../assets/undraw/purple/undraw_mail_box_kd5i.svg">
     </div>
     <div *ngIf="chats.length == 0" class="image-container" text-center>
-        <br><br><br><br>
         <img height="200px" width="300px" src="../../assets/undraw/purple/undraw_messages1_9ah2.svg">
         <br>
         <br>
         <h2 class="headline">Your messages can be found here.</h2>
-        <br>
         <p class="subtext">
-            First explore the Wandr network and start chatting with a local!
+            Explore the Wandr network and start chatting with a local. Or invite your friends to expand your network!
         </p>
         <br>
         <button ion-button square outline color="secondary" margin-top (click)="onClickExplore()" margin-top>
-            <span style="color:secondary;font-size:12pt;font-weight:lighter;">Explore</span>
+            Explore
+        </button>
+        &nbsp;
+        <button ion-button square outline color="secondary" margin-top (click)="onClickInvite()" margin-top>
+            Invite
         </button>
     </div>
 </ion-content>
