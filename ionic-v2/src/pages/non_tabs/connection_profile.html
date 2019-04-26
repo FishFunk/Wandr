@@ -89,11 +89,14 @@
                         <span>Send Message</span>
                     </div>
                 </button>
-                <button *ngIf="chatExists" ion-button square outline large color="secondary" (click)="onClickGoToChat()">
-                    <div>
-                        <span>Go To Chat</span>
-                    </div>
-                </button>
+                <div *ngIf="chatExists">
+                    <button *ngIf="!showJoinBtn" ion-button square outline large color="secondary" (click)="onClickGoToChat()">
+                        <span>View Chat</span>
+                    </button>
+                    <button *ngIf="showJoinBtn" ion-button square outline large color="secondary" (click)="onClickRejoinChat()">
+                        <span>Rejoin Chat</span>
+                    </button>
+                </div>
             </ion-col>
         </ion-row>
     </ion-grid>

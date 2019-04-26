@@ -74,8 +74,8 @@ export class InboxPage {
       let messageData = {};
       messageData[dateInMillis] = <IMessage> {
           roomkey: chat.roomkey,
-          to_uid: isUserA ? chat.userB_id : chat.userA_id,
-          from_uid: Constants.appBotId, 
+          to_uid: '', // Leave ID blank so notification isn't triggered
+          from_uid: '', // Leave ID blank so message gets styled correctly
           name: 'Wandr Bot', 
           text: message, 
           timestamp: dateInMillis
@@ -84,11 +84,13 @@ export class InboxPage {
       // Update chat summary
       let chatUpdate = <IChat> {
           lastMessage: message,
-          timestamp: dateInMillis,
-          userA_unread: !isUserA,
-          userB_unread: isUserA,
-          userA_deleted: isUserA,
-          userB_deleted: !isUserA
+          timestamp: dateInMillis
+      }
+
+      if(isUserA){
+        chatUpdate.userA_deleted = true;
+      } else {
+        chatUpdate.userB_deleted = true;
       }
 
       const new_roomkeys = this.user_roomkeys.filter((key)=>{

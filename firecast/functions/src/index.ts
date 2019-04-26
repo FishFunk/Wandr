@@ -89,7 +89,9 @@ exports.newMessageNotification =
             const newMessage = messages[latestMessageKey];
             const idToNotify = newMessage.to_uid;
 
-            return _sendNotificationToId(idToNotify, `New message from ${newMessage.name}!`, newMessage.text);
+            if(idToNotify){
+                return _sendNotificationToId(idToNotify, `New message from ${newMessage.name}!`, newMessage.text);
+            }
         });
 
 exports.createChat = functions.https.onCall((chatData, context) => {

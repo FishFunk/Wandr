@@ -65,8 +65,8 @@ export class IntroPage {
     }
     else {
       // DEBUG/Browser Mode
-      window.localStorage.setItem(Constants.facebookUserIdKey, "00001");
-      window.localStorage.setItem(Constants.firebaseUserIdKey, "XkS98bzJM1co7vpyBlKGUpPgd2Q2");
+      window.localStorage.setItem(Constants.facebookUserIdKey, "10212312262992697");
+      window.localStorage.setItem(Constants.firebaseUserIdKey, "SlQA4Yz8Pwhuv15d6ygmdo284UF2");
       // this.presentAlert('cordova is not available.');
       this.next();
     }

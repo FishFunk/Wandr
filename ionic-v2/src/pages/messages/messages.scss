@@ -98,6 +98,21 @@ page-messages {
         }
     }
 
+    .message.other{
+        margin: 0 auto;
+        text-align: center;
+        p {
+            box-shadow: none;
+            margin: 10px auto;
+            color: color($colors, myGrey);
+            font-size: 12px;
+            font-style: italic;
+        }
+        .message-time {
+            display: none;
+        }
+    }
+
     #messageContent{
         width: 100%;
     }

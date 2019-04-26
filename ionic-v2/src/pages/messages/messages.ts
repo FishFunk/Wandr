@@ -160,6 +160,11 @@ export class MessagesPage {
 
     async sendMessage() {
 
+        if(this.chat.userB_deleted || this.chat.userA_deleted){
+            this.presentAlert("Chat room only has one user. Messaging is disabled.");
+            return;
+        }
+
         var trimmedText = this.message.trim();
         if (trimmedText.length > 0){
             let formattedText = trimmedText;
@@ -218,10 +223,20 @@ export class MessagesPage {
     }
  
     getClass(message){
+        // Generated message
         if(message.from_uid == Constants.appBotId){
             return 'bot';
         }
-        return this.uid == message.from_uid  ? 'outgoing' : 'incoming';
+        // Current user sent message
+        if(this.uid == message.from_uid){
+            return 'outgoing';
+        }
+        // Current user received message
+        if(this.uid == message.to_uid){
+            return 'incoming';
+        }
+
+        return 'other';
     }
 
     udpateHeight()

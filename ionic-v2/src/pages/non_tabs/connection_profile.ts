@@ -3,11 +3,12 @@ import { LoadingController, NavParams, ToastController, NavController, AlertCont
 import { IUser, IFacebookFriend } from '../../models/user';
 import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
-import { IChat } from '../../models/chat';
+import { IChat, IMessage } from '../../models/chat';
 import { AngularFireFunctions } from 'angularfire2/functions';
 import { MessagesPage } from '../messages/messages';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Logger } from '../../helpers/logger';
+import { InboxPage } from '../messages/inbox';
  
 @Component({
   selector: 'page-connection-profile',
@@ -21,8 +22,10 @@ export class ConnectionProfilePage {
     viewUserData: IUser;
     mutualFriends: IUser[] = [];
     showChatButton: boolean;
-    chatExists: boolean;
     chatData: IChat;
+
+    chatExists: boolean = false;
+    showJoinBtn: boolean = false;
 
     constructor(
         params: NavParams,
@@ -60,17 +63,24 @@ export class ConnectionProfilePage {
     }
 
     async loadView(){
-      const doesExist = await this._checkIfChatExists();
+      if(this.showChatButton){
+        this.chatExists = await this._checkIfChatExists();
 
-      if(doesExist){
-        // Chat with roomkey already exists, update UI button and verify user has roomkey
-        this.chatExists = true;
-        await this._verifyUserHasRoomkey()
-          .catch(error =>{
-            return Promise.reject(error);
-          });
-      } else {
-          this.chatExists = false;
+        if(this.chatExists){
+          // Chat with roomkey already exists, update UI button and verify user has roomkey
+          if(
+            (this.currentUserId == this.chatData.userA_id && this.chatData.userA_deleted) ||
+            (this.currentUserId == this.chatData.userB_id && this.chatData.userB_deleted)){
+            // Current user has deleted this chat. Show action button to re-join chat.
+            this.showJoinBtn = true;
+          } else {
+            this.showJoinBtn = false;
+            await this._verifyUserHasRoomkey()
+              .catch(error =>{
+                return Promise.reject(error);
+              });
+          }
+        }
       }
 
       await this.readMutualConnectionInfo();
@@ -93,10 +103,48 @@ export class ConnectionProfilePage {
       this.presentConfirmation();
     }
 
-    onClickGoToChat(){
+    async onClickGoToChat(){
+      // TODO: Nav to tab first?
       this.navCtrl.push(MessagesPage, 
         { chat: this.chatData, showProfileButton: false }, 
         { animate: true, direction: 'forward' });
+    }
+
+    async onClickRejoinChat(){
+      let isUserA = this.currentUserId == this.chatData.userA_id;
+      let message = `${isUserA ? this.chatData.userA_name : this.chatData.userB_name} has joined the chat.`;
+      let dateInMillis = new Date().getTime().toString();
+
+      let messageData = {};
+      messageData[dateInMillis] = <IMessage> {
+          roomkey: this.chatData.roomkey,
+          to_uid: '', // Leave ID blank so notification isn't triggered
+          from_uid: '', // Leave ID blank so message gets styled correctly
+          name: 'Wandr Bot', 
+          text: message, 
+          timestamp: dateInMillis
+      }
+
+      // Update chat summary
+      let chatUpdate = <IChat> {
+          lastMessage: message,
+          timestamp: dateInMillis
+      }
+
+      if(isUserA){
+        chatUpdate.userA_deleted = false;
+      } else {
+        chatUpdate.userB_deleted = false;
+      }
+
+      await this._verifyUserHasRoomkey();
+
+      await this.dbHelper.SendMessage(this.chatData.roomkey, messageData, chatUpdate)
+        .catch(error => this.logger.Error(error));
+
+      this.showJoinBtn = false;
+
+      this.onClickGoToChat();
     }
 
     onClickSendMessage(){
@@ -186,7 +234,7 @@ export class ConnectionProfilePage {
         const user = await this.dbHelper.ReadUserByFirebaseUid(this.currentUserId);
 
         if(!_.contains(user.roomkeys, this.chatData.roomkey)){
-          this.logger.Warn(`Roomkey exists but ${this.currentUserId} does not have it! Updating user roomkeys...`);
+          //this.logger.Warn(`Roomkey exists but ${this.currentUserId} does not have it! Updating user roomkeys...`);
           user.roomkeys.push(this.chatData.roomkey);
           await this.dbHelper.UpdateUser(this.currentUserId, { roomkeys: user.roomkeys });
         }
