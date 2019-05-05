@@ -5,6 +5,7 @@ page-profile {
     right: 0;
     top: 0;
     padding: 20px 20px 0 0;
+    color: color($colors, secondary);
   }
 
   .far{
@@ -24,11 +25,11 @@ page-profile {
     border-radius: 50%;
   }
 
-  h3{
-    padding-top: 10px;
-    font-size: 18px;
-    color: color($colors, myGrey);
-  }
+  // h3{
+  //   padding-top: 10px;
+  //   font-size: 18px;
+  //   color: color($colors, myGrey);
+  // }
 
   .subtext{
     padding-top: 2px;

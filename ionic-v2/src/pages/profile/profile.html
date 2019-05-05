@@ -1,7 +1,8 @@
 <ion-content padding>
     <br>
+    <br>
     <div id="edit-button">
-        <button ion-button icon-only clear (click)="onClickEdit()">
+        <button color ="primary" ion-button icon-only clear (click)="onClickEdit()">
             <i class="far fa-edit"></i>
         </button>
     </div>
@@ -25,40 +26,67 @@
             </ion-col>
         </ion-row>
     </ion-grid>
-    <br>
-    <br>
     <ion-grid>
       <ion-row>
-        <ion-col col-12>
-            <h3 *ngIf="userData.bio && userData.bio.length > 0">About</h3>
-            <p>{{userData.bio}}</p>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col col-12>
+        <ion-col col-18>
           <ion-grid no-padding>
-              <h3 *ngIf="userData.interests && userData.interests.length > 0">Interests</h3>
-              <ion-row>
-                  <ion-col *ngFor="let item of userData.interests">
-                    <i [class]="item.iconClass"></i>
-                    <p>{{item.label}}</p>
-                  </ion-col>
-              </ion-row>
+              <ion-card padding box-shadow margin-bottom>
+                <h3 *ngIf="userData.interests && userData.interests.length > 0">INTERESTS</h3>
+                <br>
+                <ion-row>
+                    <ion-col *ngFor="let item of userData.interests">
+                        <i [class]="item.iconClass" style="font-size:16px"></i>&nbsp;&nbsp;<span style="font-size: 12px">Yes</span>
+                    </ion-col>
+                </ion-row>
+                <br>
+                <h3 *ngIf="userData.lifestyle && userData.lifestyle.length > 0">LIFESTYLE</h3>
+                <br>
+                <ion-row>
+                    <ion-col *ngFor="let item of userData.lifestyle">
+                        <i [class]="item.iconClass" style="font-size:16px"></i>&nbsp;&nbsp;<span style="font-size: 12px">Yes</span>
+                    </ion-col>
+                </ion-row>
+                <br>
+                <ion-row>
+                    <ion-col>
+                        <h3 *ngIf="userData.bio && userData.bio.length > 0">ABOUT</h3>
+                        <br>
+                    <span>{{userData.bio}}</span>
+                    </ion-col>
+                </ion-row>
+            </ion-card>
           </ion-grid>
         </ion-col>
       </ion-row>
-      <ion-row>
-        <ion-col col-12>
+      <!-- <ion-row>
+        <ion-col col-18>
+            <ion-grid no-padding>
+                    <ion-card  padding box-shadow margin-bottom>
+                        <h3 *ngIf="userData.interests && userData.interests.length > 0">INTERESTS</h3>
+                        <ion-row>
+                            <ion-col *ngFor="let item of userData.interests">
+                                <i [class]="item.iconClass" style="font-size:16px"></i>
+
+                            </ion-col>
+                        </ion-row>
+                    </ion-card>
+                </ion-grid>
+            
           <ion-grid no-padding>
-              <h3 *ngIf="userData.lifestyle && userData.lifestyle.length > 0">Lifestyle</h3>
+              <h3 *ngIf="userData.lifestyle && userData.lifestyle.length > 0">LIFESTYLE</h3>
               <ion-row>
                   <ion-col *ngFor="let item of userData.lifestyle">
-                    <i [class]="item.iconClass"></i>
-                    <p>{{item.label}}</p>
+                    <i [class]="item.iconClass" style="font-size:16px"></i>
                   </ion-col>
               </ion-row>
           </ion-grid>
         </ion-col>
-      </ion-row>
+      </ion-row> -->
+      <!-- <ion-row>
+        <ion-col col-12>
+            <h3 *ngIf="userData.bio && userData.bio.length > 0">ABOUT</h3>
+            <p>{{userData.bio}}</p>
+        </ion-col>
+      </ion-row> -->
     </ion-grid>
 </ion-content>

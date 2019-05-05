@@ -38,7 +38,6 @@
     "@types/underscore": "^1.8.9",
     "angularfire2": "^5.1.1",
     "cordova-android": "~7.1.4",
-    "cordova-ios": "~4.5.5",
     "cordova-plugin-add-swift-support": "^1.7.1",
     "cordova-plugin-badge": "^0.8.8",
     "cordova-plugin-contacts": "^3.0.1",
@@ -62,7 +61,8 @@
     "rxjs-compat": "^6.3.3",
     "sw-toolbox": "^3.6.0",
     "underscore": "^1.9.1",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "cordova-ios": "~4.5.5"
   },
   "devDependencies": {
     "@angular-devkit/build-optimizer": "^0.0.24",

@@ -207,8 +207,7 @@ export class ProfileModal {
     });
   }
 
-  private async reverseGeocode(lat: number, lng: number): Promise<any>
-  {
+  private async reverseGeocode(lat: number, lng: number): Promise<any>{
     return new Promise((resolve, reject)=>{
       this.geocoder.geocode({ location: {lat: lat, lng: lng} }, (results, status)=>{
         if(status == google.maps.GeocoderStatus.OK){
@@ -220,5 +219,10 @@ export class ProfileModal {
         }
       });
     });
+  }
+
+
+  private close(){
+    this.viewCtrl.dismiss();
   }
 }

@@ -9,8 +9,11 @@ page-intro {
       }
         
       #facebook-logo{
-        font-size: 1.2em;
+        font-size: 1.5em;
       }
+      .fb{
+        background-image: linear-gradient(to right, #6700a9, #7209b6, #7d13c3, #891bd0, #9422dd);
+    }
       
       // .swiper-pagination-bullet-active {
       //   background: color($colors, secondary);
@@ -81,5 +84,7 @@ page-intro {
         animation-name: fadeInUp;
         -webkit-animation-name: fadeInUp;
     }
+
+    
 
 }

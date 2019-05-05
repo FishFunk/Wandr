@@ -5,7 +5,47 @@ https://www.rgbtohex.net/
 
 myTeal: #1ABC9C
 myGrey: #C0C0B5
-myDarkPurple: #800040
+
+
+  primary:  #1ABC9C,
+  secondary:  #6700a9,
 
 myTeal: #{'background-image': 'linear-gradient(to top, #b4d4ba, #cbd7ba, #dfdac0, #eedecc, #f7e3da)'}"
 
+
+.btn {
+	background-image: linear-gradient(to right, #006175 0%, #00a950 100%);
+	border-radius: 40px;
+  box-sizing: border-box;
+	color: #00a84f;
+	display: block;
+	font: 1.125rem 'Oswald', Arial, sans-serif; /*18*/
+	height: 80px;
+	letter-spacing: 1px;
+	margin: 0 auto;
+	padding: 4px;
+	position: relative;
+  text-decoration: none;
+	text-transform: uppercase;
+	width: 264px;
+	z-index: 2;
+}
+
+.btn:hover {
+	color: #fff;
+}
+
+.btn span {
+	align-items: center;
+	background: #e7e8e9;
+	border-radius: 40px;
+	display: flex;
+	justify-content: center;
+	height: 100%;
+	transition: background .5s ease;
+	width: 100%;
+}
+
+.btn:hover span {
+	background: transparent;
+}
