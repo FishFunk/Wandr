@@ -8,7 +8,6 @@ import { AngularFireFunctions } from 'angularfire2/functions';
 import { MessagesPage } from '../messages/messages';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Logger } from '../../helpers/logger';
-import { InboxPage } from '../messages/inbox';
  
 @Component({
   selector: 'page-connection-profile',
@@ -27,6 +26,8 @@ export class ConnectionProfilePage {
     chatExists: boolean = false;
     showJoinBtn: boolean = false;
 
+    createChatFunction: firebase.functions.HttpsCallable;
+
     constructor(
         params: NavParams,
         private logger: Logger,
@@ -41,6 +42,10 @@ export class ConnectionProfilePage {
         this.viewUserData = params.get('user');
         this.showChatButton = params.get('showChatButton');
         this.currentUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
+        this.createChatFunction = this.firebaseFunctionsModule.functions.httpsCallable('createChat');
+
+        // Run function with no data to wake up
+        this.createChatFunction();
     }
 
     ionViewDidLoad(){
@@ -185,9 +190,8 @@ export class ConnectionProfilePage {
             userB_deleted: false
           };
       
-          const createChat = this.firebaseFunctionsModule.functions.httpsCallable('createChat');
           
-          createChat(data)
+          this.createChatFunction(data)
             .then((result)=>{
               this.chatData = result.data;
               this.chatExists = true;

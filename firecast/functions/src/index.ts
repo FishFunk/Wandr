@@ -96,15 +96,20 @@ exports.newMessageNotification =
 
 exports.createChat = functions.https.onCall((chatData, context) => {
 
-    chatData.lastMessage = `Hey ${chatData.userB_name}! Looks like you and ${chatData.userA_name} have a network connection! You can now message each other here!\n\n- Wandr Team`;
+    if(chatData){
+        chatData.lastMessage = `Hey ${chatData.userB_name}! Looks like you and ${chatData.userA_name} have a network connection! You can now message each other here!\n\n- Wandr Team`;
 
-    return _createChatRoom(chatData)
-        .then(()=>{
-            return chatData;
-        })
-        .catch(error => {
-            throw error;
-        });
+        return _createChatRoom(chatData)
+            .then(()=>{
+                return chatData;
+            })
+            .catch(error => {
+                throw error;
+            });
+    } else {
+        console.trace("createChat ran without any params");
+        return Promise.resolve();
+    }
 });
 
 async function _createChatRoom(chatData: any){
