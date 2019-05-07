@@ -60,7 +60,7 @@ export class ConnectionProfilePage {
 
         this.loadView()
             .then(()=>{
-                loading.dismiss();
+              loading.dismiss();
             })
             .catch(error=>{
                 loading.dismiss();

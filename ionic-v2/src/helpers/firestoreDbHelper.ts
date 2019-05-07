@@ -5,6 +5,7 @@ import { AngularFirestore } from "angularfire2/firestore";
 import { IChat } from "../models/chat";
 import { firestore } from "firebase";
 import { Observable } from "rxjs";
+import { query } from "@angular/core/src/render3";
 
 @Injectable()
 export class FirestoreDbHelper {
@@ -60,11 +61,14 @@ export class FirestoreDbHelper {
       });
       
       var users = [];
-      const snapshots = await Promise.all(snapshotPromises);
-      snapshots.forEach(querySnapshot=>{
-        querySnapshot.docs.forEach(docSnapshot=>{
-          const temp = <IUser> docSnapshot.data()
-          users.push(temp);
+      const querySnapshots = await Promise.all(snapshotPromises);
+
+      querySnapshots.forEach(snapshot=>{
+        snapshot.forEach(result=>{
+          if(result.exists){
+            const temp = <IUser> result.data()
+            users.push(temp);
+          }
         });
       });
 

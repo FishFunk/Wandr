@@ -20,18 +20,18 @@
         <div *ngIf="firstConnections.length > 0">
             <ion-item-divider>
                 <ion-label>
-                1st Degree Connections
+                    1st Degree Connections
                 </ion-label>
             </ion-item-divider>
             <ion-item *ngFor="let user of firstConnections" (click)="onClickProfile(user)">
                 <ion-thumbnail item-start>
                     <img [src]="user.profile_img_url">               
                 </ion-thumbnail>
-                <ion-label>
-                    <h2>{{user.first_name}}</h2>
-                    <h3>Mutual friends: {{countMutualFriends(user)}}</h3>
-                    <h3>{{user.bio}}</h3>
-                </ion-label>
+                <div class="line-height">
+                    <p class="name">{{user.first_name}}</p>
+                    <p class="subtext">Mutual friends: {{countMutualFriends(user)}}</p>
+                    <p class="subtext">{{user.bio}}</p>
+                </div>
             </ion-item>
         </div>
         <div *ngIf="secondConnections.length > 0">
@@ -44,11 +44,11 @@
                 <ion-thumbnail item-start>
                     <img [src]="user.profile_img_url">               
                 </ion-thumbnail>
-                <ion-label>
-                    <h2>{{user.first_name}}</h2>
-                    <h3>Mutual friends: {{countMutualFriends(user)}}</h3>
-                    <h3>{{user.bio}}</h3>
-                </ion-label>
+                <div class="line-height">
+                    <p class="name">{{user.first_name}}</p>
+                    <p class="subtext">Mutual friends: {{countMutualFriends(user)}}</p>
+                    <p class="subtext">{{user.bio}}</p>
+                </div>
             </ion-item>
         </div>  
         <div *ngIf="otherConnections.length > 0">
@@ -61,10 +61,10 @@
                 <ion-thumbnail item-start>
                     <img [src]="user.profile_img_url">                                   
                 </ion-thumbnail>
-                <ion-label>
-                    <h2>{{user.first_name}}</h2>
-                    <h3>{{user.bio}}</h3>
-                </ion-label>
+                <div class="line-height">
+                    <p class="name">{{user.first_name}}</p>
+                    <p class="subtext">{{user.bio}}</p>
+                </div>
             </ion-item>
         </div>
     </ion-list>

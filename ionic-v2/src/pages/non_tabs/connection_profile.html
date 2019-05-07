@@ -33,8 +33,6 @@
         </ion-row>
     </ion-grid>
     <br>
-    <br>
-
     <ion-card padding box-shadow margin-bottom>
         <ion-grid>
             <h3>INTERESTS</h3>
@@ -68,11 +66,10 @@
                 <ion-col col-12>
                     <ion-grid no-padding>
                         <h3>MUTUAL FRIENDS</h3>
+                        <br>
                         <ion-row>
-                            <ion-col *ngFor="let user of mutualFriends">
-                                <ion-avatar>
-                                    <img [src]="user.profile_img_url">
-                                </ion-avatar>
+                            <ion-col class="mutual-friend" *ngFor="let user of mutualFriends" col-4>
+                                <img [src]="user.profile_img_url">
                                 <label>{{user.first_name}} {{user.last_name}}</label>
                             </ion-col>
                         </ion-row>
