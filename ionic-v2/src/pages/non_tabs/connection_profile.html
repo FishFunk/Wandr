@@ -34,70 +34,69 @@
     </ion-grid>
     <br>
     <br>
-    <ion-grid>
-        <ion-row *ngIf="viewUserData.bio">
-            <ion-col col-12>
-                <h3>ABOUT</h3>
-                <p>{{viewUserData.bio}}</p>
-            </ion-col>
-        </ion-row>
-        <ion-row *ngIf="viewUserData.interests && viewUserData.interests.length > 0">
-            <ion-col col-12>
-                <ion-grid no-padding>
-                    <h3>INTERESTS</h3>
-                    <ion-row>
-                        <ion-col *ngFor="let item of viewUserData.interests">
-                        <i [class]="item.iconClass"></i>
-                        <p>{{item.label}}</p>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </ion-col>
-        </ion-row>
-        <ion-row *ngIf="viewUserData.lifestyle && viewUserData.lifestyle.length > 0">
-            <ion-col col-12>
-                <ion-grid no-padding>
-                    <h3>LIFESTYLE</h3>
-                    <ion-row>
-                        <ion-col *ngFor="let item of viewUserData.lifestyle">
-                            <i [class]="item.iconClass"></i>
-                            <p>{{item.label}}</p>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </ion-col>
-        </ion-row>
-        <ion-row *ngIf="mutualFriends && mutualFriends.length > 0">
-            <ion-col col-12>
-                <ion-grid no-padding>
-                    <h3>MUTUAL FRIENDS</h3>
-                    <ion-row>
-                        <ion-col *ngFor="let user of mutualFriends">
-                            <ion-avatar>
-                                <img [src]="user.profile_img_url">
-                            </ion-avatar>
-                            <label>{{user.first_name}} {{user.last_name}}</label>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </ion-col>
-        </ion-row>
-        <ion-row *ngIf="showChatButton">
-            <ion-col col-12 text-center>
-                <button *ngIf="!chatExists" ion-button square outline large color="secondary" (click)="onClickSendMessage()">
-                    <div>
-                        <span>Send Message</span>
+
+    <ion-card padding box-shadow margin-bottom>
+        <ion-grid>
+            <h3>INTERESTS</h3>
+            <br>
+            <ion-row>
+                <ion-col *ngFor="let item of userInterests">
+                    <i [class]="item.iconClass"></i>&nbsp;&nbsp;
+                    <span *ngIf="item.checked">Yes</span>
+                    <span *ngIf="!item.checked">No</span>
+                </ion-col>
+            </ion-row>
+            <br>
+            <h3>LIFESTYLE</h3>
+            <br>
+            <ion-row>
+                <ion-col *ngFor="let item of lifestyleOptions">
+                    <i [class]="item.iconClass"></i>&nbsp;&nbsp;
+                    <span *ngIf="item.checked">Yes</span>
+                    <span *ngIf="!item.checked">No</span>
+                </ion-col>
+            </ion-row>
+            <br>
+            <ion-row *ngIf="viewUserData.bio && viewUserData.bio.length > 0">
+                <ion-col>
+                    <h3>ABOUT</h3>
+                    <br>
+                    <p class="bio">{{viewUserData.bio}}</p>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="mutualFriends && mutualFriends.length > 0">
+                <ion-col col-12>
+                    <ion-grid no-padding>
+                        <h3>MUTUAL FRIENDS</h3>
+                        <ion-row>
+                            <ion-col *ngFor="let user of mutualFriends">
+                                <ion-avatar>
+                                    <img [src]="user.profile_img_url">
+                                </ion-avatar>
+                                <label>{{user.first_name}} {{user.last_name}}</label>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showChatButton">
+                <ion-col col-12 text-center>
+                    <br>
+                    <button *ngIf="!chatExists" ion-button square outline large color="secondary" (click)="onClickSendMessage()">
+                        <div>
+                            <span>Send Message</span>
+                        </div>
+                    </button>
+                    <div *ngIf="chatExists">
+                        <button *ngIf="!showJoinBtn" ion-button square outline large color="secondary" (click)="onClickGoToChat()">
+                            <span>View Chat</span>
+                        </button>
+                        <button *ngIf="showJoinBtn" ion-button square outline large color="secondary" (click)="onClickRejoinChat()">
+                            <span>Rejoin Chat</span>
+                        </button>
                     </div>
-                </button>
-                <div *ngIf="chatExists">
-                    <button *ngIf="!showJoinBtn" ion-button square outline large color="secondary" (click)="onClickGoToChat()">
-                        <span>View Chat</span>
-                    </button>
-                    <button *ngIf="showJoinBtn" ion-button square outline large color="secondary" (click)="onClickRejoinChat()">
-                        <span>Rejoin Chat</span>
-                    </button>
-                </div>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card>
 </ion-content>    

@@ -1,4 +1,10 @@
 page-connection-profile{
+
+    // Option icons
+    .fas {
+        font-size: 20px;
+    }
+
     #profile-img {
         width:100%;
         height:100%;
@@ -8,6 +14,10 @@ page-connection-profile{
         // border-style: solid;
         // --border-color: color($colors, dark);
         border-radius: 50%;
+    }
+
+    .bio{
+        color: black;
     }
 
     .subtext{
