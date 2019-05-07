@@ -10,7 +10,6 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { IntroPage } from '../pages/intro/intro';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { FacebookApi } from '../helpers/facebookApi';
-import { AngularFireFunctions } from 'angularfire2/functions';
 
 declare var google; // Declare global 'google' variable
 
@@ -28,8 +27,7 @@ export class MyApp {
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
     private keyboard: Keyboard,
-    private facebookApi: FacebookApi,
-    private firebaseFunctionsModule: AngularFireFunctions) {
+    private facebookApi: FacebookApi) {
       this.initializeApp();
   }
 
@@ -74,8 +72,8 @@ public readonly firebaseInitOptions: any = {
 
         if(this.platform.is('cordova')){
           // Run function with no data to wake up          
-          const createChatFunction = this.firebaseFunctionsModule.functions.httpsCallable('createChat');
-          createChatFunction();
+          //const createChatFunction = this.firebaseFunctionsModule.functions.httpsCallable('createChat');
+          //createChatFunction();
 
           this.facebookApi.facebookLoginStatus()
           .then((statusResponse)=>{

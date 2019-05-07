@@ -107,7 +107,9 @@ exports.createChat = functions.https.onCall((chatData, context) => {
                 throw error;
             });
     } else {
+        // Wake-up function
         console.trace("createChat ran without any params");
+        admin.firestore().collection('chats').limit(1).get();
         return Promise.resolve();
     }
 });

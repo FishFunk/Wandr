@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, LoadingController, ToastController, Platform, App, ModalController, Events } from 'ionic-angular';
-import { Location, User, IUser } from '../../models/user';
+import { Location, User, IUser, ICheckboxOption } from '../../models/user';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
@@ -16,6 +16,9 @@ import { Utils } from '../../helpers/utils';
   templateUrl: 'profile.html'
 })
 export class ProfilePage {
+  userInterests: ICheckboxOption[] = [];
+  lifestyleOptions: ICheckboxOption[] = [];
+
   userData: IUser = new User('','','','', '',
     new Location(),[],[],'','', '', { notifications: true }, []);
   loadingPopup;
@@ -48,6 +51,9 @@ export class ProfilePage {
     this.showLoadingPopup();
 
     try{
+      this.userInterests = await this.firestoreDbHelper.ReadMetadata<ICheckboxOption[]>('user_interests');
+      this.lifestyleOptions = await this.firestoreDbHelper.ReadMetadata<ICheckboxOption[]>('user_lifestyle');
+
       if(this.platform.is('cordova')){
         var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
         var facebookUid = window.localStorage.getItem(Constants.facebookUserIdKey);
@@ -132,9 +138,16 @@ export class ProfilePage {
         await this.writeUserDataToDb();
       } else {
         // ionic serve path
-        const uid = 'XkS98bzJM1co7vpyBlKGUpPgd2Q2'; // Johnny Appleseed
+        const uid = 'HN7yxROvzXhuoP80arDDmmmQUAj1'; // Johnny Appleseed
+        window.localStorage.setItem(Constants.firebaseUserIdKey, uid);
         this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(uid, false);
+        window.localStorage.setItem(Constants.userFirstNameKey, this.userData.first_name);
+        window.localStorage.setItem(Constants.userLastNameKey, this.userData.last_name);
+        window.localStorage.setItem(Constants.profileImageUrlKey, this.userData.profile_img_url);
+        window.localStorage.setItem(Constants.userFacebookFriendsKey, JSON.stringify(this.userData.friends));
       }
+ 
+      this.renderUserOptions();
 
       this.loadingPopup.dismiss();
     }
@@ -152,6 +165,7 @@ export class ProfilePage {
   private async reloadUser(){
     var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid, false);
+    this.renderUserOptions();
   }
 
   private async extractLocationAndGeoData(location: string){
@@ -175,6 +189,34 @@ export class ProfilePage {
   private writeUserDataToDb(): Promise<any>{
     const updateData = this.getPlainUserObject();
     return this.firestoreDbHelper.UpdateUser(this.userData.app_uid, updateData);
+  }
+
+  private renderUserOptions(){
+    if(this.userData.interests){
+      this.userInterests.forEach(userOption=>{
+        const match = _.find(this.userData.interests, (checked)=>{
+          return userOption.label === checked.label;
+        });
+        if(match){
+          userOption['checked'] = true;
+        } else {
+          userOption['checked'] = false;
+        }
+      });
+    }
+
+    if(this.userData.lifestyle){
+      this.lifestyleOptions.forEach(userOption=>{
+        const match = _.find(this.userData.lifestyle, (checked)=>{
+          return userOption.label === checked.label;
+        });
+        if(match){
+          userOption['checked'] = true;
+        } else {
+          userOption['checked'] = false;
+        }
+      });
+    }
   }
 
   private async forwardGeocode(formattedLocation: string): Promise<any>

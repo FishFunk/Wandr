@@ -1,5 +1,9 @@
 page-profile {
 
+  .fas{
+    font-size: 16px;
+  }
+
   #edit-button{
     position: absolute;
     right: 0;
@@ -25,11 +29,9 @@ page-profile {
     border-radius: 50%;
   }
 
-  // h3{
-  //   padding-top: 10px;
-  //   font-size: 18px;
-  //   color: color($colors, myGrey);
-  // }
+  .bio{
+    color: black;
+  }
 
   .subtext{
     padding-top: 2px;
