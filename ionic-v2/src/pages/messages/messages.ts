@@ -206,7 +206,7 @@ export class MessagesPage {
 
             await this.firestoreDbHelper.SendMessage(this.chat.roomkey, data, chatUpdate)
                 .then(()=>{
-                    this.udpateHeight();
+                    this.updateHeight();
                     //this.scrollToBottom(200);
                 })
                 .catch(error =>{
@@ -239,7 +239,7 @@ export class MessagesPage {
         return 'other';
     }
 
-    udpateHeight()
+    updateHeight()
     {
         this.textarea.nativeElement.style.height = this.initialTextareaScrollHeight+"px";
         this.textarea.nativeElement.style.height = (this.textarea.nativeElement.scrollHeight)+"px";

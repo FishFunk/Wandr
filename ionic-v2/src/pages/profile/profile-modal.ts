@@ -1,4 +1,4 @@
-import { Component, NgZone } from "@angular/core";
+import { Component, NgZone, ViewChild, ElementRef } from "@angular/core";
 import { ViewController, NavParams, LoadingController, AlertController, Events } from "ionic-angular";
 import { IUser, User, Location } from '../../models/user';
 import { ICheckboxOption } from '../../models/metadata';
@@ -15,6 +15,8 @@ import { Utils } from "../../helpers/utils";
   })
 
 export class ProfileModal {
+  @ViewChild('textInput') textarea: ElementRef;
+  initialTextareaScrollHeight: number;
 
   userData: IUser = new User('','','','', '',
     new Location(),[],[],'','', '', { notifications: true }, []);
@@ -76,6 +78,10 @@ export class ProfileModal {
     loader.dismiss();
   }
 
+  ionViewWillEnter(){
+    this.initialTextareaScrollHeight = this.textarea.nativeElement.scrollHeight;
+  }
+
   async onClickSave(){
     const loader = this.createLoadingPopup();
     loader.present();
@@ -107,6 +113,12 @@ export class ProfileModal {
   selectSearchResult(item){
     this.autoComplete.input = item.description;
     this.autoCompleteItems = [];
+  }
+
+  updateHeight()
+  {
+      this.textarea.nativeElement.style.height = this.initialTextareaScrollHeight+"px";
+      this.textarea.nativeElement.style.height = (this.textarea.nativeElement.scrollHeight)+"px";
   }
   //******* end Bound Elements ***** //
 

@@ -54,9 +54,16 @@
                 </ion-col>
               </ion-row>
               <ion-row>
-                  <ion-col>
+                  <ion-col col-12>
                     <h3>ABOUT</h3>
-                    <ion-textarea [(ngModel)]="userData.bio"></ion-textarea>
+                    <textarea #textInput
+                      [(ngModel)]="userData.bio" 
+                      (input)="updateHeight()"
+                      spellcheck="true"
+                      autoComplete="true" 
+                      autocorrect="true"  
+                      placeholder="A bit about yourself and your travels...">
+                    </textarea>
                   </ion-col>
               </ion-row>
 
