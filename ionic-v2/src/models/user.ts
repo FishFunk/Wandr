@@ -1,3 +1,5 @@
+import { ICheckboxOption } from "./metadata";
+
 export interface IUser{
     app_uid: string; 
     facebook_uid: string;
@@ -31,11 +33,6 @@ export interface IMutualConnectionInfo {
     profile_img_url: string;
 }
 
-export interface ICheckboxOption{
-    label: string,
-    iconClass: string
-}
-
 export interface IFacebookFriend{
     name: string;
     id: string;
@@ -43,8 +40,6 @@ export interface IFacebookFriend{
 
 export interface IUserSettings{
     notifications: boolean;
-    //ghostMode: boolean;
-    //thirdConnections: boolean;
 }
 
 export class Location implements ILocation{

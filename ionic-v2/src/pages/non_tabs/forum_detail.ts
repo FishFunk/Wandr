@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController } from 'ionic-angular';
+import { NavParams } from 'ionic-angular';
 import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
-import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
  
 @Component({
   selector: 'forum-deail-page',
@@ -21,10 +20,7 @@ export class ForumDetailPage {
     forumTopic: string = "";
 
     constructor(
-        params: NavParams,
-        private navCtrl: NavController,
-        private loadingCtrl: LoadingController,
-        private firestoreDbHelper: FirestoreDbHelper){
+        params: NavParams){
         
         this.locationString = params.get('locationStringFormat');
         this.forumId = params.get('forumId');
@@ -40,11 +36,11 @@ export class ForumDetailPage {
         alert("Not implemented")
     }
 
-    private createSpinner(){
-        return this.loadingCtrl.create({
-            spinner: 'hide',
-            content:`<img src="../../assets/ring-loader.gif"/>`,
-            cssClass: 'my-loading-class'
-        });
-    }
+    // private createSpinner(){
+    //     return this.loadingCtrl.create({
+    //         spinner: 'hide',
+    //         content:`<img src="../../assets/ring-loader.gif"/>`,
+    //         cssClass: 'my-loading-class'
+    //     });
+    // }
 }

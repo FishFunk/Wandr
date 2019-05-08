@@ -1,6 +1,7 @@
 import { Component, NgZone } from "@angular/core";
 import { ViewController, NavParams, LoadingController, AlertController, Events } from "ionic-angular";
-import { IUser, ICheckboxOption, User, Location } from '../../models/user';
+import { IUser, User, Location } from '../../models/user';
+import { ICheckboxOption } from '../../models/metadata';
 import _ from "underscore";
 
 import { FormBuilder } from "@angular/forms";

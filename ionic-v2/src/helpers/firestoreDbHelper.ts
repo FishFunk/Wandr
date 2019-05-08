@@ -5,7 +5,6 @@ import { AngularFirestore } from "angularfire2/firestore";
 import { IChat } from "../models/chat";
 import { firestore } from "firebase";
 import { Observable } from "rxjs";
-import { query } from "@angular/core/src/render3";
 
 @Injectable()
 export class FirestoreDbHelper {

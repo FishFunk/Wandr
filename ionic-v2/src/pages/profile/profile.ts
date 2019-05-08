@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, LoadingController, ToastController, Platform, App, ModalController, Events } from 'ionic-angular';
-import { Location, User, IUser, ICheckboxOption } from '../../models/user';
+import { Location, User, IUser } from '../../models/user';
+import {ICheckboxOption } from '../../models/metadata';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';

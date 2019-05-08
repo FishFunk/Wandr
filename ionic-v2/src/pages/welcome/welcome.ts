@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, Platform, LoadingController } from 'ionic-angular';
+import { NavController, AlertController, Platform, LoadingController } from 'ionic-angular';
 // import {
 //     StartPage,
 //     MyMetricsWizardStartDate

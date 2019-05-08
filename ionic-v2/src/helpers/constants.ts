@@ -17,4 +17,7 @@ export abstract class Constants {
     public static refreshMapDataEventName = "onRefreshMapDataEvent";
     public static refreshProfileDataEvent = "onRefreshProfileDataEvent";
 
+    // Database
+    public static shareInfoKey = "shareInfo";
+
 }

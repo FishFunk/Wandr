@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LoadingController, NavParams, ToastController, NavController, AlertController } from 'ionic-angular';
-import { IUser, IFacebookFriend, ICheckboxOption } from '../../models/user';
+import { IUser, IFacebookFriend } from '../../models/user';
+import { ICheckboxOption } from '../../models/metadata';
 import _ from 'underscore';
 import { Constants } from '../../helpers/constants';
 import { IChat, IMessage } from '../../models/chat';
