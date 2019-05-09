@@ -133,7 +133,7 @@ $text-font-size: 12px;
 h3{
   padding-top: 10px;
   // font-size: 18px;
-  color: color($colors, secondary);
+  color: color($colors, secondary) !important;
 }
 
 
