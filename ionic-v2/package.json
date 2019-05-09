@@ -27,8 +27,8 @@
     "@ionic-native/facebook": "5.0.0-beta.22",
     "@ionic-native/firebase": "5.0.0-beta.22",
     "@ionic-native/keyboard": "5.0.0-beta.22",
-    "@ionic-native/network": "^5.0.0-beta.22",
-    "@ionic-native/social-sharing": "^5.5.1",
+    "@ionic-native/network": "5.0.0-beta.22",
+    "@ionic-native/social-sharing": "5.0.0-beta.22",
     "@ionic-native/splash-screen": "5.0.0-beta.22",
     "@ionic-native/status-bar": "5.0.0-beta.22",
     "@ionic/pro": "^2.0.4",
@@ -37,14 +37,12 @@
     "@types/googlemaps": "^3.30.16",
     "@types/underscore": "^1.8.9",
     "angularfire2": "^5.1.1",
-    "cordova-android": "~7.1.4",
     "cordova-ios": "~4.5.5",
     "cordova-plugin-add-swift-support": "^1.7.1",
     "cordova-plugin-badge": "^0.8.8",
     "cordova-plugin-contacts": "^3.0.1",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-facebook4": "^4.2.1",
-    "cordova-plugin-firebase": "^2.0.5",
     "cordova-plugin-ionic": "^5.2.9",
     "cordova-plugin-ionic-keyboard": "~2.1.3",
     "cordova-plugin-ionic-webview": "~4.0.1",
@@ -61,7 +59,9 @@
     "rxjs-compat": "^6.3.3",
     "sw-toolbox": "^3.6.0",
     "underscore": "^1.9.1",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "cordova-plugin-firebase": "https://github.com/dpa99c/cordova-plugin-firebase#GH-1057-April-05-android-build-issue",
+    "cordova-android": "~7.1.4"
   },
   "devDependencies": {
     "@angular-devkit/build-optimizer": "^0.0.24",
@@ -75,7 +75,6 @@
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-statusbar": {},
-      "cordova-plugin-firebase": {},
       "cordova-plugin-badge": {},
       "cordova-plugin-contacts": {},
       "cordova-plugin-facebook4": {
@@ -87,11 +86,12 @@
       "cordova-plugin-network-information": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-x-socialsharing": {}
+      "cordova-plugin-x-socialsharing": {},
+      "cordova-plugin-firebase": {}
     },
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }

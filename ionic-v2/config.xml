@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.wewandr.app" version="0.0.10" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.wewandr.app" version="0.0.11" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Wandr</name>
     <description>An interactive travel networking app.</description>
     <author email="admin@wanderlustlabs.io" href="http://wanderlustlabs.io/">Wanderlust Labs, LLC</author>
@@ -85,7 +85,6 @@
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="~5.0.2" />
     <plugin name="cordova-plugin-statusbar" spec="~2.4.2" />
-    <plugin name="cordova-plugin-firebase" spec="~2.0.5" />
     <plugin name="cordova-plugin-badge" spec="~0.8.8" />
     <plugin name="cordova-plugin-contacts" spec="~3.0.1" />
     <plugin name="cordova-plugin-facebook4" spec="~4.1.0">
@@ -98,6 +97,7 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="~2.1.3" />
     <plugin name="cordova-plugin-ionic-webview" spec="~4.0.1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="~5.4.4" />
-    <engine name="android" spec="~7.1.4" />
+    <plugin name="cordova-plugin-firebase" spec="https://github.com/dpa99c/cordova-plugin-firebase#GH-1057-April-05-android-build-issue" />
     <engine name="ios" spec="~4.5.5" />
+    <engine name="android" spec="~7.1.4" />
 </widget>

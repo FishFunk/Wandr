@@ -44,24 +44,27 @@ page-messages {
             max-width: 75%;
             box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
             padding: 10px 15px 10px 7px;
-            margin: 5px 0;
+            margin: 0 0;
             background: color($colors, light);
             white-space: pre-wrap;
             word-wrap: break-word;
         }
     }
+
+    .message-time{
+        color: color($colors, myGrey);
+        font-size: 11px;
+    }
+
     .message.bot{
         margin: 0 auto;
+        margin-bottom: 10px;
         text-align: center;
         p {
             margin: 0 auto;
             color: color($colors, light);
             border-radius: 11px 11px 11px 11px;
             background: color($colors, primary);
-        }
-        .message-time {
-            color: color($colors, dark);
-            font-size: small;
         }
     }
 
@@ -77,9 +80,7 @@ page-messages {
             background: color($colors, secondary);
         }
         .message-time {
-            color: color($colors, dark);
             float: left;
-            font-size: small;
         }
     }
     .message.outgoing {
@@ -92,9 +93,7 @@ page-messages {
             border-radius: 11px 11px 0 11px;
         }
         .message-time {
-            color: color($colors, dark);
             float: right;
-            font-size: small;
         }
     }
 
