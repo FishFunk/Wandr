@@ -52,11 +52,14 @@ page-inbox {
         text-align: center;
     }
 
-    #filler-img{
+    .filler-img{
         height: 200px;
         width: 300px;
-        opacity: 0.6;
-        margin-top: 30%;
+        opacity: 0.8;
+    }
+
+    .margin-top{
+        margin-top: 20%;
     }
     
 }

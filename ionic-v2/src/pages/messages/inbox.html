@@ -23,11 +23,11 @@
             </ion-item-sliding>
         </div>
     </ion-list>
-    <div *ngIf="chats.length > 0 && chats.length < 4" class="image-container">
-        <img id="filler-img" src="../../assets/undraw/purple/undraw_mail_box_kd5i.svg">
+    <div *ngIf="chats.length > 0 && chats.length < 3" class="image-container">
+        <img class="filler-img margin-top" src="../../assets/undraw/purple/undraw_mail_box_kd5i.svg">
     </div>
     <div *ngIf="chats.length == 0" class="image-container" text-center>
-        <img height="200px" width="300px" src="../../assets/undraw/purple/undraw_messages1_9ah2.svg">
+        <img class="filler-img" src="../../assets/undraw/purple/undraw_messages1_9ah2.svg">
         <br>
         <br>
         <h2 class="headline">Your messages can be found here.</h2>
