@@ -42,6 +42,7 @@
         margin-bottom: 23px;
     }
 	.header_area .navbar {
+		/* background: #ffffff; */
 		background-image: -moz-linear-gradient( 0deg, rgba(188,43,255,.8) 0%, rgba(114,73,251,.8) 100%);
 		background-image: -webkit-linear-gradient( 0deg, rgba(188,43,255,.8) 0%, rgba(114,73,251,.8) 100%);
 		background-image: -ms-linear-gradient( 0deg, rgba(188,43,255,.8) 0%, rgba(114,73,251,.8) 100%);
@@ -69,7 +70,7 @@
 		display: block;
 		width: 25px;
 		height: 3px;
-		background: #fff;
+		background: #1ABC9C;
 		margin: auto;
 		margin-bottom: 4px;
 		transition: all 400ms linear;
@@ -321,7 +322,7 @@
 		font-size: 30px;
 	}
 	.app_inner h2 {
-		font-size: 24px;
+		font-size: 35px;
 	}
 	.app_btn_area .app_btn {
 		display: block;

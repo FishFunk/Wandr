@@ -20,3 +20,6 @@ $colors: (
 
 background-image: linear-gradient(to bottom, #1abc9c, #2ac4a5, #37cdae, #42d5b8, #4ddec1, #4ddec1, #4ddec1, #4ddec1, #42d5b8, #37cdae, #2ac4a5, #1abc9c);
 
+// seashell
+myTeal: #{'background-image': 'linear-gradient(to top, #b4d4ba, #cbd7ba, #dfdac0, #eedecc, #f7eda)'}"
+

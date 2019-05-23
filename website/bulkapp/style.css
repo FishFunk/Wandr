@@ -268,10 +268,10 @@ button:focus {
 }
 
 .header_area .navbar .nav .nav-item.submenu ul .nav-item:hover .nav-link {
-  background-image: -moz-linear-gradient(0deg, #bc2bff 0%, #7249fb 100%);
+  /* background-image: -moz-linear-gradient(0deg, #bc2bff 0%, #7249fb 100%);
   background-image: -webkit-linear-gradient(0deg, #bc2bff 0%, #7249fb 100%);
   background-image: -ms-linear-gradient(0deg, #bc2bff 0%, #7249fb 100%);
-  color: #fff;
+  color: #fff; */
 }
 
 @media (min-width: 992px) {
@@ -3584,7 +3584,7 @@ h6 {
 }
 
 .app_btn_area .app_btn:hover {
-  background: #fff;
+  /* background: red; */
   -webkit-box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.1);
 }

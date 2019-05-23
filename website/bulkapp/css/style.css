@@ -74,9 +74,29 @@ body {
   color: #777777;
 }
 
+.body2 {
+  line-height: 24px;
+  font-size: 20px;
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  color: #777777;
+}
+
+
+/* .body3 {
+  line-height: 24px;
+  font-size: 1px;
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  color: #777777;
+} */
+
+
+
 h1, h2, h3, h4, h5, h6 {
   font-family: "Open Sans", sans-serif;
   font-weight: 600;
+  font-size: 400px;
 }
 
 button:focus {
@@ -86,8 +106,8 @@ button:focus {
 }
 
 .p_120 {
-  padding-top: 120px;
-  padding-bottom: 120px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .pad_top {
@@ -370,6 +390,10 @@ button:focus {
 ============================================================================================ */
 .home_banner_area {
   z-index: 1;
+  
+  /* background-image: -moz-linear-gradient(0deg,  #b4d4ba 0%, #eedecc 100%);
+  background-image: -webkit-linear-gradient(0deg,  #b4d4ba 0%, #eedecc 100%);
+  background-image: -ms-linear-gradient(0deg,  #b4d4ba 0%, #eedecc 100%); */
   /* background: url(../img/banner/home-banner.jpg) no-repeat scroll center center; */
   background-color: white;
   background-size: cover;
@@ -381,10 +405,31 @@ button:focus {
   padding: 170px 0px 140px 0px;
 }
 
-.home_banner_area .banner_inner .banner_content {
-  color:#1ABC9C;
+.home_banner_area .banner_inner .banner_content h2 {
+  color:#6700a9;
+  /* background: webkit-linear-gradient (#6700a9,#9422dd); */
+  /* -webkit-text-fill-color: transparent; */
 }
 
+
+body {
+	
+	background: linear-gradient(to right, #FDFBFB, #EBEDEE 70%);
+}
+
+.text {
+  text-transform: uppercase;
+  font-size: 40px;
+	background: linear-gradient(to bottom, #6700a9 0%, #1ABC9C 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+/* 
+
+  primary:  #1ABC9C,
+  secondary:  #6700a9,
+*/
 .home_banner_area .banner_inner .banner_content .col-lg-9 {
   vertical-align: middle;
   -ms-flex-item-align: center;
@@ -3492,7 +3537,8 @@ h6 {
   -webkit-box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.08);
   box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.08);
   padding: 50px 30px;
-  border-radius: 5px;
+  border-radius: 10px;
+  background-color:  #fff;
 }
 
 .feature_item img {
@@ -3549,21 +3595,21 @@ h6 {
 /* Download App Area css
 ============================================================================================ */
 .download_app_area {
-  background-image: -moz-linear-gradient(0deg,  #1abc9c 0%, #1abc9c 100%);
+  /* background-image: -moz-linear-gradient(0deg,  #1abc9c 0%, #1abc9c 100%);
   background-image: -webkit-linear-gradient(0deg, #1abc9c 0%, #1abc9c 100%);
-  background-image: -ms-linear-gradient(0deg,  #1abc9c 0%, #1abc9c 100%);
+  background-image: -ms-linear-gradient(0deg,  #1abc9c 0%, #1abc9c 100%); */
 }
 
 /* 'linear-gradient(to top, #b4d4ba, #cbd7ba, #dfdac0, #eedecc, #f7e3da)'}" */
 
-.app_inner {
+.app_inner { 
   max-width: 780px;
   margin: auto;
   text-align: center;
 }
 
 .app_inner h2 {
-  color: red;
+  color: #1ABC9C;
   font-size: 36px;
   font-family: "Open Sans", sans-serif;
   font-weight: 600;
@@ -3571,13 +3617,13 @@ h6 {
 }
 
 .app_inner p {
-  color: red;
+  color: #222222;
   margin-bottom: 40px;
 }
 
 .app_btn_area .app_btn {
   display: inline-block;
-  border: 1px solid #eeeeee;
+  /* border: 1px solid #eeeeee; */
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 30px;
@@ -3588,18 +3634,18 @@ h6 {
 }
 
 .app_btn_area .app_btn:hover {
-  background: red;
-  -webkit-box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.1);
-  box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.1);
+  /* background: red; */
+  /* -webkit-box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.1); */
+  /* box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.1); */
 }
 
 .app_btn_area .app_btn:hover .media .d-flex i {
-  background: -webkit-linear-gradient(left, #bb2bff, #7349fb);
+  /* background: -webkit-linear-gradient(left, #bb2bff, #7349fb);
   background: -webkit-gradient(linear, left top, right top, from(#bb2bff), to(#7349fb));
   background: -o-linear-gradient(left, #bb2bff, #7349fb);
   background: linear-gradient(left, #bb2bff, #7349fb);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent; */
 }
 
 .app_btn_area .app_btn:hover .media .media-body h4 {
