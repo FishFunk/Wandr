@@ -19,7 +19,7 @@ export class MessagesPage {
  
     @ViewChild(Content) contentArea: Content;
     @ViewChildren('messageListItems') messageListItems: QueryList<ElementRef>;
-    @ViewChild('sendButton') sendButton: Button;
+    @ViewChild('sendButton') sendButton: ElementRef;
     @ViewChild('textInput') textarea: ElementRef;
 
     headerName: string;
@@ -88,14 +88,14 @@ export class MessagesPage {
             this.scrollToBottom(0);
         });
 
-        this.sendButtonElement = this.sendButton._elementRef.nativeElement;     
+        this.sendButtonElement = this.sendButton.nativeElement;     
         this.sendButtonElement.addEventListener('click', this.stopBubble.bind(this));
         this.sendButtonElement.addEventListener('mousedown', this.stopBubble.bind(this));
         this.sendButtonElement.addEventListener('touchdown', this.stopBubble.bind(this));
         this.sendButtonElement.addEventListener('touchmove', this.stopBubble.bind(this));
         this.sendButtonElement.addEventListener('touchstart', this.stopBubble.bind(this));
         this.sendButtonElement.addEventListener('touchend', this.stopBubbleAndSendMessage.bind(this));
-        this.sendButtonElement.addEventListener('mouseup', this.sendMessage.bind(this));
+        this.sendButtonElement.addEventListener('mouseup', this.stopBubbleAndSendMessage.bind(this));
 
         setTimeout(()=>{
             this.scrollToBottom(0);
@@ -168,13 +168,6 @@ export class MessagesPage {
         var trimmedText = this.message.trim();
         if (trimmedText.length > 0){
             let formattedText = trimmedText;
-            let loading = this.loadingCtrl.create({
-                spinner: 'hide',
-                content:`<img src="../../assets/ring-loader.gif"/>`,
-                cssClass: 'my-loading-class'
-            });
-
-            loading.present();
 
             formattedText = Utils.convertLinkValuesInString(trimmedText);
 
@@ -207,14 +200,11 @@ export class MessagesPage {
             await this.firestoreDbHelper.SendMessage(this.chat.roomkey, data, chatUpdate)
                 .then(()=>{
                     this.udpateHeight();
-                    //this.scrollToBottom(200);
                 })
                 .catch(error =>{
                     this.presentAlert("It's not you, it's us... Message failed to send :(");
                     this.logger.Error(error);
                 });
-
-            loading.dismiss();
         }
     }
 
@@ -254,11 +244,15 @@ export class MessagesPage {
         catch (ex) {
             this.logger.Warn(ex);
         }
+
+        return false;
     }
 
     private stopBubbleAndSendMessage(event) {
-        this.stopBubble(event);
+        event.preventDefault(); 
+        event.stopPropagation();
         this.sendMessage();
+        return false;
     }
 
     private presentAlert(message: string){
