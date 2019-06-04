@@ -3,13 +3,15 @@ import { ProfilePage } from '../profile/profile';
 import { InboxPage } from '../messages/inbox';
 import { InvitePage } from '../invite/invite';
 import { MapPage } from '../explore/map';
-import { Tabs, ToastController, Events } from 'ionic-angular';
+import { Tabs, ToastController, Events, ModalController, AlertController } from 'ionic-angular';
 import { SettingsPage } from '../settings/settings';
 import { FcmProvider } from '../../providers/fcm/fcm';
 import { tap } from 'rxjs/operators';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Constants } from '../../helpers/constants';
 import { Logger } from '../../helpers/logger';
+import { TripsPage } from '../trips/trips';
+import { ProfileModal } from '../profile/profile-modal';
 
 @Component({
   selector: 'tabs-page',
@@ -20,7 +22,7 @@ export class TabsPage {
 
   @ViewChild('appTabs') tabRef: Tabs;
 
-  tab1Root = ProfilePage;
+  tab1Root = TripsPage;
   tab2Root = InboxPage;
   tab3Root = MapPage;
   tab4Root = InvitePage;
@@ -30,7 +32,9 @@ export class TabsPage {
 
   constructor(
     public toastCtrl: ToastController,
+    public alertCtrl: AlertController,
     public fcm: FcmProvider,
+    private modalController: ModalController,
     private firestoreDbHelper: FirestoreDbHelper,
     private logger: Logger,
     private events: Events) {
@@ -43,7 +47,28 @@ export class TabsPage {
       });
   }
 
+  private showOnBoardingPrompt(){
+    // TODO: implement better
+    const modal = this.modalController.create(ProfileModal);
+    modal.present();
+
+    const alert = this.alertCtrl.create({
+      title: "Welcome to Wandr!",
+      message: "Update your profile to get started.",
+      buttons: [
+        {text: "OK"}
+      ]
+    });
+    alert.present();
+  }
+
   private async load(){
+    const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+    const user = await this.firestoreDbHelper.ReadUserByFirebaseUid(uid);
+    if(!user.onboardcomplete){
+      this.showOnBoardingPrompt();
+    }
+
     const token = await this.fcm.getToken();
     await this.fcm.saveTokenToFirestore(token);
 

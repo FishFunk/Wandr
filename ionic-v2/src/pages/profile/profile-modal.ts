@@ -2,8 +2,6 @@ import { Component, NgZone } from "@angular/core";
 import { ViewController, NavParams, LoadingController, AlertController, Events } from "ionic-angular";
 import { IUser, ICheckboxOption, User, Location } from '../../models/user';
 import _ from "underscore";
-
-import { FormBuilder } from "@angular/forms";
 import { FirestoreDbHelper } from "../../helpers/firestoreDbHelper";
 import { Constants } from "../../helpers/constants";
 import { Utils } from "../../helpers/utils";
@@ -28,8 +26,7 @@ export class ProfileModal {
   private geocoder: google.maps.Geocoder;
 
   constructor(
-    public viewCtrl: ViewController, 
-    public fb: FormBuilder,
+    public viewCtrl: ViewController,
     private zone: NgZone,    
     public navParams: NavParams,
     private loadingCtrl: LoadingController,
@@ -72,6 +69,8 @@ export class ProfileModal {
       });
     }
 
+    this.autoComplete.input = this.userData.location.stringFormat || '';
+
     loader.dismiss();
   }
 
@@ -84,6 +83,10 @@ export class ProfileModal {
     loader.dismiss();
 
     this.viewCtrl.dismiss(null, '', { animate: true, direction: 'down'});
+  }
+
+  onClickCancel(){
+    this.viewCtrl.dismiss();
   }
 
   //***** start Bound Elements ***** //

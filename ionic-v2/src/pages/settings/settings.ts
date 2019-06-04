@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ToastController, NavController, AlertController, App } from 'ionic-angular';
+import { IonicPage, ToastController, NavController, AlertController, App, ViewController } from 'ionic-angular';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { ContactPage } from './contact';
 import { AboutPage } from './about';
@@ -8,6 +8,7 @@ import { IUserSettings } from '../../models/user';
 import { IntroPage } from '../intro/intro';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Logger } from '../../helpers/logger';
+import { ProfilePage } from '../profile/profile';
 
 @IonicPage()
 @Component({
@@ -56,6 +57,10 @@ export class SettingsPage {
             .catch((error)=> {
                 this.logger.Error(error);
             });
+    }
+
+    onClickViewProfile(){
+        this.navCtrl.push(ProfilePage, {}, { animate: true, direction: 'forward' });
     }
 
     onClickContact(){

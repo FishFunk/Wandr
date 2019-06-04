@@ -1,10 +1,21 @@
+<ion-header class="custom-header">
+    <ion-grid>
+        <ion-row>
+            <ion-col col-2>
+                <button ion-button icon-only clear (click)="onClickBack()">
+                    <ion-icon name="arrow-back"></ion-icon>
+                </button>
+            </ion-col>
+            <ion-col col-8></ion-col>
+            <ion-col col-2 class="justify-right">
+                <button ion-button icon-only clear (click)="onClickEdit()">
+                    <i class="far fa-edit"></i>
+                </button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-header>
 <ion-content padding>
-    <br>
-    <div id="edit-button">
-        <button ion-button icon-only clear (click)="onClickEdit()">
-            <i class="far fa-edit"></i>
-        </button>
-    </div>
     <ion-grid>
         <ion-row>
             <ion-col text-center>

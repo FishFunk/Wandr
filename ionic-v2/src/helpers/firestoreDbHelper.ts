@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { IUser } from "../models/user";
 import _ from 'underscore';
-import { AngularFirestore } from "angularfire2/firestore";
+import { AngularFirestore, AngularFirestoreDocument } from "angularfire2/firestore";
 import { IChat } from "../models/chat";
 import { firestore } from "firebase";
 import { Observable } from "rxjs";
@@ -90,6 +90,15 @@ export class FirestoreDbHelper {
 
     public CreateNewReport(reportData: any): Promise<firestore.DocumentReference>{
       return this.angularFirestore.collection('reports').add(reportData);
+    }
+
+    public CreateNewTrip(tripData: any): Promise<firestore.DocumentReference>{
+      return this.angularFirestore.collection('trips').add(tripData);
+    }
+
+    public ReadTripsObservableByUserId(firebaseUserId: string): Observable<any>{
+      return this.angularFirestore.collection('trips', 
+      ref=> ref.where('uid', '==', firebaseUserId)).valueChanges();
     }
 
     public GetMessagesObservable(roomkey: string): Observable<any>{

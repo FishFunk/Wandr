@@ -28,7 +28,6 @@ import { Facebook } from '@ionic-native/facebook/ngx';
 import { TabsPage } from '../pages/tabs/tabs';
 
 //***********  Page Modules **************/
-import { ProfilePageModule } from '../pages/profile/profile.module';
 import { InboxPageModule } from '../pages/messages/inbox.module';
 import { InvitePageModule } from '../pages/invite/invite.module';
 import { MapPageModule } from '../pages/explore/map.module';
@@ -37,13 +36,15 @@ import { MessagesPageModule } from '../pages/messages/messages.module';
 import { IntroPageModule } from '../pages/intro/intro.module';
 import { ConnectionListModule } from '../pages/non_tabs/connection_list.module';
 import { ConnectionProfileModule } from '../pages/non_tabs/connection_profile.module';
-// import { TimeLineModule } from '../pages/trips/time-line.module';
-// import { WelcomeModule } from '../pages/welcome/welcome-module';
-
-//*********** Modal Pages **************/
+import { TripsPageModule } from '../pages/trips/trips.module';
+import { ProfilePageModule } from '../pages/profile/profile.module';
 import { ContactPage } from '../pages/settings/contact';
 import { AboutPage } from '../pages/settings/about';
+import { ProfilePage } from '../pages/profile/profile';
+
+//*********** Modals **************/
 import { ProfileModal } from '../pages/profile/profile-modal';
+import { CreateTripModal } from '../pages/trips/create-trip-modal';
 
 //*********** Provider **************/
 import { FacebookApi } from '../helpers/facebookApi';
@@ -70,7 +71,9 @@ export const config = {
     TabsPage,
     ContactPage,
     AboutPage,
-    ProfileModal
+    ProfilePage,
+    ProfileModal,
+    CreateTripModal
   ],
   imports: [
     BrowserModule,
@@ -85,7 +88,7 @@ export const config = {
     AngularFirestoreModule,
     AngularFireModule.initializeApp(config),
     IntroPageModule,
-    ProfilePageModule,
+    //ProfilePageModule,
     InboxPageModule,
     InvitePageModule,
     MapPageModule,
@@ -95,7 +98,7 @@ export const config = {
     ConnectionProfileModule,
     SortOptionsPopoverModule,
     MapTutorialPopoverModule,
-    // TimeLineModule,
+    TripsPageModule
     // WelcomeModule
   ],
   bootstrap: [IonicApp],
@@ -104,7 +107,9 @@ export const config = {
     TabsPage,
     ContactPage,
     AboutPage,
-    ProfileModal
+    ProfileModal,
+    CreateTripModal,
+    ProfilePage
   ],
   providers: [
     StatusBar,

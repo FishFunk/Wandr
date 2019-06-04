@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, LoadingController, ToastController, Platform, App, ModalController, Events } from 'ionic-angular';
+import { LoadingController, ToastController, Platform, App, ModalController, Events, NavController } from 'ionic-angular';
 import { Location, User, IUser } from '../../models/user';
 import { FacebookApi } from '../../helpers/facebookApi';
 import { Constants } from '../../helpers/constants';
@@ -10,14 +10,14 @@ import _ from 'underscore';
 import { ProfileModal } from './profile-modal';
 import { Utils } from '../../helpers/utils';
 
-@IonicPage()
 @Component({
   selector: 'page-profile',
   templateUrl: 'profile.html'
 })
+
 export class ProfilePage {
   userData: IUser = new User('','','','', '',
-    new Location(),[],[],'','', '', { notifications: true }, []);
+    new Location(),[],[],'','','', { notifications: true }, []);
   loadingPopup;
   secondConnectionCount: number = 0;
   defaultProfileImg = '../../assets/undraw/purple/undraw_profile_pic_ic5t.svg';
@@ -28,6 +28,7 @@ export class ProfilePage {
   constructor(
     public modalController: ModalController,
     public loadingCtrl: LoadingController, 
+    public navCtrl: NavController,
     private toastCtrl: ToastController,
     private appCtrl: App,
     private facebookApi: FacebookApi,
@@ -132,7 +133,7 @@ export class ProfilePage {
         await this.writeUserDataToDb();
       } else {
         // ionic serve path
-        const uid = 'XkS98bzJM1co7vpyBlKGUpPgd2Q2'; // Johnny Appleseed
+        const uid = 'HN7yxROvzXhuoP80arDDmmmQUAj1'; // Johnny Appleseed
         this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(uid, false);
       }
 
@@ -147,7 +148,11 @@ export class ProfilePage {
   onClickEdit(){
       const modal = this.modalController.create(ProfileModal);
       modal.present();  
-    }
+  }
+
+  onClickBack(){
+    this.navCtrl.pop({animate: true, direction: 'back'});
+  }
 
   private async reloadUser(){
     var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);

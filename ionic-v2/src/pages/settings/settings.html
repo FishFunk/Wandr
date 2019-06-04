@@ -10,6 +10,7 @@
             <ion-label>Push Notifications</ion-label>
             <ion-toggle color="primary"  [(ngModel)]="pushNotifications" (ionChange)="updateUserSettings()"></ion-toggle>
         </ion-item>
+        <button ion-item (click)="onClickViewProfile()">View Profile</button>
         <button ion-item (click)="onClickAbout()">Our Story</button>
         <button ion-item (click)="onClickContact()">Contact Us</button>
         <a ion-item detail-none href="https://wanderlustlabs.io/privacy-policy/">Privacy Policy <i class="fas fa-external-link-alt" color="#6700a9" item-end></i></a>

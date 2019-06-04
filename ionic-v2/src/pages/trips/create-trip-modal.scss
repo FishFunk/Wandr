@@ -1,0 +1,32 @@
+create-trip-modal{
+    h3{
+        color: color($colors, secondary);
+    }
+
+    label, ion-label{
+        color: color($colors, myGrey);
+        font-weight: bold;
+        font-size: 1.4rem;
+    }
+
+    ion-col{
+        text-align: left;
+        justify-content: left;
+        justify-items: left;
+        padding: 0 !important;
+    }
+
+    ion-checkbox{
+        margin: 0 8px 0 0 !important;
+        padding: 0 !important;
+    }
+
+    ion-datetime{
+        font-size: 1.4rem;
+    }
+
+    .date-label{
+        color: black !important;
+        font-weight: normal;
+    }
+}

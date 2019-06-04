@@ -9,9 +9,9 @@
             <ion-col col-8 text-center>
                 <p class="header-text">Chat with {{headerName}}</p>
             </ion-col>
-            <ion-col col-2 class="justify-right">
-                <button *ngIf="showProfileButton" ion-button clear (click)="onClickProfile()">
-                    Profile
+            <ion-col col-2>
+                <button *ngIf="showProfileButton" ion-button clear icon-only (click)="onClickProfile()">
+                    <ion-icon name="md-contact"></ion-icon>
                 </button>
             </ion-col>
         </ion-row>
