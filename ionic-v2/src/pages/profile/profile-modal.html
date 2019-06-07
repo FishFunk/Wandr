@@ -34,7 +34,7 @@
       </ion-row>
       <ion-row>
         <ion-col col-12>
-            <h3>Bio</h3>
+            <h3>BIO</h3>
             <ion-textarea 
                 placeholder="A bit about yourself..." 
                 [(ngModel)]="userData.bio">
@@ -44,7 +44,7 @@
       <ion-row>
         <ion-col col-12>
           <ion-grid no-padding>
-              <h3>Interests</h3>
+              <h3>INTERESTS</h3>
               <ion-row>
                 <ion-col *ngFor="let item of userInterests" col-3>
                   <ion-checkbox [(ngModel)]="item.checked"></ion-checkbox>
@@ -58,7 +58,7 @@
       <ion-row>
         <ion-col col-12>
           <ion-grid no-padding>
-              <h3>Lifestyle</h3>
+              <h3>LIFESTYLE</h3>
               <ion-row>
                 <ion-col *ngFor="let item of lifestyleOptions" col-3>
                   <ion-checkbox [(ngModel)]="item.checked"></ion-checkbox>

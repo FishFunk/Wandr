@@ -19,24 +19,9 @@
         <br>
         <br>
         <ion-row>
-            <ion-col col-3>
-                <button ion-button large full clear icon-only (click)="facebookShare()">
-                    <ion-icon class="facebook_blue" name="logo-facebook"></ion-icon>
-                </button>
-            </ion-col>
-            <ion-col col-3>
-                <button ion-button large full clear icon-only (click)="twitterShare()">
-                    <ion-icon class="twitter_blue" name="logo-twitter"></ion-icon>
-                </button>
-            </ion-col>
-            <ion-col col-3>
-                <button ion-button large full clear icon-only (click)="smsShare()">
-                    <ion-icon class="message_blue" name="text"></ion-icon>
-                </button>
-            </ion-col>
-            <ion-col col-3>
-                <button ion-button large full clear icon-only (click)="whatsAppShare()">
-                    <ion-icon class="whatsapp_green" name="logo-whatsapp"></ion-icon>
+            <ion-col col-12>
+                <button ion-button large square outline color="secondary" (click)="openShareSheet()">
+                    SHARE
                 </button>
             </ion-col>
         </ion-row>

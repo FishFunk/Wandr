@@ -3,13 +3,25 @@
     <ion-row>
       <ion-col col-11 offset-1>
         <ion-list>
-          <ion-card  padding box-shadow margin-bottom *ngFor="let trip of data" (click)="onEvent('onItemClick', trip, $event)">
-            <span font-bold small-font ion-text color="accent">{{trip.startDate}}</span>
-            <span font-bold small-font ion-text color="accent">{{trip.endDate}}</span>
-            <ion-item  [ngClass]="animateClass" transparent no-padding>
-              <h2 ion-text color="accent">{{trip.location}}</h2>
-            </ion-item>
-            <!-- <img [src]="item.image"> -->
+          <ion-card  padding box-shadow margin-bottom *ngFor="let item of data">
+            <ion-grid no-padding>
+              <ion-row>
+                <ion-col col-10>
+                    <span font-bold small-font>{{item.data.startDate}}</span>
+                    &nbsp;<span *ngIf="item.data.endDate">to</span>&nbsp;
+                    <span font-bold small-font>{{item.data.endDate}}</span>
+                    <ion-item  transparent no-padding>
+                      <h2 ion-text >{{item.data.location}}</h2>
+                    </ion-item>
+                    <!-- <img [src]="item.image"> -->
+                </ion-col>
+                <ion-col col-2>
+                  <button id="trash-btn" ion-button clear class="card-btn" (click)="onClickTrash(item.key)"><i class="far fa-trash-alt"></i></button>
+                  <button id="edit-btn" ion-button clear class="card-btn" (click)="onClickEdit(item.key)"><i class="far fa-edit"></i></button>
+                  <button id="detail-btn" ion-button clear class="card-btn" (click)="onClickDetail(item.key)"><i class="fas fa-eye"></i></button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
           </ion-card>
         </ion-list>
       </ion-col>

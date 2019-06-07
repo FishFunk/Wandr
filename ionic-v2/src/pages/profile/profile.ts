@@ -8,7 +8,7 @@ import { Logger } from '../../helpers/logger';
 import { IntroPage } from '../intro/intro';
 import _ from 'underscore';
 import { ProfileModal } from './profile-modal';
-import { Utils } from '../../helpers/utils';
+import { ICheckboxOption } from '../../models/metadata';
 
 @Component({
   selector: 'page-profile',
@@ -16,14 +16,15 @@ import { Utils } from '../../helpers/utils';
 })
 
 export class ProfilePage {
+
+  userInterests: ICheckboxOption[] = [];
+  lifestyleOptions: ICheckboxOption[] = [];
+
   userData: IUser = new User('','','','', '',
     new Location(),[],[],'','','', { notifications: true }, []);
   loadingPopup;
   secondConnectionCount: number = 0;
   defaultProfileImg = '../../assets/undraw/purple/undraw_profile_pic_ic5t.svg';
-
-  private geocoder: google.maps.Geocoder;
-
 
   constructor(
     public modalController: ModalController,
@@ -37,7 +38,6 @@ export class ProfilePage {
     private logger: Logger,
     private events: Events) {
 
-    this.geocoder = new google.maps.Geocoder();
     this.events.subscribe(Constants.refreshProfileDataEvent, this.reloadUser.bind(this));
   }
 
@@ -49,6 +49,9 @@ export class ProfilePage {
     this.showLoadingPopup();
 
     try{
+      this.userInterests = await this.firestoreDbHelper.ReadMetadata<ICheckboxOption[]>('user_interests');
+      this.lifestyleOptions = await this.firestoreDbHelper.ReadMetadata<ICheckboxOption[]>('user_lifestyle');
+
       if(this.platform.is('cordova')){
         var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
         var facebookUid = window.localStorage.getItem(Constants.facebookUserIdKey);
@@ -64,58 +67,7 @@ export class ProfilePage {
           return;
         }
 
-        var user = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid, false);
-
-        // If User does not exist yet
-        if(!user) {
-          this.userData.app_uid = firebaseUid;
-          this.userData.facebook_uid = facebookUid;
-
-          // Get first and last name
-          var names = fbUserData.name.split(' ');
-          this.userData.first_name = names[0];
-          this.userData.last_name = names[1];
-
-          // Get Facebook location and geocode it
-          if(fbUserData.location && fbUserData.location.name) {
-            this.userData.location.stringFormat = fbUserData.location.name;
-            await this.extractLocationAndGeoData(fbUserData.location.name);
-          }
-
-          // Get Facebook friends list
-          this.userData.friends = await this.facebookApi.getFriendList(facebookUid, token);
-
-          // Email
-          this.userData.email = fbUserData.email || '';
-
-          // Get Facebook photo URL
-          if(fbUserData.picture){
-            this.userData.profile_img_url = 
-              fbUserData.picture.data ? fbUserData.picture.data.url : '../../assets/avatar_man.png'; // TODO: Default image
-          }
-
-          // Create new user ref
-          const newUsr = this.getPlainUserObject();
-          await this.firestoreDbHelper.SetNewUserData(firebaseUid, newUsr);
-
-          // Enable edit mode
-          this.onClickEdit();
-        } else {
-          // IF user already has been created
-          this.userData = <User> user;
-          
-          // Always update Facebook friends list
-          this.userData.friends = await this.facebookApi.getFriendList(facebookUid, token);
-
-          // Always update email
-          this.userData.email = fbUserData.email || '';
-
-          // Always update Facebook photo URL
-          if(fbUserData.picture){
-            this.userData.profile_img_url = 
-              fbUserData.picture.data ? fbUserData.picture.data.url : this.defaultProfileImg;
-          }
-        }
+        this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid, false);
 
         // Cache some user data
         window.localStorage.setItem(Constants.userFirstNameKey, this.userData.first_name);
@@ -125,17 +77,13 @@ export class ProfilePage {
 
         // Calculate second degree connections
         this.secondConnectionCount = await this.countSecondConnections();
-
-        // Always update last login timestamp
-        this.userData.last_login = new Date().toString();
-
-        // Update DB
-        await this.writeUserDataToDb();
       } else {
         // ionic serve path
         const uid = 'HN7yxROvzXhuoP80arDDmmmQUAj1'; // Johnny Appleseed
         this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(uid, false);
       }
+      
+      this.renderUserOptions();
 
       this.loadingPopup.dismiss();
     }
@@ -154,61 +102,37 @@ export class ProfilePage {
     this.navCtrl.pop({animate: true, direction: 'back'});
   }
 
+  private renderUserOptions(){
+    if(this.userData.interests){
+      this.userInterests.forEach(userOption=>{
+        const match = _.find(this.userData.interests, (checked)=>{
+          return userOption.label === checked.label;
+        });
+        if(match){
+          userOption['checked'] = true;
+        } else {
+          userOption['checked'] = false;
+        }
+      });
+    }
+
+    if(this.userData.lifestyle){
+      this.lifestyleOptions.forEach(userOption=>{
+        const match = _.find(this.userData.lifestyle, (checked)=>{
+          return userOption.label === checked.label;
+        });
+        if(match){
+          userOption['checked'] = true;
+        } else {
+          userOption['checked'] = false;
+        }
+      });
+    }
+  }
+
   private async reloadUser(){
     var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid, false);
-  }
-
-  private async extractLocationAndGeoData(location: string){
-    let data = await this.forwardGeocode(location);
-    let formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
-
-    // geocode again to ensure generic city lat long
-    data = await this.forwardGeocode(formattedLocation);
-    formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
-
-    const lat = +data.latitude;
-    const lng = +data.longitude;
-
-    this.userData.location = {
-      stringFormat: formattedLocation,
-      latitude: lat.toFixed(6).toString(),
-      longitude: lng.toFixed(6).toString()
-    };
-  }
-
-  private writeUserDataToDb(): Promise<any>{
-    const updateData = this.getPlainUserObject();
-    return this.firestoreDbHelper.UpdateUser(this.userData.app_uid, updateData);
-  }
-
-  private async forwardGeocode(formattedLocation: string): Promise<any>
-  {
-    return new Promise((resolve, reject)=>{
-      this.geocoder.geocode({ address: formattedLocation }, (results, status)=>{
-        if(status == google.maps.GeocoderStatus.OK){
-          var result = _.first(results);
-          resolve({ latitude: result.geometry.location.lat(), longitude: result.geometry.location.lng() });
-        } else {
-          reject(new Error(`Unable to forward geocode ${formattedLocation}`));
-        }
-      });
-    });
-  }
-
-  private async reverseGeocode(lat: number, lng: number): Promise<any>
-  {
-    return new Promise((resolve, reject)=>{
-      this.geocoder.geocode({ location: {lat: lat, lng: lng} }, (results, status)=>{
-        if(status == google.maps.GeocoderStatus.OK){
-          const formattedLocation = Utils.formatGeocoderResults(results);
-          resolve(formattedLocation);
-        }
-        else {
-          reject(new Error(`Unable to reverse geocode lat: ${lat}, lng: ${lng}`));
-        }
-      });
-    });
   }
 
   private showLoadingPopup(){
@@ -239,22 +163,4 @@ export class ProfilePage {
     return Promise.resolve(secondConnections.length);
   }
 
-  private getPlainUserObject(){
-    return <IUser> {
-      app_uid: this.userData.app_uid, 
-      facebook_uid: this.userData.facebook_uid,
-      first_name: this.userData.first_name,
-      last_name: this.userData.last_name,
-      email: this.userData.email || "",
-      bio: this.userData.bio || "",
-      location: Object.assign({}, this.userData.location),
-      friends: this.userData.friends.map((obj)=> {return Object.assign({}, obj)}),
-      interests: this.userData.interests || [],
-      lifestyle: this.userData.lifestyle || [],
-      roomkeys: this.userData.roomkeys || [],
-      last_login: this.userData.last_login || new Date().toString(),
-      settings: Object.assign({}, this.userData.settings),
-      profile_img_url: this.userData.profile_img_url
-    }
-  }
 }

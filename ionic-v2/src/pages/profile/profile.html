@@ -30,46 +30,41 @@
                         <span>{{userData.location.stringFormat}}</span>
                     </ion-row>
                     <ion-row class="subtext">
-                        <label>Connections:</label>&nbsp;<span>{{userData.friends.length + secondConnectionCount}}</span>
+                        <label>Connections:</label>&nbsp;<span>{{userData.friends.length+secondConnectionCount}}</span>
                     </ion-row>
                 </div>
             </ion-col>
         </ion-row>
     </ion-grid>
-    <br>
-    <br>
-    <ion-grid>
-      <ion-row>
-        <ion-col col-12>
-            <h3 *ngIf="userData.bio && userData.bio.length > 0">About</h3>
-            <p>{{userData.bio}}</p>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col col-12>
-          <ion-grid no-padding>
-              <h3 *ngIf="userData.interests && userData.interests.length > 0">Interests</h3>
-              <ion-row>
-                  <ion-col *ngFor="let item of userData.interests">
-                    <i [class]="item.iconClass"></i>
-                    <p>{{item.label}}</p>
-                  </ion-col>
-              </ion-row>
-          </ion-grid>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col col-12>
-          <ion-grid no-padding>
-              <h3 *ngIf="userData.lifestyle && userData.lifestyle.length > 0">Lifestyle</h3>
-              <ion-row>
-                  <ion-col *ngFor="let item of userData.lifestyle">
-                    <i [class]="item.iconClass"></i>
-                    <p>{{item.label}}</p>
-                  </ion-col>
-              </ion-row>
-          </ion-grid>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+    <ion-card padding box-shadow margin-bottom>
+        <ion-grid>
+            <h3>INTERESTS</h3>
+            <br>
+            <ion-row>
+                <ion-col class="icon-col" *ngFor="let item of userInterests">
+                    <i [class]="item.iconClass"></i>&nbsp;
+                    <span *ngIf="item.checked">Yes</span>
+                    <span *ngIf="!item.checked">No</span>
+                </ion-col>
+            </ion-row>
+            <br>
+            <h3>LIFESTYLE</h3>
+            <br>
+            <ion-row>
+                <ion-col class="icon-col" *ngFor="let item of lifestyleOptions">
+                    <i [class]="item.iconClass"></i>&nbsp;
+                    <span *ngIf="item.checked">Yes</span>
+                    <span *ngIf="!item.checked">No</span>
+                </ion-col>
+            </ion-row>
+            <br>
+            <ion-row *ngIf="userData.bio && userData.bio.length > 0">
+                <ion-col>
+                    <h3>ABOUT</h3>
+                    <br>
+                    <p class="bio">{{userData.bio}}</p>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card>
 </ion-content>

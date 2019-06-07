@@ -8,7 +8,7 @@ import { AngularFireFunctions } from 'angularfire2/functions';
 import { MessagesPage } from '../messages/messages';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Logger } from '../../helpers/logger';
-import { InboxPage } from '../messages/inbox';
+import { ICheckboxOption } from '../../models/metadata';
  
 @Component({
   selector: 'page-connection-profile',
@@ -16,6 +16,9 @@ import { InboxPage } from '../messages/inbox';
 })
 
 export class ConnectionProfilePage {
+
+    userInterests: ICheckboxOption[] = [];
+    lifestyleOptions: ICheckboxOption[] = [];
 
     secondConnectionCount: number;
     currentUserId: string;
@@ -63,6 +66,11 @@ export class ConnectionProfilePage {
     }
 
     async loadView(){
+      this.userInterests = await this.dbHelper.ReadMetadata<ICheckboxOption[]>('user_interests');
+      this.lifestyleOptions = await this.dbHelper.ReadMetadata<ICheckboxOption[]>('user_lifestyle');
+
+      this.renderUserOptions();
+
       if(this.showChatButton){
         this.chatExists = await this._checkIfChatExists();
 
@@ -205,6 +213,34 @@ export class ConnectionProfilePage {
               this.logger.Error(error);
             });
         }
+    }
+
+    private renderUserOptions(){
+      if(this.viewUserData.interests){
+        this.userInterests.forEach(userOption=>{
+          const match = _.find(this.viewUserData.interests, (checked)=>{
+            return userOption.label === checked.label;
+          });
+          if(match){
+            userOption['checked'] = true;
+          } else {
+            userOption['checked'] = false;
+          }
+        });
+      }
+  
+      if(this.viewUserData.lifestyle){
+        this.lifestyleOptions.forEach(userOption=>{
+          const match = _.find(this.viewUserData.lifestyle, (checked)=>{
+            return userOption.label === checked.label;
+          });
+          if(match){
+            userOption['checked'] = true;
+          } else {
+            userOption['checked'] = false;
+          }
+        });
+      }
     }
 
     private async _checkIfChatExists(){

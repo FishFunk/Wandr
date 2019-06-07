@@ -5,6 +5,7 @@ import { AngularFirestore, AngularFirestoreDocument } from "angularfire2/firesto
 import { IChat } from "../models/chat";
 import { firestore } from "firebase";
 import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class FirestoreDbHelper {
@@ -96,9 +97,20 @@ export class FirestoreDbHelper {
       return this.angularFirestore.collection('trips').add(tripData);
     }
 
+    public UpdateTrip(key: string, tripData: any){
+      return this.angularFirestore.collection('trips').doc(key).update(tripData);
+    }
+
     public ReadTripsObservableByUserId(firebaseUserId: string): Observable<any>{
       return this.angularFirestore.collection('trips', 
-      ref=> ref.where('uid', '==', firebaseUserId)).valueChanges();
+        ref=> ref.where('uid', '==', firebaseUserId)).snapshotChanges()
+        .pipe(map(items => { 
+          return items.map(a => {
+            const data = a.payload.doc.data();
+            const key = a.payload.doc.id;
+            return {key, data};
+          });
+        }));
     }
 
     public GetMessagesObservable(roomkey: string): Observable<any>{
@@ -191,6 +203,10 @@ export class FirestoreDbHelper {
 
     public async UpdateUser(firebaseUserId: string, updateData: any){
       return this.angularFirestore.collection('users').doc(firebaseUserId).update(updateData);
+    }
+
+    public async DeleteTripByKey(key: string){
+      return this.angularFirestore.collection('trips').doc(key).delete();
     }
 
     public async DeleteUserByFirebaseUid(firebaseUserId){

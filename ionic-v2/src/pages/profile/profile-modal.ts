@@ -1,6 +1,7 @@
 import { Component, NgZone } from "@angular/core";
 import { ViewController, NavParams, LoadingController, AlertController, Events } from "ionic-angular";
-import { IUser, ICheckboxOption, User, Location } from '../../models/user';
+import { IUser, User, Location } from '../../models/user';
+import { ICheckboxOption } from "../../models/metadata";
 import _ from "underscore";
 import { FirestoreDbHelper } from "../../helpers/firestoreDbHelper";
 import { Constants } from "../../helpers/constants";
@@ -147,27 +148,9 @@ export class ProfileModal {
   }
 
   private writeUserDataToDb(): Promise<any>{
-    const updateData = this.getPlainUserObject();
+    const updateData = Utils.getPlainUserObject(this.userData);
+    updateData.onboardcomplete = true;
     return this.firestoreDbHelper.UpdateUser(this.userData.app_uid, updateData);
-  }
-
-  private getPlainUserObject(){
-    return <IUser> {
-      app_uid: this.userData.app_uid, 
-      facebook_uid: this.userData.facebook_uid,
-      first_name: this.userData.first_name,
-      last_name: this.userData.last_name,
-      email: this.userData.email || "",
-      bio: this.userData.bio || "",
-      location: Object.assign({}, this.userData.location),
-      friends: this.userData.friends.map((obj)=> {return Object.assign({}, obj)}),
-      interests: this.userData.interests || [],
-      lifestyle: this.userData.lifestyle || [],
-      roomkeys: this.userData.roomkeys || [],
-      last_login: this.userData.last_login || new Date().toString(),
-      settings: Object.assign({}, this.userData.settings),
-      profile_img_url: this.userData.profile_img_url || ""
-    }
   }
 
   private createLoadingPopup(){

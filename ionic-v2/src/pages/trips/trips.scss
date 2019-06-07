@@ -1,5 +1,24 @@
 trips-page {
 
+  #trash-btn{
+    color: color($colors, danger);
+  }
+
+  #edit-btn{
+    color: color($colors, primary);
+  }
+
+  #detail-btn{
+    color: color($colors, secondary);
+  }
+
+  .card-btn{
+    height: 2em;
+    font-size: 1.2em;
+    margin: 0;
+  }
+
+
   .card {
     border-radius: $border-radius !important;
     overflow: visible;

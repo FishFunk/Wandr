@@ -1,5 +1,5 @@
 import { Component, NgZone } from "@angular/core";
-import { ViewController, AlertController, ToastController } from "ionic-angular";
+import { ViewController, AlertController, ToastController, NavParams } from "ionic-angular";
 import { FirestoreDbHelper } from "../../helpers/firestoreDbHelper";
 import { Constants } from "../../helpers/constants";
 
@@ -10,6 +10,7 @@ import { Constants } from "../../helpers/constants";
 
 export class CreateTripModal {
 
+    key: string = "";
     tripData = {
         uid: '',
         facebook_uid: '',
@@ -31,13 +32,22 @@ export class CreateTripModal {
     autoCompleteItems: any[] = [];
 
     constructor(
+        params: NavParams,
         public viewCtrl: ViewController,
         private zone: NgZone,
         public toastCtrl: ToastController,
         private firestoreDbHelper: FirestoreDbHelper) {
+        
+        const tripData = params.get('trip');
     
-        this.tripData.uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
-        this.tripData.facebook_uid = window.localStorage.getItem(Constants.facebookUserIdKey);
+        if(tripData){
+            this.key = params.get('key');
+            this.tripData = tripData;
+            this.autoComplete.input = this.tripData.location;
+        } else {
+            this.tripData.uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+            this.tripData.facebook_uid = window.localStorage.getItem(Constants.facebookUserIdKey);
+        }
 
         this.googleAutoComplete = new google.maps.places.AutocompleteService();
     }
@@ -49,13 +59,24 @@ export class CreateTripModal {
     onClickSave(){
         if(this.autoComplete.input){
             this.tripData.location = this.autoComplete.input;
-            this.firestoreDbHelper.CreateNewTrip(this.tripData)
-                .then(()=>{
-                    this.viewCtrl.dismiss();
-                })
-                .catch(error=>{
-                    console.error(error);
-                });
+
+            if(this.key){
+                this.firestoreDbHelper.UpdateTrip(this.key, this.tripData)
+                    .then(()=>{
+                        this.viewCtrl.dismiss();
+                    })
+                    .catch(error=>{
+                        console.error(error);
+                    });
+            } else {
+                this.firestoreDbHelper.CreateNewTrip(this.tripData)
+                    .then(()=>{
+                        this.viewCtrl.dismiss();
+                    })
+                    .catch(error=>{
+                        console.error(error);
+                    });
+            }
         } else {
             const toast = this.toastCtrl.create({message:"Destination field is required", duration: 3000});
             toast.present();
