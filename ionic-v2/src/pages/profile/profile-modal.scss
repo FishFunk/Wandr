@@ -1,20 +1,16 @@
 profile-modal {
 
-    .far{
-        font-size: 1.6em;
+    .fas {
+        font-size: 20px;
     }
 
-//   a, a div, a span, a ion-icon, a ion-label, button, button div, button span, button ion-icon, button ion-label{
-//     color: #00E1AD;
-//   }
+    .far {
+        font-size: 20px;
+    }
 
-
-//   [tappable], [tappable] div, [tappable] span, [tappable] ion-icon, [tappable] ion-label, input, textarea {
-//     color: #00E1AD;
-//     font-size: 14px;
-//   }
-
-//   item-cover disable-hover item-cover-ios item-cover-default item-cover-default-ios{
-//       background: #091F3A;
-//   }
+    h3 {
+        padding-top: 10px;
+        font-size: 18px;
+        color: color($colors, secondary);
+    }
 }
