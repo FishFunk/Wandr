@@ -34,6 +34,14 @@
     </ion-grid>
     <ion-card padding box-shadow margin-bottom>
         <ion-grid>
+            <ion-row *ngIf="viewUserData.bio && viewUserData.bio.length > 0">
+                <ion-col>
+                    <h3>ABOUT</h3>
+                    <br>
+                    <p class="bio">{{viewUserData.bio}}</p>
+                </ion-col>
+            </ion-row>
+            <br>
             <h3>INTERESTS</h3>
             <br>
             <ion-row>
@@ -51,14 +59,6 @@
                     <i [class]="item.iconClass"></i>&nbsp;
                     <span *ngIf="item.checked">Yes</span>
                     <span *ngIf="!item.checked">No</span>
-                </ion-col>
-            </ion-row>
-            <br>
-            <ion-row *ngIf="viewUserData.bio && viewUserData.bio.length > 0">
-                <ion-col>
-                    <h3>ABOUT</h3>
-                    <br>
-                    <p class="bio">{{viewUserData.bio}}</p>
                 </ion-col>
             </ion-row>
             <ion-row *ngIf="mutualFriends && mutualFriends.length > 0">

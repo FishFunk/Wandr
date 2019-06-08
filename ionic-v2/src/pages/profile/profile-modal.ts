@@ -6,6 +6,7 @@ import _ from "underscore";
 import { FirestoreDbHelper } from "../../helpers/firestoreDbHelper";
 import { Constants } from "../../helpers/constants";
 import { Utils } from "../../helpers/utils";
+import { GeoLocationHelper } from "../../helpers/geolocationHelper";
 
 @Component({
     selector: 'profile-modal',
@@ -24,8 +25,6 @@ export class ProfileModal {
   userInterests: ICheckboxOption[] = [];
   lifestyleOptions: ICheckboxOption[] = [];
 
-  private geocoder: google.maps.Geocoder;
-
   constructor(
     public viewCtrl: ViewController,
     private zone: NgZone,    
@@ -33,10 +32,10 @@ export class ProfileModal {
     private loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
     public events: Events,
-    private firestoreDbHelper: FirestoreDbHelper) {
+    private firestoreDbHelper: FirestoreDbHelper,
+    private geolocationHelper: GeoLocationHelper) {
 
     this.googleAutoComplete = new google.maps.places.AutocompleteService();
-    this.geocoder = new google.maps.Geocoder(); 
   }
 
   async ngOnInit(): Promise<any> {
@@ -127,7 +126,7 @@ export class ProfileModal {
     // TODO: Save breaks if geocode fails. Handle errors.
     if(this.autoComplete.input)
     {
-      await this.extractLocationAndGeoData(this.autoComplete.input);
+      this.userData.location = await this.geolocationHelper.extractLocationAndGeoData(this.autoComplete.input);
     }
 
     this.userData.interests = [];
@@ -158,53 +157,6 @@ export class ProfileModal {
       spinner: 'hide',
       content:`<img src="../../assets/ring-loader.gif"/>`,
       cssClass: 'my-loading-class'
-    });
-  }
-
-  private async extractLocationAndGeoData(location: string){
-    let data = await this.forwardGeocode(location);
-    let formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
-
-    // geocode again to ensure generic city lat long
-    data = await this.forwardGeocode(formattedLocation);
-    formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
-
-    const lat = +data.latitude;
-    const lng = +data.longitude;
-
-    this.userData.location = {
-      stringFormat: formattedLocation,
-      latitude: lat.toFixed(6).toString(),
-      longitude: lng.toFixed(6).toString()
-    };
-  }
-
-  private async forwardGeocode(formattedLocation: string): Promise<any>
-  {
-    return new Promise((resolve, reject)=>{
-      this.geocoder.geocode({ address: formattedLocation }, (results, status)=>{
-        if(status == google.maps.GeocoderStatus.OK){
-          var result = _.first(results);
-          resolve({ latitude: result.geometry.location.lat(), longitude: result.geometry.location.lng() });
-        } else {
-          reject(new Error(`Unable to forward geocode ${formattedLocation}`));
-        }
-      });
-    });
-  }
-
-  private async reverseGeocode(lat: number, lng: number): Promise<any>
-  {
-    return new Promise((resolve, reject)=>{
-      this.geocoder.geocode({ location: {lat: lat, lng: lng} }, (results, status)=>{
-        if(status == google.maps.GeocoderStatus.OK){
-          const formattedLocation = Utils.formatGeocoderResults(results);
-          resolve(formattedLocation);
-        }
-        else {
-          reject(new Error(`Unable to reverse geocode lat: ${lat}, lng: ${lng}`));
-        }
-      });
     });
   }
 }

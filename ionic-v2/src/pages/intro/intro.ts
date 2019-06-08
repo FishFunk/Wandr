@@ -8,6 +8,7 @@ import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { User, IUser, Location, ILocation } from '../../models/user';
 import _ from 'underscore';
 import { Utils } from '../../helpers/utils';
+import { GeoLocationHelper } from '../../helpers/geolocationHelper';
 
 @IonicPage()
 @Component({
@@ -15,8 +16,6 @@ import { Utils } from '../../helpers/utils';
   templateUrl: 'intro.html'
 })
 export class IntroPage {
-
-  private geocoder: google.maps.Geocoder;
 
   cordova: boolean = false;
 
@@ -42,11 +41,11 @@ export class IntroPage {
     private alertCtrl: AlertController,
     private fbApi: FacebookApi,
     private firestoreDbHelper: FirestoreDbHelper,
+    private geolocationHelper: GeoLocationHelper,
     private platform: Platform,
     private loadingCtrl: LoadingController,
     private logger: Logger) {
       this.cordova = this.platform.is('cordova');
-      this.geocoder = new google.maps.Geocoder();
     }
 
   onClickfacebookLogin() {
@@ -146,7 +145,7 @@ export class IntroPage {
 
       // Get Facebook location and geocode it
       if(fbUserData.location && fbUserData.location.name) {
-        user.location = await this.extractLocationAndGeoData(fbUserData.location.name);
+        user.location = await this.geolocationHelper.extractLocationAndGeoData(fbUserData.location.name);
       }
 
       // Get Facebook friends list
@@ -195,52 +194,5 @@ export class IntroPage {
   private updateUserData(userData: IUser): Promise<any>{
     const updateData = Utils.getPlainUserObject(userData);
     return this.firestoreDbHelper.UpdateUser(userData.app_uid, updateData);
-  }
-
-  private async extractLocationAndGeoData(location: string): Promise<ILocation>{
-    let data = await this.forwardGeocode(location);
-    let formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
-
-    // geocode again to ensure generic city lat long
-    data = await this.forwardGeocode(formattedLocation);
-    formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
-
-    const lat = +data.latitude;
-    const lng = +data.longitude;
-
-    return <ILocation>{
-      stringFormat: formattedLocation,
-      latitude: lat.toFixed(6).toString(),
-      longitude: lng.toFixed(6).toString()
-    };
-  }
-
-  private async forwardGeocode(formattedLocation: string): Promise<any>
-  {
-    return new Promise((resolve, reject)=>{
-      this.geocoder.geocode({ address: formattedLocation }, (results, status)=>{
-        if(status == google.maps.GeocoderStatus.OK){
-          var result = _.first(results);
-          resolve({ latitude: result.geometry.location.lat(), longitude: result.geometry.location.lng() });
-        } else {
-          reject(new Error(`Unable to forward geocode ${formattedLocation}`));
-        }
-      });
-    });
-  }
-
-  private async reverseGeocode(lat: number, lng: number): Promise<any>
-  {
-    return new Promise((resolve, reject)=>{
-      this.geocoder.geocode({ location: {lat: lat, lng: lng} }, (results, status)=>{
-        if(status == google.maps.GeocoderStatus.OK){
-          const formattedLocation = Utils.formatGeocoderResults(results);
-          resolve(formattedLocation);
-        }
-        else {
-          reject(new Error(`Unable to reverse geocode lat: ${lat}, lng: ${lng}`));
-        }
-      });
-    });
   }
 }

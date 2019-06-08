@@ -45,6 +45,7 @@ import { ProfilePage } from '../pages/profile/profile';
 //*********** Modals **************/
 import { ProfileModal } from '../pages/profile/profile-modal';
 import { CreateTripModal } from '../pages/trips/create-trip-modal';
+import { TripDetailsModal } from '../pages/trips/trip-details-modal';
 
 //*********** Provider **************/
 import { FacebookApi } from '../helpers/facebookApi';
@@ -54,6 +55,7 @@ import { FcmProvider } from '../providers/fcm/fcm';
 import { SortOptionsPopoverModule } from '../pages/non_tabs/sort_option_popover.module';
 import { MapTutorialPopoverModule } from '../pages/explore/tutorial_popover.module';
 import { ConnectivityServiceProvider } from '../providers/connectivity-service/connectivity-service';
+import { GeoLocationHelper } from '../helpers/geolocationHelper';
 
 //********** firebase configuration  ************ */
 export const config = { 
@@ -73,7 +75,8 @@ export const config = {
     AboutPage,
     ProfilePage,
     ProfileModal,
-    CreateTripModal
+    CreateTripModal,
+    TripDetailsModal
   ],
   imports: [
     BrowserModule,
@@ -88,7 +91,6 @@ export const config = {
     AngularFirestoreModule,
     AngularFireModule.initializeApp(config),
     IntroPageModule,
-    //ProfilePageModule,
     InboxPageModule,
     InvitePageModule,
     MapPageModule,
@@ -99,7 +101,6 @@ export const config = {
     SortOptionsPopoverModule,
     MapTutorialPopoverModule,
     TripsPageModule
-    // WelcomeModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -109,6 +110,7 @@ export const config = {
     AboutPage,
     ProfileModal,
     CreateTripModal,
+    TripDetailsModal,
     ProfilePage
   ],
   providers: [
@@ -127,7 +129,8 @@ export const config = {
     FcmProvider,
     Badge,
     Contacts,
-    ConnectivityServiceProvider
+    ConnectivityServiceProvider,
+    GeoLocationHelper
   ]
 })
 export class AppModule {}

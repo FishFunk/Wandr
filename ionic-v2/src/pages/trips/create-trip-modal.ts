@@ -1,7 +1,9 @@
 import { Component, NgZone } from "@angular/core";
-import { ViewController, AlertController, ToastController, NavParams } from "ionic-angular";
+import { ViewController, ToastController, NavParams } from "ionic-angular";
 import { FirestoreDbHelper } from "../../helpers/firestoreDbHelper";
 import { Constants } from "../../helpers/constants";
+import { ITrip } from "../../models/trip";
+import { GeoLocationHelper } from "../../helpers/geolocationHelper";
 
 @Component({
     selector: 'create-trip-modal',
@@ -11,7 +13,7 @@ import { Constants } from "../../helpers/constants";
 export class CreateTripModal {
 
     key: string = "";
-    tripData = {
+    tripData: ITrip = {
         uid: '',
         facebook_uid: '',
         going: false,
@@ -36,7 +38,8 @@ export class CreateTripModal {
         public viewCtrl: ViewController,
         private zone: NgZone,
         public toastCtrl: ToastController,
-        private firestoreDbHelper: FirestoreDbHelper) {
+        private firestoreDbHelper: FirestoreDbHelper,
+        private geolocationHelper: GeoLocationHelper) {
         
         const tripData = params.get('trip');
     
@@ -56,9 +59,10 @@ export class CreateTripModal {
         this.viewCtrl.dismiss();
     }
 
-    onClickSave(){
+    async onClickSave(){
         if(this.autoComplete.input){
-            this.tripData.location = this.autoComplete.input;
+            const location = await this.geolocationHelper.extractLocationAndGeoData(this.autoComplete.input);
+            this.tripData.location = location.stringFormat;
 
             if(this.key){
                 this.firestoreDbHelper.UpdateTrip(this.key, this.tripData)

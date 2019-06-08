@@ -5,6 +5,7 @@ import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Constants } from '../../helpers/constants';
 import { Observable } from 'rxjs';
 import _ from 'underscore';
+import { TripDetailsModal } from './trip-details-modal';
 
 @IonicPage()
 @Component({
@@ -43,7 +44,9 @@ export class TripsPage {
   }
 
   onClickDetail(key){
-    alert("not implemented");
+    const match = _.find(this.data, (obj)=> obj.key == key);
+    const modal = this.modalController.create(TripDetailsModal, { key: key, trip: match.data });
+    modal.present();
   }
 
   load() :any {
