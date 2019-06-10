@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController } from 'ionic-angular';
+import { IonicPage, ModalController, AlertController } from 'ionic-angular';
 import { CreateTripModal } from './create-trip-modal';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Constants } from '../../helpers/constants';
@@ -18,6 +18,7 @@ export class TripsPage {
   data = [];
 
   constructor(private modalController: ModalController,
+    private alertCtrl: AlertController,
     private firestoreDbHelper: FirestoreDbHelper) {
   }
 
@@ -31,10 +32,19 @@ export class TripsPage {
   }
 
   onClickTrash(key){
-    this.firestoreDbHelper.DeleteTripByKey(key)
-      .catch(error=>{
-        console.error(error);
-      });
+    const confirm = this.alertCtrl.create({
+      title: `Are you sure want to delete this trip?`,
+      buttons: [
+        {
+          text: 'Cancel',
+          handler:  ()=>{}
+        },
+        {
+          text: 'Delete',
+          handler: this.deleteTrip.bind(this, key)
+        }]
+    });
+    confirm.present();
   }
 
   onClickEdit(key){
@@ -56,5 +66,12 @@ export class TripsPage {
     this.tripsObservable.subscribe(async data =>{
       this.data = data;
     });
+  }
+
+  private deleteTrip(key){
+    this.firestoreDbHelper.DeleteTripByKey(key)
+      .catch(error=>{
+        console.error(error);
+      });
   }
 }
