@@ -4,8 +4,12 @@ trip-details-modal{
         font-size: 18px;
         color: color($colors, secondary);
     }
+
+    .location-img{
+        width:auto;
+    }
     
-    img{
+    .profile-img{
         width:60px;
         height:60px;
         border-radius: 50%;

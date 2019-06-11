@@ -11,5 +11,6 @@ export interface ITrip {
     flying?: boolean,
     driving?: boolean,
     startDate?: string,
-    endDate?: string
+    endDate?: string,
+    photoUrl?: string
 }

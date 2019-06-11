@@ -15,11 +15,14 @@
         <h3>ITINERARY</h3>
         <ion-row>
             <ion-col col-12>
-                <span font-bold small-font>{{tripData.startDate}}</span>
-                &nbsp;<span *ngIf="tripData.endDate">to</span>&nbsp;
-                <span font-bold small-font>{{tripData.endDate}}</span>
-                <ion-item  transparent no-padding text-wrap>
+                <span font-bold small-font>{{tripData.startDate || 'TBD'}}</span>
+                &nbsp;<span>to</span>&nbsp;
+                <span font-bold small-font>{{tripData.endDate || 'TBD'}}</span>
+                <ion-item  transparent no-padding text-wrap no-lines>
                     <h2 ion-text >{{tripData.location}}</h2>
+                </ion-item>
+                <ion-item no-padding text-center no-lines>
+                    <img class="location-img" [src]="tripData.photoUrl">
                 </ion-item>
             </ion-col>
         </ion-row>
@@ -30,7 +33,7 @@
                     <ion-row>
                         <ion-col *ngFor="let user of locals">
                             <ion-avatar>
-                                <img [src]="user.profile_img_url">
+                                <img class="profile-img" [src]="user.profile_img_url">
                             </ion-avatar>
                             <label>{{user.first_name}} {{user.last_name}}</label>
                         </ion-col>

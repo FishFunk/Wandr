@@ -23,7 +23,7 @@ export class Utils
       });
     });
 
-    if(country == 'US'){
+    if(country == 'United States'){
       if(locality && administrativeArea_1){
         return `${locality}, ${administrativeArea_1}`;
       }

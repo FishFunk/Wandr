@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, ViewChild } from '@angular/core';
 import { IonicPage, ModalController, AlertController, Modal } from 'ionic-angular';
 import { CreateTripModal } from './create-trip-modal';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
@@ -15,12 +15,16 @@ import { ITrip } from '../../models/trip';
 })
 export class TripsPage {
 
+  @ViewChild('placeResults') listRef: any;
+
   tripsObservable: Observable<any>;
   data = [];
 
   googleAutoComplete: any;
   autoComplete: any = { input: '' };
-  autoCompleteItems: any[] = [];
+  autoCompleteItems: google.maps.places.AutocompletePrediction[] = [];
+  selectedPlace: google.maps.places.AutocompletePrediction;
+  placeService: google.maps.places.PlacesService;
 
   constructor(private modalController: ModalController,
     private alertCtrl: AlertController,
@@ -34,10 +38,13 @@ export class TripsPage {
     this.load();
   }
 
-  onClickCreateTrip(){
+  async onClickCreateTrip(){
     let modal: Modal;
     if(this.autoCompleteItems.length > 0){
-      this.autoComplete.input = _.first(this.autoCompleteItems).description;
+      const place = _.first(this.autoCompleteItems);
+      this.selectedPlace = place;
+      this.autoComplete.input = place.description;
+      this.autoCompleteItems = [];
     }
 
     const trip: ITrip = {
@@ -45,6 +52,8 @@ export class TripsPage {
       facebook_uid: window.localStorage.getItem(Constants.facebookUserIdKey),
       location: this.autoComplete.input
     }
+
+    trip.photoUrl = await this.getPhotoUrl(this.selectedPlace.place_id);
 
     modal = this.modalController.create(CreateTripModal, { trip: trip });
     modal.present();
@@ -82,6 +91,8 @@ export class TripsPage {
   }
 
   load() :any {
+    this.placeService = new google.maps.places.PlacesService(this.listRef.nativeElement);
+
     const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.tripsObservable = this.firestoreDbHelper.ReadTripsObservableByUserId(uid);
 
@@ -107,9 +118,10 @@ export class TripsPage {
     });
   }
 
-  selectSearchResult(item){
-      this.autoComplete.input = item.description;
-      this.autoCompleteItems = [];
+  selectSearchResult(item: google.maps.places.AutocompletePrediction){
+    this.selectedPlace = item;
+    this.autoComplete.input = item.description;
+    this.autoCompleteItems = [];
   }
   //******* end Bound Elements ***** //
 
@@ -118,5 +130,24 @@ export class TripsPage {
       .catch(error=>{
         console.error(error);
       });
+  }
+
+  private getPhotoUrl(placeId: string): Promise<string>{
+    return new Promise((resolve, reject)=>{
+      var request = {
+        placeId: placeId,
+        fields: ['photo']
+      };
+      
+      this.placeService.getDetails(request, function(place, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          const photoUrl = _.first(place.photos).getUrl({maxWidth: 500});
+          resolve(photoUrl);
+        } else {
+          reject(new Error("Failed to get place details")); // TODO: Default image?
+        }
+      });
+    });
+
   }
 }

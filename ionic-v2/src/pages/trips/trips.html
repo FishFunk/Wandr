@@ -7,6 +7,7 @@
           (ionInput)="updateSearchResults()" 
           placeholder="ie. Sydney, Australia">
         </ion-searchbar>
+        <div #placeResults></div>
         <ion-list [hidden]="autoCompleteItems.length == 0">
           <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">
             {{ item.description }}
@@ -32,7 +33,7 @@
                     <ion-item  transparent no-padding text-wrap>
                       <h2 ion-text >{{item.data.location}}</h2>
                     </ion-item>
-                    <img src="../../assets/images/background/3.jpg">
+                    <img id="location-photo" [src]="item.data.photoUrl">
                 </ion-col>
                 <ion-col col-2>
                   <button id="trash-btn" ion-button clear class="card-btn" (click)="onClickTrash(item.key)"><i class="far fa-trash-alt"></i></button>
