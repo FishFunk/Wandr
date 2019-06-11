@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
-import { IonicPage, ModalController, AlertController } from 'ionic-angular';
+import { Component, NgZone } from '@angular/core';
+import { IonicPage, ModalController, AlertController, Modal } from 'ionic-angular';
 import { CreateTripModal } from './create-trip-modal';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Constants } from '../../helpers/constants';
 import { Observable } from 'rxjs';
 import _ from 'underscore';
 import { TripDetailsModal } from './trip-details-modal';
+import { ITrip } from '../../models/trip';
 
 @IonicPage()
 @Component({
@@ -17,9 +18,16 @@ export class TripsPage {
   tripsObservable: Observable<any>;
   data = [];
 
+  googleAutoComplete: any;
+  autoComplete: any = { input: '' };
+  autoCompleteItems: any[] = [];
+
   constructor(private modalController: ModalController,
     private alertCtrl: AlertController,
-    private firestoreDbHelper: FirestoreDbHelper) {
+    private firestoreDbHelper: FirestoreDbHelper,
+    private zone: NgZone)
+  {
+    this.googleAutoComplete = new google.maps.places.AutocompleteService();
   }
 
   ionViewDidEnter(){
@@ -27,8 +35,22 @@ export class TripsPage {
   }
 
   onClickCreateTrip(){
-    const modal = this.modalController.create(CreateTripModal);
+    let modal: Modal;
+    if(this.autoCompleteItems.length > 0){
+      this.autoComplete.input = _.first(this.autoCompleteItems).description;
+    }
+
+    const trip: ITrip = {
+      uid: window.localStorage.getItem(Constants.firebaseUserIdKey),
+      facebook_uid: window.localStorage.getItem(Constants.facebookUserIdKey),
+      location: this.autoComplete.input
+    }
+
+    modal = this.modalController.create(CreateTripModal, { trip: trip });
     modal.present();
+
+    this.autoComplete.input = '';
+    this.autoCompleteItems = [];
   }
 
   onClickTrash(key){
@@ -67,6 +89,29 @@ export class TripsPage {
       this.data = data;
     });
   }
+
+  //***** start Bound Elements ***** //
+  updateSearchResults(){
+    if (this.autoComplete.input == '') {
+      this.autoCompleteItems = [];
+      return;
+    }
+    this.googleAutoComplete.getPlacePredictions({ input: this.autoComplete.input },
+      (predictions, status) => {
+        this.autoCompleteItems = [];
+        this.zone.run(() => {
+          predictions.forEach((prediction) => {
+          this.autoCompleteItems.push(prediction);
+        });
+      });
+    });
+  }
+
+  selectSearchResult(item){
+      this.autoComplete.input = item.description;
+      this.autoCompleteItems = [];
+  }
+  //******* end Bound Elements ***** //
 
   private deleteTrip(key){
     this.firestoreDbHelper.DeleteTripByKey(key)

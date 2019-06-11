@@ -12,6 +12,15 @@ trips-page {
     color: color($colors, secondary);
   }
 
+  #add-btn{
+    margin: 0;
+    padding: 0;
+  }
+
+  .custom-pad{
+    padding: 12px 12px 0 12px;
+  }
+
   .card-btn{
     height: 2em;
     font-size: 1.2em;

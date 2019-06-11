@@ -18,15 +18,24 @@ export class Utils
           locality = comp.long_name;
         }
         if (_.indexOf(comp.types, 'country') >= 0){
-          country = comp.short_name;
+          country = comp.long_name;
         }
       });
     });
 
     if(country == 'US'){
-      return `${locality}, ${administrativeArea_1}`;
+      if(locality && administrativeArea_1){
+        return `${locality}, ${administrativeArea_1}`;
+      }
+      else {
+        return administrativeArea_1;
+      }
     } else {
-      return `${locality}, ${country}`;
+      if(locality && country){
+        return `${locality}, ${country}`;
+      } else {
+        return country;
+      }
     }
   }
 

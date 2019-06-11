@@ -1,5 +1,24 @@
 <ion-content>
   <ion-grid>
+    <ion-row class="custom-pad">
+      <ion-col col-11>
+        <ion-searchbar 
+          [(ngModel)]="autoComplete.input" 
+          (ionInput)="updateSearchResults()" 
+          placeholder="ie. Sydney, Australia">
+        </ion-searchbar>
+        <ion-list [hidden]="autoCompleteItems.length == 0">
+          <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">
+            {{ item.description }}
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col col-1 text-center>
+          <button id="add-btn" ion-button clear (click)="onClickCreateTrip()" [disabled]="autoComplete.input.length == 0">
+            <i class="fas fa-plus fa-2x"></i>
+          </button>
+      </ion-col>
+    </ion-row>
     <ion-row>
       <ion-col col-11 offset-1>
         <ion-list>
@@ -7,13 +26,13 @@
             <ion-grid no-padding>
               <ion-row>
                 <ion-col col-10>
-                    <span font-bold small-font>{{item.data.startDate}}</span>
-                    &nbsp;<span *ngIf="item.data.endDate">to</span>&nbsp;
-                    <span font-bold small-font>{{item.data.endDate}}</span>
+                    <span font-bold small-font>{{item.data.startDate || 'TBD'}}</span>
+                    &nbsp;<span>to</span>&nbsp;
+                    <span font-bold small-font>{{item.data.endDate || 'TBD'}}</span>
                     <ion-item  transparent no-padding text-wrap>
                       <h2 ion-text >{{item.data.location}}</h2>
                     </ion-item>
-                    <!-- <img [src]="item.image"> -->
+                    <img src="../../assets/images/background/3.jpg">
                 </ion-col>
                 <ion-col col-2>
                   <button id="trash-btn" ion-button clear class="card-btn" (click)="onClickTrash(item.key)"><i class="far fa-trash-alt"></i></button>
@@ -26,12 +45,12 @@
         </ion-list>
       </ion-col>
     </ion-row>
-    <ion-row>
+    <!-- <ion-row>
       <ion-col col-12 text-center>
         <button ion-button outline (click)="onClickCreateTrip()">
           CREATE TRIP
         </button>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
   </ion-grid>
 </ion-content>

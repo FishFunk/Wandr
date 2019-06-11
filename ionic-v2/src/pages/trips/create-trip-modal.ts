@@ -90,17 +90,17 @@ export class CreateTripModal {
     //***** start Bound Elements ***** //
     updateSearchResults(){
         if (this.autoComplete.input == '') {
-        this.autoCompleteItems = [];
-        return;
+            this.autoCompleteItems = [];
+            return;
         }
         this.googleAutoComplete.getPlacePredictions({ input: this.autoComplete.input },
         (predictions, status) => {
-        this.autoCompleteItems = [];
-        this.zone.run(() => {
-            predictions.forEach((prediction) => {
-            this.autoCompleteItems.push(prediction);
+            this.autoCompleteItems = [];
+            this.zone.run(() => {
+                predictions.forEach((prediction) => {
+                this.autoCompleteItems.push(prediction);
+                });
             });
-        });
         });
     }
 
