@@ -1,5 +1,9 @@
 trips-page {
 
+  ion-card{
+    background-size: cover !important;
+  }
+
   #trash-btn{
     color: color($colors, danger);
   }
@@ -20,6 +24,12 @@ trips-page {
   #location-photo{
     width: 250px;
     height: auto;
+  }
+
+  .transparent{
+    background-color: white;
+    opacity: 0.8;
+    box-shadow: 0px 0px 5px 5px white;
   }
 
   .custom-pad{

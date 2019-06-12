@@ -15,7 +15,7 @@ import { ITrip } from '../../models/trip';
 })
 export class TripsPage {
 
-  @ViewChild('placeResults') listRef: any;
+  @ViewChild('placeResults') placesRef: any;
 
   tripsObservable: Observable<any>;
   data = [];
@@ -91,7 +91,7 @@ export class TripsPage {
   }
 
   load() :any {
-    this.placeService = new google.maps.places.PlacesService(this.listRef.nativeElement);
+    this.placeService = new google.maps.places.PlacesService(this.placesRef.nativeElement);
 
     const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.tripsObservable = this.firestoreDbHelper.ReadTripsObservableByUserId(uid);
@@ -140,14 +140,14 @@ export class TripsPage {
       };
       
       this.placeService.getDetails(request, function(place, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          const photoUrl = _.first(place.photos).getUrl({maxWidth: 500});
+        if (status === google.maps.places.PlacesServiceStatus.OK && place.photos && place.photos.length > 0) {
+          const randomIdx = _.random(0, place.photos.length - 1);
+          const photoUrl = place.photos[randomIdx].getUrl({maxWidth: 500});
           resolve(photoUrl);
         } else {
-          reject(new Error("Failed to get place details")); // TODO: Default image?
+          reject(new Error("Failed to get place details and photo")); // TODO: Default image?
         }
       });
     });
-
   }
 }

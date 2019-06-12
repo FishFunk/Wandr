@@ -23,9 +23,9 @@
     <ion-row>
       <ion-col col-11 offset-1>
         <ion-list>
-          <ion-card  padding box-shadow margin-bottom *ngFor="let item of data">
+          <ion-card  padding box-shadow margin-bottom *ngFor="let item of data" [ngStyle]="{background: 'url(' + item.data.photoUrl + ')'}">
             <ion-grid no-padding>
-              <ion-row>
+              <ion-row class="transparent" padding>
                 <ion-col col-10>
                     <span font-bold small-font>{{item.data.startDate || 'TBD'}}</span>
                     &nbsp;<span>to</span>&nbsp;
@@ -33,7 +33,7 @@
                     <ion-item  transparent no-padding text-wrap>
                       <h2 ion-text >{{item.data.location}}</h2>
                     </ion-item>
-                    <img id="location-photo" [src]="item.data.photoUrl">
+                    <!-- <img id="location-photo" [src]="item.data.photoUrl"> -->
                 </ion-col>
                 <ion-col col-2>
                   <button id="trash-btn" ion-button clear class="card-btn" (click)="onClickTrash(item.key)"><i class="far fa-trash-alt"></i></button>

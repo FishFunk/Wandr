@@ -1,9 +1,10 @@
-import { Component, NgZone } from "@angular/core";
+import { Component, NgZone, ViewChild } from "@angular/core";
 import { ViewController, ToastController, NavParams } from "ionic-angular";
 import { FirestoreDbHelper } from "../../helpers/firestoreDbHelper";
 import { Constants } from "../../helpers/constants";
 import { ITrip } from "../../models/trip";
 import { GeoLocationHelper } from "../../helpers/geolocationHelper";
+import _ from 'underscore';
 
 @Component({
     selector: 'create-trip-modal',
@@ -11,6 +12,8 @@ import { GeoLocationHelper } from "../../helpers/geolocationHelper";
   })
 
 export class CreateTripModal {
+
+    @ViewChild('placeResults') placesRef: any;
 
     key: string = "";
     tripData: ITrip = {
@@ -32,6 +35,8 @@ export class CreateTripModal {
     googleAutoComplete: any;
     autoComplete: any = { input: '' };
     autoCompleteItems: any[] = [];
+    selectedPlace: google.maps.places.AutocompletePrediction;
+    placeService: google.maps.places.PlacesService;
 
     constructor(
         params: NavParams,
@@ -45,7 +50,7 @@ export class CreateTripModal {
     
         if(tripData){
             this.key = params.get('key');
-            this.tripData = tripData;
+            this.tripData = JSON.parse(JSON.stringify(tripData));
             this.autoComplete.input = this.tripData.location;
         } else {
             this.tripData.uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
@@ -55,36 +60,68 @@ export class CreateTripModal {
         this.googleAutoComplete = new google.maps.places.AutocompleteService();
     }
 
+    ionViewDidEnter(){
+        this.placeService = new google.maps.places.PlacesService(this.placesRef.nativeElement);
+    }
+
     onClickCancel(){
         this.viewCtrl.dismiss();
     }
 
     async onClickSave(){
-        if(this.autoComplete.input){
-            const location = await this.geolocationHelper.extractLocationAndGeoData(this.autoComplete.input);
-            this.tripData.location = location.stringFormat;
-
-            if(this.key){
-                this.firestoreDbHelper.UpdateTrip(this.key, this.tripData)
-                    .then(()=>{
-                        this.viewCtrl.dismiss();
-                    })
-                    .catch(error=>{
-                        console.error(error);
-                    });
-            } else {
-                this.firestoreDbHelper.CreateNewTrip(this.tripData)
-                    .then(()=>{
-                        this.viewCtrl.dismiss();
-                    })
-                    .catch(error=>{
-                        console.error(error);
-                    });
-            }
-        } else {
+        if(!this.autoComplete.input){
             const toast = this.toastCtrl.create({message:"Destination field is required", duration: 3000});
             toast.present();
+            return;
         }
+
+        if(this.autoCompleteItems.length > 0){
+            const place = _.first(this.autoCompleteItems);
+            this.selectedPlace = place;
+            this.autoComplete.input = place.description;
+            this.autoCompleteItems = [];
+            this.tripData.photoUrl = await this.getTripPhoto();
+        }
+
+        const location = await this.geolocationHelper.extractLocationAndGeoData(this.autoComplete.input);
+        this.tripData.location = location.stringFormat;
+
+        if(this.key){
+            this.firestoreDbHelper.UpdateTrip(this.key, this.tripData)
+                .then(()=>{
+                    this.viewCtrl.dismiss();
+                })
+                .catch(error=>{
+                    console.error(error);
+                });
+        } else {
+            this.firestoreDbHelper.CreateNewTrip(this.tripData)
+                .then(()=>{
+                    this.viewCtrl.dismiss();
+                })
+                .catch(error=>{
+                    console.error(error);
+                });
+        }
+    }
+
+    private async getTripPhoto(): Promise<string>{
+        return new Promise((resolve, reject)=>{
+            var request = {
+              placeId: this.selectedPlace.place_id,
+              fields: ['photo']
+            };
+            
+            this.placeService.getDetails(request, function(place, status) {
+              if (status === google.maps.places.PlacesServiceStatus.OK && place.photos && place.photos.length > 0) {
+                const randomIdx = _.random(0, place.photos.length - 1);
+                const photoUrl = place.photos[randomIdx].getUrl({maxWidth: 500});
+                resolve(photoUrl);
+              } else {
+                reject(new Error("Failed to get place details and photo")); // TODO: Default image?
+              }
+            });
+        });
     }
     
     //***** start Bound Elements ***** //
@@ -104,9 +141,11 @@ export class CreateTripModal {
         });
     }
 
-    selectSearchResult(item){
+    async selectSearchResult(item){
+        this.selectedPlace = item;
         this.autoComplete.input = item.description;
         this.autoCompleteItems = [];
+        this.tripData.photoUrl = await this.getTripPhoto();
     }
     //******* end Bound Elements ***** //
 }

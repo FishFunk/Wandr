@@ -17,6 +17,9 @@
 </ion-header>
 <ion-content padding>
   <ion-grid>
+    <ion-row *ngIf="tripData.photoUrl">
+      <img [src]="tripData.photoUrl">
+    </ion-row>
     <h3>DESTINATION</h3>
     <ion-row>
       <ion-col col-12>
@@ -25,6 +28,7 @@
           (ionInput)="updateSearchResults()" 
           placeholder="ie. Sydney, Australia">
         </ion-searchbar>
+        <div #placeResults></div>
         <ion-list [hidden]="autoCompleteItems.length == 0">
           <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">
             {{ item.description }}
