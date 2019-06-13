@@ -18,16 +18,12 @@
                 <span font-bold small-font>{{tripData.startDate || 'TBD'}}</span>
                 &nbsp;<span>to</span>&nbsp;
                 <span font-bold small-font>{{tripData.endDate || 'TBD'}}</span>
-                <ion-item  transparent no-padding text-wrap no-lines>
-                    <h2 ion-text >{{tripData.location}}</h2>
-                </ion-item>
-                <ion-item no-padding text-center no-lines>
-                    <img class="location-img" [src]="tripData.photoUrl">
-                </ion-item>
+                <h2>{{tripData.location}}</h2>
+                <img class="location-img" [src]="tripData.photoUrl">
             </ion-col>
         </ion-row>
-        <h3>WANDR LOCALS</h3>
-        <ion-row>
+        <ion-row *ngIf="locals.length > 0">
+            <h3>WANDR LOCALS</h3>
             <ion-col col-12>
                 <ion-grid no-padding>
                     <ion-row>

@@ -5,6 +5,7 @@ import { Constants } from "../../helpers/constants";
 import { ITrip } from "../../models/trip";
 import { GeoLocationHelper } from "../../helpers/geolocationHelper";
 import _ from 'underscore';
+import { filter } from "rxjs/operators";
 
 @Component({
     selector: 'create-trip-modal',
@@ -114,12 +115,16 @@ export class CreateTripModal {
             
             this.placeService.getDetails(request, function(place, status) {
               if (status === google.maps.places.PlacesServiceStatus.OK && place.photos && place.photos.length > 0) {
-                const randomIdx = _.random(0, place.photos.length - 1);
-                const photoUrl = place.photos[randomIdx].getUrl({maxWidth: 500});
-                resolve(photoUrl);
-              } else {
-                reject(new Error("Failed to get place details and photo")); // TODO: Default image?
+                var filteredPhotos = _.filter(place.photos, (photo)=> photo.width > photo.height); // exclude portrait photos
+                if(filteredPhotos.length > 0){
+                    const randomIdx = _.random(0, filteredPhotos.length - 1);
+                    const photoUrl = filteredPhotos[randomIdx].getUrl({maxWidth: 500, maxHeight: 250});
+                    resolve(photoUrl);
+                    return;
+                }
               }
+              // No photo match
+              reject(new Error("Failed to get place details and photo")); // TODO: Default image?      
             });
         });
     }

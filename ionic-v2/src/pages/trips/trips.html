@@ -16,42 +16,45 @@
       </ion-col>
       <ion-col col-1 text-center>
           <button id="add-btn" ion-button clear (click)="onClickCreateTrip()" [disabled]="autoComplete.input.length == 0">
-            <i class="fas fa-plus fa-2x"></i>
+            <i class="fas fa-plus create-icon"></i>
           </button>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col col-11 offset-1>
         <ion-list>
-          <ion-card  padding box-shadow margin-bottom *ngFor="let item of data" [ngStyle]="{background: 'url(' + item.data.photoUrl + ')'}">
-            <ion-grid no-padding>
-              <ion-row class="transparent" padding>
-                <ion-col col-10>
-                    <span font-bold small-font>{{item.data.startDate || 'TBD'}}</span>
-                    &nbsp;<span>to</span>&nbsp;
-                    <span font-bold small-font>{{item.data.endDate || 'TBD'}}</span>
-                    <ion-item  transparent no-padding text-wrap>
+          <ion-item-sliding *ngFor="let item of data">
+            <ion-card ion-item detail-none no-lines box-shadow margin-bottom [ngStyle]="{background: 'url(' + item.data.photoUrl + ')'}">
+              <ion-grid no-padding text-center>
+                <ion-row class="transparent pad-10">
+                  <ion-col>
+                      <div class="date-text">
+                        <span>{{item.data.startDate || 'TBD'}}</span>
+                        &nbsp;<span>to</span>&nbsp;
+                        <span>{{item.data.endDate || 'TBD'}}</span>
+                      </div>
                       <h2 ion-text >{{item.data.location}}</h2>
-                    </ion-item>
-                    <!-- <img id="location-photo" [src]="item.data.photoUrl"> -->
-                </ion-col>
-                <ion-col col-2>
-                  <button id="trash-btn" ion-button clear class="card-btn" (click)="onClickTrash(item.key)"><i class="far fa-trash-alt"></i></button>
-                  <button id="edit-btn" ion-button clear class="card-btn" (click)="onClickEdit(item.key)"><i class="far fa-edit"></i></button>
-                  <button id="detail-btn" ion-button clear class="card-btn" (click)="onClickDetail(item.key)"><i class="fas fa-eye"></i></button>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-card>
+                  </ion-col>
+                </ion-row>
+                <br><br>
+              </ion-grid>
+            </ion-card>
+            <ion-item-options side="left">
+              <button ion-button color="danger" (click)="onClickTrash(item.key)">
+                <i class="far fa-trash-alt sliding-icon"></i>
+              </button>
+              <button ion-button color="primary" (click)="onClickEdit(item.key)">
+                  <i class="far fa-edit sliding-icon"></i>
+              </button>
+            </ion-item-options>
+            <ion-item-options side="right">
+              <button ion-button color="secondary" (click)="onClickDetail(item.key)">
+                  <i class="fas fa-eye sliding-icon"></i>
+              </button>
+            </ion-item-options>
+          </ion-item-sliding>
         </ion-list>
       </ion-col>
     </ion-row>
-    <!-- <ion-row>
-      <ion-col col-12 text-center>
-        <button ion-button outline (click)="onClickCreateTrip()">
-          CREATE TRIP
-        </button>
-      </ion-col>
-    </ion-row> -->
   </ion-grid>
 </ion-content>

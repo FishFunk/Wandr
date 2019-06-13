@@ -37,7 +37,6 @@ import { IntroPageModule } from '../pages/intro/intro.module';
 import { ConnectionListModule } from '../pages/non_tabs/connection_list.module';
 import { ConnectionProfileModule } from '../pages/non_tabs/connection_profile.module';
 import { TripsPageModule } from '../pages/trips/trips.module';
-import { ProfilePageModule } from '../pages/profile/profile.module';
 import { ContactPage } from '../pages/settings/contact';
 import { AboutPage } from '../pages/settings/about';
 import { ProfilePage } from '../pages/profile/profile';
