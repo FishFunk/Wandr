@@ -28,7 +28,6 @@
           (ionInput)="updateSearchResults()" 
           placeholder="ie. Sydney, Australia">
         </ion-searchbar>
-        <div #placeResults></div>
         <ion-list [hidden]="autoCompleteItems.length == 0">
           <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">
             {{ item.description }}

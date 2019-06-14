@@ -6,6 +6,7 @@ import { ITrip } from "../../models/trip";
 import { GeoLocationHelper } from "../../helpers/geolocationHelper";
 import _ from 'underscore';
 import { filter } from "rxjs/operators";
+import { PhotoApi } from "../../helpers/photoApi";
 
 @Component({
     selector: 'create-trip-modal',
@@ -13,8 +14,6 @@ import { filter } from "rxjs/operators";
   })
 
 export class CreateTripModal {
-
-    @ViewChild('placeResults') placesRef: any;
 
     key: string = "";
     tripData: ITrip = {
@@ -37,7 +36,6 @@ export class CreateTripModal {
     autoComplete: any = { input: '' };
     autoCompleteItems: any[] = [];
     selectedPlace: google.maps.places.AutocompletePrediction;
-    placeService: google.maps.places.PlacesService;
 
     constructor(
         params: NavParams,
@@ -45,7 +43,8 @@ export class CreateTripModal {
         private zone: NgZone,
         public toastCtrl: ToastController,
         private firestoreDbHelper: FirestoreDbHelper,
-        private geolocationHelper: GeoLocationHelper) {
+        private geolocationHelper: GeoLocationHelper,
+        private photoApi: PhotoApi) {
         
         const tripData = params.get('trip');
     
@@ -62,7 +61,6 @@ export class CreateTripModal {
     }
 
     ionViewDidEnter(){
-        this.placeService = new google.maps.places.PlacesService(this.placesRef.nativeElement);
     }
 
     onClickCancel(){
@@ -107,26 +105,7 @@ export class CreateTripModal {
     }
 
     private async getTripPhoto(): Promise<string>{
-        return new Promise((resolve, reject)=>{
-            var request = {
-              placeId: this.selectedPlace.place_id,
-              fields: ['photo']
-            };
-            
-            this.placeService.getDetails(request, function(place, status) {
-              if (status === google.maps.places.PlacesServiceStatus.OK && place.photos && place.photos.length > 0) {
-                var filteredPhotos = _.filter(place.photos, (photo)=> photo.width > photo.height); // exclude portrait photos
-                if(filteredPhotos.length > 0){
-                    const randomIdx = _.random(0, filteredPhotos.length - 1);
-                    const photoUrl = filteredPhotos[randomIdx].getUrl({maxWidth: 500, maxHeight: 250});
-                    resolve(photoUrl);
-                    return;
-                }
-              }
-              // No photo match
-              reject(new Error("Failed to get place details and photo")); // TODO: Default image?      
-            });
-        });
+        return this.photoApi.queryRandomPhoto(this.selectedPlace.description);
     }
     
     //***** start Bound Elements ***** //

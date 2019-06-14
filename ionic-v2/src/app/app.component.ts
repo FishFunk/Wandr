@@ -56,6 +56,8 @@ public readonly firebaseInitOptions: any = {
           this.firebaseInitOptions
         );
 
+        this.statusBar.overlaysWebView(false);
+        
         // Handle tab hiding defect for android devices
         if (this.platform.is('android')) {
           this.statusBar.styleLightContent(); // Make phone status bar visible

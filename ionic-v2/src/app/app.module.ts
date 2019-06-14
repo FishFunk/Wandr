@@ -55,6 +55,7 @@ import { SortOptionsPopoverModule } from '../pages/non_tabs/sort_option_popover.
 import { MapTutorialPopoverModule } from '../pages/explore/tutorial_popover.module';
 import { ConnectivityServiceProvider } from '../providers/connectivity-service/connectivity-service';
 import { GeoLocationHelper } from '../helpers/geolocationHelper';
+import { PhotoApi } from '../helpers/photoApi';
 
 //********** firebase configuration  ************ */
 export const config = { 
@@ -129,7 +130,8 @@ export const config = {
     Badge,
     Contacts,
     ConnectivityServiceProvider,
-    GeoLocationHelper
+    GeoLocationHelper,
+    PhotoApi
   ]
 })
 export class AppModule {}

@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import _ from 'underscore';
 import { TripDetailsModal } from './trip-details-modal';
 import { ITrip } from '../../models/trip';
+import { PhotoApi } from '../../helpers/photoApi';
 
 @IonicPage()
 @Component({
@@ -15,8 +16,6 @@ import { ITrip } from '../../models/trip';
 })
 export class TripsPage {
 
-  @ViewChild('placeResults') placesRef: any;
-
   tripsObservable: Observable<any>;
   data = [];
 
@@ -24,12 +23,12 @@ export class TripsPage {
   autoComplete: any = { input: '' };
   autoCompleteItems: google.maps.places.AutocompletePrediction[] = [];
   selectedPlace: google.maps.places.AutocompletePrediction;
-  placeService: google.maps.places.PlacesService;
 
   constructor(private modalController: ModalController,
     private alertCtrl: AlertController,
     private firestoreDbHelper: FirestoreDbHelper,
-    private zone: NgZone)
+    private zone: NgZone,
+    private photoApi: PhotoApi)
   {
     this.googleAutoComplete = new google.maps.places.AutocompleteService();
   }
@@ -53,7 +52,7 @@ export class TripsPage {
       location: this.autoComplete.input
     }
 
-    trip.photoUrl = await this.getPhotoUrl(this.selectedPlace.place_id);
+    trip.photoUrl = await this.getPhotoUrl();
 
     modal = this.modalController.create(CreateTripModal, { trip: trip });
     modal.present();
@@ -91,8 +90,6 @@ export class TripsPage {
   }
 
   load() :any {
-    this.placeService = new google.maps.places.PlacesService(this.placesRef.nativeElement);
-
     const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.tripsObservable = this.firestoreDbHelper.ReadTripsObservableByUserId(uid);
 
@@ -132,22 +129,7 @@ export class TripsPage {
       });
   }
 
-  private getPhotoUrl(placeId: string): Promise<string>{
-    return new Promise((resolve, reject)=>{
-      var request = {
-        placeId: placeId,
-        fields: ['photo']
-      };
-      
-      this.placeService.getDetails(request, function(place, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK && place.photos && place.photos.length > 0) {
-          const randomIdx = _.random(0, place.photos.length - 1);
-          const photoUrl = place.photos[randomIdx].getUrl({maxWidth: 500});
-          resolve(photoUrl);
-        } else {
-          reject(new Error("Failed to get place details and photo")); // TODO: Default image?
-        }
-      });
-    });
+  private getPhotoUrl(): Promise<string>{
+    return this.photoApi.queryRandomPhoto(this.selectedPlace.description);
   }
 }

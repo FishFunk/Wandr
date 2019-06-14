@@ -1,13 +1,12 @@
 <ion-content>
   <ion-grid>
     <ion-row class="custom-pad">
-      <ion-col col-11>
+      <ion-col col-10 offset-1>
         <ion-searchbar 
           [(ngModel)]="autoComplete.input" 
           (ionInput)="updateSearchResults()" 
           placeholder="ie. Sydney, Australia">
         </ion-searchbar>
-        <div #placeResults></div>
         <ion-list [hidden]="autoCompleteItems.length == 0">
           <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">
             {{ item.description }}
@@ -36,7 +35,7 @@
                       <h2 ion-text >{{item.data.location}}</h2>
                   </ion-col>
                 </ion-row>
-                <br><br>
+                <br><br><br><br>
               </ion-grid>
             </ion-card>
             <ion-item-options side="left">
