@@ -18,7 +18,9 @@
 <ion-content padding>
   <ion-grid>
     <ion-row *ngIf="tripData.photoUrl" text-center>
-      <img [src]="tripData.photoUrl">
+      <ion-col col-12>
+          <img class="location-img" [src]="tripData.photoUrl">
+      </ion-col>
     </ion-row>
     <h3>DESTINATION</h3>
     <ion-row>
@@ -38,18 +40,18 @@
     <br>
     <h3>TRIP DETAILS</h3>
     <ion-row>
-      <ion-col ion-item no-lines col-6>
+      <!-- <ion-col ion-item no-lines col-6>
         <ion-checkbox [(ngModel)]="tripData.going"></ion-checkbox>&nbsp;
         <ion-label>Going</ion-label>
       </ion-col>
       <ion-col ion-item no-lines col-6>
           <ion-checkbox [(ngModel)]="tripData.wantsToGo"></ion-checkbox>&nbsp;
-          <ion-label>Want to go</ion-label>
-      </ion-col>
-      <ion-col ion-item no-lines col-6>
+          <ion-label>Plan to go</ion-label>
+      </ion-col> -->
+      <!-- <ion-col ion-item no-lines col-6>
           <ion-checkbox [(ngModel)]="tripData.hasBeen"></ion-checkbox>&nbsp;
           <ion-label>Have been</ion-label>
-      </ion-col>
+      </ion-col> -->
       <ion-col ion-item no-lines col-6>
         <ion-checkbox [(ngModel)]="tripData.business"></ion-checkbox>
         <ion-label>Business</ion-label>

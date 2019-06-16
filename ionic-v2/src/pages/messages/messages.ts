@@ -1,5 +1,5 @@
 import { Component, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
-import { Content, LoadingController, NavParams, Button, NavController, Events, AlertController } from 'ionic-angular';
+import { Content, LoadingController, NavParams, NavController, Events, AlertController } from 'ionic-angular';
 import { Constants } from '../../helpers/constants';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { Subscription, Observable } from 'rxjs';

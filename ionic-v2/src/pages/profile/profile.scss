@@ -4,7 +4,11 @@ page-profile {
     position: absolute;
     right: 0;
     top: 0;
-    padding: 20px 20px 0 0;
+    padding: 0 0.5em 0 0;
+  }
+
+  .fa-edit{
+    font-size: 20px !important;
   }
 
   .fas{
@@ -20,6 +24,14 @@ page-profile {
   }
 
   ion-header[transparent] .toolbar-background { background: transparent;}
+
+  .custom-header > * > * > *{
+    padding: 0;
+  }
+
+  .custom-header{
+      padding-top: 20px;
+  }
   
   .profile-img{
     width:100%;

@@ -19,7 +19,7 @@ trips-page {
 
   #add-btn{
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 6px;
   }
 
   #location-photo{
@@ -96,5 +96,15 @@ trips-page {
     &:after {
       display: none;
     }
+  }
+
+  ion-header[transparent] .toolbar-background { background: transparent;}
+
+  .custom-header > * > * > *{
+    padding: 0;
+  }
+
+  .custom-header{
+      padding-top: 10px;
   }
 }

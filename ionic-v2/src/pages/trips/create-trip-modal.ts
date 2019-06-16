@@ -21,9 +21,9 @@ export class CreateTripModal {
         facebook_uid: '',
         going: false,
         wantsToGo: false,
-        hasBeen: false,
-        business: false,
-        leisure: false,
+        // hasBeen: false,
+        // business: false,
+        // leisure: false,
         moving: false,
         flying: false,
         driving: false,
@@ -58,9 +58,6 @@ export class CreateTripModal {
         }
 
         this.googleAutoComplete = new google.maps.places.AutocompleteService();
-    }
-
-    ionViewDidEnter(){
     }
 
     onClickCancel(){

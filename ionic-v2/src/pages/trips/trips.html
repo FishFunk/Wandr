@@ -1,6 +1,29 @@
+<ion-header class="custom-header">
+    <ion-grid>
+      <ion-row class="custom-pad">
+        <ion-col col-10 offset-1>
+          <ion-searchbar 
+            [(ngModel)]="autoComplete.input" 
+            (ionInput)="updateSearchResults()" 
+            placeholder="ie. Sydney, Australia">
+          </ion-searchbar>
+          <ion-list [hidden]="autoCompleteItems.length == 0">
+            <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">
+              {{ item.description }}
+            </ion-item>
+          </ion-list>
+        </ion-col>
+        <ion-col col-1>
+            <button id="add-btn" ion-button clear (click)="onClickCreateTrip()" [disabled]="autoComplete.input.length == 0">
+              <i class="fas fa-plus create-icon"></i>
+            </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+</ion-header>
 <ion-content>
   <ion-grid>
-    <ion-row class="custom-pad">
+    <!-- <ion-row class="custom-pad">
       <ion-col col-10 offset-1>
         <ion-searchbar 
           [(ngModel)]="autoComplete.input" 
@@ -18,7 +41,7 @@
             <i class="fas fa-plus create-icon"></i>
           </button>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
     <ion-row>
       <ion-col col-11 offset-1>
         <ion-list>
