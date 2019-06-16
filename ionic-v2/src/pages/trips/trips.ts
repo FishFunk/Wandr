@@ -1,5 +1,5 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
-import { IonicPage, ModalController, AlertController, Modal } from 'ionic-angular';
+import { IonicPage, ModalController, AlertController, Modal, NavController } from 'ionic-angular';
 import { CreateTripModal } from './create-trip-modal';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Constants } from '../../helpers/constants';
@@ -25,6 +25,7 @@ export class TripsPage {
   selectedPlace: google.maps.places.AutocompletePrediction;
 
   constructor(private modalController: ModalController,
+    private navCtrl: NavController,
     private alertCtrl: AlertController,
     private firestoreDbHelper: FirestoreDbHelper,
     private zone: NgZone,
@@ -87,6 +88,11 @@ export class TripsPage {
     const match = _.find(this.data, (obj)=> obj.key == key);
     const modal = this.modalController.create(TripDetailsModal, { key: key, trip: match.data });
     modal.present();
+  }
+
+  onClickExplore(){
+    let tab = this.navCtrl.parent;
+    tab.select(2);
   }
 
   load() :any {

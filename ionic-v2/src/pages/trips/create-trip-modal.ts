@@ -1,5 +1,5 @@
 import { Component, NgZone, ViewChild } from "@angular/core";
-import { ViewController, ToastController, NavParams } from "ionic-angular";
+import { ViewController, ToastController, NavParams, LoadingController } from "ionic-angular";
 import { FirestoreDbHelper } from "../../helpers/firestoreDbHelper";
 import { Constants } from "../../helpers/constants";
 import { ITrip } from "../../models/trip";
@@ -42,6 +42,7 @@ export class CreateTripModal {
         public viewCtrl: ViewController,
         private zone: NgZone,
         public toastCtrl: ToastController,
+        private loadingCtrl: LoadingController,
         private firestoreDbHelper: FirestoreDbHelper,
         private geolocationHelper: GeoLocationHelper,
         private photoApi: PhotoApi) {
@@ -71,6 +72,13 @@ export class CreateTripModal {
             return;
         }
 
+        const loading = this.loadingCtrl.create({
+            spinner: 'hide',
+            content:`<img src="../../assets/ring-loader.gif"/>`,
+            cssClass: 'my-loading-class'
+        });
+        loading.present();
+
         if(this.autoCompleteItems.length > 0){
             const place = _.first(this.autoCompleteItems);
             this.selectedPlace = place;
@@ -85,17 +93,21 @@ export class CreateTripModal {
         if(this.key){
             this.firestoreDbHelper.UpdateTrip(this.key, this.tripData)
                 .then(()=>{
+                    loading.dismiss();
                     this.viewCtrl.dismiss();
                 })
                 .catch(error=>{
+                    loading.dismiss();
                     console.error(error);
                 });
         } else {
             this.firestoreDbHelper.CreateNewTrip(this.tripData)
                 .then(()=>{
+                    loading.dismiss();
                     this.viewCtrl.dismiss();
                 })
                 .catch(error=>{
+                    loading.dismiss();
                     console.error(error);
                 });
         }

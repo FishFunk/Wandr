@@ -107,4 +107,23 @@ trips-page {
   .custom-header{
       padding-top: 10px;
   }
+
+  #filler-img{
+      height: 200px;
+      width: 300px;
+  }
+
+  .headline{
+    font-size: 16px;
+    font-weight: bold;
+    color: color($colors, myGrey);
+    position: relative;
+  }
+
+  .subtext{
+      padding: 0;
+      margin: 0 10% 0 10%;
+      font-size: 14px;
+      color: color($colors, myGrey);
+  }
 }
