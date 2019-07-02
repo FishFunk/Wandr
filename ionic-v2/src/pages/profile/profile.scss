@@ -4,14 +4,34 @@ page-profile {
     position: absolute;
     right: 0;
     top: 0;
-    padding: 20px 20px 0 0;
+    padding: 0 0.5em 0 0;
+  }
+
+  .fa-edit{
+    font-size: 20px !important;
+  }
+
+  .fas{
+    font-size: 16px;
   }
 
   .far{
-    font-size: 1.6em;
+    font-size: 16px;
+  }
+
+  .bio{
+    color: black;
   }
 
   ion-header[transparent] .toolbar-background { background: transparent;}
+
+  .custom-header > * > * > *{
+    padding: 0;
+  }
+
+  .custom-header{
+      padding-top: 20px;
+  }
   
   .profile-img{
     width:100%;
@@ -27,7 +47,11 @@ page-profile {
   h3{
     padding-top: 10px;
     font-size: 18px;
-    color: color($colors, myGrey);
+    color: color($colors, secondary);
+  }
+
+  .icon-col{
+    padding: 0 5px 0 0;
   }
 
   .subtext{
@@ -38,5 +62,9 @@ page-profile {
 
   .grid {
     padding: 0;
+  }
+
+  .scroll-content{
+    padding: 10px !important;
   }
 }

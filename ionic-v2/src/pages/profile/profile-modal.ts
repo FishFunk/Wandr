@@ -1,12 +1,12 @@
 import { Component, NgZone } from "@angular/core";
 import { ViewController, NavParams, LoadingController, AlertController, Events } from "ionic-angular";
-import { IUser, ICheckboxOption, User, Location } from '../../models/user';
+import { IUser, User, Location } from '../../models/user';
+import { ICheckboxOption } from "../../models/metadata";
 import _ from "underscore";
-
-import { FormBuilder } from "@angular/forms";
 import { FirestoreDbHelper } from "../../helpers/firestoreDbHelper";
 import { Constants } from "../../helpers/constants";
 import { Utils } from "../../helpers/utils";
+import { GeoLocationHelper } from "../../helpers/geolocationHelper";
 
 @Component({
     selector: 'profile-modal',
@@ -25,20 +25,17 @@ export class ProfileModal {
   userInterests: ICheckboxOption[] = [];
   lifestyleOptions: ICheckboxOption[] = [];
 
-  private geocoder: google.maps.Geocoder;
-
   constructor(
-    public viewCtrl: ViewController, 
-    public fb: FormBuilder,
+    public viewCtrl: ViewController,
     private zone: NgZone,    
     public navParams: NavParams,
     private loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
     public events: Events,
-    private firestoreDbHelper: FirestoreDbHelper) {
+    private firestoreDbHelper: FirestoreDbHelper,
+    private geolocationHelper: GeoLocationHelper) {
 
     this.googleAutoComplete = new google.maps.places.AutocompleteService();
-    this.geocoder = new google.maps.Geocoder(); 
   }
 
   async ngOnInit(): Promise<any> {
@@ -72,6 +69,8 @@ export class ProfileModal {
       });
     }
 
+    this.autoComplete.input = this.userData.location.stringFormat || '';
+
     loader.dismiss();
   }
 
@@ -84,6 +83,10 @@ export class ProfileModal {
     loader.dismiss();
 
     this.viewCtrl.dismiss(null, '', { animate: true, direction: 'down'});
+  }
+
+  onClickCancel(){
+    this.viewCtrl.dismiss();
   }
 
   //***** start Bound Elements ***** //
@@ -123,7 +126,7 @@ export class ProfileModal {
     // TODO: Save breaks if geocode fails. Handle errors.
     if(this.autoComplete.input)
     {
-      await this.extractLocationAndGeoData(this.autoComplete.input);
+      this.userData.location = await this.geolocationHelper.extractLocationAndGeoData(this.autoComplete.input);
     }
 
     this.userData.interests = [];
@@ -144,27 +147,9 @@ export class ProfileModal {
   }
 
   private writeUserDataToDb(): Promise<any>{
-    const updateData = this.getPlainUserObject();
+    const updateData = Utils.getPlainUserObject(this.userData);
+    updateData.onboardcomplete = true;
     return this.firestoreDbHelper.UpdateUser(this.userData.app_uid, updateData);
-  }
-
-  private getPlainUserObject(){
-    return <IUser> {
-      app_uid: this.userData.app_uid, 
-      facebook_uid: this.userData.facebook_uid,
-      first_name: this.userData.first_name,
-      last_name: this.userData.last_name,
-      email: this.userData.email || "",
-      bio: this.userData.bio || "",
-      location: Object.assign({}, this.userData.location),
-      friends: this.userData.friends.map((obj)=> {return Object.assign({}, obj)}),
-      interests: this.userData.interests || [],
-      lifestyle: this.userData.lifestyle || [],
-      roomkeys: this.userData.roomkeys || [],
-      last_login: this.userData.last_login || new Date().toString(),
-      settings: Object.assign({}, this.userData.settings),
-      profile_img_url: this.userData.profile_img_url || ""
-    }
   }
 
   private createLoadingPopup(){
@@ -172,53 +157,6 @@ export class ProfileModal {
       spinner: 'hide',
       content:`<img src="../../assets/ring-loader.gif"/>`,
       cssClass: 'my-loading-class'
-    });
-  }
-
-  private async extractLocationAndGeoData(location: string){
-    let data = await this.forwardGeocode(location);
-    let formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
-
-    // geocode again to ensure generic city lat long
-    data = await this.forwardGeocode(formattedLocation);
-    formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
-
-    const lat = +data.latitude;
-    const lng = +data.longitude;
-
-    this.userData.location = {
-      stringFormat: formattedLocation,
-      latitude: lat.toFixed(6).toString(),
-      longitude: lng.toFixed(6).toString()
-    };
-  }
-
-  private async forwardGeocode(formattedLocation: string): Promise<any>
-  {
-    return new Promise((resolve, reject)=>{
-      this.geocoder.geocode({ address: formattedLocation }, (results, status)=>{
-        if(status == google.maps.GeocoderStatus.OK){
-          var result = _.first(results);
-          resolve({ latitude: result.geometry.location.lat(), longitude: result.geometry.location.lng() });
-        } else {
-          reject(new Error(`Unable to forward geocode ${formattedLocation}`));
-        }
-      });
-    });
-  }
-
-  private async reverseGeocode(lat: number, lng: number): Promise<any>
-  {
-    return new Promise((resolve, reject)=>{
-      this.geocoder.geocode({ location: {lat: lat, lng: lng} }, (results, status)=>{
-        if(status == google.maps.GeocoderStatus.OK){
-          const formattedLocation = Utils.formatGeocoderResults(results);
-          resolve(formattedLocation);
-        }
-        else {
-          reject(new Error(`Unable to reverse geocode lat: ${lat}, lng: ${lng}`));
-        }
-      });
     });
   }
 }

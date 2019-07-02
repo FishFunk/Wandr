@@ -1,5 +1,6 @@
 import { IChat } from "../models/chat";
 import _ from 'underscore';
+import { IUser } from "../models/user";
 declare var is; // is-js
 
 export class Utils
@@ -17,15 +18,24 @@ export class Utils
           locality = comp.long_name;
         }
         if (_.indexOf(comp.types, 'country') >= 0){
-          country = comp.short_name;
+          country = comp.long_name;
         }
       });
     });
 
-    if(country == 'US'){
-      return `${locality}, ${administrativeArea_1}`;
+    if(country == 'United States'){
+      if(locality && administrativeArea_1){
+        return `${locality}, ${administrativeArea_1}`;
+      }
+      else {
+        return administrativeArea_1;
+      }
     } else {
-      return `${locality}, ${country}`;
+      if(locality && country){
+        return `${locality}, ${country}`;
+      } else {
+        return country;
+      }
     }
   }
 
@@ -61,5 +71,24 @@ export class Utils
       });
       
       return badgeCount;
+  }
+
+  public static getPlainUserObject(userData: IUser){
+    return <IUser> {
+      app_uid: userData.app_uid, 
+      facebook_uid: userData.facebook_uid,
+      first_name: userData.first_name,
+      last_name: userData.last_name,
+      email: userData.email || "",
+      bio: userData.bio || "",
+      location: Object.assign({}, userData.location),
+      friends: userData.friends.map((obj)=> {return Object.assign({}, obj)}),
+      interests: userData.interests || [],
+      lifestyle: userData.lifestyle || [],
+      roomkeys: userData.roomkeys || [],
+      last_login: userData.last_login || new Date().toString(),
+      settings: Object.assign({}, userData.settings),
+      profile_img_url: userData.profile_img_url || ""
+    }
   }
 }

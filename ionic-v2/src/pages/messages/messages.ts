@@ -1,5 +1,5 @@
 import { Component, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
-import { Content, LoadingController, NavParams, Button, NavController, Events, AlertController } from 'ionic-angular';
+import { Content, LoadingController, NavParams, NavController, Events, AlertController } from 'ionic-angular';
 import { Constants } from '../../helpers/constants';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { Subscription, Observable } from 'rxjs';
@@ -112,7 +112,10 @@ export class MessagesPage {
         
         if(this.messagesObservable){
             this.messagesObservable.subscribe(async data =>{
-                this.messages = _.map(data, (obj, key)=> obj);
+                this.messages = _.map(data, (obj: IMessage, key)=> {
+                    obj.text = Utils.convertLinkValuesInString(obj.text);
+                    return obj
+                });
             });
     
             this.updateChatReadReceipt()
@@ -169,7 +172,7 @@ export class MessagesPage {
         if (trimmedText.length > 0){
             let formattedText = trimmedText;
 
-            formattedText = Utils.convertLinkValuesInString(trimmedText);
+            // formattedText = Utils.convertLinkValuesInString(trimmedText);
 
             const isUserA = this.uid == this.chat.userA_id;
 

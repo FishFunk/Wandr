@@ -9,6 +9,9 @@ export abstract class Constants {
     public static appBotId = "wandr_bot"; // defined in firebase functions index.ts
     public static hideMapTutorial = "hideMapTutorial";
 
+    // Database
+    public static shareInfoKey = "shareInfo";
+
     // Events
     public static updateBadgeCountEventName = "onUpdateBadgeCountEvent";
     public static orderConnectionsByFirstName = "onOrderConnectionsByFirst";

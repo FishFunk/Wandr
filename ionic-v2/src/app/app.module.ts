@@ -28,7 +28,6 @@ import { Facebook } from '@ionic-native/facebook/ngx';
 import { TabsPage } from '../pages/tabs/tabs';
 
 //***********  Page Modules **************/
-import { ProfilePageModule } from '../pages/profile/profile.module';
 import { InboxPageModule } from '../pages/messages/inbox.module';
 import { InvitePageModule } from '../pages/invite/invite.module';
 import { MapPageModule } from '../pages/explore/map.module';
@@ -37,13 +36,15 @@ import { MessagesPageModule } from '../pages/messages/messages.module';
 import { IntroPageModule } from '../pages/intro/intro.module';
 import { ConnectionListModule } from '../pages/non_tabs/connection_list.module';
 import { ConnectionProfileModule } from '../pages/non_tabs/connection_profile.module';
-// import { TimeLineModule } from '../pages/trips/time-line.module';
-// import { WelcomeModule } from '../pages/welcome/welcome-module';
-
-//*********** Modal Pages **************/
+import { TripsPageModule } from '../pages/trips/trips.module';
 import { ContactPage } from '../pages/settings/contact';
 import { AboutPage } from '../pages/settings/about';
+import { ProfilePage } from '../pages/profile/profile';
+
+//*********** Modals **************/
 import { ProfileModal } from '../pages/profile/profile-modal';
+import { CreateTripModal } from '../pages/trips/create-trip-modal';
+import { TripDetailsModal } from '../pages/trips/trip-details-modal';
 
 //*********** Provider **************/
 import { FacebookApi } from '../helpers/facebookApi';
@@ -53,6 +54,8 @@ import { FcmProvider } from '../providers/fcm/fcm';
 import { SortOptionsPopoverModule } from '../pages/non_tabs/sort_option_popover.module';
 import { MapTutorialPopoverModule } from '../pages/explore/tutorial_popover.module';
 import { ConnectivityServiceProvider } from '../providers/connectivity-service/connectivity-service';
+import { GeoLocationHelper } from '../helpers/geolocationHelper';
+import { PhotoApi } from '../helpers/photoApi';
 
 //********** firebase configuration  ************ */
 export const config = { 
@@ -70,7 +73,10 @@ export const config = {
     TabsPage,
     ContactPage,
     AboutPage,
-    ProfileModal
+    ProfilePage,
+    ProfileModal,
+    CreateTripModal,
+    TripDetailsModal
   ],
   imports: [
     BrowserModule,
@@ -85,7 +91,6 @@ export const config = {
     AngularFirestoreModule,
     AngularFireModule.initializeApp(config),
     IntroPageModule,
-    ProfilePageModule,
     InboxPageModule,
     InvitePageModule,
     MapPageModule,
@@ -95,8 +100,7 @@ export const config = {
     ConnectionProfileModule,
     SortOptionsPopoverModule,
     MapTutorialPopoverModule,
-    // TimeLineModule,
-    // WelcomeModule
+    TripsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -104,7 +108,10 @@ export const config = {
     TabsPage,
     ContactPage,
     AboutPage,
-    ProfileModal
+    ProfileModal,
+    CreateTripModal,
+    TripDetailsModal,
+    ProfilePage
   ],
   providers: [
     StatusBar,
@@ -122,7 +129,9 @@ export const config = {
     FcmProvider,
     Badge,
     Contacts,
-    ConnectivityServiceProvider
+    ConnectivityServiceProvider,
+    GeoLocationHelper,
+    PhotoApi
   ]
 })
 export class AppModule {}

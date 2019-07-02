@@ -1,0 +1,82 @@
+<ion-header class="custom-header">
+    <ion-grid>
+      <ion-row class="custom-pad">
+        <ion-col col-10 offset-1>
+          <ion-searchbar 
+            [(ngModel)]="autoComplete.input" 
+            (ionInput)="updateSearchResults()" 
+            placeholder="ie. Sydney, Australia">
+          </ion-searchbar>
+          <ion-list [hidden]="autoCompleteItems.length == 0">
+            <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">
+              {{ item.description }}
+            </ion-item>
+          </ion-list>
+        </ion-col>
+        <ion-col col-1>
+            <button id="add-btn" ion-button clear (click)="onClickCreateTrip()" [disabled]="autoComplete.input.length == 0">
+              <i class="fas fa-plus create-icon"></i>
+            </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+</ion-header>
+<ion-content>
+  <ion-grid>
+    <ion-row *ngIf="data.length > 0">
+      <ion-col col-11 offset-1>
+        <ion-list>
+          <ion-item-sliding *ngFor="let item of data">
+            <ion-card ion-item detail-none no-lines box-shadow margin-bottom [ngStyle]="{background: 'url(' + item.data.photoUrl + ')'}">
+              <ion-grid no-padding text-center>
+                <ion-row class="transparent pad-10">
+                  <ion-col>
+                      <div class="date-text">
+                        <span>{{item.data.startDate || 'TBD'}}</span>
+                        &nbsp;<span>to</span>&nbsp;
+                        <span>{{item.data.endDate || 'TBD'}}</span>
+                      </div>
+                      <h2 ion-text >{{item.data.location}}</h2>
+                  </ion-col>
+                </ion-row>
+                <br><br><br><br>
+              </ion-grid>
+            </ion-card>
+            <ion-item-options side="left">
+              <button ion-button color="danger" (click)="onClickTrash(item.key)">
+                <i class="far fa-trash-alt sliding-icon"></i>
+              </button>
+              <button ion-button color="primary" (click)="onClickEdit(item.key)">
+                  <i class="far fa-edit sliding-icon"></i>
+              </button>
+            </ion-item-options>
+            <ion-item-options side="right">
+              <button ion-button color="secondary" (click)="onClickDetail(item.key)">
+                  <i class="fas fa-eye sliding-icon"></i>
+              </button>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <div *ngIf="data.length == 0">
+        <ion-row>
+          <ion-col col-12>
+              <img id="filler-img" src="../../assets/undraw/purple/undraw_destanation1_h3vq.svg">
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-12 text-center>
+              <h2 class="headline">Plan and track your trips here.</h2>
+              <p class="subtext">
+                  Not sure where to go? Explore your Wandr network!
+              </p>
+              <br>
+              <button ion-button square outline color="primary" margin-top (click)="onClickExplore()" margin-top>
+                  EXPLORE
+              </button>
+          </ion-col>
+        </ion-row>
+    </div>
+  </ion-grid>
+</ion-content>

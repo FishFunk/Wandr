@@ -1,3 +1,5 @@
+import { ICheckboxOption } from "./metadata";
+
 export interface IUser{
     app_uid: string; 
     facebook_uid: string;
@@ -29,11 +31,6 @@ export interface IMutualConnectionInfo {
     first_name: string;
     last_name: string;
     profile_img_url: string;
-}
-
-export interface ICheckboxOption{
-    label: string,
-    iconClass: string
 }
 
 export interface IFacebookFriend{
