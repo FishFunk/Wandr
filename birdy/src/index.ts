@@ -4,8 +4,6 @@ const admin = require('firebase-admin');
 const express = require('express');
 const requestPromise = require('request-promise');
 
-
-
 const app = express();
 
 // --------- todo: i think this is only for dev...
@@ -35,8 +33,10 @@ exports.api = functions.https.onRequest(app);
 // -----------------------------------------
 app.post('/getHolidays', (req, res) => {
   
-    let response : any = {};
-    holidayApiGetHolidays()
+    let response: any = {};
+    let countryCode = '';
+
+    holidayApiGetHolidays(countryCode)
     .then((resp) => {
       console.log(resp);
       response.data = resp;
@@ -98,4 +98,3 @@ function weatherApiGetRegions(){
       json: true
     });
 }
- 
