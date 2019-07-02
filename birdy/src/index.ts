@@ -30,6 +30,40 @@ exports.api = functions.https.onRequest(app);
 
 
 
+// -----------------------------------------
+// --- Service name: /getRegions ---
+// -----------------------------------------
+app.post('/getHolidays', (req, res) => {
+  
+    let response : any = {};
+    holidayApiGetHolidays()
+    .then((resp) => {
+      console.log(resp);
+      response.data = resp;
+      response.ErrorMessage = "OK";
+      response.ErrorCode = 200;
+      
+      res.status(200);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(response);
+    })
+    .catch((err) => {
+      response.ErrorMessage = err;
+      response.ErrorCode = 200;
+      res.status(200);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(response);
+    });
+  });
+  
+  function holidayApiGetHolidays(countryCode: string){
+      return requestPromise({
+        method: 'GET',
+        uri: 'https://holidayapi.com/v1/holidays?key=50059bac-4ff6-4353-b67a-e99f72b303a4&country=' + countryCode + '&year=2018&pretty',
+        json: true
+      });
+  }
+
 
 // -----------------------------------------
 // --- Service name: /getRegions ---
