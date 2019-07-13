@@ -95,7 +95,7 @@ export class TripsPage {
     tab.select(2);
   }
 
-  load() :any {
+  load(){
     const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.tripsObservable = this.firestoreDbHelper.ReadTripsObservableByUserId(uid);
 
