@@ -1,12 +1,11 @@
-import { Component, NgZone, ViewChild } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import { ViewController, ToastController, NavParams, LoadingController } from "ionic-angular";
 import { FirestoreDbHelper } from "../../helpers/firestoreDbHelper";
 import { Constants } from "../../helpers/constants";
 import { ITrip } from "../../models/trip";
 import { GeoLocationHelper } from "../../helpers/geolocationHelper";
 import _ from 'underscore';
-import { filter } from "rxjs/operators";
-import { PhotoApi } from "../../helpers/photoApi";
+// import { PhotoApi } from "../../helpers/photoApi";
 
 @Component({
     selector: 'create-trip-modal',
@@ -19,17 +18,13 @@ export class CreateTripModal {
     tripData: ITrip = {
         uid: '',
         facebook_uid: '',
-        going: false,
-        wantsToGo: false,
-        // hasBeen: false,
-        // business: false,
-        // leisure: false,
+        business: false,
+        leisure: false,
         moving: false,
-        flying: false,
-        driving: false,
         startDate: null,
         endDate: null,
-        location: ""
+        location: "",
+        notes: ""
     };
 
     googleAutoComplete: any;
@@ -44,8 +39,7 @@ export class CreateTripModal {
         public toastCtrl: ToastController,
         private loadingCtrl: LoadingController,
         private firestoreDbHelper: FirestoreDbHelper,
-        private geolocationHelper: GeoLocationHelper,
-        private photoApi: PhotoApi) {
+        private geolocationHelper: GeoLocationHelper) {
         
         const tripData = params.get('trip');
     
@@ -84,7 +78,7 @@ export class CreateTripModal {
             this.selectedPlace = place;
             this.autoComplete.input = place.description;
             this.autoCompleteItems = [];
-            this.tripData.photoUrl = await this.getTripPhoto();
+            //this.tripData.photoUrl = await this.getTripPhoto();
         }
 
         const location = await this.geolocationHelper.extractLocationAndGeoData(this.autoComplete.input);
@@ -113,9 +107,9 @@ export class CreateTripModal {
         }
     }
 
-    private async getTripPhoto(): Promise<string>{
-        return this.photoApi.queryRandomPhoto(this.selectedPlace.description);
-    }
+    // private async getTripPhoto(): Promise<string>{
+    //     return this.photoApi.queryRandomPhoto(this.selectedPlace.description);
+    // }
     
     //***** start Bound Elements ***** //
     updateSearchResults(){
@@ -138,7 +132,7 @@ export class CreateTripModal {
         this.selectedPlace = item;
         this.autoComplete.input = item.description;
         this.autoCompleteItems = [];
-        this.tripData.photoUrl = await this.getTripPhoto();
+        //this.tripData.photoUrl = await this.getTripPhoto();
     }
     //******* end Bound Elements ***** //
 }

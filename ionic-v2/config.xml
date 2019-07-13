@@ -91,13 +91,11 @@
     <plugin name="cordova-plugin-firebase" spec="~2.0.5" />
     <plugin name="cordova-plugin-badge" spec="~0.8.8" />
     <plugin name="cordova-plugin-contacts" spec="~3.0.1" />
-    <plugin name="cordova-plugin-facebook4" spec="~4.1.0">
+    <plugin name="cordova-plugin-network-information" spec="~2.0.1" />
+    <plugin name="cordova-android-support-gradle-release" spec="~3.0.0" />
+    <plugin name="cordova-plugin-facebook5" spec="~1.9.1">
         <variable name="APP_ID" value="244138132926081" />
         <variable name="APP_NAME" value="Wandr" />
-        <variable name="FACEBOOK_HYBRID_APP_EVENTS" value="false" />
-        <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="4.38.1" />
     </plugin>
-    <plugin name="cordova-plugin-network-information" spec="~2.0.1" />
     <engine name="android" spec="~7.1.4" />
-    <engine name="ios" spec="~4.5.5" />
 </widget>

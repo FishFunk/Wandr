@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import _ from 'underscore';
 import { TripDetailsModal } from './trip-details-modal';
 import { ITrip } from '../../models/trip';
-import { PhotoApi } from '../../helpers/photoApi';
+// import { PhotoApi } from '../../helpers/photoApi';
 
 @IonicPage()
 @Component({
@@ -26,10 +26,8 @@ export class TripsPage {
 
   constructor(private modalController: ModalController,
     private navCtrl: NavController,
-    private alertCtrl: AlertController,
     private firestoreDbHelper: FirestoreDbHelper,
-    private zone: NgZone,
-    private photoApi: PhotoApi)
+    private zone: NgZone)
   {
     this.googleAutoComplete = new google.maps.places.AutocompleteService();
   }
@@ -53,35 +51,13 @@ export class TripsPage {
       location: this.autoComplete.input
     }
 
-    trip.photoUrl = await this.getPhotoUrl();
+    //trip.photoUrl = await this.getPhotoUrl();
 
     modal = this.modalController.create(CreateTripModal, { trip: trip });
     modal.present();
 
     this.autoComplete.input = '';
     this.autoCompleteItems = [];
-  }
-
-  onClickTrash(key){
-    const confirm = this.alertCtrl.create({
-      title: `Are you sure want to delete this trip?`,
-      buttons: [
-        {
-          text: 'Cancel',
-          handler:  ()=>{}
-        },
-        {
-          text: 'Delete',
-          handler: this.deleteTrip.bind(this, key)
-        }]
-    });
-    confirm.present();
-  }
-
-  onClickEdit(key){
-    const match = _.find(this.data, (obj)=> obj.key == key);
-    const modal = this.modalController.create(CreateTripModal, { key: key, trip: match.data });
-    modal.present();
   }
 
   onClickDetail(key){
@@ -128,14 +104,7 @@ export class TripsPage {
   }
   //******* end Bound Elements ***** //
 
-  private deleteTrip(key){
-    this.firestoreDbHelper.DeleteTripByKey(key)
-      .catch(error=>{
-        console.error(error);
-      });
-  }
-
-  private getPhotoUrl(): Promise<string>{
-    return this.photoApi.queryRandomPhoto(this.selectedPlace.description);
-  }
+  // private getPhotoUrl(): Promise<string>{
+  //   return this.photoApi.queryRandomPhoto(this.selectedPlace.description);
+  // }
 }

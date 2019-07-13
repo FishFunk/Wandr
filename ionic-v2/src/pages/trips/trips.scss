@@ -1,22 +1,5 @@
 trips-page {
 
-  ion-card{
-    background-size: cover !important;
-    z-index: 999;
-  }
-
-  #trash-btn{
-    color: color($colors, danger);
-  }
-
-  #edit-btn{
-    color: color($colors, primary);
-  }
-
-  #detail-btn{
-    color: color($colors, secondary);
-  }
-
   #add-btn{
     margin: 0;
     padding: 0 0 0 6px;
@@ -36,10 +19,6 @@ trips-page {
     // border-radius: 50%;
   }
 
-  .sliding-icon{
-    font-size: 16px;
-  }
-
   .create-icon{
     font-size: 22px;
   }
@@ -56,14 +35,8 @@ trips-page {
     font-size: 12px;
   }
 
-  .card-btn{
-    height: 2em;
-    font-size: 1.2em;
-    margin: 0;
-  }
 
-
-  ion-item-sliding {
+  .card {
     border-radius: $border-radius !important;
     overflow: visible;
     position: relative;
@@ -75,7 +48,7 @@ trips-page {
       background: #6700a9;//theme-colors('mainColors', 'primary') !important;
       top:45%;
       left: -25px;
-      bottom: -60%;
+      bottom: -65%;
       position: absolute;
     }
 
@@ -92,7 +65,7 @@ trips-page {
     }
   }
 
-  ion-list > ion-item-sliding:last-child {
+  ion-list > ion-card:last-child {
     &:after {
       display: none;
     }

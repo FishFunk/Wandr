@@ -15,11 +15,18 @@
         <h3>ITINERARY</h3>
         <ion-row>
             <ion-col col-12>
+                <span>From</span>&nbsp;
                 <span font-bold small-font>{{tripData.startDate || 'TBD'}}</span>
                 &nbsp;<span>to</span>&nbsp;
                 <span font-bold small-font>{{tripData.endDate || 'TBD'}}</span>
                 <h2>{{tripData.location}}</h2>
-                <img class="location-img" [src]="tripData.photoUrl">
+                <!-- <img class="location-img" [src]="tripData.photoUrl"> -->
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="tripData.notes">
+            <h3>NOTES</h3>
+            <ion-col col-12>
+                <p>{{tripData.notes}}</p>
             </ion-col>
         </ion-row>
         <ion-row *ngIf="locals.length > 0">
@@ -37,17 +44,29 @@
                 </ion-grid>
             </ion-col>
         </ion-row>
-        <!-- <h3>WEATHER</h3>
         <ion-row>
+            <h3>WEATHER</h3>
             <ion-col col-12>
 
             </ion-col>
         </ion-row>
-        <h3>HOLIDAYS</h3>
         <ion-row>
+            <h3>HOLIDAYS</h3>
             <ion-col col-12>
 
             </ion-col>
-        </ion-row> -->
+        </ion-row>
+        <ion-row>
+            <ion-col col-12 text-center>
+                <button ion-button square outline color="primary" margin-top (click)="onClickEdit()">
+                    EDIT
+                </button>
+            </ion-col>
+            <ion-col col-12 text-center>
+                <button ion-button square outline color="danger" margin-top (click)="onClickDelete()">
+                    DELETE
+                </button>
+            </ion-col>
+        </ion-row>
     </ion-grid>
 </ion-content>
