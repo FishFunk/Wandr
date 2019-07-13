@@ -44,6 +44,7 @@ functions/**/*.js.map
 # Typescript v1 declaration files
 typings/
 
+#birdy/.gitignore
 # Optional npm cache directory
 .npm
 
@@ -61,3 +62,6 @@ typings/
 
 # dotenv environment variables file
 .env
+
+node_modules/
+

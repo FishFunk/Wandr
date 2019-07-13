@@ -13,7 +13,7 @@ export class PhotoApi
     public queryRandomPhoto(searchValue: string): Promise<string>{
         searchValue = searchValue.replace(' ', '%20').replace(',','');
         return new Promise((resolve, reject)=>{
-            this.http.get(`https://api.unsplash.com/photos/random?query=${searchValue}&client_id=${this.client_id}`)
+            this.http.get(`https://api.unsplash.com/photos/random?query=${searchValue}&orientation=landscape&featured=true&client_id=${this.client_id}`)
                 .subscribe((data: any)=>{
                     resolve(data.urls.regular);
                 }, (error)=>{
