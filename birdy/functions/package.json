@@ -36,5 +36,8 @@
     "deploy": "tsc && firebase deploy --only functions",
     "test": "run-s build mocha"
   },
-  "private": true
+  "private": true,
+  "engines":{
+    "node": "8"
+  }
 }

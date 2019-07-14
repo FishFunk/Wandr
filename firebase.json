@@ -4,14 +4,6 @@
       "npm --prefix \"$RESOURCE_DIR\" run lint",
       "npm --prefix \"$RESOURCE_DIR\" run build"
     ],
-    "public": "public",
-    "rewrites": [{
-      "source": "/getHolidays",
-      "function": "birdy"
-    },
-    {
-      "source": "/getRegions",
-      "function": "birdy"
-    }]
+    "public": "public"
   }
 }

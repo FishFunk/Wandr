@@ -94,16 +94,6 @@ declare function escape(string: string): string;
   */
 declare function unescape(string: string): string;
 
-interface Symbol {
-  /** Returns a string representation of an object. */
-  toString(): string;
-
-  /** Returns the primitive value of the specified object. */
-  valueOf(): symbol;
-}
-
-declare type PropertyKey = string | number | symbol;
-
 interface PropertyDescriptor {
     configurable?: boolean;
     enumerable?: boolean;
@@ -134,7 +124,7 @@ interface Object {
       * Determines whether an object has a property with the specified name.
       * @param v A property name.
       */
-    hasOwnProperty(v: PropertyKey): boolean;
+    hasOwnProperty(v: string): boolean;
 
     /**
       * Determines whether an object exists in another object's prototype chain.
@@ -146,7 +136,7 @@ interface Object {
       * Determines whether a specified property is enumerable.
       * @param v A property name.
       */
-    propertyIsEnumerable(v: PropertyKey): boolean;
+    propertyIsEnumerable(v: string): boolean;
 }
 
 interface ObjectConstructor {
@@ -169,7 +159,7 @@ interface ObjectConstructor {
       * @param o Object that contains the property.
       * @param p Name of the property.
     */
-    getOwnPropertyDescriptor(o: any, p: PropertyKey): PropertyDescriptor | undefined;
+    getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor | undefined;
 
     /**
       * Returns the names of the own properties of an object. The own properties of an object are those that are defined directly
@@ -197,7 +187,7 @@ interface ObjectConstructor {
       * @param p The property name.
       * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
       */
-    defineProperty(o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): any;
+    defineProperty(o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any;
 
     /**
       * Adds one or more properties to an object, and/or modifies attributes of existing properties.
@@ -535,15 +525,6 @@ interface TemplateStringsArray extends ReadonlyArray<string> {
     readonly raw: ReadonlyArray<string>;
 }
 
-/**
- * The type of `import.meta`.
- * 
- * If you need to declare that a given property exists on `import.meta`,
- * this type may be augmented via interface merging.
- */
-interface ImportMeta {
-}
-
 interface Math {
     /** The mathematical constant e. This is Euler's number, the base of natural logarithms. */
     readonly E: number;
@@ -811,7 +792,8 @@ interface Date {
 
 interface DateConstructor {
     new(): Date;
-    new(value: number | string): Date;
+    new(value: number): Date;
+    new(value: string): Date;
     new(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
     (): string;
     readonly prototype: Date;
@@ -1379,7 +1361,7 @@ type Pick<T, K extends keyof T> = {
 /**
  * Construct a type with a set of properties K of type T
  */
-type Record<K extends keyof any, T> = {
+type Record<K extends string, T> = {
     [P in K]: T;
 };
 
@@ -4173,6 +4155,8 @@ interface Date {
 }
 
 
+declare type PropertyKey = string | number | symbol;
+
 interface Array<T> {
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -4431,6 +4415,20 @@ interface NumberConstructor {
     parseInt(string: string, radix?: number): number;
 }
 
+interface Object {
+    /**
+     * Determines whether an object has a property with the specified name.
+     * @param v A property name.
+     */
+    hasOwnProperty(v: PropertyKey): boolean;
+
+    /**
+     * Determines whether a specified property is enumerable.
+     * @param v A property name.
+     */
+    propertyIsEnumerable(v: PropertyKey): boolean;
+}
+
 interface ObjectConstructor {
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
@@ -4486,6 +4484,25 @@ interface ObjectConstructor {
      * @param proto The value of the new prototype or null.
      */
     setPrototypeOf(o: any, proto: object | null): any;
+
+    /**
+     * Gets the own property descriptor of the specified object.
+     * An own property descriptor is one that is defined directly on the object and is not
+     * inherited from the object's prototype.
+     * @param o Object that contains the property.
+     * @param p Name of the property.
+     */
+    getOwnPropertyDescriptor(o: any, propertyKey: PropertyKey): PropertyDescriptor | undefined;
+
+    /**
+     * Adds a property to an object, or modifies attributes of an existing property.
+     * @param o Object on which to add or modify the property. This can be a native JavaScript
+     * object (that is, a user-defined object or a built in object) or a DOM object.
+     * @param p The property name.
+     * @param attributes Descriptor for the property. It can be for a data property or an accessor
+     *  property.
+     */
+    defineProperty(o: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): any;
 }
 
 interface ReadonlyArray<T> {
@@ -4678,7 +4695,7 @@ interface Map<K, V> {
 
 interface MapConstructor {
     new (): Map<any, any>;
-    new <K, V>(entries?: ReadonlyArray<[K, V]> | null): Map<K, V>;
+    new <K, V>(entries?: ReadonlyArray<[K, V]>): Map<K, V>;
     readonly prototype: Map<any, any>;
 }
 declare var Map: MapConstructor;
@@ -4699,7 +4716,7 @@ interface WeakMap<K extends object, V> {
 
 interface WeakMapConstructor {
     new (): WeakMap<object, any>;
-    new <K extends object, V>(entries?: ReadonlyArray<[K, V]> | null): WeakMap<K, V>;
+    new <K extends object, V>(entries?: ReadonlyArray<[K, V]>): WeakMap<K, V>;
     readonly prototype: WeakMap<object, any>;
 }
 declare var WeakMap: WeakMapConstructor;
@@ -4715,7 +4732,7 @@ interface Set<T> {
 
 interface SetConstructor {
     new (): Set<any>;
-    new <T>(values?: ReadonlyArray<T> | null): Set<T>;
+    new <T>(values?: ReadonlyArray<T>): Set<T>;
     readonly prototype: Set<any>;
 }
 declare var Set: SetConstructor;
@@ -4734,7 +4751,7 @@ interface WeakSet<T extends object> {
 
 interface WeakSetConstructor {
     new (): WeakSet<object>;
-    new <T extends object>(values?: ReadonlyArray<T> | null): WeakSet<T>;
+    new <T extends object>(values?: ReadonlyArray<T>): WeakSet<T>;
     readonly prototype: WeakSet<object>;
 }
 declare var WeakSet: WeakSetConstructor;
@@ -5447,7 +5464,14 @@ interface PromiseConstructor {
      * @param reason The reason the promise was rejected.
      * @returns A new rejected Promise.
      */
-    reject<T = never>(reason?: any): Promise<T>;
+    reject(reason: any): Promise<never>;
+
+    /**
+     * Creates a new rejected promise for the provided reason.
+     * @param reason The reason the promise was rejected.
+     * @returns A new rejected Promise.
+     */
+    reject<T>(reason: any): Promise<T>;
 
     /**
      * Creates a new resolved promise for the provided value.
@@ -5505,6 +5529,14 @@ declare namespace Reflect {
     function setPrototypeOf(target: object, proto: any): boolean;
 }
 
+
+interface Symbol {
+    /** Returns a string representation of an object. */
+    toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): symbol;
+}
 
 interface SymbolConstructor {
     /**
@@ -22114,11 +22146,6 @@ declare var WScript: {
      */
     Sleep(intTime: number): void;
 };
-
-/**
- * WSH is an alias for WScript under Windows Script Host
- */
-declare var WSH: typeof WScript;
 
 /**
  * Represents an Automation SAFEARRAY
