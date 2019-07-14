@@ -5,6 +5,7 @@ import { Constants } from "../../helpers/constants";
 import { ITrip } from "../../models/trip";
 import { IUser } from "../../models/user";
 import { CreateTripModal } from "./create-trip-modal";
+import { TripsApi } from "../../helpers/tripsApi";
 
 @Component({
     selector: 'trip-details-modal',
@@ -27,7 +28,8 @@ export class TripDetailsModal {
         public viewCtrl: ViewController,
         private alertCtrl: AlertController,
         private firestoreDbHelper: FirestoreDbHelper,
-        private modalController: ModalController
+        private modalController: ModalController,
+        private tripsApi: TripsApi
     ){
         this.key = params.get('key');
         this.tripData = params.get('trip');
@@ -40,6 +42,22 @@ export class TripDetailsModal {
     async load(){
         const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
         this.locals = await this.firestoreDbHelper.ReadAllUsers(uid, this.tripData.location);
+
+        // await this.tripsApi.getHolidays()
+        //   .then(data=>{
+        //     console.log(data);
+        //   })
+        //   .catch(error=>{
+        //     console.error(error);
+        //   });
+
+        // await this.tripsApi.getRegions()
+        //   .then(data=>{
+        //     console.log(data);
+        //   })
+        //   .catch(error=>{
+        //     console.error(error);
+        //   });
     }
 
     onClickClose(){

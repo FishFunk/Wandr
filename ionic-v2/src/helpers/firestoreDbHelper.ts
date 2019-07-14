@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { IUser } from "../models/user";
 import _ from 'underscore';
-import { AngularFirestore, AngularFirestoreDocument } from "angularfire2/firestore";
+import { AngularFirestore } from "angularfire2/firestore";
 import { IChat } from "../models/chat";
 import { firestore } from "firebase";
 import { Observable } from "rxjs";
