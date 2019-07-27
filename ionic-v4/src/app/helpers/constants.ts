@@ -7,7 +7,10 @@ export abstract class Constants {
     public static userFirstNameKey = "firstName";
     public static userLastNameKey = "lastName";
     public static appBotId = "wandr_bot"; // defined in firebase functions index.ts
+
+    // Flags
     public static hideMapTutorial = "hideMapTutorial";
+    public static showIntro = "showIntro";
 
     // Database
     public static shareInfoKey = "shareInfo";

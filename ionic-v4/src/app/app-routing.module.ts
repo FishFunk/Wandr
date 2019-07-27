@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { IntroGuard } from './guards/intro.guard';
 
 const routes: Routes = [
-  { path: '', loadChildren: './tabs/tabs.module#TabsPageModule', canActivate: [IntroGuard] },
+  { path: '', loadChildren: './tabs/tabs.module#TabsPageModule' },
   { path: 'intro', loadChildren: './intro/intro.module#IntroPageModule' },
   { path: 'connection-list/:location', loadChildren: './non-tabs/connection-list.module#ConnectionListPageModule' },
   //{ path: 'connection-profile/:userId/:showChatButton', loadChildren: './non-tabs/connection-profile.module#ConnectionProfilePageModule' },
