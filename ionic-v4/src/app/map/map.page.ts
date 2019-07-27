@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { IUser } from '../models/user';
-import { NavController, LoadingController, AlertController, Events } from '@ionic/angular';
+import { LoadingController, AlertController, Events, PopoverController, ModalController } from '@ionic/angular';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
 import { Constants } from '../helpers/constants';
 import _ from "underscore";
 import {} from "google-maps";
+import { ConnectionListPage } from '../non-tabs/connection-list.page';
+import { MapTutorialPopover } from './tutorial-popover';
 
 @Component({
   selector: 'app-map',
@@ -14,9 +16,8 @@ import {} from "google-maps";
 })
 
 export class MapPage {
-
   maxZoomLevel = 10;
-  minZoomLevel = 2;
+  minZoomLevel = 3;
   users: IUser[] = [];
   searchItems: string[];
   map: google.maps.Map;
@@ -25,8 +26,11 @@ export class MapPage {
   searchBox: google.maps.places.SearchBox;
   
   private firebaseUserId: string;
+  private currentRandomLocation: string;
 
-  mapOptions = <google.maps.MapOptions> {
+  pageloaded=false;
+
+  mapOptions: google.maps.MapOptions = {
     center: this.mapCenter,
     minZoom: this.minZoomLevel,
     maxZoom: this.maxZoomLevel,
@@ -63,9 +67,30 @@ export class MapPage {
 
   locationMap: _.Dictionary<google.maps.LatLng>; // { 'string_location' : LatLng Object }
 
-  constructor(public navCtrl: NavController,
+
+  slides = [
+    {
+      title: "<br>Wandr-ing where to go next?",
+      description: "Wandr makes it easy to explore where friends are located!",
+      image: "../../assets/undraw/purple/"
+    },
+    {
+      title: "Explore the Wandr map",
+      description: "See all your connections on an interactive map",
+      image: "../../assets/undraw/purple/"
+    },
+    {
+      title: "Instantly chat with connections",
+      description: "Make plans and go have fun",
+      image: "../../assets/undraw/purple/"
+    },
+  ];
+
+
+  constructor(public modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
+    private popoverCtrl: PopoverController,
     private firestoreDbHelper: FirestoreDbHelper,
     private logger: Logger,
     private events: Events) {
@@ -77,20 +102,24 @@ export class MapPage {
     // TODO: Splash/fade to hide map loading delay?
     const spinner = await this.showLoadingPopup();
     this.loadMap()
-      .then(()=>{
+      .then(async ()=>{
         // TODO: Show one-time introductory dialog explaining how to use map (tutorial?)
         spinner.dismiss();
+        const hideTutorial = window.localStorage.getItem(Constants.hideMapTutorial) == "true";
+        if(!hideTutorial){
+          // setTimeout(async ()=>{
+            const popover = await this.popoverCtrl.create({
+              component: MapTutorialPopover
+            });
+            popover.present();
+          //}, 250);
+        }
       })
-      .catch(async error=>{
-        spinner.dismiss();        
-        this.logger.Error(error)
-          .then(()=>{
-            this.showLoadFailurePrompt();
-          })
-          .catch(()=>{
-            this.showLoadFailurePrompt();
-          });
-      });  
+      .catch(error=>{
+        spinner.dismiss();
+        this.showLoadFailurePrompt();
+        this.logger.Error(error);
+      });
   }
  
   async loadMap(){
@@ -131,39 +160,14 @@ export class MapPage {
       spinner.dismiss();
     } catch(ex){
       spinner.dismiss();
-      this.logger.Error(ex)
-        .then(()=>{
-          this.showLoadFailurePrompt();
-        })
-        .catch(()=>{
-          this.showLoadFailurePrompt();
-        });
+      this.showLoadFailurePrompt();
+      this.logger.Error(ex);
     }
   }
 
-  onMarkerClick(latLng: google.maps.LatLng, e: Event){
-    var str_location = _.findKey(this.locationMap, (obj)=>{
-      return obj == latLng;
-    });
-
-    this.navCtrl.navigateForward(`/connection-list/${str_location}`, 
-      { 
-        animated: true,
-        animationDirection: 'forward'
-      });
-  }
-
-  async onShowAllClick(){
-    this.navCtrl.navigateForward(`/connection-list/`, 
-      { 
-        animated: true,
-        animationDirection: 'forward'
-      });
-  }
-
-  private async showLoadFailurePrompt(){
-    const alert = await  this.alertCtrl.create({
-      message: "Hmm, looks like something went wrong...",
+  private showLoadFailurePrompt(){
+    this.alertCtrl.create({
+      header: "Hmm, looks like something went wrong...",
       buttons: [{
         text: "Reload the map?",
         handler: ()=>{
@@ -171,8 +175,6 @@ export class MapPage {
         }
       }]
     });
-
-    alert.present();
   }
 
   private createMarkersAndHeatMap(allUsers: IUser[]){
@@ -197,7 +199,7 @@ export class MapPage {
       
     // Cache and map geocode information
     let geoCode: google.maps.LatLng;
-    if(!this.locationMap[formattedLocation]){
+    if(!this.locationMap[formattedLocation] && user.location.latitude && user.location.longitude){
       geoCode = new google.maps.LatLng(+user.location.latitude, +user.location.longitude);
       this.locationMap[formattedLocation] = geoCode;
 
@@ -232,6 +234,32 @@ export class MapPage {
 
       marker.setMap(this.map);
     });
+  }
+
+  private async onMarkerClick(latLng: google.maps.LatLng, e: Event){
+    const currentZoom = this.map.getZoom();
+    if(currentZoom < this.maxZoomLevel){
+      this.map.panTo(latLng);
+      this.map.setZoom(currentZoom * 2);
+      return;
+    }
+
+    var str_location = _.findKey(this.locationMap, (obj)=>{
+      return obj == latLng;
+    });
+
+    const modal = await this.modalCtrl.create({
+      component: ConnectionListPage,
+      componentProps: { locationStringFormat: str_location }
+    });
+    modal.present();
+  }
+
+  private async onShowAllClick(){
+    const modal = await this.modalCtrl.create({
+      component: ConnectionListPage
+    });
+    modal.present();
   }
 
   private initHeatMap(geoData: google.maps.LatLng[]){
@@ -309,11 +337,10 @@ export class MapPage {
 
   private async showLoadingPopup(){
     const spinner = await this.loadingCtrl.create({
-          spinner: 'dots',
-          cssClass: 'my-loading-class'
+          spinner: 'dots'
       });
 
-    spinner.present();
+    await spinner.present();
 
     return spinner;
   }
@@ -351,14 +378,30 @@ export class MapPage {
     controlText.innerHTML = '<i class="fas fa-dice fa-2x"></i>';
     controlUI.appendChild(controlText);
 
-    // Setup the click event listeners
-    controlUI.addEventListener('click', ()=> {
+    // Setup the Random click event listener
+    controlUI.addEventListener('click', async ()=> {
       var keys = _.keys(this.locationMap);
-      var randomIdx = _.random(0, keys.length - 1);
-      var randomKey = keys[randomIdx];
-      var latLng = this.locationMap[randomKey];
-      this.map.panTo(latLng);
-      this.map.setZoom(this.maxZoomLevel);
+      if(keys.length == 0){
+        const alert = await this.alertCtrl.create({
+          message: "No connections yet!"
+        });
+        alert.present();
+      } else if (keys.length == 1){
+        const latLng = this.locationMap[keys[0]];
+        this.map.panTo(latLng);
+        this.map.setZoom(this.maxZoomLevel);
+      } else {
+        var randomIdx = _.random(0, keys.length - 1);
+        var newLocation = keys[randomIdx];
+        if(newLocation == this.currentRandomLocation){
+          controlUI.click();
+        } else {
+          this.currentRandomLocation = newLocation;
+          var latLng = this.locationMap[newLocation];
+          this.map.panTo(latLng);
+          this.map.setZoom(this.maxZoomLevel);
+        }
+      }
     });
 
     this.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(controlDiv);
@@ -401,5 +444,6 @@ export class MapPage {
     controlUI.addEventListener('click', this.onShowAllClick.bind(this));
 
     this.map.controls[google.maps.ControlPosition.LEFT_TOP].push(controlDiv);
+    this.pageloaded=true;
   }
 }

@@ -1,7 +1,7 @@
 <ion-header class="custom-header">
-  <ion-grid>
+  <ion-grid class="no-padding-bottom">
     <ion-row>
-      <ion-col size="10" offset="1">
+      <ion-col size="9" offset="1">
         <ion-searchbar 
           [(ngModel)]="autoComplete.input" 
           (ionInput)="updateSearchResults()" 
@@ -15,7 +15,7 @@
         </ion-list>
       </ion-col>
       <ion-col size="1">
-          <ion-button fill="clear" (click)="onClickCreateTrip()" [disabled]="autoComplete.input.length == 0">
+          <ion-button expand="full" fill="clear" (click)="onClickCreateTrip()" [disabled]="autoComplete.input.length == 0">
             <i class="fas fa-plus create-icon"></i>
           </ion-button>
       </ion-col>
@@ -23,11 +23,11 @@
   </ion-grid>
 </ion-header>
 <ion-content>
-<ion-grid>
+<ion-grid class="no-padding-top">
   <ion-row *ngIf="data.length > 0">
-    <ion-col col-11 offset-1>
+    <ion-col size="12" class="no-padding-top">
       <ion-list>
-        <ion-card padding box-shadow margin-bottom *ngFor="let item of data" (click)="onClickDetail(item.key)">
+        <ion-card *ngFor="let item of data" (click)="onClickDetail(item.key)">
           <ion-grid no-padding text-center>
             <ion-row class="transparent pad-10">
               <ion-col>
@@ -48,12 +48,12 @@
   </ion-row>
   <div *ngIf="data.length == 0">
       <ion-row>
-        <ion-col col-12>
+        <ion-col size="12">
             <img id="filler-img" src="../../assets/undraw/purple/undraw_destanation1_h3vq.svg">
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col col-12 text-center>
+        <ion-col size="12" text-center>
             <h2 class="headline">Plan and track your trips here.</h2>
             <p class="subtext">
                 Not sure where to go? Explore your Wandr network!

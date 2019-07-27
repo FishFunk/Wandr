@@ -1,16 +1,16 @@
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MapTutorialPopover } from './tutorial-popover';
 import { FormsModule } from '@angular/forms';
-import { ConnectionProfileModal } from './connection-profile';
 
 @NgModule({
-  declarations: [ConnectionProfileModal],
+  declarations: [MapTutorialPopover],
   imports: [
     IonicModule,
     CommonModule,
     FormsModule
   ],
-  entryComponents: [ConnectionProfileModal]
+  entryComponents: [MapTutorialPopover]
 })
-export class ConnectionProfileModalModule {}
+export class MapTutorialPopoverModule {}

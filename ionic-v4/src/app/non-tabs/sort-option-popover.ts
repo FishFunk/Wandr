@@ -3,7 +3,7 @@ import { Component } from "@angular/core";
 import { Constants } from "../helpers/constants";
 
 @Component({
-    templateUrl: 'sort_option_popover.html'
+    templateUrl: 'sort-option-popover.html'
 })
 
 export class SortOptionsPopover {

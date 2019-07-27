@@ -1,8 +1,7 @@
 
-  // #add-btn{
-  //   margin: 0;
-  //   padding: 0 0 0 6px;
-  // }
+  ion-searchbar{
+    padding: 0;
+  }
 
   #location-photo{
     width: 250px;
@@ -22,9 +21,13 @@
     font-size: 22px;
   }
 
-  // .custom-pad{
-  //   padding: 12px 12px 0 12px;
-  // }
+  .no-padding-top{
+    padding-top: 0;
+  }
+
+  .no-padding-bottom{
+    padding-bottom: 0;
+  }
 
   .pad-10{
     padding: 10px;
@@ -35,8 +38,8 @@
   }
 
 
-  .card {
-    --border-radius: var(--border-radius) !important;
+  ion-card {
+    border-radius: 4px !important;
 
     overflow: visible;
     position: relative;
@@ -45,10 +48,10 @@
     &:after {
       content: "";
       width: 2px;
-      background: #6700a9;//theme-colors('mainColors', 'primary') !important;
-      top:45%;
-      left: -25px;
-      bottom: -65%;
+      background: var(--ion-color-secondary) !important;
+      top:50%;
+      left: -9px;
+      bottom: -75%;
       position: absolute;
     }
 
@@ -58,9 +61,9 @@
       width: 14px;
       height: 14px;
       border-radius: 50%;
-      background: #6700a9;// theme-colors('mainColors', 'primary') !important;
+      background: var(--ion-color-secondary) !important;
       top:45%;
-      left: -31px;
+      left: -15px;
       position: absolute;
     }
   }

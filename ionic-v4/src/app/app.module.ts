@@ -27,6 +27,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { TripDetailsModalModule } from './trips/trip-details-modal.module';
 import { CreateTripModalModule } from './trips/create-trip-modal.module';
 import { ProfileModalModule } from './profile/profile-modal.module';
+import { ConnectionListPageModule } from './non-tabs/connection-list.module';
+import { ConnectionProfileModalModule } from './non-tabs/connection-profile.module';
+
+// Popovers
+import { MapTutorialPopoverModule } from './map/tutorial-popover.module';
+import { SortOptionsPopoverModule } from './non-tabs/sort-option-popover.module';
 
 // Pages
 import { MessagesPageModule } from './chats/messages.module';
@@ -64,6 +70,10 @@ export const config = {
     CreateTripModalModule,
     MessagesPageModule,
     ProfileModalModule,
+    MapTutorialPopoverModule,
+    ConnectionListPageModule,
+    SortOptionsPopoverModule,
+    ConnectionProfileModalModule,
     HttpClientModule
   ],
   providers: [

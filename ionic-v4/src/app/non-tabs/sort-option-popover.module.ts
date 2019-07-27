@@ -2,15 +2,15 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ConnectionProfileModal } from './connection-profile';
+import { SortOptionsPopover } from './sort-option-popover';
 
 @NgModule({
-  declarations: [ConnectionProfileModal],
+  declarations: [SortOptionsPopover],
   imports: [
     IonicModule,
     CommonModule,
     FormsModule
   ],
-  entryComponents: [ConnectionProfileModal]
+  entryComponents: [SortOptionsPopover]
 })
-export class ConnectionProfileModalModule {}
+export class SortOptionsPopoverModule {}

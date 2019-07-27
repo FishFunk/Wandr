@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavParams, ToastController, NavController, AlertController } from '@ionic/angular';
-import { IUser, IFacebookFriend } from '../models/user';
+import { LoadingController, NavParams, ToastController, AlertController, ModalController, NavController } from '@ionic/angular';
+import { IUser, IFacebookFriend, User, Location } from '../models/user';
 import _ from 'underscore';
 import { Constants } from '../helpers/constants';
 import { IChat, IMessage } from '../models/chat';
@@ -10,19 +10,21 @@ import { Logger } from '../helpers/logger';
 import { ICheckboxOption } from '../models/metadata';
  
 @Component({
-  selector: 'page-connection-profile',
-  templateUrl: 'connection-profile.page.html',
-  styleUrls: ['connection-profile.page.scss']
+  selector: 'connection-profile-modal',
+  templateUrl: 'connection-profile.html',
+  styleUrls: ['connection-profile.scss']
 })
 
-export class ConnectionProfilePage {
+export class ConnectionProfileModal {
 
     userInterests: ICheckboxOption[] = [];
     lifestyleOptions: ICheckboxOption[] = [];
 
     secondConnectionCount: number;
     currentUserId: string;
-    viewUserData: IUser;
+    viewUserId: string;
+    viewUserData: IUser = new User('','','','', '',
+      new Location(),[],[],'','', '');
     mutualFriends: IUser[] = [];
     showChatButton: boolean;
     chatData: IChat;
@@ -31,19 +33,23 @@ export class ConnectionProfilePage {
     showJoinBtn: boolean = false;
 
     constructor(
-        params: NavParams,
+        navParams: NavParams,
         private logger: Logger,
         private loadingCtrl: LoadingController,
         private toastCtrl: ToastController,
         private alertCtrl: AlertController,
+        private modalCtrl: ModalController,
         private navCtrl: NavController,
         private firebaseFunctionsModule: AngularFireFunctions,
         private dbHelper: FirestoreDbHelper){
-
+        
         this.chatData = null;
-        this.viewUserData = params.get('user');
-        this.showChatButton = params.get('showChatButton');
+        this.viewUserId = navParams.get('userId');
+        this.showChatButton = navParams.get('showChatButton') == "true";
         this.currentUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
+
+        // this.viewUserId = this.activatedRoute.snapshot.paramMap.get('userId');
+        // this.showChatButton = this.activatedRoute.snapshot.paramMap.get('showChatButton') == "true";
     }
 
     async ngOnInit(){
@@ -64,6 +70,7 @@ export class ConnectionProfilePage {
     }
 
     async loadView(){
+      this.viewUserData = await this.dbHelper.ReadUserByFirebaseUid(this.viewUserId);
       this.userInterests = await this.dbHelper.ReadMetadata<ICheckboxOption[]>('user_interests');
       this.lifestyleOptions = await this.dbHelper.ReadMetadata<ICheckboxOption[]>('user_lifestyle');
 
@@ -101,8 +108,8 @@ export class ConnectionProfilePage {
       this.mutualFriends = await this.dbHelper.ReadUsersByFacebookId(mutualFriendIds);
     }
 
-    onClickBack(){
-      this.navCtrl.back();
+    onClickClose(){
+      this.modalCtrl.dismiss();
     }
 
     onClickReport(){
@@ -111,8 +118,9 @@ export class ConnectionProfilePage {
 
     async onClickGoToChat(){
       // TODO: Nav to tab first?
-      await this.navCtrl.pop();
-      this.navCtrl.navigateForward(`messages/:${this.chatData.roomkey}/:false`);
+      await this.modalCtrl.dismiss();
+      await this.modalCtrl.dismiss();
+      this.navCtrl.navigateForward(`messages/${this.chatData.roomkey}/false`);
     }
 
     async onClickRejoinChat(){

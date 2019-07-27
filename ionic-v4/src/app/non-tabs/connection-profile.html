@@ -1,15 +1,16 @@
 <ion-header class="custom-header">
-    <ion-grid>
-        <ion-row>
-            <ion-col col-2>
-                <button ion-button icon-only clear (click)="onClickBack()"><ion-icon name="arrow-back"></ion-icon></button>
-            </ion-col>
-            <ion-col col-8></ion-col>
-            <ion-col col-2 class="justify-right">
-                <button ion-button icon-only clear (click)="onClickReport()"><ion-icon name="flag"></ion-icon></button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button fill="clear" color="primary" (click)="onClickClose()">
+                <i class="far fa-window-close"></i> 
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button fill="clear" color="primary" (click)="onClickReport()">
+                <ion-icon name="flag"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 <ion-content>
     <ion-grid>
@@ -37,11 +38,9 @@
             <ion-row *ngIf="viewUserData.bio && viewUserData.bio.length > 0">
                 <ion-col>
                     <h3>ABOUT</h3>
-                    <br>
                     <p class="bio">{{viewUserData.bio}}</p>
                 </ion-col>
             </ion-row>
-            <br>
             <h3>INTERESTS</h3>
             <br>
             <ion-row>
@@ -79,18 +78,18 @@
             <br>
             <ion-row *ngIf="showChatButton">
                 <ion-col col-12 text-center>
-                    <button *ngIf="!chatExists" ion-button square outline large color="secondary" (click)="onClickSendMessage()">
+                    <ion-button *ngIf="!chatExists" fill="outline" size="large" color="secondary" (click)="onClickSendMessage()">
                         <div>
                             <span>Send Message</span>
                         </div>
-                    </button>
+                    </ion-button>
                     <div *ngIf="chatExists">
-                        <button *ngIf="!showJoinBtn" ion-button square outline large color="secondary" (click)="onClickGoToChat()">
+                        <ion-button *ngIf="!showJoinBtn" fill="outline" size="large" color="secondary" (click)="onClickGoToChat()">
                             <span>View Chat</span>
-                        </button>
-                        <button *ngIf="showJoinBtn" ion-button square outline large color="secondary" (click)="onClickRejoinChat()">
+                        </ion-button>
+                        <ion-button *ngIf="showJoinBtn" fill="outline" size="large" color="secondary" (click)="onClickRejoinChat()">
                             <span>Rejoin Chat</span>
-                        </button>
+                        </ion-button>
                     </div>
                 </ion-col>
             </ion-row>

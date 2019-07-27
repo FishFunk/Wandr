@@ -1,19 +1,17 @@
 <ion-header class="custom-header">
-    <ion-grid>
-        <ion-row>
-            <ion-col col-2>
-                <button ion-button icon-only clear (click)="onClickBack()"><ion-icon name="arrow-back"></ion-icon></button>
-            </ion-col>
-            <ion-col col-8 text-center>
-                <p class="header-text">{{displayLocation}}</p>
-            </ion-col>
-            <ion-col col-2 class="justify-right">
-                <button ion-button icon-only clear (click)="presentPopover($event)">
-                    <ion-icon name="list"></ion-icon>
-                </button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button fill="clear" color="primary" (click)="onClickClose()">
+                <i class="far fa-window-close"></i> 
+            </ion-button>
+        </ion-buttons>
+        <ion-title>{{displayLocation}}</ion-title>
+        <ion-buttons slot="end">
+            <ion-button fill="clear" color="primary" (click)="presentPopover($event)">
+                <ion-icon name="list"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 <ion-content>
     <ion-list>

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Events, PopoverController, LoadingController } from '@ionic/angular';
+import { NavController, NavParams, Events, PopoverController, LoadingController, ModalController } from '@ionic/angular';
 import { IUser, IFacebookFriend } from '../models/user';
 import _ from 'underscore';
 import { Constants } from '../helpers/constants';
-import { SortOptionsPopover } from './sort_option_popover';
+import { SortOptionsPopover } from './sort-option-popover';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
+import { ConnectionProfileModal } from './connection-profile';
  
 @Component({
   selector: 'connection-list-page',
@@ -26,6 +27,7 @@ export class ConnectionListPage {
     constructor(
         params: NavParams,
         private navCtrl: NavController,
+        private modalController: ModalController,
         private popoverCtrl: PopoverController,
         private loadingCtrl: LoadingController,
         private firestoreDbHelper: FirestoreDbHelper,
@@ -50,7 +52,7 @@ export class ConnectionListPage {
         this.events.subscribe(Constants.orderConnectionsByMutual, this.orderByMutualFriends.bind(this));
     }
 
-    async ionViewDidLoad(){
+    async ngOnInit(){
         const spinner = await this.createSpinner();
         await spinner.present();
 
@@ -82,12 +84,20 @@ export class ConnectionListPage {
         popover.present();
     }
 
-    onClickBack(){
-        this.navCtrl.back();
+    onClickClose(){
+        this.modalController.dismiss();
     }
 
-    onClickProfile(user: IUser){
-        this.navCtrl.navigateForward(`connection-profile/:${user.app_uid}/:false`);
+    async onClickProfile(user: IUser){
+        // this.navCtrl.navigateForward(`connection-profile/${user.app_uid}/false`);
+        const modal = await this.modalController.create({
+            component: ConnectionProfileModal,
+            componentProps: {
+                userId: user.app_uid,
+                showChatButton: true
+            }
+        });
+        modal.present();
     }
 
     countMutualFriends(connectionUser: IUser){

@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { ModalController, NavController } from '@ionic/angular';
+import { ModalController, NavController, LoadingController } from '@ionic/angular';
 import { CreateTripModal } from './create-trip-modal';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Constants } from '../helpers/constants';
@@ -26,6 +26,7 @@ export class TripsPage {
   selectedPlace: google.maps.places.AutocompletePrediction;
 
   constructor(private modalController: ModalController,
+    private loadingCtrl: LoadingController,
     private navCtrl: NavController,
     private firestoreDbHelper: FirestoreDbHelper,
     private zone: NgZone)
@@ -79,13 +80,20 @@ export class TripsPage {
     this.navCtrl.navigateForward('/explore');
   }
 
-  load(){
+  async load(){
+    const spinner = await this.loadingCtrl.create({
+      spinner: 'dots'
+    });
+    spinner.present();
+
     const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.tripsObservable = this.firestoreDbHelper.ReadTripsObservableByUserId(uid);
 
     this.tripsObservable.subscribe(async data =>{
       this.data = data;
     });
+
+    spinner.dismiss();
   }
 
   //***** start Bound Elements ***** //

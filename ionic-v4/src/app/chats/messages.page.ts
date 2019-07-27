@@ -5,7 +5,6 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { Subscription, Observable } from 'rxjs';
 import { IMessage, IChat } from '../models/chat';
 import _ from 'underscore';
-import { ConnectionProfilePage } from '../non-tabs/connection-profile.page';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
 import { Utils } from '../helpers/utils';
@@ -51,7 +50,7 @@ export class MessagesPage {
         private events: Events) {
         
         this.roomkey = this.activatedRoute.snapshot.paramMap.get('roomkey');
-        this.showProfileButton = !!this.activatedRoute.snapshot.paramMap.get('showProfileButton');
+        this.showProfileButton = this.activatedRoute.snapshot.paramMap.get('showProfileButton') == "true";
         this.uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
         this.firstName = window.localStorage.getItem(Constants.userFirstNameKey);
     }
@@ -154,11 +153,7 @@ export class MessagesPage {
         this.firestoreDbHelper.ReadUserByFirebaseUid(targetUid, true)
             .then((user)=>{
                 loading.dismiss();
-                this.modalCtrl.create({
-                    component: ConnectionProfilePage,
-                    componentProps: { user: user, showChatButton: false },
-                    animated: true
-                });
+                this.navCtrl.navigateForward(`/connection-profile/${targetUid}/false`);
             })
             .catch(error=>{
                 loading.dismiss();
