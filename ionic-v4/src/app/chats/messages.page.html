@@ -1,0 +1,51 @@
+<ion-header class="custom-header">
+    <ion-grid>
+        <ion-row>
+            <ion-col col-2>
+                <button ion-button icon-only clear (click)="onClickBack()">
+                    <ion-icon name="arrow-back"></ion-icon>
+                </button>
+            </ion-col>
+            <ion-col col-8 text-center>
+                <p class="header-text">Chat with {{headerName}}</p>
+            </ion-col>
+            <ion-col col-2>
+                <button *ngIf="showProfileButton" ion-button clear icon-only (click)="onClickProfile()">
+                    <ion-icon name="md-contact"></ion-icon>
+                </button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-header>
+<ion-content id="messageContent" padding>
+    <div #messageListItems class="message" 
+            *ngFor="let message of messages" 
+            [ngClass]="getClass(message)">
+        <div class="message-time">{{message.timestamp | date:'EEE h:mm a'}}</div>
+        <p [innerHTML]="message.text"></p>
+    </div>
+</ion-content>
+
+<ion-footer id="message-footer">
+    <ion-toolbar>
+        <ion-grid no-padding>
+            <ion-row id="input-row">
+                <ion-col col-11>
+                    <textarea #textInput
+                        spellcheck="true" 
+                        autoComplete="true" 
+                        autocorrect="true" 
+                        (input)="udpateHeight()"
+                        [(ngModel)]="message" 
+                        placeholder="Type your message...">
+                    </textarea>              
+                </ion-col>
+                <ion-col col-1>
+                    <label for="textInput" #sendButton class="send-label">
+                        <i class="fa fa-paper-plane send-icon" aria-hidden="true"></i>
+                    </label>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-toolbar>
+</ion-footer>

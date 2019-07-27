@@ -1,0 +1,99 @@
+<ion-header class="custom-header">
+    <ion-grid>
+        <ion-row>
+            <ion-col col-2>
+                <button ion-button icon-only clear (click)="onClickBack()"><ion-icon name="arrow-back"></ion-icon></button>
+            </ion-col>
+            <ion-col col-8></ion-col>
+            <ion-col col-2 class="justify-right">
+                <button ion-button icon-only clear (click)="onClickReport()"><ion-icon name="flag"></ion-icon></button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-header>
+<ion-content>
+    <ion-grid>
+        <ion-row>
+            <ion-col text-center>
+                <img id="profile-img" [src]="viewUserData.profile_img_url"/>
+            </ion-col>
+            <ion-col align-self-center>
+                <div class="user-info">
+                    <ion-row>
+                        <h1>{{viewUserData.first_name}} {{viewUserData.last_name}}</h1>
+                    </ion-row>
+                    <ion-row class="subtext">
+                        <span>{{viewUserData.location.stringFormat}}</span>
+                    </ion-row>
+                    <ion-row class="subtext">
+                        <span>Mutual Friends:&nbsp;{{mutualFriends.length}}</span>
+                    </ion-row>
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <ion-card padding box-shadow margin-bottom>
+        <ion-grid>
+            <ion-row *ngIf="viewUserData.bio && viewUserData.bio.length > 0">
+                <ion-col>
+                    <h3>ABOUT</h3>
+                    <br>
+                    <p class="bio">{{viewUserData.bio}}</p>
+                </ion-col>
+            </ion-row>
+            <br>
+            <h3>INTERESTS</h3>
+            <br>
+            <ion-row>
+                <ion-col class="icon-col" *ngFor="let item of userInterests">
+                    <i [class]="item.iconClass"></i>&nbsp;
+                    <span *ngIf="item.checked">Yes</span>
+                    <span *ngIf="!item.checked">No</span>
+                </ion-col>
+            </ion-row>
+            <br>
+            <h3>LIFESTYLE</h3>
+            <br>
+            <ion-row>
+                <ion-col class="icon-col" *ngFor="let item of lifestyleOptions">
+                    <i [class]="item.iconClass"></i>&nbsp;
+                    <span *ngIf="item.checked">Yes</span>
+                    <span *ngIf="!item.checked">No</span>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="mutualFriends && mutualFriends.length > 0">
+                <ion-col col-12>
+                    <ion-grid no-padding>
+                        <h3>MUTUAL FRIENDS</h3>
+                        <ion-row>
+                            <ion-col *ngFor="let user of mutualFriends">
+                                <ion-avatar>
+                                    <img [src]="user.profile_img_url">
+                                </ion-avatar>
+                                <label>{{user.first_name}} {{user.last_name}}</label>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-col>
+            </ion-row>
+            <br>
+            <ion-row *ngIf="showChatButton">
+                <ion-col col-12 text-center>
+                    <button *ngIf="!chatExists" ion-button square outline large color="secondary" (click)="onClickSendMessage()">
+                        <div>
+                            <span>Send Message</span>
+                        </div>
+                    </button>
+                    <div *ngIf="chatExists">
+                        <button *ngIf="!showJoinBtn" ion-button square outline large color="secondary" (click)="onClickGoToChat()">
+                            <span>View Chat</span>
+                        </button>
+                        <button *ngIf="showJoinBtn" ion-button square outline large color="secondary" (click)="onClickRejoinChat()">
+                            <span>Rejoin Chat</span>
+                        </button>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card>
+</ion-content>    

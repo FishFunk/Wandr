@@ -1,0 +1,24 @@
+ion-slide {
+    height: 100vh;
+    flex-direction: column;
+    background: var(--ion-color-primary);
+}
+
+ion-img {
+    max-width: 50vw;
+    max-height: 50vh;
+    overflow: hidden;
+}
+
+ion-button {
+    margin-top: 20px;
+    color: var(--ion-color-light);
+}
+
+h1 {
+    color: var(--ion-color-light);
+}
+
+p {
+    color: var(--ion-color-light);
+}
