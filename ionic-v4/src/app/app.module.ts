@@ -13,6 +13,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
+import { Firebase } from '@ionic-native/firebase/ngx';
 
 // angular-fire
 import { AngularFireModule } from '@angular/fire';
@@ -33,6 +34,7 @@ import { ConnectionProfileModalModule } from './non-tabs/connection-profile.modu
 // Popovers
 import { MapTutorialPopoverModule } from './map/tutorial-popover.module';
 import { SortOptionsPopoverModule } from './non-tabs/sort-option-popover.module';
+import { FcmProvider } from '../providers/fcm/fcm';
 
 // Pages
 import { MessagesPageModule } from './chats/messages.module';
@@ -84,12 +86,14 @@ export const config = {
     SocialSharing,
     Facebook,
     Keyboard,
+    Firebase,
     FacebookApi,
     Logger,
     Device,
     FirestoreDbHelper,
     TripsApi,
-    GeoLocationHelper
+    GeoLocationHelper,
+    FcmProvider
   ],
   bootstrap: [AppComponent]
 })

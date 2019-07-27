@@ -137,6 +137,8 @@ export class IntroPage implements OnInit {
         user.profile_img_url = 
           fbUserData.picture.data ? fbUserData.picture.data.url : '';
       }
+
+      this.updateUserData(user);
     }
   }
 
