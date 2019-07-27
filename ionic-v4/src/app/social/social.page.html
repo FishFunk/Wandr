@@ -1,44 +1,30 @@
-<ion-header>
-  <ion-toolbar>
-      <ion-title><ion-icon name="md-globe"></ion-icon>&nbsp;Wandr</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <ion-card text-center>
-      <ion-card-header>
-          <p>Grow Your Wandr Network!</p>
-      </ion-card-header>    
-      <ion-card-content>
-          <label>Current Rank:</label>&nbsp;
-            <span *ngFor="let iconClass of getUserRank()">
-                <i [ngClass]="iconClass"></i>
-            </span><br>
-          <label>1st Degree Connections:</label>&nbsp;<span>{{firstConnectionCount}}</span><br>
-          <label>2nd Degree Connections:</label>&nbsp;<span>{{secondConnectionCount}}</span><br>
-          <br>
-          <br>
-          <hr>
-      </ion-card-content>   
-      <ion-item no-lines text-center>
-            <ion-grid>
-                <ion-row>
-                    <ion-col>
-                        <ion-button size="large" fill="clear" icon-only (click)="facebookShare()">
-                            <ion-icon class="facebook_blue" name="logo-facebook"></ion-icon>
-                        </ion-button>
-                        <ion-button size="large" fill="clear" icon-only (click)="twitterShare()">
-                            <ion-icon class="twitter_blue" name="logo-twitter"></ion-icon>
-                        </ion-button>
-                        <ion-button size="large" fill="clear" icon-only (click)="smsShare()">
-                            <ion-icon class="message_blue" name="text"></ion-icon>
-                        </ion-button>
-                        <ion-button size="large" fill="clear" icon-only (click)="whatsAppShare()">
-                            <ion-icon class="whatsapp_green" name="logo-whatsapp"></ion-icon>
-                        </ion-button>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-      </ion-item>  
-  </ion-card>
+    <br>
+    <div class="image-container">
+        <img height="200px" width="300px" src="../../assets/undraw/teal/undraw_hang_out_h9ud.svg" />
+    </div>
+    <ion-grid text-center>
+        <ion-row>
+            <ion-col size="12">
+                <p class="header">Know other Wandrers?</p>
+                <p class="subheader">Tell your friends! A larger network means more opportunity to Wandr.</p>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="12" class="stats">
+                <label>1st Degree Connections:</label>&nbsp;<span>{{firstConnectionCount}}</span><br>
+                <label>2nd Degree Connections:</label>&nbsp;<span>{{secondConnectionCount}}</span><br>
+            </ion-col>
+        </ion-row>
+        <br>
+        <br>
+        <ion-row>
+            <ion-col size="12">
+                <ion-button size="large" fill="outline" color="secondary" (click)="openShareSheet()">
+                    SHARE
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>
+      

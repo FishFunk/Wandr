@@ -1,19 +1,16 @@
 <ion-header class="custom-header">
-    <ion-grid>
-        <ion-row>
-            <ion-col col-2>
-                <button ion-button icon-only clear (click)="onClickBack()">
-                    <ion-icon name="arrow-back"></ion-icon>
-                </button>
-            </ion-col>
-            <ion-col col-8></ion-col>
-            <ion-col col-2 class="justify-right">
-                <button id="edit-button" ion-button icon-only clear (click)="onClickEdit()">
-                    <i class="far fa-edit"></i>
-                </button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button fill="clear" color="primary" (click)="onClickBack()">
+                <ion-icon name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button fill="clear" color="primary" (click)="onClickEdit()">
+                <i class="far fa-edit"></i>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 <ion-content padding>
     <ion-grid>
@@ -41,11 +38,9 @@
             <ion-row *ngIf="userData.bio && userData.bio.length > 0">
                 <ion-col>
                     <h3>ABOUT</h3>
-                    <br>
                     <p class="bio">{{userData.bio}}</p>
                 </ion-col>
             </ion-row>
-            <br>
             <h3>INTERESTS</h3>
             <br>
             <ion-row>
@@ -55,7 +50,6 @@
                     <span *ngIf="!item.checked">No</span>
                 </ion-col>
             </ion-row>
-            <br>
             <h3>LIFESTYLE</h3>
             <br>
             <ion-row>

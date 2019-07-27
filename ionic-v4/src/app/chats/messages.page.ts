@@ -1,5 +1,5 @@
 import { Component, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
-import { IonContent, LoadingController, NavParams, NavController, Events, AlertController, ModalController } from '@ionic/angular';
+import { IonContent, LoadingController, NavController, Events, AlertController, ModalController } from '@ionic/angular';
 import { Constants } from '../helpers/constants';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { Subscription, Observable } from 'rxjs';
@@ -9,6 +9,7 @@ import { ConnectionProfilePage } from '../non-tabs/connection-profile.page';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
 import { Utils } from '../helpers/utils';
+import { ActivatedRoute } from '@angular/router';
 
  
 @Component({
@@ -30,6 +31,7 @@ export class MessagesPage {
     initialTextareaScrollHeight: number;
     firstName: string;
     chat: IChat;
+    roomkey: string;
     showProfileButton: boolean;
     messagesObservable: Observable<any>;
 
@@ -38,7 +40,7 @@ export class MessagesPage {
     sendButtonElement: Element;
 
     constructor(
-        params: NavParams,
+        private activatedRoute: ActivatedRoute,
         private loadingCtrl: LoadingController,
         private navCtrl: NavController,
         private modalCtrl: ModalController,
@@ -48,17 +50,15 @@ export class MessagesPage {
         private logger: Logger,
         private events: Events) {
         
-        this.chat = params.get('chat');
-        this.showProfileButton = !!params.get('showProfileButton');
+        this.roomkey = this.activatedRoute.snapshot.paramMap.get('roomkey');
+        this.showProfileButton = !!this.activatedRoute.snapshot.paramMap.get('showProfileButton');
         this.uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
-
-        if(this.uid == this.chat.userA_id){
-            this.headerName = this.chat.userB_name;
-        } else {
-            this.headerName = this.chat.userA_name;
-        }
-
         this.firstName = window.localStorage.getItem(Constants.userFirstNameKey);
+    }
+
+
+    ngOnInit(){
+        this.loadMessages();
     }
 
     ionViewWillLeave(){
@@ -104,11 +104,15 @@ export class MessagesPage {
         },10);
     }
 
-    ionViewDidLoad(){
-        this.loadMessages();
-    }
-
     async loadMessages(){
+
+        this.chat = await this.firestoreDbHelper.ReadSingleChat(this.roomkey);
+
+        if(this.uid == this.chat.userA_id){
+            this.headerName = this.chat.userB_name;
+        } else {
+            this.headerName = this.chat.userA_name;
+        }
 
         this.messagesObservable = this.firestoreDbHelper.GetMessagesObservable(this.chat.roomkey);
         

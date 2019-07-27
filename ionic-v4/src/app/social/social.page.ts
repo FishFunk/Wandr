@@ -9,7 +9,8 @@ import { IShareInfo } from '../models/metadata';
 
 @Component({
   selector: 'page-social',
-  templateUrl: 'social.page.html'
+  templateUrl: 'social.page.html',
+  styleUrls: ['social.page.scss']
 })
 
 export class SocialPage {
@@ -25,7 +26,7 @@ export class SocialPage {
     private logger: Logger) {
   }
 
-  ionViewDidLoad(){
+  ngOnInit(){
     this.load();
   }
 

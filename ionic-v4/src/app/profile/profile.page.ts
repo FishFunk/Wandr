@@ -22,7 +22,6 @@ export class ProfilePage {
 
   userData: IUser = new User('','','','', '',
     new Location(),[],[],'','','', { notifications: true }, []);
-  loadingPopup;
   secondConnectionCount: number = 0;
   defaultProfileImg = '../../assets/undraw/purple/undraw_profile_pic_ic5t.svg';
 
@@ -45,7 +44,11 @@ export class ProfilePage {
   }
 
   async load(){
-    this.showLoadingPopup();
+
+    const loadingPopup = await this.loadingCtrl.create({
+      spinner: 'dots'
+    });
+    loadingPopup.present();
 
     try{
       this.userInterests = await this.firestoreDbHelper.ReadMetadata<ICheckboxOption[]>('user_interests');
@@ -60,7 +63,7 @@ export class ProfilePage {
 
         if(!fbUserData){
           // Need to login to Facebook again
-          this.loadingPopup.dismiss();
+          loadingPopup.dismiss();
           this.navCtrl.navigateRoot('/intro')
           //this.appCtrl.getRootNav().setRoot(IntroPage);
           this.presentToast('Login expired. Please login again.');
@@ -85,11 +88,11 @@ export class ProfilePage {
       
       this.renderUserOptions();
 
-      this.loadingPopup.dismiss();
+      loadingPopup.dismiss();
     }
     catch(ex){
-      this.loadingPopup.dismiss();
-      this.logger.Error(ex);
+      await loadingPopup.dismiss();
+      await this.logger.Error(ex);
     }
   }
 
@@ -133,13 +136,6 @@ export class ProfilePage {
   private async reloadUser(){
     var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid, false);
-  }
-
-  private showLoadingPopup(){
-    this.loadingPopup = this.loadingCtrl.create({
-      spinner: 'dots'
-    });
-    this.loadingPopup.present();
   }
 
   private async presentToast(message: string) {

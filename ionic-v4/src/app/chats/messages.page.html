@@ -1,21 +1,19 @@
 <ion-header class="custom-header">
-    <ion-grid>
-        <ion-row>
-            <ion-col col-2>
-                <button ion-button icon-only clear (click)="onClickBack()">
-                    <ion-icon name="arrow-back"></ion-icon>
-                </button>
-            </ion-col>
-            <ion-col col-8 text-center>
-                <p class="header-text">Chat with {{headerName}}</p>
-            </ion-col>
-            <ion-col col-2>
-                <button *ngIf="showProfileButton" ion-button clear icon-only (click)="onClickProfile()">
-                    <ion-icon name="md-contact"></ion-icon>
-                </button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button fill="clear" color="primary" (click)="onClickBack()">
+                <ion-icon name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>
+            {{headerName}}
+        </ion-title>
+        <ion-buttons slot="end">
+            <ion-button *ngIf="showProfileButton" fill="clear" (click)="onClickProfile()">
+                <ion-icon name="md-contact"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 <ion-content id="messageContent" padding>
     <div #messageListItems class="message" 
@@ -30,7 +28,7 @@
     <ion-toolbar>
         <ion-grid no-padding>
             <ion-row id="input-row">
-                <ion-col col-11>
+                <ion-col size="11">
                     <textarea #textInput
                         spellcheck="true" 
                         autoComplete="true" 
@@ -40,7 +38,7 @@
                         placeholder="Type your message...">
                     </textarea>              
                 </ion-col>
-                <ion-col col-1>
+                <ion-col size="1">
                     <label for="textInput" #sendButton class="send-label">
                         <i class="fa fa-paper-plane send-icon" aria-hidden="true"></i>
                     </label>

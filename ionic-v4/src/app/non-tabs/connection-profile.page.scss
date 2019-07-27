@@ -19,7 +19,7 @@ img{
 h3{
     padding-top: 10px;
     font-size: 18px;
-    --color: var(--ion-color-secondary);
+    color: var(--ion-color-secondary);
 }
 
 .fas{
@@ -41,7 +41,7 @@ h3{
 .subtext{
     padding-top: 2px;
     font-size: 1em;
-    --color: var(--ion-color-medium);
+    color: var(--ion-color-medium);
 }
 
 .custom-header > * > * > *{

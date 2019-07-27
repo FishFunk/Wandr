@@ -1,14 +1,10 @@
 import { Component } from '@angular/core';
 import { ToastController, NavController, AlertController } from '@ionic/angular';
 import { FacebookApi } from '../helpers/facebookApi';
-import { ContactPage } from './contact.page';
-import { AboutPage } from './about.page';
 import { Constants } from '../helpers/constants';
 import { IUserSettings } from '../models/user';
-import { IntroPage } from '../intro/intro.page';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
-import { ProfilePage } from '../profile/profile.page';
 
 @Component({
   selector: 'page-settings',

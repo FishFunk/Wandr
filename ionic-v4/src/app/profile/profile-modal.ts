@@ -10,8 +10,9 @@ import { GeoLocationHelper } from "../helpers/geolocationHelper";
 
 @Component({
     selector: 'profile-modal',
-    templateUrl: 'profile-modal.html'
-  })
+    templateUrl: 'profile-modal.html',
+    styleUrls: ['profile-modal.scss']
+})
 
 export class ProfileModal {
 

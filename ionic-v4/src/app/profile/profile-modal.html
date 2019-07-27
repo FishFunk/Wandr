@@ -1,19 +1,19 @@
 <ion-header>
-    <ion-navbar>
-      <ion-buttons start>
-          <button ion-button icon-only  (click)="onClickCancel()">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-button fill="clear" color="primary" (click)="onClickCancel()">
             <i class="far fa-window-close"></i> 
-          </button>
+          </ion-button>
       </ion-buttons>
       <ion-title text-center>
         Edit Profile
       </ion-title>
-      <ion-buttons end>
-          <button ion-button icon-only  (click)="onClickSave()">
+      <ion-buttons slot="end">
+          <ion-button fill="clear" color="primary" (click)="onClickSave()">
             <i class="far fa-save"></i>            
-          </button>
+          </ion-button>
       </ion-buttons>
-    </ion-navbar>
+    </ion-toolbar>
 </ion-header>
 <ion-content>
     <ion-grid>

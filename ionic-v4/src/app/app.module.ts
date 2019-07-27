@@ -12,6 +12,7 @@ import { Device } from '@ionic-native/device/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
 
 // angular-fire
 import { AngularFireModule } from '@angular/fire';
@@ -25,6 +26,10 @@ import { HttpClientModule } from '@angular/common/http';
 // Modals
 import { TripDetailsModalModule } from './trips/trip-details-modal.module';
 import { CreateTripModalModule } from './trips/create-trip-modal.module';
+import { ProfileModalModule } from './profile/profile-modal.module';
+
+// Pages
+import { MessagesPageModule } from './chats/messages.module';
 
 // Helpers
 import { TripsApi } from './helpers/tripsApi';
@@ -57,6 +62,8 @@ export const config = {
     AngularFireFunctionsModule,
     TripDetailsModalModule,
     CreateTripModalModule,
+    MessagesPageModule,
+    ProfileModalModule,
     HttpClientModule
   ],
   providers: [
@@ -66,6 +73,7 @@ export const config = {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     SocialSharing,
     Facebook,
+    Keyboard,
     FacebookApi,
     Logger,
     Device,
