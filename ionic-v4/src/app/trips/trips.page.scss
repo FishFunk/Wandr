@@ -29,10 +29,6 @@
     padding-bottom: 0;
   }
 
-  .pad-10{
-    padding: 10px;
-  }
-
   .date-text{
     font-size: 12px;
   }
@@ -40,6 +36,8 @@
 
   ion-card {
     border-radius: 4px !important;
+
+    max-height: 125px;
 
     overflow: visible;
     position: relative;
@@ -50,8 +48,8 @@
       width: 2px;
       background: var(--ion-color-secondary) !important;
       top:50%;
-      left: -9px;
-      bottom: -75%;
+      left: -10px;
+      bottom: -65%;
       position: absolute;
     }
 
@@ -63,7 +61,7 @@
       border-radius: 50%;
       background: var(--ion-color-secondary) !important;
       top:45%;
-      left: -15px;
+      left: -16px;
       position: absolute;
     }
   }
@@ -75,14 +73,6 @@
   }
 
   ion-header[transparent] .toolbar-background { background: transparent;}
-
-  // .custom-header > * > * > *{
-  //   padding: 0;
-  // }
-
-  // .custom-header{
-  //     padding-top: 10px;
-  // }
 
   #filler-img{
       height: 200px;

@@ -1,14 +1,11 @@
-<ion-header class="custom-header">
-    <ion-grid>
-        <ion-row>
-            <ion-col col-2>
-                <button ion-button icon-only clear (click)="onClickBack()">
-                    <ion-icon name="arrow-back"></ion-icon>
-                </button>
-            </ion-col>
-            <ion-col col-10></ion-col>
-        </ion-row>
-    </ion-grid>
+<ion-header class="top-10">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button fill="clear" (click)="onClickBack()">
+                <ion-icon name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 <ion-content padding>
     <div class="image-container">

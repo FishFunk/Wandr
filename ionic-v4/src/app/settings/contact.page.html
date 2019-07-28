@@ -1,16 +1,14 @@
-<ion-header class="custom-header">
-    <ion-grid>
-        <ion-row>
-            <ion-col col-2>
-                <button ion-button icon-only clear (click)="onClickBack()">
-                    <ion-icon name="arrow-back"></ion-icon>
-                </button>
-            </ion-col>
-            <ion-col col-10></ion-col>
-        </ion-row>
-    </ion-grid>
+<ion-header class="top-10">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button fill="clear" (click)="onClickBack()">
+                <ion-icon name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 <ion-content>
+    <br>
     <div class="image-container">
         <img height="200px" width="300px" src="../../assets/undraw/teal/undraw_online_world_mc1t.svg" />
     </div>
@@ -29,11 +27,9 @@
             <ion-textarea [(ngModel)]="text" placeholder="Enter your comments here...">
             </ion-textarea>
         </ion-item>
-        <br>
-        <ion-item text-center no-lines>
-            <button ion-button square outline large color="secondary" (click)="onSubmit()">
-                SUBMIT
-            </button>
-        </ion-item>
     </ion-list>
+    <br>
+    <ion-button id="submit-btn" fill="outline" expand="block" color="secondary" (click)="onSubmit()">
+        SUBMIT
+    </ion-button>
 </ion-content>

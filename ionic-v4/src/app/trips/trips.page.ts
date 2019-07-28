@@ -77,7 +77,7 @@ export class TripsPage {
   }
 
   onClickExplore(){
-    this.navCtrl.navigateForward('/explore');
+    this.navCtrl.navigateForward('/map');
   }
 
   async load(){
