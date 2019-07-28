@@ -59,7 +59,7 @@ export class TripDetailsModal {
         this.weatherInfo.C = weatherInfo.Temperature.Metric.Value;
         this.weatherInfo.Text = weatherInfo.WeatherText;
 
-        this.upcomingHolidays = await this.tripsApi.getUpcomingHolidays2('US');
+        this.upcomingHolidays = await this.tripsApi.getUpcomingHolidays2(this.tripData.location.countryCode);
     }
 
     onClickClose(){

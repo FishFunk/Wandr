@@ -5,22 +5,20 @@ declare var is; // is-js
 
 export class Utils
 {
-  public static formatGeocoderResults(data: google.maps.GeocoderResult[]){
+  public static formatGeocoderResults(data: google.maps.GeocoderResult){
     var country: string;
     var locality: string;
     var administrativeArea_1: string;
-    data.forEach(val=>{
-      val.address_components.forEach(comp=>{
-        if(_.indexOf(comp.types, 'administrative_area_level_1') >= 0){
-          administrativeArea_1 = comp.long_name;
-        }
-        if (_.indexOf(comp.types, 'locality') >= 0){
-          locality = comp.long_name;
-        }
-        if (_.indexOf(comp.types, 'country') >= 0){
-          country = comp.long_name;
-        }
-      });
+    data.address_components.forEach(comp=>{
+      if(_.indexOf(comp.types, 'administrative_area_level_1') >= 0){
+        administrativeArea_1 = comp.long_name;
+      }
+      if (_.indexOf(comp.types, 'locality') >= 0){
+        locality = comp.long_name;
+      }
+      if (_.indexOf(comp.types, 'country') >= 0){
+        country = comp.long_name;
+      }
     });
 
     if(country == 'United States'){

@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import _ from 'underscore';
 import { TripDetailsModal } from './trip-details-modal';
 import { ITrip } from '../models/trip';
+import { GeoLocationHelper } from '../helpers/geolocationHelper';
 // import { PhotoApi } from '../../helpers/photoApi';
 
 @Component({
@@ -29,6 +30,7 @@ export class TripsPage {
     private loadingCtrl: LoadingController,
     private navCtrl: NavController,
     private firestoreDbHelper: FirestoreDbHelper,
+    private geoHelper: GeoLocationHelper,
     private zone: NgZone)
   {
     this.googleAutoComplete = new google.maps.places.AutocompleteService();
@@ -50,7 +52,7 @@ export class TripsPage {
     const trip: ITrip = {
       uid: window.localStorage.getItem(Constants.firebaseUserIdKey),
       facebook_uid: window.localStorage.getItem(Constants.facebookUserIdKey),
-      location: this.autoComplete.input
+      location: await this.geoHelper.extractLocationAndGeoData(this.autoComplete.input)
     }
 
     //trip.photoUrl = await this.getPhotoUrl();

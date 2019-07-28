@@ -23,6 +23,7 @@ export interface ILocation{
     stringFormat: string; // TODO: Need to ensure consistent format and data validation
     latitude: string;
     longitude: string;
+    countryCode: string;
 }
 
 export interface IMutualConnectionInfo {
@@ -48,7 +49,8 @@ export class Location implements ILocation{
     constructor(
         public stringFormat: string = '',
         public latitude: string = '',
-        public longitude: string = '')
+        public longitude: string = '',
+        public countryCode: string = '')
     {}
 }
 
