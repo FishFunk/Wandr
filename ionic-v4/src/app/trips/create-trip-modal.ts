@@ -48,7 +48,7 @@ export class CreateTripModal {
         if(tripData){
             this.key = params.get('key');
             this.tripData = JSON.parse(JSON.stringify(tripData));
-            this.autoComplete.input = this.tripData.location;
+            this.autoComplete.input = this.tripData.location.stringFormat;
         } else {
             this.tripData.uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
             this.tripData.facebook_uid = window.localStorage.getItem(Constants.facebookUserIdKey);

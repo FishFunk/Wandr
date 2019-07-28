@@ -46,10 +46,12 @@
                 <label>{{weatherInfo.Text}}</label>
             </ion-col>
         </ion-row>
+        <h3>UPCOMING HOLIDAYS</h3>
         <ion-row>
-            <h3>HOLIDAYS</h3>
-            <ion-col>
-
+            <ion-col *ngFor="let holiday of upcomingHolidays" size="4">
+                <label>{{holiday.name}}</label>
+                <br>
+                <span>{{holiday.observed}}</span>
             </ion-col>
         </ion-row>
         <ion-row>

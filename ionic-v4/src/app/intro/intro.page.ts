@@ -16,6 +16,11 @@ import { User, Location, IUser} from '../models/user';
 })
 export class IntroPage implements OnInit {
 
+  slideOpts = {
+    direction: 'horizontal',
+    initialSlide: 0
+  }
+
   constructor(
     private facebookApi: FacebookApi,
     private geolocationHelper: GeoLocationHelper,

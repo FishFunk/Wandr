@@ -29,6 +29,8 @@ export class TripDetailsModal {
       Text: ''
     }
 
+    upcomingHolidays = [];
+
     locals: IUser[] = [];
 
     constructor(
@@ -51,11 +53,13 @@ export class TripDetailsModal {
         const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
         this.locals = await this.firestoreDbHelper.ReadAllUsers(uid, this.tripData.location.stringFormat);
 
-        const data = await this.tripsApi.getWeatherInfoByLatLong(this.tripData.location.latitude, this.tripData.location.longitude)
-        const weatherInfo = _.first(data);
+        const weatherData = await this.tripsApi.getWeatherInfoByLatLong(this.tripData.location.latitude, this.tripData.location.longitude)
+        const weatherInfo = _.first(weatherData);
         this.weatherInfo.F = weatherInfo.Temperature.Imperial.Value;
         this.weatherInfo.C = weatherInfo.Temperature.Metric.Value;
         this.weatherInfo.Text = weatherInfo.WeatherText;
+
+        this.upcomingHolidays = await this.tripsApi.getUpcomingHolidays2('US');
     }
 
     onClickClose(){

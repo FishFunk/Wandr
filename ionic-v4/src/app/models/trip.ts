@@ -17,3 +17,11 @@ export interface ITrip {
     notes?: string
     // photoUrl?: string
 }
+
+export interface IHoliday{
+    name: string;
+    date: string; // yyyy-mm-dd
+    observed: string; // yyyy-mm-dd
+    public: string
+    country: string;
+}

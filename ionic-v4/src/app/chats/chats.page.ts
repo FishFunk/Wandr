@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { IChat } from '../models/chat';
-import { Constants } from '../helpers/constants';
 import { LoadingController, Events, NavController, AlertController } from '@ionic/angular';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
 import _ from 'underscore';
+import { Constants } from '../helpers/constants';
 
 @Component({
   selector: 'app-chats',
@@ -25,9 +25,10 @@ export class ChatsPage {
     private navCtrl: NavController
   ){
     this.userId = window.localStorage.getItem(Constants.firebaseUserIdKey);
+    this.events.subscribe(Constants.refreshChatDataEvent, this.loadChats.bind(this));
   }
 
-  ngOnInit(){
+  ionViewDidEnter(){
     this.loadChats();
   }
 
@@ -58,6 +59,14 @@ export class ChatsPage {
   onClickChat(chat: IChat){
     const showProfileButton = true;
     this.navCtrl.navigateForward(`/messages/${chat.roomkey}/${showProfileButton}`);
+  }
+
+  onClickExplore(){
+    this.navCtrl.navigateForward('/tabs/map');    
+  }
+
+  onClickInvite(){
+    this.navCtrl.navigateForward('/tabs/social');
   }
 
   getClass(chat: IChat){

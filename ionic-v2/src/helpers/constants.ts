@@ -1,4 +1,4 @@
-export abstract class Constants {
+export class Constants {
     public static facebookUserIdKey = "facebookUserId";
     public static firebaseUserIdKey = "firebaseUserId";
     public static accessTokenKey = "accessToken";
@@ -19,5 +19,4 @@ export abstract class Constants {
     public static orderConnectionsByMutual = "onOrderConnectionsByMutual";
     public static refreshMapDataEventName = "onRefreshMapDataEvent";
     public static refreshProfileDataEvent = "onRefreshProfileDataEvent";
-
 }

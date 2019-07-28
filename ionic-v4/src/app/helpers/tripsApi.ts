@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { resolve } from 'dns';
+import { IHoliday } from '../models/trip';
+import _ from 'underscore';
 
 @Injectable()
 export class TripsApi
@@ -42,16 +43,50 @@ export class TripsApi
         });
     }
 
-    // public getHolidays(countryCode: string = 'US'): Promise<string>{
-    //     return new Promise((resolve, reject)=>{
-    //         this.http.get(`https://holidayapi.com/v1/holidays?key=${this.holidayApiKey}&country=${countryCode}&year=2018`)
-    //             .subscribe((data: any)=>{
-    //                 resolve(data);
-    //             }, (error)=>{
-    //                 reject(error);
-    //             });
-    //     })
-    // }
+    public getUpcomingHolidays(countryCode: string): Promise<any>{
+        return new Promise((resolve,reject)=>{
+            const date = new Date();
+            const year = '2018'; //new Date().getFullYear(); // TODO: Buy full featured API
+            const month = date.getMonth();
+            const day = date.getDay();
+
+            this.http.get(
+                `https://holidayapi.com/v1/holidays?key=${this.holidayApiKey}&country=${countryCode}&year=${year}&upcoming&month=${month}&day=${day}&public`)
+                .subscribe((data: any)=>{
+                    resolve(data);
+                }, (error)=>{
+                    reject(error);
+                });
+        });
+    }
+
+    public async getUpcomingHolidays2(countryCode: string): Promise<any>{
+        const data = await this.getHolidays(countryCode)
+            .catch(error=>{
+                Promise.reject(error);
+            });
+        
+        const now = new Date();
+        now.setFullYear(2018);
+
+        const result = _.filter(data.holidays, (holiday)=>{
+            let then = new Date(holiday.observed);
+            return then > now;
+        });
+
+        return result;
+    }
+
+    private getHolidays(countryCode: string): Promise<any>{
+        return new Promise((resolve, reject)=>{
+            this.http.get(`https://holidayapi.com/v1/holidays?key=${this.holidayApiKey}&country=${countryCode}&year=2018&public`)
+                .subscribe((data: any)=>{
+                    resolve(data);
+                }, (error)=>{
+                    reject(error);
+                });
+        })
+    }
 
     // public getRegions(): Promise<string>{
     //     return new Promise((resolve, reject)=>{

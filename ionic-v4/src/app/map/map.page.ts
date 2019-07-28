@@ -107,12 +107,11 @@ export class MapPage {
         spinner.dismiss();
         const hideTutorial = window.localStorage.getItem(Constants.hideMapTutorial) == "true";
         if(!hideTutorial){
-          // setTimeout(async ()=>{
             const popover = await this.popoverCtrl.create({
-              component: MapTutorialPopover
+              component: MapTutorialPopover,
+              cssClass: 'tutorial-popover'
             });
             popover.present();
-          //}, 250);
         }
       })
       .catch(error=>{

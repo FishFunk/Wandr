@@ -129,6 +129,7 @@ export class MessagesPage {
 
     onClickBack(){
         this.navCtrl.back();
+        this.events.publish(Constants.refreshChatDataEvent);
     }
 
     async onClickProfile(){

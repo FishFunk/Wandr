@@ -1,6 +1,5 @@
 import { Component, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { Content, LoadingController, NavParams, NavController, Events, AlertController } from 'ionic-angular';
-import { Constants } from '../../helpers/constants';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { Subscription, Observable } from 'rxjs';
 import { IMessage, IChat } from '../../models/chat';
@@ -9,6 +8,7 @@ import { ConnectionProfilePage } from '../non_tabs/connection_profile';
 import { FirestoreDbHelper } from '../../helpers/firestoreDbHelper';
 import { Logger } from '../../helpers/logger';
 import { Utils } from '../../helpers/utils';
+import { Constants } from '../../helpers/constants';
 
  
 @Component({
