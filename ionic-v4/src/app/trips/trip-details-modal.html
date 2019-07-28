@@ -19,7 +19,7 @@
                 <span font-bold small-font>{{tripData.startDate || 'TBD'}}</span>
                 &nbsp;<span>to</span>&nbsp;
                 <span font-bold small-font>{{tripData.endDate || 'TBD'}}</span>
-                <h2>{{tripData.location}}</h2>
+                <h2>{{tripData.location.stringFormat}}</h2>
                 <!-- <img class="location-img" [src]="tripData.photoUrl"> -->
             </ion-col>
         </ion-row>
@@ -29,25 +29,21 @@
                 <p>{{tripData.notes}}</p>
             </ion-col>
         </ion-row>
+        <h3>WANDR LOCALS</h3>
         <ion-row *ngIf="locals.length > 0">
-            <h3>WANDR LOCALS</h3>
-            <ion-col col-12>
-                <ion-grid no-padding>
-                    <ion-row>
-                        <ion-col *ngFor="let user of locals">
-                            <ion-avatar>
-                                <img class="profile-img" [src]="user.profile_img_url">
-                            </ion-avatar>
-                            <label>{{user.first_name}} {{user.last_name}}</label>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
+            <ion-col *ngFor="let user of locals" size="4">
+                <ion-avatar>
+                    <img class="profile-img" [src]="user.profile_img_url">
+                </ion-avatar>
+                <label>{{user.first_name}} {{user.last_name}}</label>
             </ion-col>
         </ion-row>
+        <h3>WEATHER</h3>
         <ion-row>
-            <h3>WEATHER</h3>
             <ion-col>
-
+                <label>{{weatherInfo.F}}</label>&nbsp;<span>F</span><br>
+                <label>{{weatherInfo.C}}</label>&nbsp;<span>C</span><br>
+                <label>{{weatherInfo.Text}}</label>
             </ion-col>
         </ion-row>
         <ion-row>

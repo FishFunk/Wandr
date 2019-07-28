@@ -5,6 +5,7 @@ import { Constants } from "../helpers/constants";
 import { ITrip } from "../models/trip";
 import { GeoLocationHelper } from "../helpers/geolocationHelper";
 import _ from 'underscore';
+import { Location } from '../models/user';
 // import { PhotoApi } from "../../helpers/photoApi";
 
 @Component({
@@ -24,7 +25,7 @@ export class CreateTripModal {
         moving: false,
         startDate: null,
         endDate: null,
-        location: "",
+        location: new Location(),
         notes: ""
     };
 
@@ -81,7 +82,7 @@ export class CreateTripModal {
         }
 
         const location = await this.geolocationHelper.extractLocationAndGeoData(this.autoComplete.input);
-        this.tripData.location = location.stringFormat;
+        this.tripData.location = location;
 
         if(this.key){
             this.firestoreDbHelper.UpdateTrip(this.key, this.tripData)

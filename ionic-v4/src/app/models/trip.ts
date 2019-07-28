@@ -1,7 +1,9 @@
+import { Location } from './user';
+
 export interface ITrip {
     uid: string,
     facebook_uid: string,
-    location: string
+    location: Location
     // going?: boolean,
     // wantsToGo?: boolean,
     // hasBeen?: boolean,

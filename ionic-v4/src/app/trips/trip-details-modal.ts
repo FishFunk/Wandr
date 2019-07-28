@@ -3,9 +3,10 @@ import { NavParams, AlertController, ModalController } from "@ionic/angular";
 import { FirestoreDbHelper } from "../helpers/firestoreDbHelper";
 import { Constants } from "../helpers/constants";
 import { ITrip } from "../models/trip";
-import { IUser } from "../models/user";
+import { IUser, Location } from "../models/user";
 import { CreateTripModal } from "./create-trip-modal";
 import { TripsApi } from "../helpers/tripsApi";
+import _ from "underscore";
 
 @Component({
     selector: 'trip-details-modal',
@@ -19,8 +20,14 @@ export class TripDetailsModal {
     tripData: ITrip = {
         uid: '',
         facebook_uid: '',
-        location: ''
+        location: new Location()
     };
+
+    weatherInfo = {
+      F: '',
+      C: '',
+      Text: ''
+    }
 
     locals: IUser[] = [];
 
@@ -36,29 +43,19 @@ export class TripDetailsModal {
         this.tripData = params.get('trip');
     }
 
-    ionViewDidLoad(){
+    ngOnInit(){
         this.load();
     }
 
     async load(){
         const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
-        this.locals = await this.firestoreDbHelper.ReadAllUsers(uid, this.tripData.location);
+        this.locals = await this.firestoreDbHelper.ReadAllUsers(uid, this.tripData.location.stringFormat);
 
-        // await this.tripsApi.getHolidays()
-        //   .then(data=>{
-        //     console.log(data);
-        //   })
-        //   .catch(error=>{
-        //     console.error(error);
-        //   });
-
-        // await this.tripsApi.getRegions()
-        //   .then(data=>{
-        //     console.log(data);
-        //   })
-        //   .catch(error=>{
-        //     console.error(error);
-        //   });
+        const data = await this.tripsApi.getWeatherInfoByLatLong(this.tripData.location.latitude, this.tripData.location.longitude)
+        const weatherInfo = _.first(data);
+        this.weatherInfo.F = weatherInfo.Temperature.Imperial.Value;
+        this.weatherInfo.C = weatherInfo.Temperature.Metric.Value;
+        this.weatherInfo.Text = weatherInfo.WeatherText;
     }
 
     onClickClose(){
