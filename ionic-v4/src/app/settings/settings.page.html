@@ -12,11 +12,11 @@
             <ion-label>Push Notifications</ion-label>
             <ion-toggle color="primary"  [(ngModel)]="pushNotifications" (ionChange)="updateUserSettings()"></ion-toggle>
         </ion-item>
-        <ion-item (click)="onClickViewProfile()">View Profile</ion-item>
-        <ion-item (click)="onClickAbout()">Our Story</ion-item>
-        <ion-item (click)="onClickContact()">Contact Us</ion-item>
+        <ion-item (click)="onClickViewProfile()" detail="true">View Profile</ion-item>
+        <ion-item (click)="onClickAbout()" detail="true">Our Story</ion-item>
+        <ion-item (click)="onClickContact()" detail="true">Contact Us</ion-item>
         <ion-item href="https://joinwandr.com/privacy-policy.html" detail="false">
-            Privacy Policy <i class="fas fa-external-link-alt" color="#6700a9" slot="end"></i>
+            Privacy Policy <i id="external-link" class="fas fa-external-link-alt" slot="end"></i>
         </ion-item>
     </ion-list> 
     <br>
