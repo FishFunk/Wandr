@@ -1,7 +1,6 @@
 import { Component, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { IonContent, LoadingController, NavController, Events, AlertController, ModalController } from '@ionic/angular';
 import { Constants } from '../helpers/constants';
-import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { Subscription, Observable } from 'rxjs';
 import { IMessage, IChat } from '../models/chat';
 import _ from 'underscore';
@@ -9,6 +8,7 @@ import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
 import { Utils } from '../helpers/utils';
 import { ActivatedRoute } from '@angular/router';
+import { ConnectionProfileModal } from '../non-tabs/connection-profile';
 
  
 @Component({
@@ -44,7 +44,6 @@ export class MessagesPage {
         private navCtrl: NavController,
         private modalCtrl: ModalController,
         private alertCtrl: AlertController,
-        private keyboard: Keyboard,
         private firestoreDbHelper: FirestoreDbHelper,
         private logger: Logger,
         private events: Events) {
@@ -62,8 +61,8 @@ export class MessagesPage {
 
     ionViewWillLeave(){
         // Remove listeners
-        this.keyboardShowObservable.unsubscribe();
-        this.keyboardHideObservable.unsubscribe();
+        window.removeEventListener('keyboardDidShow', this.scrollToBottom.bind(this, 0));
+        window.removeEventListener('keyboardDidHide', this.scrollToBottom.bind(this, 0));
 
         this.sendButtonElement.removeEventListener('click', this.stopBubble.bind(this));
         this.sendButtonElement.removeEventListener('mousedown', this.stopBubble.bind(this));
@@ -81,13 +80,8 @@ export class MessagesPage {
             this.scrollToBottom(0);
         });
 
-        this.keyboardShowObservable = this.keyboard.onKeyboardShow().subscribe(()=>{
-            this.scrollToBottom(0);
-        });
-        
-        this.keyboardHideObservable = this.keyboard.onKeyboardHide().subscribe(()=>{
-            this.scrollToBottom(0);
-        });
+        window.addEventListener('keyboardDidShow', this.scrollToBottom.bind(this, 0));
+        window.addEventListener('keyboardDidHide', this.scrollToBottom.bind(this, 0));
 
         this.sendButtonElement = this.sendButton.nativeElement;     
         this.sendButtonElement.addEventListener('click', this.stopBubble.bind(this));
@@ -138,11 +132,6 @@ export class MessagesPage {
     }
 
     async onClickProfile(){
-        const loading = await this.loadingCtrl.create({
-            spinner: 'dots'
-        });
-        loading.present();
-
         let targetUid;
         if(this.uid == this.chat.userA_id){
             targetUid = this.chat.userB_id;
@@ -150,16 +139,14 @@ export class MessagesPage {
             targetUid = this.chat.userA_id;
         }
 
-        this.firestoreDbHelper.ReadUserByFirebaseUid(targetUid, true)
-            .then((user)=>{
-                loading.dismiss();
-                this.navCtrl.navigateForward(`/connection-profile/${targetUid}/false`);
-            })
-            .catch(error=>{
-                loading.dismiss();
-                this.presentAlert(`${this.headerName} has deleted their account!`);
-                this.logger.Error(error);
-            });
+        const modal = await this.modalCtrl.create({
+            component: ConnectionProfileModal,
+            componentProps: {
+                userId: targetUid,
+                showChatButton: true
+            }
+        });
+        modal.present();
     }
 
     async sendMessage() {

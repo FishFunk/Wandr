@@ -71,6 +71,15 @@ export class ConnectionProfileModal {
 
     async loadView(){
       this.viewUserData = await this.dbHelper.ReadUserByFirebaseUid(this.viewUserId);
+      
+      if(typeof(this.viewUserData) == "string"){
+        // Read User Failed
+        this.modalCtrl.dismiss();
+        this.alertCtrl.create({
+          message: 'User no longer exists'
+        });
+      }
+
       this.userInterests = await this.dbHelper.ReadMetadata<ICheckboxOption[]>('user_interests');
       this.lifestyleOptions = await this.dbHelper.ReadMetadata<ICheckboxOption[]>('user_lifestyle');
 

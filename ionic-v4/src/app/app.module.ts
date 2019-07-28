@@ -62,7 +62,11 @@ export const config = {
   entryComponents: [],
   imports: [
     BrowserModule, 
-    IonicModule.forRoot(), 
+    IonicModule.forRoot({
+      mode: 'ios',
+      scrollAssist: false,
+      scrollPadding: false
+    }), 
     AppRoutingModule,
     AngularFireModule.initializeApp(config),
     AngularFireAuthModule,
