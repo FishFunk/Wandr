@@ -7,6 +7,8 @@ import { FacebookApi } from './helpers/facebookApi';
 import { Router } from '@angular/router';
 import { Constants } from './helpers/constants';
 
+declare var google: any; // Declare global 'google' variable
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'

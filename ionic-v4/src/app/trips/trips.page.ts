@@ -124,6 +124,7 @@ export class TripsPage {
     this.selectedPlace = item;
     this.autoComplete.input = item.description;
     this.autoCompleteItems = [];
+    this.onClickCreateTrip();
   }
   //******* end Bound Elements ***** //
 

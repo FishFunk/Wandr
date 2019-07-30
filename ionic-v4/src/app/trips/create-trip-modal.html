@@ -58,20 +58,20 @@
     <ion-row>
       <ion-col ion-item no-lines size="6">
         <ion-label class="date-label" stacked>Arrive</ion-label>
-        <ion-datetime placeholder="mm/dd/yyyy" [(ngModel)]="tripData.startDate" [disabled]="tripData.noArrival"></ion-datetime>
+        <ion-datetime placeholder="mm/dd/yyyy" [(ngModel)]="tripData.startDate"></ion-datetime>
       </ion-col>
-      <ion-col ion-item no-lines size="6">
+      <!-- <ion-col ion-item no-lines size="6">
           <ion-checkbox [(ngModel)]="tripData.noArrival"></ion-checkbox>
           <ion-label>N/A</ion-label>
-      </ion-col>
+      </ion-col> -->
       <ion-col ion-item no-lines size="6">
         <ion-label class="date-label" stacked>Depart</ion-label>
-        <ion-datetime placeholder="mm/dd/yyyy" [(ngModel)]="tripData.endDate" [min]="tripData.startDate" [disabled]="tripData.noDeparture"></ion-datetime>
+        <ion-datetime placeholder="mm/dd/yyyy" [(ngModel)]="tripData.endDate" [min]="tripData.startDate"></ion-datetime>
       </ion-col>
-      <ion-col ion-item no-lines size="6">
+      <!-- <ion-col ion-item no-lines size="6">
           <ion-checkbox [(ngModel)]="tripData.noDeparture"></ion-checkbox>
           <ion-label>N/A</ion-label>
-      </ion-col>
+      </ion-col> -->
     </ion-row>
     <br>
     <h3>NOTES</h3>
