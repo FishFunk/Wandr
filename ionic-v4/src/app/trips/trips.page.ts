@@ -21,10 +21,10 @@ export class TripsPage {
   tripsObservable: Observable<any>;
   data = [];
 
-  googleAutoComplete: any;
-  autoComplete: any = { input: '' };
-  autoCompleteItems: google.maps.places.AutocompletePrediction[] = [];
-  selectedPlace: google.maps.places.AutocompletePrediction;
+  // googleAutoComplete: any;
+  // autoComplete: any = { input: '' };
+  // autoCompleteItems: google.maps.places.AutocompletePrediction[] = [];
+  // selectedPlace: google.maps.places.AutocompletePrediction;
 
   constructor(private modalController: ModalController,
     private loadingCtrl: LoadingController,
@@ -33,7 +33,7 @@ export class TripsPage {
     private geoHelper: GeoLocationHelper,
     private zone: NgZone)
   {
-    this.googleAutoComplete = new google.maps.places.AutocompleteService();
+    //this.googleAutoComplete = new google.maps.places.AutocompleteService();
   }
 
   ngOnInit(){
@@ -42,17 +42,20 @@ export class TripsPage {
 
   async onClickCreateTrip(){
     let modal;
-    if(this.autoCompleteItems.length > 0){
-      const place = _.first(this.autoCompleteItems);
-      this.selectedPlace = place;
-      this.autoComplete.input = place.description;
-      this.autoCompleteItems = [];
-    }
+    let location;
+
+    // if(this.autoCompleteItems.length > 0){
+    //   const place = _.first(this.autoCompleteItems);
+    //   this.selectedPlace = place;
+    //   this.autoComplete.input = place.description;
+    //   this.autoCompleteItems = [];
+    //   location = await this.geoHelper.extractLocationAndGeoData(this.autoComplete.input);
+    // }
 
     const trip: ITrip = {
       uid: window.localStorage.getItem(Constants.firebaseUserIdKey),
       facebook_uid: window.localStorage.getItem(Constants.facebookUserIdKey),
-      location: await this.geoHelper.extractLocationAndGeoData(this.autoComplete.input)
+      location: location || ''
     }
 
     //trip.photoUrl = await this.getPhotoUrl();
@@ -64,8 +67,8 @@ export class TripsPage {
 
     modal.present();
 
-    this.autoComplete.input = '';
-    this.autoCompleteItems = [];
+    // this.autoComplete.input = '';
+    // this.autoCompleteItems = [];
   }
 
   async onClickDetail(key){
@@ -99,33 +102,33 @@ export class TripsPage {
   }
 
   //***** start Bound Elements ***** //
-  updateSearchResults(){
-    if (this.autoComplete.input == '') {
-      this.autoCompleteItems = [];
-      return;
-    }
-    this.googleAutoComplete.getPlacePredictions({ input: this.autoComplete.input },
-      (predictions, status) => {
-        this.autoCompleteItems = [];
-        this.zone.run(() => {
-          predictions.forEach((prediction) => {
-          this.autoCompleteItems.push(prediction);
-        });
-      });
-    });
-  }
+  // updateSearchResults(){
+  //   if (this.autoComplete.input == '') {
+  //     this.autoCompleteItems = [];
+  //     return;
+  //   }
+  //   this.googleAutoComplete.getPlacePredictions({ input: this.autoComplete.input },
+  //     (predictions, status) => {
+  //       this.autoCompleteItems = [];
+  //       this.zone.run(() => {
+  //         predictions.forEach((prediction) => {
+  //         this.autoCompleteItems.push(prediction);
+  //       });
+  //     });
+  //   });
+  // }
 
-  clearResults(){
-    this.autoComplete.input = '';
-    this.autoCompleteItems = [];
-  }
+  // clearResults(){
+  //   this.autoComplete.input = '';
+  //   this.autoCompleteItems = [];
+  // }
 
-  selectSearchResult(item: google.maps.places.AutocompletePrediction){
-    this.selectedPlace = item;
-    this.autoComplete.input = item.description;
-    this.autoCompleteItems = [];
-    this.onClickCreateTrip();
-  }
+  // selectSearchResult(item: google.maps.places.AutocompletePrediction){
+  //   this.selectedPlace = item;
+  //   this.autoComplete.input = item.description;
+  //   this.autoCompleteItems = [];
+  //   this.onClickCreateTrip();
+  // }
   //******* end Bound Elements ***** //
 
   // private getPhotoUrl(): Promise<string>{

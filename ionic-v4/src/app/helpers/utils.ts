@@ -5,6 +5,18 @@ declare var is; // is-js
 
 export class Utils
 {
+  // public formatDate(timestamp: string){
+  //   const now = new Date();
+  //   const date = new Date(timestamp);
+
+  //   // Date is at least a week old
+  //   if(date.getTime() < now.getTime() - (7 * 24 * 60 * 60 * 60)){
+  //     // TODO: return mm/dd/yyyy format
+  //   } else {
+  //     // TODO: return ddd hh:mm format
+  //   }
+  // }
+
   public static formatGeocoderResults(data: google.maps.GeocoderResult){
     var country: string;
     var locality: string;
