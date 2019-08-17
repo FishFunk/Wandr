@@ -10,10 +10,13 @@
                         <img [src]="userId == chat.userA_id ? chat.userB_photoUrl : chat.userA_photoUrl">
                     </ion-thumbnail>
                     <div [class]="getClass(chat)">
-                        <ion-label class="name">{{userId == chat.userA_id ? chat.userB_name : chat.userA_name}}</ion-label>
-                        <p class="message">{{chat.lastMessage.substr(0,50)+'...'}}</p>
+                        <ion-label>
+                            <span class="name">{{userId == chat.userA_id ? chat.userB_name : chat.userA_name}}</span>
+                            <br>
+                            <span class="message">{{chat.lastMessage}}</span>
+                        </ion-label>
                     </div>
-                    <span class="timestamp">{{chat.timestamp | date:'EEE h:mm a'}}</span>
+                    <span class="timestamp">{{chat.timestamp | date:'MMM dd'}}</span>
                 </ion-item>
                 <ion-item-options side="end">
                     <ion-item-option color="danger" (click)="onClickDeleteChat(slidingItem, chat)">

@@ -7,6 +7,7 @@ import { IUser, Location } from "../models/user";
 import { CreateTripModal } from "./create-trip-modal";
 import { TripsApi } from "../helpers/tripsApi";
 import _ from "underscore";
+import { Utils } from '../helpers/utils';
 
 @Component({
     selector: 'trip-details-modal',
@@ -26,7 +27,8 @@ export class TripDetailsModal {
     weatherInfo = {
       F: '',
       C: '',
-      Text: ''
+      Text: '',
+      Icon: ''
     }
 
     upcomingHolidays = [];
@@ -58,6 +60,7 @@ export class TripDetailsModal {
         this.weatherInfo.F = weatherInfo.Temperature.Imperial.Value;
         this.weatherInfo.C = weatherInfo.Temperature.Metric.Value;
         this.weatherInfo.Text = weatherInfo.WeatherText;
+        this.weatherInfo.Icon = Utils.getWeatherIcon(weatherInfo.WeatherText);
 
         this.upcomingHolidays = await this.tripsApi.getUpcomingHolidays2(this.tripData.location.countryCode);
     }
@@ -65,7 +68,7 @@ export class TripDetailsModal {
     onClickClose(){
         this.modalCtrl.dismiss();
     }
-
+    
     async onClickEdit(){
         this.modalCtrl.dismiss();
         const modal = await this.modalController.create({

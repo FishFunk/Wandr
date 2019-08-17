@@ -74,6 +74,17 @@
       </ion-col> -->
     </ion-row>
     <br>
+    <h3>CURRENT WEATHER</h3>
+    <ion-row>
+        <ion-col>
+            <div [innerHtml]="weatherInfo.Icon"></div>
+            <label>{{weatherInfo.Text}}</label>
+        </ion-col>
+        <ion-col *ngIf="weatherInfo.F">
+            <label>{{weatherInfo.F}}</label>&nbsp;&deg;<span>F</span><br>
+            <label>{{weatherInfo.C}}</label>&nbsp;&deg;<span>C</span><br>
+        </ion-col>
+    </ion-row>
     <h3>NOTES</h3>
     <ion-row>
         <ion-col size="12">

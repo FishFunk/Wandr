@@ -5,17 +5,76 @@ declare var is; // is-js
 
 export class Utils
 {
-  // public formatDate(timestamp: string){
-  //   const now = new Date();
-  //   const date = new Date(timestamp);
+  public static getWeatherIcon(weather: string){
+    let icon;
+    switch(weather){
+      case('Windy'):
+      icon = '<i class="fas fa-wind"></i>'
+      break;
 
-  //   // Date is at least a week old
-  //   if(date.getTime() < now.getTime() - (7 * 24 * 60 * 60 * 60)){
-  //     // TODO: return mm/dd/yyyy format
-  //   } else {
-  //     // TODO: return ddd hh:mm format
-  //   }
-  // }
+      case('Cloudy'):
+      icon = '<i class="fas fa-cloud"></i>';
+      break;
+      
+      case('Some clouds'):
+      icon = '<i class="fas fa-cloud"></i>';
+      break;
+
+      case('Mostly cloudy'):
+      icon = '<i class="fas fa-cloud"></i>';
+      break;
+
+      case('Partly cloudy'):
+      icon = '<i class="fas fa-cloud-moon"></i>';
+      break;
+
+      case('Clouds and sun'):
+      icon = '<i class="fas fa-cloud-sun"></i>';
+      break;
+
+      case('Sunny'):
+      icon = '<i class="fas fa-sun"></i>';
+      break;
+
+      case('Mostly sunny'):
+      icon = '<i class="fas fa-cloud-sun"></i>';
+      break;
+
+      case('Partly sunny'):
+      icon = '<i class="fas fa-cloud-sun"></i>';
+      break;
+
+      case('Showers'):
+      icon = '<i class="fas fa-cloud-rain"></i>';
+      break;
+
+      case('Light rain'):
+      icon = '<i class="fas fa-cloud-rain"></i>';
+      break;
+
+      case('Rain'):
+      icon = '<i class="fas fa-cloud-showers-heavy"></i>';
+      break;
+
+      case('Snow'):
+      icon = '<i class="far fa-snowflake"></i>';
+      break;
+
+      case('Smog'):
+      icon = '<i class="fas fa-smog"></i>';
+      break;
+
+      case('Mostly clear'):
+      icon = '<i class="fas fa-cloud-moon"></i>';
+      break;
+
+      case('Clear'):
+      icon = '<i class="fas fa-moon"></i>';
+      break;
+    }
+
+    return icon;
+  }
 
   public static formatGeocoderResults(data: google.maps.GeocoderResult){
     var country: string;

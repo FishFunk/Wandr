@@ -40,29 +40,37 @@
                 </ion-col>
             </ion-row>
         </div>
-        <h3>WEATHER</h3>
+        <h3>CURRENT WEATHER</h3>
         <ion-row>
             <ion-col>
-                <label>{{weatherInfo.F}}</label>&nbsp;<span>F</span><br>
-                <label>{{weatherInfo.C}}</label>&nbsp;<span>C</span><br>
+                <div [innerHtml]="weatherInfo.Icon"></div>
                 <label>{{weatherInfo.Text}}</label>
+            </ion-col>
+            <ion-col>
+                <label>{{weatherInfo.F}}</label>&nbsp;&deg;<span>F</span><br>
+                <label>{{weatherInfo.C}}</label>&nbsp;&deg;<span>C</span><br>
             </ion-col>
         </ion-row>
         <h3>UPCOMING HOLIDAYS</h3>
-        <ion-row>
-            <ion-col *ngFor="let holiday of upcomingHolidays" size="4">
-                <label>{{holiday.name}}</label>
-                <br>
-                <span>{{holiday.observed}}</span>
+        <ion-row no-padding>
+            <ion-col *ngFor="let holiday of upcomingHolidays" size="6" no-padding>
+                <ion-card>
+                    <ion-card-header>
+                        <label>{{holiday.observed | date:'MMM dd, yyyy'}}</label>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <p>{{holiday.name}}</p>
+                    </ion-card-content>
+                </ion-card>
             </ion-col>
         </ion-row>
         <ion-row>
-            <ion-col size="12" text-center>
+            <ion-col size="6" text-center>
                 <ion-button fill="outline" color="primary" margin-top (click)="onClickEdit()">
                     EDIT
                 </ion-button>
             </ion-col>
-            <ion-col size="12" text-center>
+            <ion-col size="6" text-center>
                 <ion-button fill="outline" color="danger" margin-top (click)="onClickDelete()">
                     DELETE
                 </ion-button>

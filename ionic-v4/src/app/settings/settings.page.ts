@@ -47,7 +47,7 @@ export class SettingsPage {
 
         this.firestoreDbHelper.UpdateUser(this.firebaseUid, { settings: newSettings })
             .then(()=>{
-                this.presentToast("Preferences saved!");
+                // this.presentToast("Preferences saved!");
             })
             .catch((error)=> {
                 this.logger.Error(error);

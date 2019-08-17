@@ -6,6 +6,8 @@ import { ITrip } from "../models/trip";
 import { GeoLocationHelper } from "../helpers/geolocationHelper";
 import _ from 'underscore';
 import { Location } from '../models/user';
+import { TripsApi } from '../helpers/tripsApi';
+import { Utils } from '../helpers/utils';
 // import { PhotoApi } from "../../helpers/photoApi";
 
 @Component({
@@ -29,10 +31,17 @@ export class CreateTripModal {
         notes: ""
     };
 
+    weatherInfo = {
+        F: '',
+        C: '',
+        Text: '',
+        Icon: ''
+    }
+
     googleAutoComplete: any;
     autoComplete: any = { input: '' };
     autoCompleteItems: any[] = [];
-    selectedPlace: google.maps.places.AutocompletePrediction;
+    // selectedPlace: google.maps.places.AutocompletePrediction;
 
     constructor(
         params: NavParams,
@@ -41,13 +50,14 @@ export class CreateTripModal {
         public toastCtrl: ToastController,
         private loadingCtrl: LoadingController,
         private firestoreDbHelper: FirestoreDbHelper,
-        private geolocationHelper: GeoLocationHelper) {
+        private geolocationHelper: GeoLocationHelper,
+        private tripsApi: TripsApi) {
         
-        const tripData = params.get('trip');
+        const tripDataParam = params.get('trip');
     
-        if(tripData){
+        if(tripDataParam){
             this.key = params.get('key');
-            this.tripData = JSON.parse(JSON.stringify(tripData));
+            this.tripData = JSON.parse(JSON.stringify(tripDataParam));
             this.autoComplete.input = this.tripData.location.stringFormat || '';
         } else {
             this.tripData.uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
@@ -55,6 +65,23 @@ export class CreateTripModal {
         }
 
         this.googleAutoComplete = new google.maps.places.AutocompleteService();
+    }
+
+    ngOnInit(){
+        this.loadWeatherInfo();
+    }
+
+    async loadWeatherInfo(){
+        if(this.autoComplete.input)
+        {
+            const location = await this.geolocationHelper.extractLocationAndGeoData(this.autoComplete.input);
+            const weatherData = await this.tripsApi.getWeatherInfoByLatLong(location.latitude, location.longitude)
+            const weatherInfo = _.first(weatherData);
+            this.weatherInfo.F = weatherInfo.Temperature.Imperial.Value;
+            this.weatherInfo.C = weatherInfo.Temperature.Metric.Value;
+            this.weatherInfo.Text = weatherInfo.WeatherText;
+            this.weatherInfo.Icon = Utils.getWeatherIcon(weatherInfo.WeatherText);
+        }
     }
 
     onClickCancel(){
@@ -75,14 +102,21 @@ export class CreateTripModal {
 
         if(this.autoCompleteItems.length > 0){
             const place = _.first(this.autoCompleteItems);
-            this.selectedPlace = place;
+            // this.selectedPlace = place;
             this.autoComplete.input = place.description;
             this.autoCompleteItems = [];
             //this.tripData.photoUrl = await this.getTripPhoto();
         }
 
-        const location = await this.geolocationHelper.extractLocationAndGeoData(this.autoComplete.input);
-        this.tripData.location = location;
+        await this.geolocationHelper.extractLocationAndGeoData(this.autoComplete.input)
+            .then((location)=>{
+                this.tripData.location = location;
+            })
+            .catch((error)=>{
+                console.error(error);
+                loading.dismiss();
+                return;
+            })
 
         if(this.key){
             this.firestoreDbHelper.UpdateTrip(this.key, this.tripData)
@@ -129,9 +163,10 @@ export class CreateTripModal {
     }
 
     async selectSearchResult(item){
-        this.selectedPlace = item;
+        // this.selectedPlace = item;
         this.autoComplete.input = item.description;
         this.autoCompleteItems = [];
+        this.loadWeatherInfo();
         //this.tripData.photoUrl = await this.getTripPhoto();
     }
     //******* end Bound Elements ***** //
