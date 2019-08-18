@@ -1,15 +1,15 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
         <ion-buttons slot="start">
-            <ion-button fill="clear" color="primary" (click)="onClickBack()">
+            <ion-button fill="clear" color="light" (click)="onClickBack()">
                 <ion-icon name="arrow-back"></ion-icon>
             </ion-button>
         </ion-buttons>
-        <ion-title>
+        <ion-title color="light">
             {{headerName}}
         </ion-title>
         <ion-buttons slot="end">
-            <ion-button *ngIf="showProfileButton" fill="clear" (click)="onClickProfile()">
+            <ion-button *ngIf="showProfileButton" fill="clear" color="light" (click)="onClickProfile()">
                 <ion-icon name="md-contact"></ion-icon>
             </ion-button>
         </ion-buttons>

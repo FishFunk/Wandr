@@ -1,32 +1,19 @@
-<ion-header class="top-10" no-border>
-  <ion-toolbar>
-    <ion-grid class="no-padding-bottom">
-      <ion-row>
-        <!-- <ion-col size="9" offset="1">
-          <ion-searchbar 
-            [(ngModel)]="autoComplete.input" 
-            (ionInput)="updateSearchResults()" 
-            (ionClear)="clearResults()"
-            placeholder="ie. Sydney, Australia">
-          </ion-searchbar>
-          <ion-list [hidden]="autoCompleteItems.length == 0">
-            <ion-item *ngFor="let item of autoCompleteItems" tappable (click)="selectSearchResult(item)">
-              {{ item.description }}
-            </ion-item>
-          </ion-list>
-        </ion-col> -->
-        <ion-col size="12">
-            <ion-button expand="full" fill="outline" (click)="onClickCreateTrip()">
-              <!-- <i class="fas fa-plus create-icon"></i> -->
-              NEW TRIP
-            </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>
+        <img src="../../assets/header_logo_mark.png" width="90" height="35">
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
 <ion-grid class="no-padding-top">
+  <ion-row>
+    <ion-col size="12">
+      <ion-button expand="full" fill="outline" (click)="onClickCreateTrip()">
+        NEW TRIP
+      </ion-button>
+    </ion-col>
+  </ion-row>
   <ion-row *ngIf="data.length > 0">
     <ion-col size="11" offset="1" class="no-padding-top">
       <ion-list>

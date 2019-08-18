@@ -1,13 +1,13 @@
-<ion-header class="top-10">
-    <ion-toolbar>
+<ion-header>
+    <ion-toolbar color="primary" class="top-10">
         <ion-buttons slot="start">
-            <ion-button fill="clear" color="primary" (click)="onClickClose()">
+            <ion-button fill="clear" color="light" (click)="onClickClose()">
                 <i class="far fa-window-close"></i> 
             </ion-button>
         </ion-buttons>
-        <ion-title>{{displayLocation}}</ion-title>
+        <ion-title color="light">{{displayLocation}}</ion-title>
         <ion-buttons slot="end">
-            <ion-button fill="clear" color="primary" (click)="presentPopover($event)">
+            <ion-button fill="clear" color="light" (click)="presentPopover($event)">
                 <ion-icon name="list"></ion-icon>
             </ion-button>
         </ion-buttons>

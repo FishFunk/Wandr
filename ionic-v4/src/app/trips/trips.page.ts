@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 import { ModalController, NavController, LoadingController } from '@ionic/angular';
 import { CreateTripModal } from './create-trip-modal';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
@@ -7,8 +7,6 @@ import { Observable } from 'rxjs';
 import _ from 'underscore';
 import { TripDetailsModal } from './trip-details-modal';
 import { ITrip } from '../models/trip';
-import { GeoLocationHelper } from '../helpers/geolocationHelper';
-// import { PhotoApi } from '../../helpers/photoApi';
 
 @Component({
     selector: 'page-trips',
@@ -21,19 +19,11 @@ export class TripsPage {
   tripsObservable: Observable<any>;
   data = [];
 
-  // googleAutoComplete: any;
-  // autoComplete: any = { input: '' };
-  // autoCompleteItems: google.maps.places.AutocompletePrediction[] = [];
-  // selectedPlace: google.maps.places.AutocompletePrediction;
-
   constructor(private modalController: ModalController,
     private loadingCtrl: LoadingController,
     private navCtrl: NavController,
-    private firestoreDbHelper: FirestoreDbHelper,
-    private geoHelper: GeoLocationHelper,
-    private zone: NgZone)
+    private firestoreDbHelper: FirestoreDbHelper)
   {
-    //this.googleAutoComplete = new google.maps.places.AutocompleteService();
   }
 
   ngOnInit(){
@@ -44,21 +34,11 @@ export class TripsPage {
     let modal;
     let location;
 
-    // if(this.autoCompleteItems.length > 0){
-    //   const place = _.first(this.autoCompleteItems);
-    //   this.selectedPlace = place;
-    //   this.autoComplete.input = place.description;
-    //   this.autoCompleteItems = [];
-    //   location = await this.geoHelper.extractLocationAndGeoData(this.autoComplete.input);
-    // }
-
     const trip: ITrip = {
       uid: window.localStorage.getItem(Constants.firebaseUserIdKey),
       facebook_uid: window.localStorage.getItem(Constants.facebookUserIdKey),
       location: location || ''
     }
-
-    //trip.photoUrl = await this.getPhotoUrl();
 
     modal = await this.modalController.create({
       component: CreateTripModal, 
@@ -66,9 +46,6 @@ export class TripsPage {
     });
 
     modal.present();
-
-    // this.autoComplete.input = '';
-    // this.autoCompleteItems = [];
   }
 
   async onClickDetail(key){
@@ -100,38 +77,4 @@ export class TripsPage {
 
     spinner.dismiss();
   }
-
-  //***** start Bound Elements ***** //
-  // updateSearchResults(){
-  //   if (this.autoComplete.input == '') {
-  //     this.autoCompleteItems = [];
-  //     return;
-  //   }
-  //   this.googleAutoComplete.getPlacePredictions({ input: this.autoComplete.input },
-  //     (predictions, status) => {
-  //       this.autoCompleteItems = [];
-  //       this.zone.run(() => {
-  //         predictions.forEach((prediction) => {
-  //         this.autoCompleteItems.push(prediction);
-  //       });
-  //     });
-  //   });
-  // }
-
-  // clearResults(){
-  //   this.autoComplete.input = '';
-  //   this.autoCompleteItems = [];
-  // }
-
-  // selectSearchResult(item: google.maps.places.AutocompletePrediction){
-  //   this.selectedPlace = item;
-  //   this.autoComplete.input = item.description;
-  //   this.autoCompleteItems = [];
-  //   this.onClickCreateTrip();
-  // }
-  //******* end Bound Elements ***** //
-
-  // private getPhotoUrl(): Promise<string>{
-  //   return this.photoApi.queryRandomPhoto(this.selectedPlace.description);
-  // }
 }

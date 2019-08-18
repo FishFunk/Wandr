@@ -185,7 +185,7 @@ export class ConnectionProfileModal {
       
           const currentUserFirstName = window.localStorage.getItem(Constants.userFirstNameKey);
           const currentUserPhotoUrl = window.localStorage.getItem(Constants.profileImageUrlKey);
-      
+          
           const focusedConnectionUid = this.viewUserData.app_uid;
           const roomkey = this.currentUserId + '_' + focusedConnectionUid;
       

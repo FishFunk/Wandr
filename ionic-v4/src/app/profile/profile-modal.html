@@ -1,15 +1,15 @@
-<ion-header no-border>
-    <ion-toolbar>
+<ion-header>
+    <ion-toolbar color="primary">
       <ion-buttons slot="start">
-          <ion-button fill="clear" color="primary" (click)="onClickCancel()">
+          <ion-button fill="clear" color="light" (click)="onClickCancel()">
             <i class="far fa-window-close"></i> 
           </ion-button>
       </ion-buttons>
-      <ion-title text-center>
+      <ion-title color="light">
         Edit Profile
       </ion-title>
       <ion-buttons slot="end">
-          <ion-button fill="clear" color="primary" (click)="onClickSave()">
+          <ion-button fill="clear" color="light" (click)="onClickSave()">
             <i class="far fa-save"></i>            
           </ion-button>
       </ion-buttons>
@@ -74,6 +74,6 @@
 </ion-content>
 <ion-footer>
   <div margin top>
-    <button class="bottom" ion-button type="button" clear full color="primary" (click)="onClickSave()">SAVE</button>
+    <ion-button fill="clear" expand="full" color="primary" (click)="onClickSave()">SAVE</ion-button>
   </div>
 </ion-footer>

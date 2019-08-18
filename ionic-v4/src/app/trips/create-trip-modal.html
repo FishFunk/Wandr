@@ -1,15 +1,15 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
       <ion-buttons slot="start">
-          <ion-button fill="clear" color="primary" (click)="onClickCancel()">
+          <ion-button fill="clear" color="light" (click)="onClickCancel()">
             <i class="far fa-window-close"></i>            
           </ion-button>
       </ion-buttons>
-      <ion-title text-center>
+      <ion-title text-center color="light">
         CREATE TRIP
       </ion-title>
       <ion-buttons slot="end">
-          <ion-button fill="clear" color="primary" (click)="onClickSave()">
+          <ion-button fill="clear" color="light" (click)="onClickSave()">
             <i class="far fa-save"></i>            
           </ion-button>
       </ion-buttons>
@@ -58,7 +58,7 @@
     <ion-row>
       <ion-col ion-item no-lines size="6">
         <ion-label class="date-label" stacked>Arrive</ion-label>
-        <ion-datetime placeholder="mm/dd/yyyy" [(ngModel)]="tripData.startDate"></ion-datetime>
+        <ion-datetime placeholder="mm/dd/yyyy" [(ngModel)]="tripData.startDate" max="2100-01-01"></ion-datetime>
       </ion-col>
       <!-- <ion-col ion-item no-lines size="6">
           <ion-checkbox [(ngModel)]="tripData.noArrival"></ion-checkbox>
@@ -66,7 +66,7 @@
       </ion-col> -->
       <ion-col ion-item no-lines size="6">
         <ion-label class="date-label" stacked>Depart</ion-label>
-        <ion-datetime placeholder="mm/dd/yyyy" [(ngModel)]="tripData.endDate" [min]="tripData.startDate"></ion-datetime>
+        <ion-datetime placeholder="mm/dd/yyyy" [(ngModel)]="tripData.endDate" [min]="tripData.startDate" max="2100-01-01"></ion-datetime>
       </ion-col>
       <!-- <ion-col ion-item no-lines size="6">
           <ion-checkbox [(ngModel)]="tripData.noDeparture"></ion-checkbox>

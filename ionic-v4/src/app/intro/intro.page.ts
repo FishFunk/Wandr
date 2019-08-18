@@ -120,11 +120,8 @@ export class IntroPage implements OnInit {
       // Email
       user.email = fbUserData.email || '';
 
-      // Get Facebook photo URL
-      if(fbUserData.picture){
-        user.profile_img_url = 
-          fbUserData.picture.data ? fbUserData.picture.data.url : '../../assets/avatar_man.png'; // TODO: Default image
-      }
+      // Set Facebook photo URL
+      user.profile_img_url = `https://graph.facebook.com/${facebookUid}/picture?width=360&height=360`;
 
       // Create new user ref
       const newUsr = Utils.getPlainUserObject(user);
@@ -136,12 +133,6 @@ export class IntroPage implements OnInit {
 
       // Always update email
       user.email = fbUserData.email || '';
-
-      // Always update Facebook photo URL
-      if(fbUserData.picture){
-        user.profile_img_url = 
-          fbUserData.picture.data ? fbUserData.picture.data.url : '';
-      }
 
       this.updateUserData(user);
     }

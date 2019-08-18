@@ -5,6 +5,7 @@ import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
 import _ from 'underscore';
 import { Constants } from '../helpers/constants';
+import { FacebookApi } from '../helpers/facebookApi';
 
 @Component({
   selector: 'app-chats',
@@ -22,7 +23,8 @@ export class ChatsPage {
     private alertCtrl: AlertController,
     private logger: Logger,
     private events: Events,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private facebookApi: FacebookApi
   ){
     this.userId = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.events.subscribe(Constants.refreshChatDataEvent, this.loadChats.bind(this));
