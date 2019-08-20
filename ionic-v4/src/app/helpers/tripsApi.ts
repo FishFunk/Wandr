@@ -87,16 +87,4 @@ export class TripsApi
                 });
         })
     }
-
-    // public getRegions(): Promise<string>{
-    //     return new Promise((resolve, reject)=>{
-    //         this.http.get(
-    //             `http://dataservice.accuweather.com/locations/v1/regions?apikey=${this.weatherApiKey}&language=en`)
-    //             .subscribe((data: any)=>{
-    //                 resolve(data);
-    //             }, (error)=>{
-    //                 reject(error);
-    //             });
-    //     })
-    // }
 }
