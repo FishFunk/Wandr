@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Platform } from '@ionic/angular';
 
 @Injectable()
 export class FacebookApi{
@@ -10,7 +11,8 @@ export class FacebookApi{
 
     constructor(
         private facebook: Facebook,
-        private firebaseAuth: AngularFireAuth)
+        private firebaseAuth: AngularFireAuth,
+        private platform: Platform)
     {
         this.facebookPermissions = ['public_profile','user_location','email','user_friends','user_gender'];
     }
@@ -27,7 +29,11 @@ export class FacebookApi{
 
     public facebookLogout(): Promise<any>
     {
-        return this.facebook.logout();
+        if(this.platform.is('cordova')){
+            return this.facebook.logout();
+        } else {
+            return Promise.resolve();
+        }
     }
 
     public facebookLoginStatus(): Promise<FacebookLoginResponse>

@@ -5,24 +5,24 @@
 .header {
     margin: 0;
     padding: 0;
-    font-size: 1.5em;
-    color: var(--ion-color-primary);
+    font-size: 1.3em;
+    color: var(--ion-color-dark);
     font-weight: bold;
 }
 
 .subheader{
     font-size: 1em;
-    color: var(--ion-color-primary);
+    color: var(--ion-color-dark);
 }
 
 .stats > label{
     font-size: 1em;
     font-weight: bold;
-    color: var(--ion-color-medium);
+    color: var(--ion-color-dark);
 }
 
 .stats > span{
     font-size: 1em;
     font-weight: bold;
-    color: var(--ion-color-medium);
+    color: var(--ion-color-dark);
 }

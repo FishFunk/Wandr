@@ -1,11 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { ToastController, AlertController, ModalController, Events, IonTabs } from '@ionic/angular';
+import { ToastController, AlertController, ModalController, Events, IonTabs, Platform, IonicModule } from '@ionic/angular';
 import { FcmProvider } from 'src/providers/fcm/fcm';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
 import { ProfileModal } from '../profile/profile-modal';
 import { Constants } from '../helpers/constants';
 import { tap } from 'rxjs/operators';
+import { User, IUser } from '../models/user';
 
 @Component({
   selector: 'app-tabs',
@@ -29,6 +30,11 @@ export class TabsPage {
 
   ngOnInit(){
     this.load()
+      .catch(error=>{
+        this.logger.Error(error);
+        alert("App startup failure. Please close and try again.");
+        return;
+      });
   }
 
   private async showOnBoardingPrompt(){
@@ -52,6 +58,7 @@ export class TabsPage {
   private async load(){
     const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     const user = await this.firestoreDbHelper.ReadUserByFirebaseUid(uid);
+
     if(!user.onboardcomplete){
       this.showOnBoardingPrompt();
     }
