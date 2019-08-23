@@ -89,7 +89,6 @@ export class ConnectionListPage {
     }
 
     async onClickProfile(user: IUser){
-        // this.navCtrl.navigateForward(`connection-profile/${user.app_uid}/false`);
         const modal = await this.modalController.create({
             component: ConnectionProfileModal,
             componentProps: {

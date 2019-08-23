@@ -7,6 +7,7 @@ import { ProfileModal } from '../profile/profile-modal';
 import { Constants } from '../helpers/constants';
 import { tap } from 'rxjs/operators';
 import { FacebookApi } from '../helpers/facebookApi';
+import { Utils } from '../helpers/utils';
 
 @Component({
   selector: 'app-tabs',
@@ -17,6 +18,7 @@ export class TabsPage {
 
   @ViewChild('appTabs') tabRef: IonTabs;
   badgeCount = 0;
+  loadingPopup;
 
   constructor(public toastCtrl: ToastController,
     public alertCtrl: AlertController,
@@ -35,6 +37,7 @@ export class TabsPage {
   ngOnInit(){
     this.load()
       .catch(error=>{
+        this.loadingPopup.dismiss();
         this.logger.Error(error);
         alert("App startup failure. Please close and try again.");
         return;
@@ -60,31 +63,40 @@ export class TabsPage {
   }
 
   private async load(){
+    const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
 
-    const loadingPopup = await this.loadingCtrl.create({
+    if(!uid){
+      this.navCtrl.navigateRoot('/intro');
+      return;     
+    }
+
+    this.loadingPopup = await this.loadingCtrl.create({
       spinner: 'dots'
     });
-    loadingPopup.present();
+    this.loadingPopup.present();
 
-    const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     const user = await this.firestoreDbHelper.ReadUserByFirebaseUid(uid);
 
     if(this.platform.is('cordova')){
       var facebookUid = window.localStorage.getItem(Constants.facebookUserIdKey);
-      var token = window.localStorage.getItem(Constants.accessTokenKey);
-      var fbUserData = await <any> this.facebookApi.getUser(facebookUid, token);
+      var facebookToken = window.localStorage.getItem(Constants.accessTokenKey);
+      var fbUserData = await <any> this.facebookApi.getUser(facebookUid, facebookToken);
+      var status = await this.facebookApi.facebookLoginStatus();
   
-      if(!fbUserData || !user){
+      if(!fbUserData || !user || status.status != 'connected'){
         // Need to login to Facebook again
-        loadingPopup.dismiss();
+        this.loadingPopup.dismiss();
         this.navCtrl.navigateRoot('/intro')
-        //this.appCtrl.getRootNav().setRoot(IntroPage);
         this.presentToast('Login expired. Please login again.');
         return;
+      } else {
+        // Update user friend list
+        const userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(uid);
+        userData.friends = await this.facebookApi.getFriendList(facebookUid, facebookToken);
+        const updateData = Utils.getPlainUserObject(userData);
+        await this.firestoreDbHelper.UpdateUser(userData.app_uid, updateData);
       }
-    }
 
-    if(this.platform.is('cordova')){
       const token = await this.fcm.getToken();
       await this.fcm.saveTokenToFirestore(token);
     
@@ -122,7 +134,6 @@ export class TabsPage {
       ).subscribe();
     }
 
-
     this.events.subscribe(Constants.updateBadgeCountEventName, (newCount: number)=>{
       this.badgeCount = newCount;
     });
@@ -133,7 +144,7 @@ export class TabsPage {
       this.showOnBoardingPrompt();
     }
 
-    loadingPopup.dismiss();
+    this.loadingPopup.dismiss();
   }
 
   private async updateBadgeCount(){

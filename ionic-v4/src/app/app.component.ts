@@ -36,13 +36,6 @@ export class AppComponent {
       // Handle tab hiding defect for android devices
       if (this.platform.is('android')) {
         this.statusBar.styleLightContent();
-        // this.keyboard.onKeyboardShow().subscribe(() => {
-        //   document.body.classList.add('keyboard-is-open');
-        // });
-
-        // this.keyboard.onKeyboardHide().subscribe(() => {
-        //   document.body.classList.remove('keyboard-is-open');
-        // });
       } else {
         this.statusBar.styleDefault();
       }
@@ -51,7 +44,7 @@ export class AppComponent {
         const fbStatus = await this.facebookApi.facebookLoginStatus();
         const isLoggedIn = fbStatus.status === 'connected';
   
-        if(!isLoggedIn){
+        if(!isLoggedIn || !this.areValuesCached()){
           this.router.navigateByUrl('/intro');
         } else {
           const firebaseData = await this.facebookApi.firebaseLogin(fbStatus.authResponse.accessToken);
@@ -61,6 +54,8 @@ export class AppComponent {
             fbStatus.authResponse.userID, 
             firebaseData.user.uid,
             fbStatus.authResponse.accessToken);
+
+          this.router.navigateByUrl('/tabs/trips');
         }
       } else {
         this.router.navigateByUrl('/intro');
@@ -74,6 +69,18 @@ export class AppComponent {
       window.localStorage.setItem(Constants.facebookUserIdKey, facebookUid);
       window.localStorage.setItem(Constants.firebaseUserIdKey, firebaseUid);
       window.localStorage.setItem(Constants.accessTokenKey, accessToken);
+    } else {
+      throw new Error("Local storage not available");
+    }
+  }
+
+  private areValuesCached(): boolean
+  {
+    if(window.localStorage){
+      return (
+        window.localStorage.getItem(Constants.facebookUserIdKey) != null && 
+        window.localStorage.getItem(Constants.firebaseUserIdKey)  != null &&
+        window.localStorage.getItem(Constants.accessTokenKey) != null);
     } else {
       throw new Error("Local storage not available");
     }

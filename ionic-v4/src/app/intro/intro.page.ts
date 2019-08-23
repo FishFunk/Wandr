@@ -28,8 +28,7 @@ export class IntroPage implements OnInit {
     private navCtrl: NavController,
     private alertCtrl: AlertController,
     private platform: Platform,
-    private logger: Logger,
-    private router: Router) { }
+    private logger: Logger) { }
 
   ngOnInit() {
   }
@@ -38,8 +37,7 @@ export class IntroPage implements OnInit {
     if (this.platform.is('cordova')) {
       this.checkStatusAndLogin()
         .then(()=>{
-          //this.router.navigateByUrl('/');
-          this.navCtrl.navigateRoot('/');
+          this.navCtrl.navigateRoot('/tabs');
         })
         .catch((error)=>{
           this.logger.Error(error);
@@ -50,13 +48,8 @@ export class IntroPage implements OnInit {
       // DEBUG/Browser Mode
       window.localStorage.setItem(Constants.facebookUserIdKey, "10212312262992697");
       window.localStorage.setItem(Constants.firebaseUserIdKey, "SlQA4Yz8Pwhuv15d6ygmdo284UF2");
-      // this.presentAlert('cordova is not available.');
-      this.next();
+      this.navCtrl.navigateRoot('/tabs');  
     }
-  }
-
-  private next(): void {
-    this.navCtrl.navigateRoot('/');
   }
 
   private async checkStatusAndLogin() {
@@ -128,10 +121,8 @@ export class IntroPage implements OnInit {
       await this.firestoreDbHelper.SetNewUserData(firebaseUid, newUsr);
     } else {
       // IF user already has been created
-      // Always update Facebook friends list
+      // just update Facebook friends list and email
       user.friends = await this.facebookApi.getFriendList(facebookUid, token);
-
-      // Always update email
       user.email = fbUserData.email || '';
 
       this.updateUserData(user);
