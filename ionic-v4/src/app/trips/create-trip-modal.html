@@ -40,15 +40,15 @@
     <br>
     <h3>TRIP REASON</h3>
     <ion-row>
-      <ion-col ion-item no-lines size="12">
+      <ion-col size="12">
         <ion-checkbox [(ngModel)]="tripData.business"></ion-checkbox>
         <ion-label>Business</ion-label>
       </ion-col>
-      <ion-col ion-item no-lines size="12">
+      <ion-col size="12">
           <ion-checkbox [(ngModel)]="tripData.leisure"></ion-checkbox>
           <ion-label>Leisure</ion-label>
       </ion-col>
-      <ion-col ion-item no-lines size="12">
+      <ion-col size="12">
           <ion-checkbox [(ngModel)]="tripData.moving"></ion-checkbox>
           <ion-label>Moving</ion-label>
       </ion-col>
@@ -56,22 +56,14 @@
     <br>
     <h3>DATES</h3>
     <ion-row>
-      <ion-col ion-item no-lines size="6">
+      <ion-col size="6">
         <ion-label class="date-label" stacked>Arrive</ion-label>
         <ion-datetime placeholder="mm/dd/yyyy" [(ngModel)]="tripData.startDate" max="2100-01-01"></ion-datetime>
       </ion-col>
-      <!-- <ion-col ion-item no-lines size="6">
-          <ion-checkbox [(ngModel)]="tripData.noArrival"></ion-checkbox>
-          <ion-label>N/A</ion-label>
-      </ion-col> -->
-      <ion-col ion-item no-lines size="6">
+      <ion-col size="6">
         <ion-label class="date-label" stacked>Depart</ion-label>
         <ion-datetime placeholder="mm/dd/yyyy" [(ngModel)]="tripData.endDate" [min]="tripData.startDate" max="2100-01-01"></ion-datetime>
       </ion-col>
-      <!-- <ion-col ion-item no-lines size="6">
-          <ion-checkbox [(ngModel)]="tripData.noDeparture"></ion-checkbox>
-          <ion-label>N/A</ion-label>
-      </ion-col> -->
     </ion-row>
     <br>
     <h3>CURRENT WEATHER</h3>

@@ -42,19 +42,16 @@
                 </ion-col>
             </ion-row>
             <h3>INTERESTS</h3>
-            <br>
             <ion-row>
-                <ion-col class="icon-col" *ngFor="let item of userInterests">
+                <ion-col size="3" *ngFor="let item of userInterests" text-center>
                     <i [class]="item.iconClass"></i>&nbsp;
                     <span *ngIf="item.checked">Yes</span>
                     <span *ngIf="!item.checked">No</span>
                 </ion-col>
             </ion-row>
-            <br>
             <h3>LIFESTYLE</h3>
-            <br>
             <ion-row>
-                <ion-col class="icon-col" *ngFor="let item of lifestyleOptions">
+                <ion-col size="3" *ngFor="let item of lifestyleOptions" text-center>
                     <i [class]="item.iconClass"></i>&nbsp;
                     <span *ngIf="item.checked">Yes</span>
                     <span *ngIf="!item.checked">No</span>
@@ -65,11 +62,11 @@
                     <ion-grid no-padding>
                         <h3>MUTUAL FRIENDS</h3>
                         <ion-row>
-                            <ion-col *ngFor="let user of mutualFriends">
+                            <ion-col *ngFor="let user of mutualFriends" size="4" text-center>
                                 <ion-avatar>
-                                    <img [src]="user.profile_img_url">
+                                    <img class="profile-img" [src]="user.profile_img_url">
                                 </ion-avatar>
-                                <label>{{user.first_name}} {{user.last_name}}</label>
+                                <ion-label>{{user.first_name}} {{user.last_name}}</ion-label>
                             </ion-col>
                         </ion-row>
                     </ion-grid>

@@ -10,10 +10,10 @@
         <div *ngFor="let chat of chats">
             <ion-item-sliding #slidingItem>
                 <ion-item (click)="onClickChat(chat)">
-                    <ion-thumbnail slot="start">
+                    <ion-thumbnail slot="start" class="top-bottom">
                         <img [src]="userId == chat.userA_id ? chat.userB_photoUrl : chat.userA_photoUrl">
                     </ion-thumbnail>
-                    <div [class]="getClass(chat)">
+                    <div [class]="getClass(chat)" class="top-bottom">
                         <ion-label>
                             <span class="name">{{userId == chat.userA_id ? chat.userB_name : chat.userA_name}}</span>
                             <br>

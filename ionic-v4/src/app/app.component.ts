@@ -62,6 +62,8 @@ export class AppComponent {
             firebaseData.user.uid,
             fbStatus.authResponse.accessToken);
         }
+      } else {
+        this.router.navigateByUrl('/intro');
       }
       
       this.splashScreen.hide();

@@ -109,8 +109,8 @@ export class ConnectionProfileModal {
     }
 
     async readMutualConnectionInfo(){
-      const currentUserFriends: IFacebookFriend[] = JSON.parse(window.localStorage.getItem(Constants.userFacebookFriendsKey));
-      const currentUserFriendIds = _.map(currentUserFriends, (friendObj)=>friendObj.id);
+      const currentUser = await this.dbHelper.ReadUserByFirebaseUid(this.currentUserId);
+      const currentUserFriendIds = _.map(currentUser.friends, (friendObj)=>friendObj.id);
       const connectionUserFriendIds = _.map(this.viewUserData.friends, (user)=>user.id);
 
       var mutualFriendIds = _.intersection(currentUserFriendIds, connectionUserFriendIds);

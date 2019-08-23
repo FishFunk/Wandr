@@ -12,7 +12,7 @@
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content padding>
+<ion-content>
     <ion-grid>
         <ion-row>
             <ion-col text-center>
@@ -42,18 +42,16 @@
                 </ion-col>
             </ion-row>
             <h3>INTERESTS</h3>
-            <br>
             <ion-row>
-                <ion-col class="icon-col" *ngFor="let item of userInterests">
+                <ion-col *ngFor="let item of userInterests" size="3" text-center>
                     <i [class]="item.iconClass"></i>&nbsp;
                     <span *ngIf="item.checked">Yes</span>
                     <span *ngIf="!item.checked">No</span>
                 </ion-col>
             </ion-row>
             <h3>LIFESTYLE</h3>
-            <br>
             <ion-row>
-                <ion-col class="icon-col" *ngFor="let item of lifestyleOptions">
+                <ion-col *ngFor="let item of lifestyleOptions" size="3" text-center>
                     <i [class]="item.iconClass"></i>&nbsp;
                     <span *ngIf="item.checked">Yes</span>
                     <span *ngIf="!item.checked">No</span>

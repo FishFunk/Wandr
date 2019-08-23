@@ -1,56 +1,57 @@
 
-    ion-list{
-        border-top: 0.55px solid #c8c7cc;
-    }
+.top-bottom{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 
-    .timestamp {
-        position: absolute;
-        top: 8px;
-        right: 16px;
-        font-size: 12px;
-        color: var(--ion-color-secondary);
-    }
+.timestamp {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 12px;
+    color: var(--ion-color-secondary);
+}
 
-    .unread {
-        color: var(ion-color-dark);
-        font-weight: bold;
-    }
+.unread {
+    color: var(ion-color-dark);
+    font-weight: bold;
+}
 
-    .name {
-        padding: 5px 0 5px 0;
-        font-size: 16px;
-    }
+.name {
+    padding: 5px 0 5px 0;
+    font-size: 16px;
+}
 
-    .message{
-        padding-bottom: 10px;
-        margin: 0;
-        color: var(--ion-color-medium);
-        font-size: 14px;
-    }
+.message{
+    padding-bottom: 10px;
+    margin: 0;
+    color: var(--ion-color-medium);
+    font-size: 14px;
+}
 
-    .headline{
-        font-size: 16px;
-        font-weight: bold;
-        color: var(ion-color-medium);
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-    }
+.headline{
+    font-size: 16px;
+    font-weight: bold;
+    color: var(ion-color-medium);
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.subtext{
+    padding: 0;
+    margin: 0 10% 0 10%;
+    font-size: 14px;
+    color: var(ion-color-medium);
+}
     
-    .subtext{
-        padding: 0;
-        margin: 0 10% 0 10%;
-        font-size: 14px;
-        color: var(ion-color-medium);
-    }
-        
-    .image-container {
-        margin-top: 12%;
-        text-align: center;
-    }
+.image-container {
+    margin-top: 12%;
+    text-align: center;
+}
 
-    #filler-img{
-        height: 200px;
-        width: 300px;
-        opacity: 0.5;
-    }
+#filler-img{
+    height: 200px;
+    width: 300px;
+    opacity: 0.5;
+}

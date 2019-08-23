@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { LoadingController, ToastController, Platform, ModalController, Events, NavController } from '@ionic/angular';
+import { LoadingController, Platform, ModalController, Events, NavController } from '@ionic/angular';
 import { Location, User, IUser } from '../models/user';
-import { FacebookApi } from '../helpers/facebookApi';
 import { Constants } from '../helpers/constants';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
@@ -29,8 +28,6 @@ export class ProfilePage {
     public modalController: ModalController,
     public loadingCtrl: LoadingController, 
     public navCtrl: NavController,
-    private toastCtrl: ToastController,
-    private facebookApi: FacebookApi,
     private platform: Platform,
     private firestoreDbHelper: FirestoreDbHelper,
     private logger: Logger,
@@ -56,27 +53,12 @@ export class ProfilePage {
 
       if(this.platform.is('cordova')){
         var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
-        var facebookUid = window.localStorage.getItem(Constants.facebookUserIdKey);
-        var token = window.localStorage.getItem(Constants.accessTokenKey);
-
-        var fbUserData = await <any> this.facebookApi.getUser(facebookUid, token);
-
-        if(!fbUserData){
-          // Need to login to Facebook again
-          loadingPopup.dismiss();
-          this.navCtrl.navigateRoot('/intro')
-          //this.appCtrl.getRootNav().setRoot(IntroPage);
-          this.presentToast('Login expired. Please login again.');
-          return;
-        }
-
         this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid, false);
 
         // Cache some user data
         window.localStorage.setItem(Constants.userFirstNameKey, this.userData.first_name);
         window.localStorage.setItem(Constants.userLastNameKey, this.userData.last_name);
         window.localStorage.setItem(Constants.profileImageUrlKey, this.userData.profile_img_url);
-        window.localStorage.setItem(Constants.userFacebookFriendsKey, JSON.stringify(this.userData.friends));
 
         // Calculate second degree connections
         this.secondConnectionCount = await this.countSecondConnections();
@@ -136,15 +118,7 @@ export class ProfilePage {
   private async reloadUser(){
     var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid, false);
-  }
-
-  private async presentToast(message: string) {
-    let toast = await this.toastCtrl.create({
-      message: message,
-      position: 'top',
-      duration: 1000
-    });
-    toast.present();
+    this.renderUserOptions();
   }
 
   private async countSecondConnections(): Promise<number>{

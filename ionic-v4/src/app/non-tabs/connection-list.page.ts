@@ -16,7 +16,7 @@ import { ConnectionProfileModal } from './connection-profile';
 export class ConnectionListPage {
 
     currentUserId: string;
-    currentUserFriends: IFacebookFriend[];
+    currentUser: IUser;
     locationString: string;
     displayLocation: string;
     firstConnections: IUser[] = [];
@@ -26,7 +26,6 @@ export class ConnectionListPage {
 
     constructor(
         params: NavParams,
-        private navCtrl: NavController,
         private modalController: ModalController,
         private popoverCtrl: PopoverController,
         private loadingCtrl: LoadingController,
@@ -43,7 +42,6 @@ export class ConnectionListPage {
             this.showForumButton = false;
         }
 
-        this.currentUserFriends = JSON.parse(window.localStorage.getItem(Constants.userFacebookFriendsKey));
         this.currentUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
 
         // Subscribe to sort events
@@ -56,6 +54,8 @@ export class ConnectionListPage {
         const spinner = await this.createSpinner();
         await spinner.present();
 
+        this.currentUser = await this.firestoreDbHelper.ReadUserByFirebaseUid(this.currentUserId);
+
         // First degree
         this.firstConnections = 
             await this.firestoreDbHelper.ReadFirstConnections(this.currentUserId, this.locationString);
@@ -64,7 +64,7 @@ export class ConnectionListPage {
         const facebookId = window.localStorage.getItem(Constants.facebookUserIdKey);
         this.secondConnections = 
             await this.firestoreDbHelper.ReadSecondConnections(
-                this.currentUserId ,facebookId, this.locationString);
+                this.currentUserId, facebookId, this.locationString);
 
         // Others
         const excludeFirstIdMap = _.indexBy(this.firstConnections, (usr)=>usr.app_uid);
@@ -101,7 +101,7 @@ export class ConnectionListPage {
     }
 
     countMutualFriends(connectionUser: IUser){
-        const currentUserFriendIds = _.map(this.currentUserFriends, (friendObj)=>friendObj.id);
+        const currentUserFriendIds = _.map(this.currentUser.friends, (friendObj)=>friendObj.id);
         const connectionUserFriendIds = _.map(connectionUser.friends, (user)=>user.id);
 
         return _.intersection(currentUserFriendIds, connectionUserFriendIds).length;

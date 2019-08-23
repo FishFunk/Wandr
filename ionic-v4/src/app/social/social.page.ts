@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, Platform } from '@ionic/angular';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Constants } from '../helpers/constants';
@@ -23,6 +23,7 @@ export class SocialPage {
     public loadingCtrl: LoadingController,
     private socialSharing: SocialSharing,
     private firestoreDbHelper: FirestoreDbHelper,
+    private platform: Platform,
     private logger: Logger) {
   }
 
@@ -63,9 +64,11 @@ export class SocialPage {
   }
 
   openShareSheet(){
-    this.socialSharing.share(this.shareInfo.message, this.shareInfo.subject, this.shareInfo.file, this.shareInfo.url)
+    if(this.platform.is('cordova')){
+      this.socialSharing.share(this.shareInfo.message, this.shareInfo.subject, this.shareInfo.file, this.shareInfo.url)
       .catch(error=>{
         this.logger.Warn(error);
       });
+    }
   }
 }
