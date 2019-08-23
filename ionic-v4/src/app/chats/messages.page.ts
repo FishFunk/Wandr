@@ -1,5 +1,5 @@
 import { Component, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
-import { IonContent, LoadingController, NavController, Events, AlertController, ModalController } from '@ionic/angular';
+import { IonContent, NavController, Events, AlertController, ModalController } from '@ionic/angular';
 import { Constants } from '../helpers/constants';
 import { Subscription, Observable } from 'rxjs';
 import { IMessage, IChat } from '../models/chat';
@@ -40,7 +40,6 @@ export class MessagesPage {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private loadingCtrl: LoadingController,
         private navCtrl: NavController,
         private modalCtrl: ModalController,
         private alertCtrl: AlertController,
@@ -56,7 +55,6 @@ export class MessagesPage {
 
 
     ngOnInit(){
-        this.loadMessages();
     }
 
     ionViewWillLeave(){
@@ -73,7 +71,7 @@ export class MessagesPage {
         this.sendButtonElement.removeEventListener('mouseup', this.stopBubbleAndSendMessage.bind(this));
     }
 
-    ionViewWillEnter() {
+    async ionViewWillEnter() {
         this.initialTextareaScrollHeight = this.textarea.nativeElement.scrollHeight;
 
         this.messageListItems.changes.subscribe(() => {
@@ -91,6 +89,8 @@ export class MessagesPage {
         this.sendButtonElement.addEventListener('touchstart', this.stopBubble.bind(this));
         this.sendButtonElement.addEventListener('touchend', this.stopBubbleAndSendMessage.bind(this));
         this.sendButtonElement.addEventListener('mouseup', this.stopBubbleAndSendMessage.bind(this));
+
+        await this.loadMessages();
 
         setTimeout(()=>{
             this.scrollToBottom(0);
