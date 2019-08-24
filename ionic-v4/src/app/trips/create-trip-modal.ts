@@ -8,7 +8,7 @@ import _ from 'underscore';
 import { Location } from '../models/user';
 import { TripsApi } from '../helpers/tripsApi';
 import { Utils } from '../helpers/utils';
-// import { PhotoApi } from "../../helpers/photoApi";
+import * as moment from 'moment';
 
 @Component({
     selector: 'create-trip-modal',
@@ -18,6 +18,8 @@ import { Utils } from '../helpers/utils';
 
 export class CreateTripModal {
 
+    todaysDate = moment().format('YYYY-MM-DD');
+    maxDate = moment().add(50, 'years').format('YYYY-MM-DD');
     key: string = "";
     tripData: ITrip = {
         uid: '',
@@ -117,6 +119,14 @@ export class CreateTripModal {
                 loading.dismiss();
                 return;
             })
+
+        // Format Dates
+        if(this.tripData.startDate){
+            this.tripData.startDate = moment(this.tripData.startDate).format('M/D/YY');
+        }
+        if(this.tripData.endDate){
+            this.tripData.endDate = moment(this.tripData.endDate).format('M/D/YY');
+        }
 
         if(this.key){
             this.firestoreDbHelper.UpdateTrip(this.key, this.tripData)

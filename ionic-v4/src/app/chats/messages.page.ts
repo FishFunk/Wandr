@@ -54,7 +54,8 @@ export class MessagesPage {
     }
 
 
-    ngOnInit(){
+    async ngOnInit(){
+        await this.loadMessages();
     }
 
     ionViewWillLeave(){
@@ -71,7 +72,7 @@ export class MessagesPage {
         this.sendButtonElement.removeEventListener('mouseup', this.stopBubbleAndSendMessage.bind(this));
     }
 
-    async ionViewWillEnter() {
+    ionViewWillEnter() {
         this.initialTextareaScrollHeight = this.textarea.nativeElement.scrollHeight;
 
         this.messageListItems.changes.subscribe(() => {
@@ -90,11 +91,7 @@ export class MessagesPage {
         this.sendButtonElement.addEventListener('touchend', this.stopBubbleAndSendMessage.bind(this));
         this.sendButtonElement.addEventListener('mouseup', this.stopBubbleAndSendMessage.bind(this));
 
-        await this.loadMessages();
-
-        setTimeout(()=>{
-            this.scrollToBottom(0);
-        },10);
+        this.scrollToBottom(0);
     }
 
     async loadMessages(){

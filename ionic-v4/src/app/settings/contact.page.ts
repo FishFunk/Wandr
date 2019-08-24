@@ -4,6 +4,7 @@ import { Constants } from '../helpers/constants';
 import { NavController, ToastController } from '@ionic/angular';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
+import * as moment from 'moment';
 
 @Component({ 
     selector: 'page-contact',
@@ -46,7 +47,7 @@ export class ContactPage {
     
             var reportData = {
                 uid: localStorage.getItem(Constants.firebaseUserIdKey),
-                timestamp: new Date().toDateString(),
+                timestamp: moment().format('M/D/YY'),
                 deviceInfo: deviceInfo,
                 userText: this.text.trim()
             }

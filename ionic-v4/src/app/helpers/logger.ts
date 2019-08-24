@@ -3,6 +3,7 @@ import { Device } from '@ionic-native/device/ngx';
 import { Constants } from './constants';
 import { AngularFirestore } from "angularfire2/firestore";
 import { Platform } from '@ionic/angular';
+import * as moment from 'moment';
 
 @Injectable()
 export class Logger{
@@ -27,20 +28,29 @@ export class Logger{
     }
 
     public async Error(error: any){
+        var log;
+
         console.error(error);
 
         if(this.platform.is('cordova')){
             if(this.isError(error)){
-                var log = {
+                log = {
+                    userName: window.localStorage.getItem(Constants.userFirstNameKey) || "NO_NAME",
                     time: this.getTimeStamp(),
                     device: this.getDeviceInfo(),
-                    name: error.name,
+                    error: error.name,
                     message: error.message,
                 };
     
                 return this.upsertLog(log, 'error');
             } else {
-                return this.upsertLog(error, 'error');
+                log = {
+                    userName: window.localStorage.getItem(Constants.userFirstNameKey) || "NO_NAME",
+                    time: this.getTimeStamp(),
+                    device: this.getDeviceInfo(),
+                    error: error
+                }
+                return this.upsertLog(log, 'error');
             }
         }
     }
@@ -93,7 +103,7 @@ export class Logger{
     }
 
     private getTimeStamp(){
-        return new Date().getTime().toString();
+        return moment().format('M/D/YY');
     }
 
     private getDeviceInfo(){
