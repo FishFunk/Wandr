@@ -1,6 +1,5 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IHoliday } from '../models/trip';
 import _ from 'underscore';
 
 @Injectable()
@@ -46,7 +45,7 @@ export class TripsApi
     public getUpcomingHolidays(countryCode: string): Promise<any>{
         return new Promise((resolve,reject)=>{
             const date = new Date();
-            const year = '2018'; //new Date().getFullYear(); // TODO: Buy full featured API
+            const year = '2018'; // date.getFullYear(); // TODO: Buy full featured API
             const month = date.getMonth();
             const day = date.getDay();
 
