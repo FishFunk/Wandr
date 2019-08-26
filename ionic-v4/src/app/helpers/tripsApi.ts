@@ -7,6 +7,7 @@ export class TripsApi
 {
     private holidayApiKey = '50059bac-4ff6-4353-b67a-e99f72b303a4';
     private weatherApiKey = 'eiWAikLyHInkK2oVffGtWBR8lp50hUvM';
+    private googleApiKey = 'AIzaSyCuxtLSqHoL0CkX2QynMDyo-vxCKl-1qmE';
 
     constructor(private http: HttpClient){
 
@@ -16,6 +17,10 @@ export class TripsApi
         const key = await this.getLocationKey(lat, lng);
         const data = await this.getWeatherInfo(key);
         return data;
+    }
+
+    public getLocationScreenshotUrl(location: string): string{
+        return `https://maps.googleapis.com/maps/api/staticmap?center=${location}&zoom=13&size=400x125&maptype=roadmap&key=${this.googleApiKey}`;
     }
 
     private getLocationKey(lat: string, lng: string): Promise<string>{

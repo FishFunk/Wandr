@@ -7,6 +7,9 @@ import { Observable } from 'rxjs';
 import _ from 'underscore';
 import { TripDetailsModal } from './trip-details-modal';
 import { ITrip } from '../models/trip';
+import { TripsApi } from '../helpers/tripsApi';
+import { ILocation } from '../models/user';
+
 
 @Component({
     selector: 'page-trips',
@@ -22,6 +25,7 @@ export class TripsPage {
   constructor(private modalController: ModalController,
     private loadingCtrl: LoadingController,
     private navCtrl: NavController,
+    private tripsApi: TripsApi,
     private firestoreDbHelper: FirestoreDbHelper)
   {
   }
@@ -62,6 +66,11 @@ export class TripsPage {
     this.navCtrl.navigateForward('/tabs/map');
   }
 
+  getLocationScreenshotUrl(location: ILocation){
+    const formattedLocation = location.stringFormat.replace(',','').replace(' ', '%20');
+    return this.tripsApi.getLocationScreenshotUrl(formattedLocation);
+  }
+
   async load(){
     const spinner = await this.loadingCtrl.create({
       spinner: 'dots'
@@ -71,8 +80,8 @@ export class TripsPage {
     const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.tripsObservable = this.firestoreDbHelper.ReadTripsObservableByUserId(uid);
 
-    this.tripsObservable.subscribe(async data =>{
-      this.data = data;
+    this.tripsObservable.subscribe(async trip =>{
+      this.data = _.sortBy(trip, (obj)=> obj.data.startDate);
     });
 
     spinner.dismiss();

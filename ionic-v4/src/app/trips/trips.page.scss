@@ -1,13 +1,4 @@
 
-  ion-searchbar{
-    padding: 0;
-  }
-
-  #location-photo{
-    width: 250px;
-    height: auto;
-  }
-
   .transparent{
     background-image: linear-gradient(to right,
       rgba(255, 255, 255, 0), 
@@ -35,10 +26,11 @@
 
 
   ion-card {
+    margin-left: 30px;
     border-radius: 4px !important;
-
-    max-height: 125px;
-
+    background-size: contain !important;
+    background-position: center center !important;
+    height: 125px;
     overflow: visible;
     position: relative;
 
@@ -48,7 +40,7 @@
       width: 2px;
       background: var(--ion-color-secondary) !important;
       top:50%;
-      left: -10px;
+      left: -16px;
       bottom: -65%;
       position: absolute;
     }
@@ -61,7 +53,7 @@
       border-radius: 50%;
       background: var(--ion-color-secondary) !important;
       top:45%;
-      left: -16px;
+      left: -22px;
       position: absolute;
     }
   }

@@ -23,8 +23,7 @@ export class ChatsPage {
     private alertCtrl: AlertController,
     private logger: Logger,
     private events: Events,
-    private navCtrl: NavController,
-    private facebookApi: FacebookApi
+    private navCtrl: NavController
   ){
     this.userId = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.events.subscribe(Constants.refreshChatDataEvent, this.loadChats.bind(this));

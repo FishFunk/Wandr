@@ -15,9 +15,9 @@
     </ion-col>
   </ion-row>
   <ion-row *ngIf="data.length > 0">
-    <ion-col size="11" offset="1" class="no-padding-top">
+    <ion-col size="12" class="no-padding-top">
       <ion-list>
-        <ion-card *ngFor="let item of data" (click)="onClickDetail(item.key)">
+        <ion-card #trips *ngFor="let item of data" (click)="onClickDetail(item.key)" [ngStyle]="{'background': 'url(' + getLocationScreenshotUrl(item.data.location) + ')'}">
           <ion-grid no-padding text-center>
             <ion-row class="transparent pad-10">
               <ion-col>
@@ -27,7 +27,7 @@
                     &nbsp;<span>to</span>&nbsp;
                     <span>{{item.data.endDate || 'TBD'}}</span>
                   </div>
-                  <h2 ion-text >{{item.data.location.stringFormat}}</h2>
+                  <!-- <h2 ion-text >{{item.data.location.stringFormat}}</h2> -->
               </ion-col>
             </ion-row>
             <br><br>
