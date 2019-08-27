@@ -55,11 +55,6 @@ export class ProfilePage {
         var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
         this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid, false);
 
-        // Cache some user data
-        window.localStorage.setItem(Constants.userFirstNameKey, this.userData.first_name);
-        window.localStorage.setItem(Constants.userLastNameKey, this.userData.last_name);
-        window.localStorage.setItem(Constants.profileImageUrlKey, this.userData.profile_img_url);
-
         // Calculate second degree connections
         this.secondConnectionCount = await this.countSecondConnections();
       } else {

@@ -13,6 +13,16 @@ export class FirestoreDbHelper {
 
     }
 
+    public async CreateLog(uid: string, logLevel: 'error' | 'warn', logData: any): Promise<any>{
+      return new Promise((resolve, reject)=>{
+        this.angularFirestore.collection('logs').doc(uid).collection(logLevel).add(logData)
+        .catch(error=>{
+          console.error(error);
+        })
+        .finally(()=> resolve());
+      })
+    }
+
     public async ReadMetadata<T>(fieldName: string): Promise<T>{
 
       let querySnapshot: firestore.DocumentSnapshot;

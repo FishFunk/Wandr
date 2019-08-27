@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { FacebookApi } from '../helpers/facebookApi';
 import { Constants } from '../helpers/constants';
 import { AlertController, Platform, NavController } from '@ionic/angular';
@@ -8,6 +7,7 @@ import { GeoLocationHelper } from '../helpers/geolocationHelper';
 import { Utils } from '../helpers/utils';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { User, Location, IUser} from '../models/user';
+import _ from 'underscore';
 
 @Component({
   selector: 'app-intro',
@@ -97,33 +97,38 @@ export class IntroPage implements OnInit {
       user.app_uid = firebaseUid;
       user.facebook_uid = facebookUid;
 
-      // Get first and last name
-      var names = fbUserData.name.split(' ');
-      user.first_name = names[0];
-      user.last_name = names[1];
-
       // Get Facebook location and geocode it
       if(fbUserData.location && fbUserData.location.name) {
         user.location = await this.geolocationHelper.extractLocationAndGeoData(fbUserData.location.name);
       }
 
-      // Get Facebook friends list
+      // Populate some fields from Facebook profile
+      
+      // First and last name
+      var names = fbUserData.name.split(' ');
+      user.first_name = _.first(names);
+      user.last_name = _.last(names);
+
+      // Facebook friends list
       user.friends = await this.facebookApi.getFriendList(facebookUid, token);
 
       // Email
       user.email = fbUserData.email || '';
 
-      // Set Facebook photo URL
+      // Facebook profile photo URL
       user.profile_img_url = `https://graph.facebook.com/${facebookUid}/picture?width=360&height=360`;
 
       // Create new user ref
       const newUsr = Utils.getPlainUserObject(user);
       await this.firestoreDbHelper.SetNewUserData(firebaseUid, newUsr);
     } else {
-      // IF user already has been created
-      // just update Facebook friends list and email
-      user.friends = await this.facebookApi.getFriendList(facebookUid, token);
+
+      // IF user already has been created just update a few fields
+      var names = fbUserData.name.split(' ');
+      user.first_name = _.first(names);
+      user.last_name = _.last(names);
       user.email = fbUserData.email || '';
+      user.friends = await this.facebookApi.getFriendList(facebookUid, token);
 
       this.updateUserData(user);
     }

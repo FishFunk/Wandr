@@ -67,7 +67,7 @@ export class TripsPage {
   }
 
   getLocationScreenshotUrl(location: ILocation){
-    const formattedLocation = location.stringFormat.replace(',','').replace(' ', '%20');
+    const formattedLocation = location.stringFormat.replace(/,/g,'').replace(/ /g, '%20');
     return this.tripsApi.getLocationScreenshotUrl(formattedLocation);
   }
 

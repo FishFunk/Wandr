@@ -28,8 +28,9 @@
   ion-card {
     margin-left: 30px;
     border-radius: 4px !important;
-    background-size: contain !important;
+    background-size: cover !important;
     background-position: center center !important;
+    background-repeat: no-repeat !important;
     height: 125px;
     overflow: visible;
     position: relative;

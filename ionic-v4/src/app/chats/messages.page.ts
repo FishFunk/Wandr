@@ -50,7 +50,6 @@ export class MessagesPage {
         this.roomkey = this.activatedRoute.snapshot.paramMap.get('roomkey');
         this.showProfileButton = this.activatedRoute.snapshot.paramMap.get('showProfileButton') == "true";
         this.uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
-        this.firstName = window.localStorage.getItem(Constants.userFirstNameKey);
     }
 
 
@@ -171,7 +170,7 @@ export class MessagesPage {
                 roomkey: this.chat.roomkey,
                 to_uid: isUserA ? this.chat.userB_id : this.chat.userA_id,
                 from_uid: this.uid, 
-                name: this.firstName, 
+                name: isUserA ? this.chat.userA_name : this.chat.userB_name,
                 text: formattedText, 
                 timestamp: dateInMillis
             }

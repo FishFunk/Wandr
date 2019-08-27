@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { NavParams, AlertController, ModalController } from "@ionic/angular";
+import { NavParams, AlertController, ModalController, NavController } from "@ionic/angular";
 import { FirestoreDbHelper } from "../helpers/firestoreDbHelper";
 import { Constants } from "../helpers/constants";
 import { ITrip } from "../models/trip";
@@ -8,6 +8,7 @@ import { CreateTripModal } from "./create-trip-modal";
 import { TripsApi } from "../helpers/tripsApi";
 import _ from "underscore";
 import { Utils } from '../helpers/utils';
+import { ConnectionProfileModal } from '../non-tabs/connection-profile';
 
 @Component({
     selector: 'trip-details-modal',
@@ -67,6 +68,17 @@ export class TripDetailsModal {
 
     onClickClose(){
         this.modalCtrl.dismiss();
+    }
+
+    async onClickUser(user: IUser){
+      const modal = await this.modalCtrl.create({
+          component: ConnectionProfileModal,
+          componentProps: {
+              userId: user.app_uid,
+              showChatButton: true
+          }
+      });
+      modal.present();
     }
     
     async onClickEdit(){

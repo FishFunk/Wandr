@@ -47,9 +47,6 @@ export class ConnectionProfileModal {
         this.viewUserId = navParams.get('userId');
         this.showChatButton = navParams.get('showChatButton') == "true";
         this.currentUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
-
-        // this.viewUserId = this.activatedRoute.snapshot.paramMap.get('userId');
-        // this.showChatButton = this.activatedRoute.snapshot.paramMap.get('showChatButton') == "true";
     }
 
     async ngOnInit(){
@@ -183,8 +180,7 @@ export class ConnectionProfileModal {
           });
           loading.present();
       
-          const currentUserFirstName = window.localStorage.getItem(Constants.userFirstNameKey);
-          const currentUserPhotoUrl = window.localStorage.getItem(Constants.profileImageUrlKey);
+          const currentUser = await this.dbHelper.ReadUserByFirebaseUid(this.currentUserId);
           
           const focusedConnectionUid = this.viewUserData.app_uid;
           const roomkey = this.currentUserId + '_' + focusedConnectionUid;
@@ -192,8 +188,8 @@ export class ConnectionProfileModal {
           const data: IChat = {
             roomkey: roomkey,
             userA_id: this.currentUserId,
-            userA_name: currentUserFirstName,
-            userA_photoUrl: currentUserPhotoUrl,
+            userA_name: currentUser.first_name,
+            userA_photoUrl: currentUser.profile_img_url,
             userA_unread: true,
             userB_id: focusedConnectionUid,
             userB_name: this.viewUserData.first_name,

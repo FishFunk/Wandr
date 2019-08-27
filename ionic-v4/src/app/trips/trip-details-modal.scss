@@ -21,7 +21,8 @@
 
     ion-card{
         margin: 0 5px 5px 0;
-        height: 80px;
+        height: auto;
+        min-height: 80px;
         color: black;
     }
 

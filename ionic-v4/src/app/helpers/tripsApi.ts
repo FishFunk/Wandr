@@ -20,7 +20,19 @@ export class TripsApi
     }
 
     public getLocationScreenshotUrl(location: string): string{
-        return `https://maps.googleapis.com/maps/api/staticmap?center=${location}&zoom=13&size=400x125&maptype=roadmap&key=${this.googleApiKey}`;
+        // green 0x1ABC9C
+        // purple 0x6700a9
+        return `https://maps.googleapis.com/maps/api/staticmap?center=${location}&zoom=13`+
+        '&size=400x200'+
+        '&maptype=roadmap'+
+        '&style=feature:landscape|color:0xf2f2f2'+
+        '&style=feature:administrative.locality|color:0x6700a9|weight:0.7'+
+        '&style=feature:water|color:0xaeaeae'+
+        '&style=feature:poi|visibility:off'+
+        '&style=feature:transit|visibility:off'+
+        '&style=feature:road|element:labels.icon|visibility:off'+
+        '&style=feature:road.highway|color:0x1ABC9C|weight:0.7'+
+        `&key=${this.googleApiKey}`;
     }
 
     private getLocationKey(lat: string, lng: string): Promise<string>{

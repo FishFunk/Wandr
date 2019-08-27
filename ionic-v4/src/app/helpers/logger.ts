@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Device } from '@ionic-native/device/ngx';
 import { Constants } from './constants';
-import { AngularFirestore } from "angularfire2/firestore";
 import { Platform } from '@ionic/angular';
 import * as moment from 'moment';
+import { FirestoreDbHelper } from './firestoreDbHelper';
 
 @Injectable()
 export class Logger{
     
     constructor(
         private device: Device,
-        private firestore: AngularFirestore,
+        private dbHelper: FirestoreDbHelper,
         private platform: Platform)
     {
     }
@@ -33,9 +33,12 @@ export class Logger{
         console.error(error);
 
         if(this.platform.is('cordova')){
+            const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+            const user = await this.dbHelper.ReadUserByFirebaseUid(uid);
+
             if(this.isError(error)){
                 log = {
-                    userName: window.localStorage.getItem(Constants.userFirstNameKey) || "NO_NAME",
+                    userName: user != null ? user.first_name : "NO_NAME",
                     time: this.getTimeStamp(),
                     device: this.getDeviceInfo(),
                     error: error.name,
@@ -45,7 +48,7 @@ export class Logger{
                 return this.upsertLog(log, 'error');
             } else {
                 log = {
-                    userName: window.localStorage.getItem(Constants.userFirstNameKey) || "NO_NAME",
+                    userName: user != null ? user.first_name : "NO_NAME",
                     time: this.getTimeStamp(),
                     device: this.getDeviceInfo(),
                     error: error
@@ -97,9 +100,9 @@ export class Logger{
     //     alert.present();
     // }
 
-    private upsertLog(logData: any, logLevel: string): Promise<any>{
+    private upsertLog(logData: any, logLevel: 'error' | 'warn'): Promise<any>{
         const uid = window.localStorage.getItem(Constants.firebaseUserIdKey) || "NO_USER_ID";
-        return this.firestore.collection('logs').doc(uid).collection(logLevel).add(logData);
+        return this.dbHelper.CreateLog(uid, logLevel, logData);
     }
 
     private getTimeStamp(){
