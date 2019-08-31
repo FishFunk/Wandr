@@ -56,4 +56,12 @@ export class FcmProvider {
   listenToNotifications(): Observable<any>{
     return this.firebaseNative.onNotificationOpen();
   }
+
+  clearAllNotifications(): Promise<any>{
+    return this.firebaseNative.clearAllNotifications();
+  }
+
+  setBadgeNumber(val: number): Promise<any>{
+    return this.firebaseNative.setBadgeNumber(val);
+  }
 }

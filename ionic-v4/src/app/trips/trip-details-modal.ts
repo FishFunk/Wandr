@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { NavParams, AlertController, ModalController, NavController } from "@ionic/angular";
+import { NavParams, AlertController, ModalController, NavController, Events } from "@ionic/angular";
 import { FirestoreDbHelper } from "../helpers/firestoreDbHelper";
 import { Constants } from "../helpers/constants";
 import { ITrip } from "../models/trip";
@@ -38,10 +38,11 @@ export class TripDetailsModal {
 
     constructor(
         params: NavParams,
-        public modalCtrl: ModalController,
+        private events: Events,
+        private modalCtrl: ModalController,
+        private navCtrl: NavController,
         private alertCtrl: AlertController,
         private firestoreDbHelper: FirestoreDbHelper,
-        private modalController: ModalController,
         private tripsApi: TripsApi
     ){
         this.key = params.get('key');
@@ -80,10 +81,18 @@ export class TripDetailsModal {
       });
       modal.present();
     }
+
+    async onClickGoToMapSpot(){
+      this.modalCtrl.dismiss();
+      await this.navCtrl.navigateForward('/tabs/map');
+      setTimeout(()=>{
+        this.events.publish(Constants.onSnapToMapLocationEvent, this.tripData.location);
+      },500);
+    }
     
     async onClickEdit(){
         this.modalCtrl.dismiss();
-        const modal = await this.modalController.create({
+        const modal = await this.modalCtrl.create({
           component: CreateTripModal, 
           componentProps: { key: this.key, trip: this.tripData }
         });
@@ -109,7 +118,7 @@ export class TripDetailsModal {
     private deleteTrip(){
         this.firestoreDbHelper.DeleteTripByKey(this.key)
           .then(()=>{
-            this.modalController.dismiss();
+            this.modalCtrl.dismiss();
           })
           .catch(error=>{
             console.error(error);

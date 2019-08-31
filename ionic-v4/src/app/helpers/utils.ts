@@ -111,7 +111,7 @@ export class Utils
   public static convertLinkValuesInString(plainText: string): string{
     let formattedText = plainText;
 
-    var textChunks = plainText.split(RegExp('\b[^\s]+\b'));
+    var textChunks = plainText.split(' ');
     textChunks.forEach(textStr=>{
       if(is.url(textStr)){
         formattedText = formattedText.replace(textStr, `<a href='${textStr}'>${textStr}</a>`);

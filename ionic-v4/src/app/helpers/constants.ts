@@ -12,11 +12,12 @@ export class Constants {
     public static shareInfoKey = "shareInfo";
 
     // Events
-    public static updateBadgeCountEventName = "onUpdateBadgeCountEvent";
+    public static updateChatBadgeCountEventName = "onUpdateChatBadgeCountEvent";
     public static orderConnectionsByFirstName = "onOrderConnectionsByFirst";
     public static orderConnectionsByLastName = "onOrderConnectionsByLast";
     public static orderConnectionsByMutual = "onOrderConnectionsByMutual";
     public static refreshMapDataEventName = "onRefreshMapDataEvent";
     public static refreshProfileDataEvent = "onRefreshProfileDataEvent";
     public static refreshChatDataEvent = "onRefreshChatDataEvent";
+    public static onSnapToMapLocationEvent = "onSnapToMapLocationEvent";
 }

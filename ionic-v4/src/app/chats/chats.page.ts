@@ -52,7 +52,7 @@ export class ChatsPage {
       this.chats = [];
     }
 
-    this.events.publish(Constants.updateBadgeCountEventName, this.getBadgeCount());
+    this.events.publish(Constants.updateChatBadgeCountEventName, this.determineBadgeCount());
 
     spinner.dismiss();
   }
@@ -111,7 +111,7 @@ export class ChatsPage {
       });
   }
 
-  private getBadgeCount(): number{
+  private determineBadgeCount(): number{
     let badgeCount = 0;
 
     _.each(this.chats, (chatObj)=>{

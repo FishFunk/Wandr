@@ -257,7 +257,7 @@ async function _sendNotificationToId(idToNotify: string, notificationTitle: stri
     });
 
     if(data.settings && data.settings.notifications){
-        const payload = {
+        const payload: admin.messaging.MessagingPayload = {
             notification: {
                 title: notificationTitle,
                 body: notificationText

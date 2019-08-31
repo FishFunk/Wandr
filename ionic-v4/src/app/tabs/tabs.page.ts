@@ -99,7 +99,7 @@ export class TabsPage {
 
       const token = await this.fcm.getToken();
       await this.fcm.saveTokenToFirestore(token);
-    
+      
       this.fcm.listenToNotifications().pipe(
         tap(async (msg: INotificationPayload)=>{
           const selectedTab = this.tabRef.getSelected();
@@ -129,12 +129,14 @@ export class TabsPage {
           if(msg.title.indexOf('network') > 0){
             this.events.publish(Constants.refreshMapDataEventName);
           }
-
         })
       ).subscribe();
+
+      // Clear any notifications in app tray
+      await this.fcm.clearAllNotifications();
     }
 
-    this.events.subscribe(Constants.updateBadgeCountEventName, (newCount: number)=>{
+    this.events.subscribe(Constants.updateChatBadgeCountEventName, (newCount: number)=>{
       this.badgeCount = newCount;
     });
 

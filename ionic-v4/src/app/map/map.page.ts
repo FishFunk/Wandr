@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IUser } from '../models/user';
+import { IUser, ILocation } from '../models/user';
 import { LoadingController, AlertController, Events, PopoverController, ModalController } from '@ionic/angular';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
@@ -332,6 +332,12 @@ export class MapPage {
 
     // Subscribe to event to refresh map data 
     this.events.subscribe(Constants.refreshMapDataEventName, this.refreshMarkersAndHeatMap.bind(this));
+    this.events.subscribe(Constants.onSnapToMapLocationEvent, (location: ILocation)=>{
+      if(location != null && location.latitude != null && location.longitude != null){
+        this.map.panTo({ lat: +location.latitude, lng: +location.longitude});
+        this.map.setZoom(this.maxZoomLevel);
+      }
+    });
   }
 
   private async showLoadingPopup(){

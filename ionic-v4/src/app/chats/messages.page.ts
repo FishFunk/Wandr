@@ -270,6 +270,6 @@ export class MessagesPage {
                 this.logger.Warn(error);
             });
 
-        this.events.publish(Constants.updateBadgeCountEventName, newBadgeCount);
+        this.events.publish(Constants.updateChatBadgeCountEventName, newBadgeCount);
     }
 }
