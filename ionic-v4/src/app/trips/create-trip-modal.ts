@@ -70,6 +70,7 @@ export class CreateTripModal {
     }
 
     ngOnInit(){
+        this.formatTripDates('YYYY-MM-DD');
         this.loadWeatherInfo();
     }
 
@@ -121,12 +122,7 @@ export class CreateTripModal {
             })
 
         // Format Dates
-        if(this.tripData.startDate){
-            this.tripData.startDate = moment(this.tripData.startDate).format('M/D/YY');
-        }
-        if(this.tripData.endDate){
-            this.tripData.endDate = moment(this.tripData.endDate).format('M/D/YY');
-        }
+        this.formatTripDates('M/D/YY');
 
         if(this.key){
             this.firestoreDbHelper.UpdateTrip(this.key, this.tripData)
@@ -148,6 +144,15 @@ export class CreateTripModal {
                     loading.dismiss();
                     console.error(error);
                 });
+        }
+    }
+
+    private formatTripDates(format: 'M/D/YY' | 'YYYY-MM-DD'){
+        if(this.tripData.startDate){
+            this.tripData.startDate = moment(this.tripData.startDate).format(format);
+        }
+        if(this.tripData.endDate){
+            this.tripData.endDate = moment(this.tripData.endDate).format(format);
         }
     }
 
