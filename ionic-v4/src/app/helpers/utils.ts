@@ -85,25 +85,36 @@ export class Utils
   }
 
   public static formatGeocoderResults(data: google.maps.GeocoderResult){
-    var country, administrativeArea_1, locality: string;
+    var country, administrativeArea_long, administrativeArea_short, locality: string;
 
     data.address_components.forEach(comp=>{
       if (_.indexOf(comp.types, 'country') >= 0){
         country = comp.long_name;
       }
       if(_.indexOf(comp.types, 'administrative_area_level_1') >= 0){
-        administrativeArea_1 = comp.long_name;
+        administrativeArea_long = comp.long_name;
+        administrativeArea_short = comp.short_name;
       }
       if (_.indexOf(comp.types, 'locality') >= 0){
         locality = comp.long_name;
       }
     });
 
+    var formattedLocation = '';
     if(country == 'United States'){
-      return `${locality}, ${administrativeArea_1}`;
+      formattedLocation = `${locality}, ${administrativeArea_long}`;
     } else {
-      return `${administrativeArea_1}, ${country}`;
+      if(locality){
+        formattedLocation += `${locality}, `;
+      }
+      if(administrativeArea_short) {
+        formattedLocation += `${administrativeArea_short}, `;
+      }
+      
+      formattedLocation += country;
     }
+
+    return formattedLocation;
   }
 
   public static convertLinkValuesInString(plainText: string): string{
