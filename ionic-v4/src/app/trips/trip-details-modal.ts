@@ -58,13 +58,22 @@ export class TripDetailsModal {
         this.locals = await this.firestoreDbHelper.ReadAllUsers(uid, this.tripData.location.stringFormat);
 
         const weatherData = await this.tripsApi.getWeatherInfoByLatLong(this.tripData.location.latitude, this.tripData.location.longitude)
-        const weatherInfo = _.first(weatherData);
-        this.weatherInfo.F = weatherInfo.Temperature.Imperial.Value;
-        this.weatherInfo.C = weatherInfo.Temperature.Metric.Value;
-        this.weatherInfo.Text = weatherInfo.WeatherText;
-        this.weatherInfo.Icon = Utils.getWeatherIcon(weatherInfo.WeatherText);
+          .catch(error=>{
+            console.error(error);
+          });
 
-        this.upcomingHolidays = await this.tripsApi.getUpcomingHolidays2(this.tripData.location.countryCode);
+        const weatherInfo = _.first(weatherData);
+        if(weatherInfo){
+          this.weatherInfo.F = weatherInfo.Temperature.Imperial.Value;
+          this.weatherInfo.C = weatherInfo.Temperature.Metric.Value;
+          this.weatherInfo.Text = weatherInfo.WeatherText;
+          this.weatherInfo.Icon = Utils.getWeatherIcon(weatherInfo.WeatherText);
+        }
+
+        this.upcomingHolidays = await this.tripsApi.getUpcomingHolidays2(this.tripData.location.countryCode)
+          .catch(error=>{
+            console.error(error);
+          });
     }
 
     onClickClose(){

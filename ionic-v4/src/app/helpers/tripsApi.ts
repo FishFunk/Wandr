@@ -5,8 +5,8 @@ import _ from 'underscore';
 @Injectable()
 export class TripsApi
 {
-    private holidayApiKey = '50059bac-4ff6-4353-b67a-e99f72b303a4';
-    private weatherApiKey = 'eiWAikLyHInkK2oVffGtWBR8lp50hUvM';
+    private holidayApiKey = '2656bc40-db4f-467d-95ec-2dd1341e3ca0';
+    private weatherApiKey = 'Kcv7ifgZrORjPoqjTp95UqlBFJiG6RxV';
     private googleApiKey = 'AIzaSyCuxtLSqHoL0CkX2QynMDyo-vxCKl-1qmE';
 
     constructor(private http: HttpClient){
@@ -22,11 +22,13 @@ export class TripsApi
     public getLocationScreenshotUrl(location: string): string{
         // green 0x1ABC9C
         // purple 0x6700a9
-        return `https://maps.googleapis.com/maps/api/staticmap?center=${location}&zoom=13`+
+        return `https://maps.googleapis.com/maps/api/staticmap?center=${location}&zoom=12`+
         '&size=400x200'+
         '&maptype=roadmap'+
         '&style=feature:landscape|color:0xf2f2f2'+
-        '&style=feature:administrative.locality|color:0x6700a9|weight:0.7'+
+        '&style=feature:administrative.locality|color:0x6700a9|weight:0.6'+
+        '&style=feature:administrative.land_parcel|visibility:off'+
+        '&style=feature:administrative.neighborhood|visibility:off'+
         '&style=feature:water|color:0xaeaeae'+
         '&style=feature:poi|visibility:off'+
         '&style=feature:transit|visibility:off'+

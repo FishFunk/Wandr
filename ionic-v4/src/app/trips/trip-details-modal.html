@@ -34,13 +34,13 @@
         <ion-row *ngIf="locals.length > 0">
             <ion-col *ngFor="let user of locals" size="4" text-center (click)="onClickUser(user)">
                 <ion-avatar>
-                    <img class="profile-avatar" [src]="user.profile_img_url">
+                    <img [src]="user.profile_img_url">
                 </ion-avatar>
                 <ion-label>{{user.first_name}} {{user.last_name}}</ion-label>
             </ion-col>
         </ion-row>
-        <h3>CURRENT WEATHER</h3>
-        <ion-row>
+        <h3 *ngIf="weatherInfo.Text">CURRENT WEATHER</h3>
+        <ion-row *ngIf="weatherInfo.Text">
             <ion-col>
                 <div [innerHtml]="weatherInfo.Icon"></div>
                 <label>{{weatherInfo.Text}}</label>
@@ -50,8 +50,8 @@
                 <label>{{weatherInfo.C}}</label>&nbsp;&deg;<span>C</span><br>
             </ion-col>
         </ion-row>
-        <h3>UPCOMING HOLIDAYS</h3>
-        <ion-row no-padding>
+        <h3 *ngIf="upcomingHolidays && upcomingHolidays.length > 0">UPCOMING HOLIDAYS</h3>
+        <ion-row no-padding *ngIf="upcomingHolidays && upcomingHolidays.length > 0">
             <ion-col *ngFor="let holiday of upcomingHolidays" size="6" no-padding>
                 <ion-card>
                     <ion-card-header>

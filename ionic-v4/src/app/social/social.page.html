@@ -18,19 +18,28 @@
             </ion-col>
         </ion-row>
         <ion-row>
-            <ion-col size="12" class="stats">
-                <label>1st Degree Connections:</label>&nbsp;<span>{{firstConnectionCount}}</span><br>
-                <label>2nd Degree Connections:</label>&nbsp;<span>{{secondConnectionCount}}</span><br>
-            </ion-col>
-        </ion-row>
-        <br>
-        <ion-row>
             <ion-col size="12">
                 <ion-button size="large" fill="outline" color="secondary" (click)="openShareSheet()">
                     SHARE
                 </ion-button>
             </ion-col>
         </ion-row>
+        <br>
+        <ion-row>
+            <ion-col size="12" class="stats">
+                <!-- <label>1st Degree Connections:</label>&nbsp;<span>{{firstConnectionCount}}</span><br>
+                <label>2nd Degree Connections:</label>&nbsp;<span>{{secondConnectionCount}}</span><br> -->
+                <label>Wandr Connections:</label>&nbsp;<span>{{firstConnectionCount+secondConnectionCount}}</span><br>
+            </ion-col>
+        </ion-row>
+        <!-- <br>
+        <ion-row>
+            <ion-col size="12">
+                <ion-button size="large" fill="outline" color="secondary" (click)="openShareSheet()">
+                    SHARE
+                </ion-button>
+            </ion-col>
+        </ion-row> -->
     </ion-grid>
 </ion-content>
       

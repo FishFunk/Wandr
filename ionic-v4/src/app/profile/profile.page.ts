@@ -21,6 +21,8 @@ export class ProfilePage {
 
   userData: IUser = new User('','','','', '',
     new Location(),[],[],'','','', { notifications: true }, []);
+
+  firstConnectionCount: number = 0;
   secondConnectionCount: number = 0;
   defaultProfileImg = '../../assets/undraw/purple/undraw_profile_pic_ic5t.svg';
 
@@ -55,7 +57,9 @@ export class ProfilePage {
         var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
         this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid, false);
 
-        // Calculate second degree connections
+        // Calculate connections
+        const firstConnections = await this.firestoreDbHelper.ReadFirstConnections(firebaseUid);
+        this.firstConnectionCount = firstConnections.length;
         this.secondConnectionCount = await this.countSecondConnections();
       } else {
         // ionic serve path

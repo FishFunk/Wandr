@@ -80,8 +80,8 @@ export class TripsPage {
     const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     this.tripsObservable = this.firestoreDbHelper.ReadTripsObservableByUserId(uid);
 
-    this.tripsObservable.subscribe(async trip =>{
-      this.data = _.sortBy(trip, (obj)=> obj.data.startDate);
+    this.tripsObservable.subscribe(async trips =>{
+      this.data = _.sortBy(trips, (obj)=> obj.data.startDate ? new Date(obj.data.startDate) : 999999999999999);
     });
 
     spinner.dismiss();

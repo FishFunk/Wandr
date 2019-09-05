@@ -6,7 +6,7 @@
     margin: 0;
     padding: 0;
     font-size: 1.3em;
-    color: var(--ion-color-dark);
+    color: var(--ion-color-primary);
     font-weight: bold;
 }
 
@@ -15,14 +15,8 @@
     color: var(--ion-color-dark);
 }
 
-.stats > label{
+.stats {
     font-size: 1em;
     font-weight: bold;
-    color: var(--ion-color-dark);
-}
-
-.stats > span{
-    font-size: 1em;
-    font-weight: bold;
-    color: var(--ion-color-dark);
+    color: var(--ion-color-medium);
 }

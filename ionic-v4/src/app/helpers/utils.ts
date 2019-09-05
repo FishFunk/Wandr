@@ -44,12 +44,20 @@ export class Utils
       icon = '<i class="fas fa-cloud-sun"></i>';
       break;
 
+      case('Hazy sun'):
+      icon = '<i class="fas fa-cloud-sun"></i>';
+      break;
+
       case('Showers'):
       icon = '<i class="fas fa-cloud-rain"></i>';
       break;
 
       case('Light rain'):
       icon = '<i class="fas fa-cloud-rain"></i>';
+      break;
+
+      case('Thunderstorm'):
+      icon = '<ion-icon name="thunderstorm"></ion-icon>';
       break;
 
       case('Rain'):
@@ -77,34 +85,24 @@ export class Utils
   }
 
   public static formatGeocoderResults(data: google.maps.GeocoderResult){
-    var country: string;
-    var locality: string;
-    var administrativeArea_1: string;
+    var country, administrativeArea_1, locality: string;
+
     data.address_components.forEach(comp=>{
+      if (_.indexOf(comp.types, 'country') >= 0){
+        country = comp.long_name;
+      }
       if(_.indexOf(comp.types, 'administrative_area_level_1') >= 0){
         administrativeArea_1 = comp.long_name;
       }
       if (_.indexOf(comp.types, 'locality') >= 0){
         locality = comp.long_name;
       }
-      if (_.indexOf(comp.types, 'country') >= 0){
-        country = comp.long_name;
-      }
     });
 
     if(country == 'United States'){
-      if(locality && administrativeArea_1){
-        return `${locality}, ${administrativeArea_1}`;
-      }
-      else {
-        return administrativeArea_1;
-      }
+      return `${locality}, ${administrativeArea_1}`;
     } else {
-      if(locality && country){
-        return `${locality}, ${country}`;
-      } else {
-        return country;
-      }
+      return `${administrativeArea_1}, ${country}`;
     }
   }
 

@@ -79,11 +79,17 @@ export class CreateTripModal {
         {
             const location = await this.geolocationHelper.extractLocationAndGeoData(this.autoComplete.input);
             const weatherData = await this.tripsApi.getWeatherInfoByLatLong(location.latitude, location.longitude)
+                .catch(error=>{
+                    console.error(error);
+                });
+                
             const weatherInfo = _.first(weatherData);
-            this.weatherInfo.F = weatherInfo.Temperature.Imperial.Value;
-            this.weatherInfo.C = weatherInfo.Temperature.Metric.Value;
-            this.weatherInfo.Text = weatherInfo.WeatherText;
-            this.weatherInfo.Icon = Utils.getWeatherIcon(weatherInfo.WeatherText);
+            if(weatherInfo){
+                this.weatherInfo.F = weatherInfo.Temperature.Imperial.Value;
+                this.weatherInfo.C = weatherInfo.Temperature.Metric.Value;
+                this.weatherInfo.Text = weatherInfo.WeatherText;
+                this.weatherInfo.Icon = Utils.getWeatherIcon(weatherInfo.WeatherText);
+            }
         }
     }
 

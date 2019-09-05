@@ -13,16 +13,15 @@ export class GeoLocationHelper {
     }
 
     public async extractLocationAndGeoData(location: string): Promise<ILocation>{
-        let data = await this.forwardGeocode(location);
-        let formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
+        let data: google.maps.GeocoderResult = await this.forwardGeocode(location);
+        const formattedLocation = Utils.formatGeocoderResults(data);
 
         // geocode again to ensure generic city lat long
         data = await this.forwardGeocode(formattedLocation);
-        formattedLocation = await this.reverseGeocode(+data.latitude, +data.longitude);
 
-        const lat = +data.latitude;
-        const lng = +data.longitude;
-        const countryCode = data.countryCode;
+        const lat = +data.geometry.location.lat();
+        const lng = +data.geometry.location.lng();
+        const countryCode = this.getCountryCode(data);
 
         return <ILocation>{
             stringFormat: formattedLocation,
@@ -32,20 +31,16 @@ export class GeoLocationHelper {
         };
     }
 
-    private async forwardGeocode(formattedLocation: string): Promise<any>
+    private async forwardGeocode(location: string): Promise<any>
     {
         return new Promise((resolve, reject)=>{
-            this.geocoder.geocode({ address: formattedLocation }, (results, status)=>{
-            if(status == google.maps.GeocoderStatus.OK){
-                var result = _.first(results);
-                resolve({ 
-                    latitude: result.geometry.location.lat(), 
-                    longitude: result.geometry.location.lng(),
-                    countryCode: this.getCountryCode(result) 
-                });
-            } else {
-                reject(new Error(`Unable to forward geocode ${formattedLocation}`));
-            }
+            this.geocoder.geocode({ address: location }, (results, status)=>{
+                if(status == google.maps.GeocoderStatus.OK){
+                    var result = _.first(results);
+                    resolve(result);
+                } else {
+                    reject(new Error(`Unable to forward geocode ${location}`));
+                }
             });
         });
     }
@@ -53,7 +48,7 @@ export class GeoLocationHelper {
     private async reverseGeocode(lat: number, lng: number): Promise<any>
     {
         return new Promise((resolve, reject)=>{
-            this.geocoder.geocode({ location: {lat: lat, lng: lng} }, (results, status)=>{
+            this.geocoder.geocode({ location: {lat: lat, lng: lng}}, (results, status)=>{
             if(status == google.maps.GeocoderStatus.OK){
                 const formattedLocation = Utils.formatGeocoderResults(_.first(results));
                 resolve(formattedLocation);

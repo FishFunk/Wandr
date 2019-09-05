@@ -58,8 +58,8 @@
         <ion-datetime placeholder="mm/dd/yyyy" [(ngModel)]="tripData.endDate" [min]="tripData.startDate" [max]="maxDate"></ion-datetime>
       </ion-col>
     </ion-row>
-    <h3>CURRENT WEATHER</h3>
-    <ion-row>
+    <h3 *ngIf="weatherInfo.Text">CURRENT WEATHER</h3>
+    <ion-row *ngIf="weatherInfo.Text">
         <ion-col>
             <div [innerHtml]="weatherInfo.Icon"></div>
             <label>{{weatherInfo.Text}}</label>
