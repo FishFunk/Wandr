@@ -64,7 +64,7 @@ export class TripsApi
     public getUpcomingHolidays(countryCode: string): Promise<any>{
         return new Promise((resolve,reject)=>{
             const date = new Date();
-            const year = '2018'; // date.getFullYear(); // TODO: Buy full featured API
+            const year = date.getFullYear();
             const month = date.getMonth();
             const day = date.getDay();
 
