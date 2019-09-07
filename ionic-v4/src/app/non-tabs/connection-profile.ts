@@ -131,7 +131,8 @@ export class ConnectionProfileModal {
 
     async onClickRejoinChat(){
       let isUserA = this.currentUserId == this.chatData.userA_id;
-      let message = `${isUserA ? this.chatData.userA_name : this.chatData.userB_name} has joined the chat.`;
+      const currentUser = await this.dbHelper.ReadUserByFirebaseUid(this.currentUserId);
+      let message = `${currentUser.first_name} has joined the chat.`;
       let dateInMillis = new Date().getTime().toString();
 
       let messageData = {};
@@ -288,13 +289,7 @@ export class ConnectionProfileModal {
       }
     }
 
-    private confirmReportUser(inputData: any){
-
-      const reason = inputData.reason.trim();
-      if(!reason){
-        this.presentAlert("Please add your reason for the report!");
-        return;
-      }
+    private confirmReportUser(){
 
       const reportData = {
         dateReported: new Date(),
@@ -302,8 +297,7 @@ export class ConnectionProfileModal {
         reportInfo: {
           uid: this.viewUserData.app_uid,
           first_name: this.viewUserData.first_name,
-          last_name: this.viewUserData.last_name,
-          reason: inputData
+          last_name: this.viewUserData.last_name
         }
       };
 
@@ -331,13 +325,9 @@ export class ConnectionProfileModal {
     private async presentConfirmation(){
       const confirm = await this.alertCtrl.create({
           header: `Report ${this.viewUserData.first_name}?`,
-          message: `Your report and ${this.viewUserData.first_name}'s profile will be reviewed. \
-            If they are in violation of the Wandr user agreement they will be banned.`,
-          inputs: [
-            {
-              name: 'reason',
-              placeholder: 'Please enter your reason...'
-            }],
+          message: `Reports are taken very seriously in order to maintain an enjoyable \
+            app experience for everyone. Relevant user activity will be reviewed and if there is \
+            violation of the Wandr user agreement, users will be banned.`,
           buttons: [
             {
               text: 'Cancel',

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { IChat } from '../models/chat';
-import { LoadingController, Events, NavController, AlertController } from '@ionic/angular';
+import { IChat, IMessage } from '../models/chat';
+import { LoadingController, Events, NavController, AlertController, IonItemSliding } from '@ionic/angular';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
 import _ from 'underscore';
@@ -16,6 +16,8 @@ export class ChatsPage {
   
   chats:  IChat[] = [];
   private userId: string;
+  private user_name: string;
+  private user_roomkeys: string[] = [];
 
   constructor(
     private dbHelper: FirestoreDbHelper,
@@ -47,6 +49,8 @@ export class ChatsPage {
       });
     
     if(user && user.roomkeys && user.roomkeys.length > 0){
+      this.user_name = user.first_name;
+      this.user_roomkeys = user.roomkeys;
       await this.queryChats(user.roomkeys);
     } else {
       this.chats = [];
@@ -68,6 +72,52 @@ export class ChatsPage {
 
   onClickInvite(){
     this.navCtrl.navigateForward('/tabs/social');
+  }
+
+  onClickDeleteChat(slidingItem: IonItemSliding, chat: IChat){
+    this.showConfirmationPrompt(async ()=>{
+
+      let isUserA = this.userId == chat.userA_id;
+      let message = `${this.user_name} has left the chat.`;
+      let dateInMillis = new Date().getTime().toString();
+
+      let messageData = {};
+      messageData[dateInMillis] = <IMessage> {
+          roomkey: chat.roomkey,
+          to_uid: '', // Leave ID blank so notification isn't triggered
+          from_uid: '', // Leave ID blank so message gets styled correctly
+          name: 'Wandr Bot', 
+          text: message, 
+          timestamp: dateInMillis
+      }
+
+      // Update chat summary
+      let chatUpdate = <IChat> {
+          lastMessage: message,
+          timestamp: dateInMillis
+      }
+
+      if(isUserA){
+        chatUpdate.userA_deleted = true;
+      } else {
+        chatUpdate.userB_deleted = true;
+      }
+
+      const new_roomkeys = this.user_roomkeys.filter((key)=>{
+        return key !== chat.roomkey;
+      });
+
+      await this.dbHelper.UpdateUser(this.userId, { roomkeys: new_roomkeys })
+        .catch(error => this.logger.Error(error));
+
+      await this.dbHelper.SendMessage(chat.roomkey, messageData, chatUpdate)
+        .catch(error => this.logger.Error(error));
+
+      await this.loadChats();
+    },
+    ()=> {
+      slidingItem.close();
+    });
   }
 
   getClass(chat: IChat){
@@ -123,5 +173,24 @@ export class ChatsPage {
     });
     
     return badgeCount;
+  }
+
+  private async showConfirmationPrompt(confirmHandler: ()=>any, cancelHandler: ()=>any){
+    const prompt = await this.alertCtrl.create({
+      header: "Are you sure you want to delete and leave this chat?",
+      buttons: [{
+        text: "Nevermind",
+        handler: ()=>{
+          cancelHandler();
+        }
+      },{
+        text: "Yes, I'm sure",
+        handler: ()=>{
+          confirmHandler();
+        }
+      }]
+    });
+
+    prompt.present();
   }
 }
