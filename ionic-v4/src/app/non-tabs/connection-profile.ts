@@ -331,13 +331,10 @@ export class ConnectionProfileModal {
     private async presentConfirmation(){
       const confirm = await this.alertCtrl.create({
           header: `Report ${this.viewUserData.first_name}?`,
-          message: `We take reports very seriously in order to maintain a safe \
-            and enjoyable app experience for everyone. \
-            We will review your report and ${this.viewUserData.first_name}'s profile. \
-            If they are in violation of our user agreement they will be banned.`,
+          message: `Your report and ${this.viewUserData.first_name}'s profile will be reviewed. \
+            If they are in violation of the Wandr user agreement they will be banned.`,
           inputs: [
             {
-              disabled: true,
               name: 'reason',
               placeholder: 'Please enter your reason...'
             }],

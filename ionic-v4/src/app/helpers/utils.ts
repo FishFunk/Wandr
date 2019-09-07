@@ -85,30 +85,64 @@ export class Utils
   }
 
   public static formatGeocoderResults(data: google.maps.GeocoderResult){
-    var country, administrativeArea_long, administrativeArea_short, locality: string;
+    var country: string, 
+    administrativeArea_long: string, 
+    administrativeArea_short: string, 
+    locality: string,
+    political: string;
+
+    var p = [];
+    var l = [];
+    var c = [];
+    var a1 = []
+    var a2 = [];
 
     data.address_components.forEach(comp=>{
-      if (_.indexOf(comp.types, 'country') >= 0){
-        country = comp.long_name;
-      }
-      if(_.indexOf(comp.types, 'administrative_area_level_1') >= 0){
-        administrativeArea_long = comp.long_name;
-        administrativeArea_short = comp.short_name;
-      }
-      if (_.indexOf(comp.types, 'locality') >= 0){
-        locality = comp.long_name;
-      }
+      comp.types.forEach(type=>{
+        if(type == 'political'){
+          p.push(comp.long_name);
+        }
+        if(type == 'locality'){
+          l.push(comp.long_name);
+        }
+        if(type == 'administrative_area_level_1'){
+          a1.push(comp.short_name);
+          a2.push(comp.long_name);
+        }
+        if(type == 'country'){
+          c.push(comp.long_name);
+        }
+      });
     });
+
+    political = _.first(p);
+    locality = _.first(l);
+    country = _.first(c);
+    administrativeArea_short = _.first(a1);
+    administrativeArea_long = _.first(a2);
 
     var formattedLocation = '';
     if(country == 'United States'){
-      formattedLocation = `${locality}, ${administrativeArea_long}`;
-    } else {
+      var descriptor = locality ? locality : political;
+      if(descriptor){
+        formattedLocation = `${descriptor}, ${administrativeArea_long}`;
+      } else {
+        formattedLocation = administrativeArea_long;
+      }
+    } else if (country == 'Canada'){
       if(locality){
         formattedLocation += `${locality}, `;
       }
       if(administrativeArea_short) {
         formattedLocation += `${administrativeArea_short}, `;
+      }
+      formattedLocation += country;
+    }
+    else{
+      if(administrativeArea_long){
+        formattedLocation += `${administrativeArea_long}, `;
+      } else if(locality) {
+        formattedLocation += `${locality}, `;
       }
       
       formattedLocation += country;

@@ -24,7 +24,7 @@ export class FacebookApi{
   
     public getUser(userId, accessToken)
     {
-        return this.executeApiCall(`/${userId}?fields=id,name,email,link,gender,picture.width(360).height(360),location&access_token=${accessToken}`);
+        return this.executeApiCall(`/${userId}?fields=id,name,email,link,picture.width(360).height(360),location&access_token=${accessToken}`);
     }
 
     public facebookLogout(): Promise<any>

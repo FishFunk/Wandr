@@ -63,7 +63,6 @@ export const config = {
   imports: [
     BrowserModule, 
     IonicModule.forRoot({
-      mode: 'ios',
       scrollAssist: false,
       scrollPadding: false
     }), 
