@@ -122,6 +122,17 @@ export class ConnectionProfileModal {
       this.presentConfirmation();
     }
 
+    async onClickUser(user: IUser){
+      const modal = await this.modalCtrl.create({
+          component: ConnectionProfileModal,
+          componentProps: {
+              userId: user.app_uid,
+              showChatButton: true
+          }
+      });
+      modal.present();
+    }
+
     async onClickGoToChat(){
       // TODO: Nav to tab first?
       await this.modalCtrl.dismiss();

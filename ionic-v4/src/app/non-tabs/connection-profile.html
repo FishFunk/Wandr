@@ -59,7 +59,7 @@
             </ion-row>
             <h3 *ngIf="mutualFriends && mutualFriends.length > 0">MUTUAL FRIENDS</h3>
             <ion-row *ngIf="mutualFriends && mutualFriends.length > 0">
-                <ion-col *ngFor="let user of mutualFriends" size="4" text-center>
+                <ion-col *ngFor="let user of mutualFriends" size="4" text-center (click)="onClickUser(user)">
                     <ion-avatar>
                         <img [src]="user.profile_img_url">
                     </ion-avatar>

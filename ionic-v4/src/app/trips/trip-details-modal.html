@@ -24,8 +24,8 @@
                 <span font-bold small-font>{{tripData.startDate || 'TBD'}}</span>
                 &nbsp;<span>to</span>&nbsp;
                 <span font-bold small-font>{{tripData.endDate || 'TBD'}}</span><br>
-                <ion-button id="location-btn" fill="clear" color="primary" (click)="onClickGoToMapSpot()" no-padding>
-                    {{tripData.location.stringFormat}}
+                <ion-button id="location-btn" fill="clear" color="primary" (click)="onClickGoToMapSpot()" no-padding text-wrap>
+                    <span>{{tripData.location.stringFormat}}</span>
                 </ion-button>
             </ion-col>
         </ion-row>
