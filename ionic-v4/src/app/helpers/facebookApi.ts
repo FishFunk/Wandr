@@ -14,7 +14,7 @@ export class FacebookApi{
         private firebaseAuth: AngularFireAuth,
         private platform: Platform)
     {
-        this.facebookPermissions = ['public_profile','user_location','email','user_friends','user_gender'];
+        this.facebookPermissions = ['public_profile','user_location','email','user_friends'];
     }
 
     public getFriendList(userId, accessToken): Promise<any[]>

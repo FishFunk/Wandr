@@ -260,7 +260,8 @@ async function _sendNotificationToId(idToNotify: string, notificationTitle: stri
         const payload: admin.messaging.MessagingPayload = {
             notification: {
                 title: notificationTitle,
-                body: notificationText
+                body: notificationText,
+                icon: 'notification_icon'
             }
         };
 
