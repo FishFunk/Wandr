@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FacebookApi } from './helpers/facebookApi';
 import { Router } from '@angular/router';
 import { Constants } from './helpers/constants';
+import { FirestoreDbHelper } from './helpers/firestoreDbHelper';
 
 declare var google: any; // Declare global 'google' variable
 
@@ -21,6 +22,7 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private facebookApi: FacebookApi,
+    private dbHelper: FirestoreDbHelper,
     private router: Router
   ) {
     this.initializeApp();
@@ -28,7 +30,10 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.onAppReady();
+      this.onAppReady()
+        .finally(()=>{
+          this.splashScreen.hide();
+        })
     });
   }
 
@@ -47,21 +52,29 @@ export class AppComponent {
         if(!isLoggedIn || !this.areValuesCached()){
           this.router.navigateByUrl('/intro');
         } else {
-          const firebaseData = await this.facebookApi.firebaseLogin(fbStatus.authResponse.accessToken);
-      
-          // TODO: Cache profile and other info in firebaseData?
-          this.cacheFacebookTokens(
-            fbStatus.authResponse.userID, 
-            firebaseData.user.uid,
-            fbStatus.authResponse.accessToken);
+          const firebaseData = await this.facebookApi.firebaseLogin(fbStatus.authResponse.accessToken)
+            .catch(error=>{
+              console.error(error);
+              this.router.navigateByUrl('/intro');
+              return;
+            });
 
-          this.router.navigateByUrl('/tabs/trips');
+          const userData = await this.dbHelper.ReadUserByFirebaseUid(firebaseData.user.uid, false);
+
+          if(userData){
+            this.cacheFacebookTokens(
+              fbStatus.authResponse.userID, 
+              firebaseData.user.uid,
+              fbStatus.authResponse.accessToken);
+  
+            this.router.navigateByUrl('/tabs/trips');
+          } else {
+            this.router.navigateByUrl('/intro');
+          }
         }
       } else {
         this.router.navigateByUrl('/intro');
       }
-      
-      this.splashScreen.hide();
   }
 
   private cacheFacebookTokens(facebookUid: string, firebaseUid: string, accessToken: string){

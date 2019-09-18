@@ -55,15 +55,17 @@ export class ProfilePage {
 
       if(this.platform.is('cordova')){
         var firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+
         this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(firebaseUid, false);
 
         // Calculate connections
         const firstConnections = await this.firestoreDbHelper.ReadFirstConnections(firebaseUid);
         this.firstConnectionCount = firstConnections.length;
         this.secondConnectionCount = await this.countSecondConnections();
+        
       } else {
         // ionic serve path
-        const uid = 'HN7yxROvzXhuoP80arDDmmmQUAj1'; // Johnny Appleseed
+        const uid = 'SlQA4Yz8Pwhuv15d6ygmdo284UF2';
         this.userData = await this.firestoreDbHelper.ReadUserByFirebaseUid(uid, false);
       }
       
