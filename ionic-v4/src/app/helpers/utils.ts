@@ -139,10 +139,10 @@ export class Utils
       formattedLocation += country;
     }
     else{
-      if(administrativeArea_long){
-        formattedLocation += `${administrativeArea_long}, `;
-      } else if(locality) {
+      if(locality){
         formattedLocation += `${locality}, `;
+      } else if(administrativeArea_long) {
+        formattedLocation += `${administrativeArea_long}, `;
       }
       
       formattedLocation += country;

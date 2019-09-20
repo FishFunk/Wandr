@@ -96,7 +96,7 @@ exports.newMessageNotification =
 
 exports.createChat = functions.https.onCall((chatData, context) => {
 
-    chatData.lastMessage = `Hey ${chatData.userB_name}! Looks like you and ${chatData.userA_name} have a network connection! You can now message each other here!\n\n- Wandr Team`;
+    chatData.lastMessage = `Hey ${chatData.userB_name}, ${chatData.userA_name} wants to connect! You can now message each other here!\n\n- Wandr Team`;
 
     return _createChatRoom(chatData)
         .then(()=>{
