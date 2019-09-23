@@ -70,7 +70,7 @@ export class TripDetailsModal {
           this.weatherInfo.Icon = Utils.getWeatherIcon(weatherInfo.WeatherText);
         }
 
-        this.upcomingHolidays = await this.tripsApi.getUpcomingHolidays2(this.tripData.location.countryCode)
+        this.upcomingHolidays = await this.tripsApi.getUpcomingHolidays(this.tripData.location.countryCode)
           .catch(error=>{
             console.error(error);
           });

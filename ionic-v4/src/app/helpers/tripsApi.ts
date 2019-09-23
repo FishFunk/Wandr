@@ -61,43 +61,26 @@ export class TripsApi
         });
     }
 
-    public getUpcomingHolidays(countryCode: string): Promise<any>{
-        return new Promise((resolve,reject)=>{
-            const date = new Date();
-            const year = date.getFullYear();
-            const month = date.getMonth();
-            const day = date.getDay();
+    public async getUpcomingHolidays(countryCode: string): Promise<any>{
+        const date = new Date();
+        const year = date.getFullYear();
 
-            this.http.get(
-                `https://holidayapi.com/v1/holidays?key=${this.holidayApiKey}&country=${countryCode}&year=${year}&upcoming&month=${month}&day=${day}&public`)
-                .subscribe((data: any)=>{
-                    resolve(data);
-                }, (error)=>{
-                    reject(error);
-                });
-        });
-    }
-
-    public async getUpcomingHolidays2(countryCode: string): Promise<any>{
-        const data = await this.getHolidays(countryCode)
+        const data = await this.getHolidays(countryCode, year)
             .catch(error=>{
                 Promise.reject(error);
             });
         
-        const now = new Date();
-        now.setFullYear(2018);
-
         const result = _.filter(data.holidays, (holiday)=>{
             let then = new Date(holiday.observed);
-            return then > now;
+            return then > date;
         });
 
         return result;
     }
 
-    private getHolidays(countryCode: string): Promise<any>{
+    private getHolidays(countryCode: string, year: number): Promise<any>{
         return new Promise((resolve, reject)=>{
-            this.http.get(`https://holidayapi.com/v1/holidays?key=${this.holidayApiKey}&country=${countryCode}&year=2018&public`)
+            this.http.get(`https://holidayapi.com/v1/holidays?key=${this.holidayApiKey}&country=${countryCode}&year=${year}&public`)
                 .subscribe((data: any)=>{
                     resolve(data);
                 }, (error)=>{
