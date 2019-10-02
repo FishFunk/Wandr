@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { ToastController, NavController, AlertController } from '@ionic/angular';
+import { ToastController, NavController, AlertController, ModalController } from '@ionic/angular';
 import { FacebookApi } from '../helpers/facebookApi';
 import { Constants } from '../helpers/constants';
 import { IUserSettings } from '../models/user';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
+import { EulaModal } from '../non-tabs/eula';
 
 @Component({
   selector: 'page-settings',
@@ -19,6 +20,7 @@ export class SettingsPage {
 
     constructor(
         public navCtrl: NavController,
+        private modalCtrl: ModalController,
         private toastCtrl: ToastController,
         private alertCtrl: AlertController,
         private fbApi: FacebookApi,
@@ -64,6 +66,11 @@ export class SettingsPage {
 
     onClickAbout(){
         this.navCtrl.navigateForward('/about');
+    }
+
+    async onClickTerms(){
+        var modal = await this.modalCtrl.create({ component: EulaModal });
+        modal.present();
     }
 
     onClickLogout() {

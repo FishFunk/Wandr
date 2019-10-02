@@ -30,6 +30,7 @@ import { CreateTripModalModule } from './trips/create-trip-modal.module';
 import { ProfileModalModule } from './profile/profile-modal.module';
 import { ConnectionListPageModule } from './non-tabs/connection-list.module';
 import { ConnectionProfileModalModule } from './non-tabs/connection-profile.module';
+import { EulaModalModule } from './non-tabs/eula.module';
 
 // Popovers
 import { MapTutorialPopoverModule } from './map/tutorial-popover.module';
@@ -79,7 +80,8 @@ export const config = {
     ConnectionListPageModule,
     SortOptionsPopoverModule,
     ConnectionProfileModalModule,
-    HttpClientModule
+    HttpClientModule,
+    EulaModalModule
   ],
   providers: [
     StatusBar,

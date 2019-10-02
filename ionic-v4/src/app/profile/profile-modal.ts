@@ -17,7 +17,7 @@ import { GeoLocationHelper } from "../helpers/geolocationHelper";
 export class ProfileModal {
 
   userData: IUser = new User('','','','', '',
-    new Location(),[],[],'','', '', { notifications: true }, []);
+    new Location(),[],[], [], '','', '', { notifications: true }, []);
 
   googleAutoComplete: any;
   autoComplete: any = { input: '' };

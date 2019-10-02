@@ -10,6 +10,7 @@ export interface IUser{
     location: ILocation;
     friends: Array<IFacebookFriend>;
     roomkeys: string[];
+    blockedUsers: string[];
     last_login: string;
     settings: IUserSettings;
     profile_img_url: string;
@@ -17,6 +18,7 @@ export interface IUser{
     lifestyle: Array<ICheckboxOption>;
     travel_info: string;
     onboardcomplete: boolean;
+    banned: boolean;
 }
 
 export interface ILocation{
@@ -64,6 +66,7 @@ export class User implements IUser{
         public location: ILocation,
         public friends: Array<IFacebookFriend>,
         public roomkeys: string[] = [],
+        public blockedUsers: string[] = [],
         public last_login: string = "",
         public profile_img_url: string = "",
         public bio: string = "",
@@ -73,6 +76,7 @@ export class User implements IUser{
         public lifestyle: Array<ICheckboxOption> = [],
         public interests: Array<ICheckboxOption> = [],
         public travel_info: string = "",
-        public onboardcomplete: boolean = false)
+        public onboardcomplete: boolean = false,
+        public banned: boolean = false)
         {}
 }

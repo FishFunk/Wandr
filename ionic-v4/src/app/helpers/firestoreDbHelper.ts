@@ -40,14 +40,21 @@ export class FirestoreDbHelper {
     public async ReadAllUsers(firebaseUserId: string, matchLocation?: string): Promise<IUser[]>{
       let querySnapshot: firestore.QuerySnapshot;
 
+      const snapshot = await this.angularFirestore.collection('users').doc(firebaseUserId).get().toPromise();
+      const user = <IUser> snapshot.data();
+
       if(matchLocation){
         querySnapshot = await this.angularFirestore
-          .collection('users', ref => ref.where('location.stringFormat', '==', matchLocation))
+          .collection('users', 
+            ref => 
+              ref
+              .where('location.stringFormat', '==', matchLocation)
+              .where('banned', '==', false))
           .get().toPromise();
       } else {
-        querySnapshot = await this.angularFirestore.firestore
-          .collection('users')
-          .get();
+        querySnapshot = await this.angularFirestore
+          .collection('users', ref => ref.where('banned', '==', false))
+          .get().toPromise();
       }
 
       let allUsers: IUser[] = [];
@@ -59,6 +66,9 @@ export class FirestoreDbHelper {
           }
         }
       });
+
+      allUsers = _.reject(allUsers, 
+        (connection: IUser)=> _.contains(user.blockedUsers, connection.app_uid));
 
       return allUsers;
     }
@@ -162,7 +172,8 @@ export class FirestoreDbHelper {
 
     public async GetUnreadChatCount(firebaseUserId: string){
       
-      const snapshot = await this.angularFirestore.collection('users').doc(firebaseUserId).get().toPromise();
+      const snapshot = await 
+        this.angularFirestore.collection('users').doc(firebaseUserId).get().toPromise();
       if(!snapshot.exists){
         // User doesn't exist yet
         return Promise.resolve(0);
@@ -203,7 +214,7 @@ export class FirestoreDbHelper {
     }
 
     public async ReadUserByFirebaseUid(firebaseUserId: string, failIfDoesntExist: boolean = true){
-      const snapshot = await this.angularFirestore.collection('users').doc(firebaseUserId).get().toPromise();
+      const snapshot = await this.angularFirestore.collection('users', ref => ref.where('banned', '==', false)).doc(firebaseUserId).get().toPromise();
       if(failIfDoesntExist && !snapshot.exists){
         return Promise.reject("No user matching ID: " + firebaseUserId);
       }
@@ -256,14 +267,15 @@ export class FirestoreDbHelper {
             .collection('users', 
               ref=> ref
                   .where('facebook_uid', '==', friend.id)
-                  .where('location.stringFormat','==', matchLocation))
+                  .where('location.stringFormat','==', matchLocation)
+                  .where('banned', '==', false))
             .get()
             .toPromise();
         });
       } else {
         promises = user.friends.map((friend)=> {
           return this.angularFirestore
-            .collection('users', ref=> ref.where('facebook_uid', '==', friend.id))
+            .collection('users', ref=> ref.where('facebook_uid', '==', friend.id).where('banned', '==', false))
             .get()
             .toPromise();
         });
@@ -282,6 +294,9 @@ export class FirestoreDbHelper {
           }
         });
       });
+
+      firstConnections = _.reject(firstConnections, 
+        (connection: IUser)=> _.contains(user.blockedUsers, connection.app_uid));
 
       return Promise.resolve(firstConnections);
     }
@@ -318,7 +333,8 @@ export class FirestoreDbHelper {
             .collection('users', 
               ref=> ref
                   .where('facebook_uid', '==', facebook_uid)
-                  .where('location.stringFormat','==', matchLocation))
+                  .where('location.stringFormat','==', matchLocation)
+                  .where('banned', '==', false))
             .get()
             .toPromise();
         });

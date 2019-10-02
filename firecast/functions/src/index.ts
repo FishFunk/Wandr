@@ -247,16 +247,16 @@ async function _sendNotificationToId(idToNotify: string, notificationTitle: stri
     console.trace(`New message notification to ID: ${idToNotify}`);
 
     // Check if user has notifications enabled
-    let data: any;
+    let userData: any;
     const querySnapshot = 
         await admin.firestore()
             .collection('users').where('app_uid', '==', idToNotify).select('settings').get();
 
     querySnapshot.forEach(result =>{
-        data = result.data();
+        userData = result.data();
     });
 
-    if(data.settings && data.settings.notifications){
+    if(userData.settings && userData.settings.notifications){
         const payload: admin.messaging.MessagingPayload = {
             notification: {
                 title: notificationTitle,

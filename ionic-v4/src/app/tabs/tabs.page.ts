@@ -36,10 +36,10 @@ export class TabsPage {
 
   ngOnInit(){
     this.load()
-      .catch(error=>{
+      .catch((error)=>{
+        alert("App startup failure. Please close and try again.");
         this.loadingPopup.dismiss();
         this.logger.Error(error);
-        alert("App startup failure. Please close and try again.");
         return;
       });
   }

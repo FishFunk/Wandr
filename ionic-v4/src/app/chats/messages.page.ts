@@ -139,8 +139,9 @@ export class MessagesPage {
         const modal = await this.modalCtrl.create({
             component: ConnectionProfileModal,
             componentProps: {
+                navPath: 1,
                 userId: targetUid,
-                showChatButton: true
+                showChatButton: false
             }
         });
         modal.present();

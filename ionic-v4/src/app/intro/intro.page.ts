@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FacebookApi } from '../helpers/facebookApi';
 import { Constants } from '../helpers/constants';
-import { AlertController, Platform, NavController } from '@ionic/angular';
+import { AlertController, Platform, NavController, ModalController } from '@ionic/angular';
 import { Logger } from '../helpers/logger';
 import { GeoLocationHelper } from '../helpers/geolocationHelper';
 import { Utils } from '../helpers/utils';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { User, Location, IUser} from '../models/user';
 import _ from 'underscore';
+import { EulaModal } from '../non-tabs/eula';
 
 @Component({
   selector: 'app-intro',
@@ -21,11 +22,14 @@ export class IntroPage implements OnInit {
     initialSlide: 0
   }
 
+  agreeToTerms = false;
+
   constructor(
     private facebookApi: FacebookApi,
     private geolocationHelper: GeoLocationHelper,
     private firestoreDbHelper: FirestoreDbHelper,
     private navCtrl: NavController,
+    private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private platform: Platform,
     private logger: Logger) { }
@@ -47,9 +51,14 @@ export class IntroPage implements OnInit {
     else{
       // DEBUG/Browser Mode
       window.localStorage.setItem(Constants.facebookUserIdKey, "10212312262992697");
-      window.localStorage.setItem(Constants.firebaseUserIdKey, "SlQA4Yz8Pwhuv15d6ygmdo284UF2");
+      window.localStorage.setItem(Constants.firebaseUserIdKey, "HN7yxROvzXhuoP80arDDmmmQUAj1");
       this.navCtrl.navigateRoot('/tabs');  
     }
+  }
+
+  async onClickShowTerms(){
+    var modal = await this.modalCtrl.create({ component: EulaModal });
+    modal.present();
   }
 
   private async checkStatusAndLogin() {
@@ -92,7 +101,7 @@ export class IntroPage implements OnInit {
     // If User does not exist yet
     if(!user) {
       user = new User('','','','', '',
-        new Location(),[],[],'','','', { notifications: true }, []);
+        new Location(),[],[], [], '','','', { notifications: true }, []);
 
       user.app_uid = firebaseUid;
       user.facebook_uid = facebookUid;
@@ -122,6 +131,11 @@ export class IntroPage implements OnInit {
       const newUsr = Utils.getPlainUserObject(user);
       await this.firestoreDbHelper.SetNewUserData(firebaseUid, newUsr);
     } else {
+
+      if(user.banned){
+        alert("Account Banned!");
+        return;
+      }
 
       // IF user already has been created just update a few fields
       var names = fbUserData.name.split(' ');

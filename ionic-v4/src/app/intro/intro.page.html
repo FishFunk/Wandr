@@ -20,10 +20,21 @@
     <ion-slide class="step-four">
         <img src="/assets/undraw/purple/undraw_having_fun_iais.svg">
         <h1>Start Wandring!</h1>
-        <ion-button (click)="onClickFacebookLogin()" color="tertiary" fill="outline" expand="block">
+        <ion-button (click)="onClickFacebookLogin()" color="tertiary" fill="outline" expand="block" [disabled]="!agreeToTerms">
           <ion-icon id="facebook-logo" name="logo-facebook" slot="start"></ion-icon>
           &nbsp;&nbsp;Sign in with Facebook
         </ion-button>
+        <br>
+        <ion-row class="pad-10">
+          <ion-col size="1">
+            <ion-checkbox [(ngModel)]="agreeToTerms" color="secondary"></ion-checkbox>
+          </ion-col>
+          <ion-col size="11">
+            <p class="terms-text">I've read and agree to Wandr's 
+              <a (click)="onClickShowTerms()">terms and conditions.</a>
+            </p>
+          </ion-col>
+        </ion-row>
     </ion-slide>
   </ion-slides>
 </ion-content>

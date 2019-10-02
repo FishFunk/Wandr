@@ -20,7 +20,7 @@ export class ProfilePage {
   lifestyleOptions: ICheckboxOption[] = [];
 
   userData: IUser = new User('','','','', '',
-    new Location(),[],[],'','','', { notifications: true }, []);
+    new Location(),[],[], [], '','','', { notifications: true }, []);
 
   firstConnectionCount: number = 0;
   secondConnectionCount: number = 0;

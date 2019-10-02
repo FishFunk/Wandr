@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LoadingController, NavParams, ToastController, AlertController, ModalController, NavController } from '@ionic/angular';
-import { IUser, IFacebookFriend, User, Location } from '../models/user';
+import { IUser, User, Location } from '../models/user';
 import _ from 'underscore';
 import { Constants } from '../helpers/constants';
 import { IChat, IMessage } from '../models/chat';
@@ -24,10 +24,12 @@ export class ConnectionProfileModal {
     currentUserId: string;
     viewUserId: string;
     viewUserData: IUser = new User('','','','', '',
-      new Location(),[],[],'','', '');
+      new Location(),[],[], [], '','', '');
     mutualFriends: IUser[] = [];
     showChatButton: boolean;
     chatData: IChat;
+
+    navPath: number;
 
     chatExists: boolean = false;
     showJoinBtn: boolean = false;
@@ -45,6 +47,7 @@ export class ConnectionProfileModal {
         
         this.chatData = null;
         this.viewUserId = navParams.get('userId');
+        this.navPath = navParams.get('navPath');
         this.showChatButton = navParams.get('showChatButton') == "true";
         this.currentUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
     }
@@ -83,6 +86,11 @@ export class ConnectionProfileModal {
       this.renderUserOptions();
 
       if(this.showChatButton){
+        if(_.contains(this.viewUserData.blockedUsers, this.currentUserId)){
+          this.showChatButton = false;
+          return;
+        }
+
         this.chatExists = await this._checkIfChatExists();
 
         if(this.chatExists){
@@ -119,13 +127,27 @@ export class ConnectionProfileModal {
     }
 
     onClickReport(){
-      this.presentConfirmation();
+      this.presentConfirmation(
+        `Report ${this.viewUserData.first_name}?`,
+        `Reports are taken very seriously in order to maintain an enjoyable \
+            app experience for everyone. Relevant user activity will be reviewed and if there is \
+            violation of the Wandr user agreement, users will be banned.`,
+        this.confirmReportUser.bind(this));
+    }
+
+    onClickBlock(){
+      this.presentConfirmation(
+        `Block ${this.viewUserData.first_name}?`,
+        `You will no longer see or be able to interact with this user.`,
+        this.confirmBlockUser.bind(this));
     }
 
     async onClickUser(user: IUser){
+      this.modalCtrl.dismiss();
       const modal = await this.modalCtrl.create({
           component: ConnectionProfileModal,
           componentProps: {
+              navPath: 2,
               userId: user.app_uid,
               showChatButton: true
           }
@@ -134,10 +156,15 @@ export class ConnectionProfileModal {
     }
 
     async onClickGoToChat(){
-      // TODO: Nav to tab first?
-      await this.modalCtrl.dismiss();
-      await this.modalCtrl.dismiss();
-      this.navCtrl.navigateForward(`messages/${this.chatData.roomkey}/false`);
+      if(this.navPath === 1){
+        // Nav from chat tab
+        await this.modalCtrl.dismiss();
+      } else {
+        // Nav from different tab
+        await this.modalCtrl.dismiss();
+        await this.modalCtrl.dismiss();
+        this.navCtrl.navigateForward(`messages/${this.chatData.roomkey}/false`);
+      }
     }
 
     async onClickRejoinChat(){
@@ -301,7 +328,6 @@ export class ConnectionProfileModal {
     }
 
     private confirmReportUser(){
-
       const reportData = {
         dateReported: new Date(),
         from: this.currentUserId,
@@ -326,6 +352,24 @@ export class ConnectionProfileModal {
         });
     }
 
+    private async confirmBlockUser(){
+      const user = await this.dbHelper.ReadUserByFirebaseUid(this.currentUserId);
+      var blocked = user.blockedUsers || [];
+      blocked.push(this.viewUserId);
+      var roomkeys = _.reject(user.roomkeys, (roomkey)=> roomkey.indexOf(this.viewUserId) > -1);
+      this.dbHelper.UpdateUser(this.currentUserId, { blockedUsers: blocked, roomkeys: roomkeys });
+
+      if(this.navPath === 1){
+        // Nav from chat tab
+        await this.modalCtrl.dismiss();
+        this.navCtrl.back();
+      } else {
+        // Nav from different tab
+        await this.modalCtrl.dismiss();
+        await this.modalCtrl.dismiss();
+      }
+    }
+
     private async presentAlert(message: string){
       const alert = await this.alertCtrl.create({
         header: message
@@ -333,12 +377,10 @@ export class ConnectionProfileModal {
       alert.present();
     }
 
-    private async presentConfirmation(){
+    private async presentConfirmation(header: string, message: string, func: any){
       const confirm = await this.alertCtrl.create({
-          header: `Report ${this.viewUserData.first_name}?`,
-          message: `Reports are taken very seriously in order to maintain an enjoyable \
-            app experience for everyone. Relevant user activity will be reviewed and if there is \
-            violation of the Wandr user agreement, users will be banned.`,
+          header: header,
+          message: message,
           buttons: [
             {
               text: 'Cancel',
@@ -346,7 +388,7 @@ export class ConnectionProfileModal {
             },
             {
               text: 'Confirm',
-              handler: this.confirmReportUser.bind(this)
+              handler: func
             }]
         });
         confirm.present();

@@ -25,6 +25,16 @@ p {
     color: var(--ion-color-light);
 }
 
+a{
+    color: var(--ion-color-light);
+    text-decoration: underline;
+}
+
+.terms-text{
+    margin-left: 2px;
+    font-size: 12px;
+}
+
 #facebook-logo{
     font-size: 1.4em;
 }

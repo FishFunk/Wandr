@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Events, PopoverController, LoadingController, ModalController } from '@ionic/angular';
-import { IUser, IFacebookFriend } from '../models/user';
+import { NavParams, Events, PopoverController, LoadingController, ModalController } from '@ionic/angular';
+import { IUser } from '../models/user';
 import _ from 'underscore';
 import { Constants } from '../helpers/constants';
 import { SortOptionsPopover } from './sort-option-popover';
@@ -92,6 +92,7 @@ export class ConnectionListPage {
         const modal = await this.modalController.create({
             component: ConnectionProfileModal,
             componentProps: {
+                navPath: 2,
                 userId: user.app_uid,
                 showChatButton: true
             }
