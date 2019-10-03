@@ -9,6 +9,7 @@ import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { User, Location, IUser} from '../models/user';
 import _ from 'underscore';
 import { EulaModal } from '../non-tabs/eula';
+import { FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 
 @Component({
   selector: 'app-intro',
@@ -62,19 +63,27 @@ export class IntroPage implements OnInit {
   }
 
   private async checkStatusAndLogin() {
-    let statusResponse = await this.facebookApi.facebookLoginStatus();
-
-    if (statusResponse.status != 'connected') {
-      statusResponse = await this.facebookApi.facebookLogin();
+    var statusResponse = await this.facebookApi.facebookLoginStatus()
+      .catch(async error=>{
+        var status = await this.facebookApi.facebookLogin();
+        return this.firebaseLogin(status);
+      });
+    
+    if (statusResponse && statusResponse.status == 'connected') {
+      return this.firebaseLogin(statusResponse);
+    } else {
+      var status = await this.facebookApi.facebookLogin();
+      return this.firebaseLogin(status);
     }
+  }
 
-    const firebaseData = await this.facebookApi.firebaseLogin(statusResponse.authResponse.accessToken);
+  private async firebaseLogin(facebookStatusResponse: FacebookLoginResponse){
+    const firebaseData = await this.facebookApi.firebaseLogin(facebookStatusResponse.authResponse.accessToken);
 
-    // TODO: Cache profile and other info in firebaseData?
     this.cacheFacebookTokens(
-      statusResponse.authResponse.userID, 
+      facebookStatusResponse.authResponse.userID, 
       firebaseData.user.uid,
-      statusResponse.authResponse.accessToken);
+      facebookStatusResponse.authResponse.accessToken);
 
     await this.initUser();
   }

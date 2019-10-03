@@ -23,7 +23,7 @@
     "@angular/router": "^7.2.2",
     "@ionic-native/core": "^5.12.0",
     "@ionic-native/device": "^5.12.0",
-    "@ionic-native/facebook": "^5.12.0",
+    "@ionic-native/facebook": "^5.14.0",
     "@ionic-native/firebase": "^5.12.0",
     "@ionic-native/keyboard": "^5.12.0",
     "@ionic-native/social-sharing": "^5.12.0",
@@ -36,11 +36,12 @@
     "cordova-android": "^8.1.0",
     "cordova-android-firebase-gradle-release": "^4.0.0",
     "cordova-android-support-gradle-release": "^3.0.1",
-    "cordova-ios": "5.0.1",
+    "cordova-ios": "^5.0.1",
+    "cordova-lib": "^9.0.1",
     "cordova-plugin-androidx": "^1.0.2",
     "cordova-plugin-androidx-adapter": "^1.1.0",
     "cordova-plugin-badge": "^0.8.8",
-    "cordova-plugin-facebook4": "^5.0.0",
+    "cordova-plugin-facebook4": "^6.1.0",
     "cordova-plugin-firebasex": "^6.0.7",
     "cordova-plugin-x-socialsharing": "^5.4.7",
     "core-js": "^2.5.4",
@@ -96,17 +97,19 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-x-socialsharing": {},
       "cordova-plugin-badge": {},
-      "cordova-plugin-facebook4": {
-        "APP_ID": "244138132926081",
-        "APP_NAME": "Wandr"
-      },
       "cordova-plugin-firebasex": {},
       "cordova-plugin-androidx": {},
-      "cordova-plugin-androidx-adapter": {}
+      "cordova-plugin-androidx-adapter": {},
+      "cordova-plugin-facebook4": {
+        "APP_ID": "244138132926081",
+        "APP_NAME": "Wandr",
+        "FACEBOOK_HYBRID_APP_EVENTS": "false",
+        "FACEBOOK_ANDROID_SDK_VERSION": "5.5.1"
+      }
     },
     "platforms": [
-      "ios",
-      "android"
+      "android",
+      "ios"
     ]
   }
 }

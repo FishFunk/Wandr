@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavParams, ToastController, AlertController, ModalController, NavController } from '@ionic/angular';
+import { LoadingController, NavParams, ToastController, AlertController, ModalController, NavController, Events } from '@ionic/angular';
 import { IUser, User, Location } from '../models/user';
 import _ from 'underscore';
 import { Constants } from '../helpers/constants';
@@ -36,6 +36,7 @@ export class ConnectionProfileModal {
 
     constructor(
         navParams: NavParams,
+        private events: Events,
         private logger: Logger,
         private loadingCtrl: LoadingController,
         private toastCtrl: ToastController,
@@ -368,6 +369,11 @@ export class ConnectionProfileModal {
         await this.modalCtrl.dismiss();
         await this.modalCtrl.dismiss();
       }
+
+      var promises: Promise<any>[] = this.events.publish(Constants.refreshChatDataEvent);
+      await Promise.all(promises);
+      promises = this.events.publish(Constants.refreshMapDataEventName);
+      await Promise.all(promises);
     }
 
     private async presentAlert(message: string){
