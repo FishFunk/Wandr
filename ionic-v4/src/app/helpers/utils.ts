@@ -200,7 +200,9 @@ export class Utils
       roomkeys: userData.roomkeys || [],
       last_login: userData.last_login || new Date().toString(),
       settings: Object.assign({}, userData.settings),
-      profile_img_url: userData.profile_img_url || ""
+      profile_img_url: userData.profile_img_url || "",
+      onboardcomplete: userData.onboardcomplete,
+      banned: userData.banned
     }
   }
 }

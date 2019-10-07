@@ -61,7 +61,7 @@ export class ProfilePage {
         // Calculate connections
         const firstConnections = await this.firestoreDbHelper.ReadFirstConnections(firebaseUid);
         this.firstConnectionCount = firstConnections.length;
-        this.secondConnectionCount = await this.countSecondConnections();
+        this.secondConnectionCount = await this.countSecondConnections(firstConnections);
         
       } else {
         // ionic serve path
@@ -122,12 +122,11 @@ export class ProfilePage {
     this.renderUserOptions();
   }
 
-  private async countSecondConnections(): Promise<number>{
+  private async countSecondConnections(firstConnections: IUser[]): Promise<number>{
 
-    const currentUserFirebaseId = localStorage.getItem(Constants.firebaseUserIdKey);
     const currentUserFacebookId = localStorage.getItem(Constants.facebookUserIdKey);
 
-    const secondConnections = await this.firestoreDbHelper.ReadSecondConnections(currentUserFirebaseId, currentUserFacebookId);
+    const secondConnections = await this.firestoreDbHelper.ReadSecondConnections(currentUserFacebookId, firstConnections);
 
     return Promise.resolve(secondConnections.length);
   }

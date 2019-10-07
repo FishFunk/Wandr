@@ -1,3 +1,9 @@
+ion-slides { 
+    --bullet-background: var(--ion-color-light);
+    --bullet-background-active: var(--ion-color-secondary); 
+}
+
+
 ion-slide {
     height: 100vh;
     flex-direction: column;

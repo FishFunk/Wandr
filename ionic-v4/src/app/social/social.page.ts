@@ -44,15 +44,15 @@ export class SocialPage {
     const firebaseUid = window.localStorage.getItem(Constants.firebaseUserIdKey);
     const facebookUid = window.localStorage.getItem(Constants.facebookUserIdKey);
 
-    const firstConnecitons = await this.firestoreDbHelper.ReadFirstConnections(firebaseUid)
+    const firstConnections = await this.firestoreDbHelper.ReadFirstConnections(firebaseUid)
       .catch(error =>{
         loading.dismiss();
         this.logger.Error(error);
         return Promise.resolve([]);
       });
-    this.firstConnectionCount = firstConnecitons.length;
+    this.firstConnectionCount = firstConnections.length;
 
-    const secondConnecitons = await this.firestoreDbHelper.ReadSecondConnections(firebaseUid, facebookUid)
+    const secondConnecitons = await this.firestoreDbHelper.ReadSecondConnections(facebookUid, firstConnections)
       .catch(async error =>{
         loading.dismiss();
         this.logger.Error(error);

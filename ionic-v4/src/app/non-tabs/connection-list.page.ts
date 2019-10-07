@@ -22,7 +22,6 @@ export class ConnectionListPage {
     firstConnections: IUser[] = [];
     secondConnections: IUser[] = [];
     otherConnections: IUser[] = [];
-    showForumButton: boolean;
 
     constructor(
         params: NavParams,
@@ -35,11 +34,9 @@ export class ConnectionListPage {
         this.locationString = params.get('locationStringFormat');
         if(this.locationString){
             this.displayLocation = this.locationString.substr(0, this.locationString.indexOf(','));
-            this.showForumButton = true;
         }else {
             // Show all connections
             this.displayLocation = "All Connections";
-            this.showForumButton = false;
         }
 
         this.currentUserId = window.localStorage.getItem(Constants.firebaseUserIdKey);
@@ -61,10 +58,10 @@ export class ConnectionListPage {
             await this.firestoreDbHelper.ReadFirstConnections(this.currentUserId, this.locationString);
 
         // Second degree
-        const facebookId = window.localStorage.getItem(Constants.facebookUserIdKey);
+        const currentUserFacebookId = window.localStorage.getItem(Constants.facebookUserIdKey);
         this.secondConnections = 
             await this.firestoreDbHelper.ReadSecondConnections(
-                this.currentUserId, facebookId, this.locationString);
+                currentUserFacebookId, this.firstConnections, this.locationString);
 
         // Others
         const excludeFirstIdMap = _.indexBy(this.firstConnections, (usr)=>usr.app_uid);

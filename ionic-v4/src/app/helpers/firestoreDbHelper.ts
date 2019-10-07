@@ -77,7 +77,10 @@ export class FirestoreDbHelper {
     {
       const snapshotPromises = _.map(facebookIds, (id)=>{
         return this.angularFirestore
-          .collection<any>('users', ref => ref.where('facebook_uid', '==', id)).get().toPromise();
+          .collection<any>('users', 
+            ref => ref
+              .where('facebook_uid', '==', id)
+              .where('banned', '==', false)).get().toPromise();
       });
       
       var users = [];
@@ -137,8 +140,8 @@ export class FirestoreDbHelper {
       return this.angularFirestore.collection('messages').doc(roomkey).valueChanges();
     }
 
-    public async ReadSingleChat(roomeky: string): Promise<IChat>{
-      let snapshot = await this.angularFirestore.collection('chats').doc(roomeky).get().toPromise();
+    public async ReadSingleChat(roomkey: string): Promise<IChat>{
+      let snapshot = await this.angularFirestore.collection('chats').doc(roomkey).get().toPromise();
       if(snapshot.exists){
         // Chat with roomkey already exists
         return <IChat> snapshot.data();
@@ -275,7 +278,10 @@ export class FirestoreDbHelper {
       } else {
         promises = user.friends.map((friend)=> {
           return this.angularFirestore
-            .collection('users', ref=> ref.where('facebook_uid', '==', friend.id).where('banned', '==', false))
+            .collection('users', 
+              ref=> ref
+                .where('facebook_uid', '==', friend.id)
+                .where('banned', '==', false))
             .get()
             .toPromise();
         });
@@ -302,20 +308,20 @@ export class FirestoreDbHelper {
     }
 
     public async ReadSecondConnections(
-        targetAppUid: string,
-        targetFacebookId: string, 
+        currentUserFacebookId: string, 
+        firstConnections: IUser[],
         matchLocation?: string): Promise<IUser[]>{
       let firstConnectionFacebookIds = [];
       let secondConnectionFacebookIds = [];
       let secondConnections: IUser[] = [];
         
-      let firstConnections = await this.ReadFirstConnections(targetAppUid);
+      // let firstConnections = await this.ReadFirstConnections(targetAppUid);
   
       _.each(firstConnections, (firstConnectionUser)=>{
         firstConnectionFacebookIds.push(firstConnectionUser.facebook_uid);
         _.each(firstConnectionUser.friends, (secondConnectionFriendObj) => {
           // Exclude current user
-          if(secondConnectionFriendObj.id != targetFacebookId){
+          if(secondConnectionFriendObj.id != currentUserFacebookId){
             secondConnectionFacebookIds.push(secondConnectionFriendObj.id);
           }
         });
@@ -341,7 +347,10 @@ export class FirestoreDbHelper {
       } else {
         promises = secondConnectionFacebookIds.map((facebook_uid)=> {
           return this.angularFirestore
-            .collection('users', ref=> ref.where('facebook_uid', '==', facebook_uid))
+            .collection('users', 
+              ref=> ref
+                .where('facebook_uid', '==', facebook_uid)
+                .where('banned', '==', false))
             .get()
             .toPromise();
         });

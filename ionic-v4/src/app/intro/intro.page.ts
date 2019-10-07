@@ -52,7 +52,7 @@ export class IntroPage implements OnInit {
     else{
       // DEBUG/Browser Mode
       window.localStorage.setItem(Constants.facebookUserIdKey, "10212312262992697");
-      window.localStorage.setItem(Constants.firebaseUserIdKey, "HN7yxROvzXhuoP80arDDmmmQUAj1");
+      window.localStorage.setItem(Constants.firebaseUserIdKey, "SlQA4Yz8Pwhuv15d6ygmdo284UF2");
       this.navCtrl.navigateRoot('/tabs');  
     }
   }
