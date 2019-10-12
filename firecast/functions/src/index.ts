@@ -63,14 +63,14 @@ exports.newUserNotification =
             return Promise.resolve();
         }
 
-        const title = userLoc ? 
-            `${userName} has joined your network in ${userLoc}!` :
-            `${userName} and their friends are now in your network!`
+        const body = userLoc ? 
+            `You now have connections in ${userLoc}.` :
+            `Discover ${userName} and their friends on your map.`
 
         const payload = {
             notification: {
-                title: title,
-                body: "Discover new connections on your map."
+                title: `${userName} joined your network!`,
+                body: body
             }
         }
         
