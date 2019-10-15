@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { NavParams, AlertController, ModalController, NavController, Events } from "@ionic/angular";
+import { NavParams, AlertController, ModalController, NavController, Events, Platform } from "@ionic/angular";
 import { FirestoreDbHelper } from "../helpers/firestoreDbHelper";
 import { Constants } from "../helpers/constants";
 import { ITrip } from "../models/trip";
@@ -9,6 +9,9 @@ import { TripsApi } from "../helpers/tripsApi";
 import _ from "underscore";
 import { Utils } from '../helpers/utils';
 import { ConnectionProfileModal } from '../non-tabs/connection-profile';
+import { IShareInfo } from '../models/metadata';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { Logger } from '../helpers/logger';
 
 @Component({
     selector: 'trip-details-modal',
@@ -22,6 +25,7 @@ export class TripDetailsModal {
     tripData: ITrip = {
         uid: '',
         facebook_uid: '',
+        public: true,
         location: new Location()
     };
 
@@ -38,6 +42,9 @@ export class TripDetailsModal {
 
     constructor(
         params: NavParams,
+        private logger: Logger,
+        private platform: Platform,
+        private socialSharing: SocialSharing,
         private events: Events,
         private modalCtrl: ModalController,
         private navCtrl: NavController,
@@ -106,6 +113,19 @@ export class TripDetailsModal {
           componentProps: { key: this.key, trip: this.tripData }
         });
         modal.present();
+    }
+
+    async onClickShare(){
+      const shareInfo = await this.firestoreDbHelper.ReadMetadata<IShareInfo>(Constants.shareInfoKey);
+      const tripSubject = "I'm planning a trip!"      
+      const tripMessage = `I'm using Wandr to plan my trip to ${this.tripData.location.stringFormat}.`;
+
+      if(this.platform.is('cordova')){
+        this.socialSharing.share(tripMessage, tripSubject, shareInfo.file, shareInfo.url)
+          .catch(error=>{
+            this.logger.Warn(error);
+          });
+      }
     }
 
     async onClickDelete(){

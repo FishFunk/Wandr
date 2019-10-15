@@ -24,6 +24,7 @@ export class CreateTripModal {
     tripData: ITrip = {
         uid: '',
         facebook_uid: '',
+        public: true,
         business: false,
         leisure: false,
         moving: false,
@@ -43,7 +44,6 @@ export class CreateTripModal {
     googleAutoComplete: any;
     autoComplete: any = { input: '' };
     autoCompleteItems: any[] = [];
-    // selectedPlace: google.maps.places.AutocompletePrediction;
 
     constructor(
         params: NavParams,
@@ -111,10 +111,8 @@ export class CreateTripModal {
 
         if(this.autoCompleteItems.length > 0){
             const place = _.first(this.autoCompleteItems);
-            // this.selectedPlace = place;
             this.autoComplete.input = place.description;
             this.autoCompleteItems = [];
-            //this.tripData.photoUrl = await this.getTripPhoto();
         }
 
         await this.geolocationHelper.extractLocationAndGeoData(this.autoComplete.input)
@@ -161,10 +159,6 @@ export class CreateTripModal {
             this.tripData.endDate = moment(this.tripData.endDate).format(format);
         }
     }
-
-    // private async getTripPhoto(): Promise<string>{
-    //     return this.photoApi.queryRandomPhoto(this.selectedPlace.description);
-    // }
     
     //***** start Bound Elements ***** //
     updateSearchResults(){
@@ -184,11 +178,9 @@ export class CreateTripModal {
     }
 
     async selectSearchResult(item){
-        // this.selectedPlace = item;
         this.autoComplete.input = item.description;
         this.autoCompleteItems = [];
         this.loadWeatherInfo();
-        //this.tripData.photoUrl = await this.getTripPhoto();
     }
     //******* end Bound Elements ***** //
 }

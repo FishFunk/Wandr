@@ -35,18 +35,8 @@ export class TripsPage {
   }
 
   async onClickCreateTrip(){
-    let modal;
-    let location;
-
-    const trip: ITrip = {
-      uid: window.localStorage.getItem(Constants.firebaseUserIdKey),
-      facebook_uid: window.localStorage.getItem(Constants.facebookUserIdKey),
-      location: location || ''
-    }
-
-    modal = await this.modalController.create({
-      component: CreateTripModal, 
-      componentProps: { trip: trip }
+    let modal = await this.modalController.create({
+      component: CreateTripModal
     });
 
     modal.present();

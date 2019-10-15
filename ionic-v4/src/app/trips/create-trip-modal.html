@@ -20,6 +20,10 @@
     <h3>DESTINATION</h3>
     <ion-row>
       <ion-col size="12">
+        <ion-item lines="none">
+            <ion-label>Public</ion-label>
+            <ion-toggle color="primary"  [(ngModel)]="tripData.public"></ion-toggle>
+        </ion-item>
         <ion-searchbar 
           [(ngModel)]="autoComplete.input" 
           (ionInput)="updateSearchResults()" 

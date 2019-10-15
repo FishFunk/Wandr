@@ -8,6 +8,7 @@ import { AngularFireFunctions } from 'angularfire2/functions';
 import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { Logger } from '../helpers/logger';
 import { ICheckboxOption } from '../models/metadata';
+import { Observable } from 'rxjs';
  
 @Component({
   selector: 'connection-profile-modal',
@@ -16,6 +17,9 @@ import { ICheckboxOption } from '../models/metadata';
 })
 
 export class ConnectionProfileModal {
+
+    tripsObservable: Observable<any>;
+    tripData = [];
 
     userInterests: ICheckboxOption[] = [];
     lifestyleOptions: ICheckboxOption[] = [];
@@ -86,6 +90,8 @@ export class ConnectionProfileModal {
 
       this.renderUserOptions();
 
+      await this.readTrips();
+
       if(this.showChatButton){
         if(_.contains(this.viewUserData.blockedUsers, this.currentUserId)){
           this.showChatButton = false;
@@ -121,6 +127,16 @@ export class ConnectionProfileModal {
 
       var mutualFriendIds = _.intersection(currentUserFriendIds, connectionUserFriendIds);
       this.mutualFriends = await this.dbHelper.ReadUsersByFacebookId(mutualFriendIds);
+    }
+
+    async readTrips(){
+      const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+      this.tripsObservable = this.dbHelper.ReadTripsObservableByUserId(uid);
+  
+      this.tripsObservable.subscribe(async trips =>{
+        trips = _.reject(trips, (obj)=> !obj.data.public);
+        this.tripData = _.sortBy(trips, (obj)=> obj.data.startDate ? new Date(obj.data.startDate) : 999999999999999);
+      });
     }
 
     onClickClose(){

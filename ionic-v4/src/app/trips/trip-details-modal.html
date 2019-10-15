@@ -70,12 +70,17 @@
         </ion-row>
         <ion-row>
             <ion-col size="6" text-center>
-                <ion-button fill="outline" color="primary" margin-top (click)="onClickEdit()">
-                    EDIT
+                <ion-button fill="outline" color="primary" margin-top (click)="onClickShare()">
+                    SHARE
                 </ion-button>
             </ion-col>
             <ion-col size="6" text-center>
-                <ion-button fill="outline" color="danger" margin-top (click)="onClickDelete()">
+                <ion-button fill="outline" color="secondary" margin-top (click)="onClickEdit()">
+                    EDIT
+                </ion-button>
+            </ion-col>
+            <ion-col size="12" text-center>
+                <ion-button fill="clear" expand="block" color="danger" margin-top (click)="onClickDelete()">
                     DELETE
                 </ion-button>
             </ion-col>
