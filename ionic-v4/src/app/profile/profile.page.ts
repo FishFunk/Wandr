@@ -7,6 +7,7 @@ import { Logger } from '../helpers/logger';
 import _ from 'underscore';
 import { ProfileModal } from './profile-modal';
 import { ICheckboxOption } from '../models/metadata';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'page-profile',
@@ -18,6 +19,9 @@ export class ProfilePage {
 
   userInterests: ICheckboxOption[] = [];
   lifestyleOptions: ICheckboxOption[] = [];
+
+  tripsObservable: Observable<any>;
+  tripData = [];
 
   userData: IUser = new User('','','','', '',
     new Location(),[],[], [], '','','', { notifications: true }, []);
@@ -71,6 +75,8 @@ export class ProfilePage {
       
       this.renderUserOptions();
 
+      await this.readTrips();
+
       loadingPopup.dismiss();
     }
     catch(ex){
@@ -114,6 +120,16 @@ export class ProfilePage {
         }
       });
     }
+  }
+
+  private async readTrips(){
+    const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
+    this.tripsObservable = this.firestoreDbHelper.ReadTripsObservableByUserId(uid);
+
+    this.tripsObservable.subscribe(async trips =>{
+      trips = _.reject(trips, (obj)=> !obj.data.public);
+      this.tripData = _.sortBy(trips, (obj)=> obj.data.startDate ? new Date(obj.data.startDate) : 999999999999999);
+    });
   }
 
   private async reloadUser(){

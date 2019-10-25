@@ -57,6 +57,16 @@
                     <span *ngIf="!item.checked">No</span>
                 </ion-col>
             </ion-row>
+            <h3 *ngIf="tripData && tripData.length > 0">TRIPS</h3>
+            <ion-row *ngIf="tripData && tripData.length > 0">
+                <ion-col size="12">
+                    <ul>
+                        <li *ngFor="let trip of tripData">
+                            {{trip.data.location.stringFormat}}
+                        </li>
+                    </ul>
+                </ion-col>
+            </ion-row>
         </ion-grid>
     </ion-card>
 </ion-content>
