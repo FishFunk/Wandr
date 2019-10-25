@@ -130,8 +130,7 @@ export class ConnectionProfileModal {
     }
 
     async readTrips(){
-      const uid = window.localStorage.getItem(Constants.firebaseUserIdKey);
-      this.tripsObservable = this.dbHelper.ReadTripsObservableByUserId(uid);
+      this.tripsObservable = this.dbHelper.ReadTripsObservableByUserId(this.viewUserId);
   
       this.tripsObservable.subscribe(async trips =>{
         trips = _.reject(trips, (obj)=> !obj.data.public);
