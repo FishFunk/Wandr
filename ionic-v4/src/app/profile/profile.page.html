@@ -15,7 +15,7 @@
 <ion-content>
     <ion-grid>
         <ion-row>
-            <ion-col text-center>
+            <ion-col class="ion-text-center">
               <img [src]="userData.profile_img_url || defaultProfileImg" class="profile-img"/>
             </ion-col>
             <ion-col align-self-center>
@@ -43,7 +43,7 @@
             </ion-row>
             <h3>INTERESTS</h3>
             <ion-row>
-                <ion-col *ngFor="let item of userInterests" size="3" text-center>
+                <ion-col *ngFor="let item of userInterests" size="3" class="ion-text-center">
                     <i [class]="item.iconClass"></i>&nbsp;
                     <span *ngIf="item.checked">Yes</span>
                     <span *ngIf="!item.checked">No</span>
@@ -51,7 +51,7 @@
             </ion-row>
             <h3>LIFESTYLE</h3>
             <ion-row>
-                <ion-col *ngFor="let item of lifestyleOptions" size="3" text-center>
+                <ion-col *ngFor="let item of lifestyleOptions" size="3" class="ion-text-center">
                     <i [class]="item.iconClass"></i>&nbsp;
                     <span *ngIf="item.checked">Yes</span>
                     <span *ngIf="!item.checked">No</span>

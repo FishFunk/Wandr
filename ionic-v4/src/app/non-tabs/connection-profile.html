@@ -18,7 +18,7 @@
 <ion-content>
     <ion-grid>
         <ion-row>
-            <ion-col text-center>
+            <ion-col class="ion-text-center">
                 <img id="profile-img" [src]="viewUserData.profile_img_url"/>
             </ion-col>
             <ion-col align-self-center>
@@ -46,7 +46,7 @@
             </ion-row>
             <h3>INTERESTS</h3>
             <ion-row>
-                <ion-col size="3" *ngFor="let item of userInterests" text-center>
+                <ion-col size="3" *ngFor="let item of userInterests" class="ion-text-center">
                     <i [class]="item.iconClass"></i>&nbsp;
                     <span *ngIf="item.checked">Yes</span>
                     <span *ngIf="!item.checked">No</span>
@@ -54,7 +54,7 @@
             </ion-row>
             <h3>LIFESTYLE</h3>
             <ion-row>
-                <ion-col size="3" *ngFor="let item of lifestyleOptions" text-center>
+                <ion-col size="3" *ngFor="let item of lifestyleOptions" class="ion-text-center">
                     <i [class]="item.iconClass"></i>&nbsp;
                     <span *ngIf="item.checked">Yes</span>
                     <span *ngIf="!item.checked">No</span>
@@ -62,7 +62,7 @@
             </ion-row>
             <h3 *ngIf="mutualFriends && mutualFriends.length > 0">MUTUAL FRIENDS</h3>
             <ion-row *ngIf="mutualFriends && mutualFriends.length > 0">
-                <ion-col *ngFor="let user of mutualFriends" size="4" text-center (click)="onClickUser(user)">
+                <ion-col *ngFor="let user of mutualFriends" size="4" class="ion-text-center" (click)="onClickUser(user)">
                     <ion-avatar>
                         <img [src]="user.profile_img_url">
                     </ion-avatar>
@@ -81,7 +81,7 @@
             </ion-row>
             <br>
             <ion-row *ngIf="showChatButton">
-                <ion-col col-12 text-center>
+                <ion-col col-12 class="ion-text-center">
                     <ion-button *ngIf="!chatExists" fill="outline" size="large" color="secondary" (click)="onClickSendMessage()">
                         <div>
                             <span>Send Message</span>

@@ -37,7 +37,7 @@
         </ion-row>
         <h3 *ngIf="locals.length > 0">WANDR LOCALS</h3>
         <ion-row *ngIf="locals.length > 0">
-            <ion-col *ngFor="let user of locals" size="4" text-center (click)="onClickUser(user)">
+            <ion-col *ngFor="let user of locals" size="4" class="ion-text-center" (click)="onClickUser(user)">
                 <ion-avatar>
                     <img [src]="user.profile_img_url">
                 </ion-avatar>
@@ -69,18 +69,18 @@
             </ion-col>
         </ion-row>
         <ion-row>
-            <ion-col size="6" text-center>
-                <ion-button fill="outline" color="primary" margin-top (click)="onClickShare()">
+            <ion-col size="6" class="ion-text-center">
+                <ion-button fill="outline" color="primary" class="ion-margin-top" (click)="onClickShare()">
                     SHARE
                 </ion-button>
             </ion-col>
-            <ion-col size="6" text-center>
-                <ion-button fill="outline" color="secondary" margin-top (click)="onClickEdit()">
+            <ion-col size="6" class="ion-text-center">
+                <ion-button fill="outline" color="secondary" class="ion-margin-top" (click)="onClickEdit()">
                     EDIT
                 </ion-button>
             </ion-col>
-            <ion-col size="12" text-center>
-                <ion-button fill="clear" expand="block" color="danger" margin-top (click)="onClickDelete()">
+            <ion-col size="12" class="ion-text-center">
+                <ion-button fill="clear" expand="block" color="danger" class="ion-margin-top" (click)="onClickDelete()">
                     DELETE
                 </ion-button>
             </ion-col>

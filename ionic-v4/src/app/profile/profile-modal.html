@@ -46,7 +46,7 @@
           <ion-grid no-padding>
               <h3>INTERESTS</h3>
               <ion-row>
-                <ion-col *ngFor="let item of userInterests" size="3" text-center>
+                <ion-col *ngFor="let item of userInterests" size="3" class="ion-text-center">
                   <ion-checkbox [(ngModel)]="item.checked"></ion-checkbox>&nbsp;
                   <i [class]="item.iconClass"></i>
                   <p>{{item.label}}</p>
@@ -60,7 +60,7 @@
           <ion-grid no-padding>
               <h3>LIFESTYLE</h3>
               <ion-row>
-                <ion-col *ngFor="let item of lifestyleOptions" size="3" text-center>
+                <ion-col *ngFor="let item of lifestyleOptions" size="3" class="ion-text-center">
                   <ion-checkbox [(ngModel)]="item.checked"></ion-checkbox>&nbsp;
                   <i [class]="item.iconClass"></i>
                   <p>{{item.label}}</p>
