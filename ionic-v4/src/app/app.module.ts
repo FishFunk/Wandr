@@ -31,6 +31,7 @@ import { ProfileModalModule } from './profile/profile-modal.module';
 import { ConnectionListPageModule } from './non-tabs/connection-list.module';
 import { ConnectionProfileModalModule } from './non-tabs/connection-profile.module';
 import { EulaModalModule } from './non-tabs/eula.module';
+import { PermissionsNoticeModalModule } from './non-tabs/permissionsNotice.module';
 
 // Popovers
 import { MapTutorialPopoverModule } from './map/tutorial-popover.module';
@@ -81,7 +82,8 @@ export const config = {
     SortOptionsPopoverModule,
     ConnectionProfileModalModule,
     HttpClientModule,
-    EulaModalModule
+    EulaModalModule,
+    PermissionsNoticeModalModule
   ],
   providers: [
     StatusBar,

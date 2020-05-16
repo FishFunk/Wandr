@@ -1,0 +1,35 @@
+<ion-header>
+    <ion-toolbar color="primary">
+      <ion-buttons slot="start">
+          <ion-button fill="clear" color="light" (click)="onClickClose()">
+            <i class="far fa-window-close"></i> 
+          </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <div class="permissionsNotice">
+        <h1>Invalid Facebook Permissions</h1>
+        <h4>Wandr requires the following minimum set of Facebook permissions</h4>
+        <p>
+            <strong>User Friends: </strong>This is a core permission that allows us to connect
+            you with friends and mutual friends.
+        </p>
+        <p>
+            <strong>Public Profile: </strong>This allows the app to access your name and Facebook 
+            profile image which helps verify our users and avoid bots.
+        </p>
+        <p>
+            <strong>Email: </strong>This is an additional piece of info used to verify a user is a real
+            person and not a bot. This info is not shared with anybody.
+        </p>
+        <p>
+            <strong>User Location: </strong>If granted, 
+            the app will read the location info from your Facebook profile and pre-populate that info 
+            into your Wandr profile. This improves user experience but is not required. 
+            This does not mean we are tracking your current location! You can update your location information
+            in your Wandr settings at any time.
+        </p>
+        <h4>If you are unable to login, please verify access to these Facebook permissions and try again.</h4>
+    </div>
+</ion-content>

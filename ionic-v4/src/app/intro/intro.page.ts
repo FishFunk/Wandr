@@ -9,6 +9,7 @@ import { FirestoreDbHelper } from '../helpers/firestoreDbHelper';
 import { User, Location, IUser} from '../models/user';
 import _ from 'underscore';
 import { EulaModal } from '../non-tabs/eula';
+import { PermissionsNoticeModal } from '../non-tabs/permissionsNotice';
 import { FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 
 @Component({
@@ -44,9 +45,14 @@ export class IntroPage implements OnInit {
         .then(()=>{
           this.navCtrl.navigateRoot('/tabs');
         })
-        .catch((error)=>{
+        .catch(async (error)=>{
           this.logger.Error(error);
-          this.presentAlert("Failed to login with Facebook");
+          if(error && typeof(error) === 'string' && error.indexOf('permissions') > -1){
+            var modal = await this.modalCtrl.create({ component: PermissionsNoticeModal });
+            modal.present();
+          } else {
+            this.presentAlert("Failed to login with Facebook");
+          }
         });
     }
     else{
@@ -63,18 +69,34 @@ export class IntroPage implements OnInit {
   }
 
   private async checkStatusAndLogin() {
-    var statusResponse = await this.facebookApi.facebookLoginStatus()
-      .catch(async error=>{
-        var status = await this.facebookApi.facebookLogin();
-        return this.firebaseLogin(status);
-      });
+    var statusResponse = await this.facebookApi.facebookLoginStatus();
     
-    if (statusResponse && statusResponse.status == 'connected') {
+    if (!statusResponse || statusResponse.status != 'connected') {
+      statusResponse = await this.facebookApi.facebookLogin();
+    }
+
+    var verifyPermissions = await this.verifyPermissions(statusResponse);
+    if(verifyPermissions){
       return this.firebaseLogin(statusResponse);
     } else {
-      var status = await this.facebookApi.facebookLogin();
-      return this.firebaseLogin(status);
+      return Promise.reject("App requires additional Facebook permissions.");
     }
+  }
+
+  private async verifyPermissions(facebookStatusResponse: FacebookLoginResponse){
+    var verifyPermissions = false;
+    var permissions = await this.facebookApi.getGrantedPermissions(
+      facebookStatusResponse.authResponse.userID, 
+      facebookStatusResponse.authResponse.accessToken);
+    permissions.forEach(p=>{
+      if(p.permission === "public_profile"){
+        verifyPermissions = p.status === "granted";
+      }
+      if(p.permission === "user_friends"){
+        verifyPermissions = p.status === "granted";
+      }
+    });
+    return verifyPermissions;
   }
 
   private async firebaseLogin(facebookStatusResponse: FacebookLoginResponse){

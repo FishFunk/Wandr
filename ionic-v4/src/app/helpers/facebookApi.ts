@@ -27,6 +27,11 @@ export class FacebookApi{
         return this.executeApiCall(`/${userId}?fields=id,name,email,link,picture.width(360).height(360),location&access_token=${accessToken}`);
     }
 
+    public getGrantedPermissions(userId, accessToken)
+    {
+        return this.executeApiCall<any[]>(`/${userId}/permissions?access_token=${accessToken}`, 'data');
+    }
+
     public facebookLogout(): Promise<any>
     {
         if(this.platform.is('cordova')){
@@ -60,7 +65,7 @@ export class FacebookApi{
 
     private async executeApiCall<T>(endPointStr, fieldStr = "")
     {
-        const response = await this.facebook.api(endPointStr, this.facebookPermissions)
+        const response = await this.facebook.api(endPointStr, []);
         return fieldStr ? response[fieldStr] : response;
     }
 
